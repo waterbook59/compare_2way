@@ -4,12 +4,16 @@ import 'package:flutter/cupertino.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    final primaryColor = CupertinoTheme.of(context).primaryColor;
+    final accentColor = CupertinoTheme.of(context).primaryContrastingColor;
+
     return CupertinoPageScaffold(
       navigationBar:
-      const CupertinoNavigationBar(
+       CupertinoNavigationBar(
         //todo ThemeDataの使い方
         //todo TextStyleやColorはutilsにまとめる
-        backgroundColor: const Color(0xFF363A44),
+        backgroundColor: primaryColor,
         middle: Text('Compare List',
             style: TextStyle(
               color: Colors.white,fontSize: 18
@@ -36,10 +40,21 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
 
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-          onPressed: ()=>print('押したぜFAB'),),
+          floatingActionButton: SizedBox(
+            width: 56,
+            height: 56,
+            child: FloatingActionButton(
+              backgroundColor:accentColor,
+//              const Color(0xFFFF7043),
+              child:  Icon(
+                Icons.add,
+                color: const Color(0xFF000000),
+                size:40
+              ),
+            onPressed: ()=>print('押したぜFAB'),),
+          ),
         ),
+
 
       ),
     );

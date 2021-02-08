@@ -13,9 +13,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoApp(
       title: 'Compare 2way',
+      theme: const CupertinoThemeData(
+          primaryColor: Color(0xFF363A44),
+          primaryContrastingColor: Color(0xFFFF7043),
+      ),
 //      theme: ThemeData(
 ////        primarySwatch: customSwatch,
-//        primaryColor: const Color(0xFF363A44),
+
 //        accentColor: const Color(0xFFFF7043),
 //        visualDensity: VisualDensity.adaptivePlatformDensity,
 //      ),
