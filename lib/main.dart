@@ -21,12 +21,9 @@ class MyApp extends StatelessWidget {
         primaryColor: Color(0xFF363A44),
         primaryContrastingColor: Color(0xFFFF7043),
         scaffoldBackgroundColor: Color(0xFFF5F5F5),
-        //todo barBackgroundColorの場所確認
         barBackgroundColor:  Color(0xFF363A44),
         textTheme: CupertinoTextThemeData(
           textStyle: TextStyle(fontFamily:'Hiragino Kaku Gothic ProN',
-//          regularFontJa,
-//              fontSize: 20
           ),
         ),
 
