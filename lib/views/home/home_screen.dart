@@ -16,12 +16,9 @@ class HomeScreen extends StatelessWidget {
        CupertinoNavigationBar(
         //todo TextStyleやColorはutilsにまとめる
         backgroundColor: primaryColor,
-        middle:const  Text('Compare List',
-          style:middleTextStyle,
-
+        middle:const  Text('Compare List', style:middleTextStyle,
         ),
-        trailing:const  Text('編集',
-            style:trailingTextStyle,
+        trailing:const  Text('編集',style:trailingTextStyle,
         ),
       ),
 
@@ -34,9 +31,16 @@ class HomeScreen extends StatelessWidget {
                     Column(
                       children:  [
                         const SizedBox(height: 20),
+                       Container(
+                         margin: EdgeInsets.all(10),
+                         width: double.infinity,
+                         child: Card(
+
+                           child: Text('ここにリスト'),),
+                       ),
                        Text(
                           'Cupertino!!!',
-                        style: regularTextStyle ,),
+                        style: regularTextStyle ),
                         const SizedBox(height: 20),
                         CupertinoTextField(
                           keyboardType: TextInputType.text,

@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
-import 'package:compare_2way/views/home_screen.dart';
+import 'package:compare_2way/views/home/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
