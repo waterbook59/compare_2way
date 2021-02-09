@@ -40,20 +40,20 @@ class HomeScreen extends StatelessWidget {
                   title: '賃貸と購入',
                   //trueで最初から開いた状態
                   showAccordion: true,
-                  collapsedIcon: Icon(Icons.details),
-                  collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
-                  contentChild: Column(
-                    children: [
-                      Row(children: [
-                        Text('結論'),
-                        CupertinoSwitch(
-                          value: true,
-                          onChanged: (value){
-                            value = false;
+                      collapsedIcon: Icon(Icons.details),
+                      collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
+                      contentChild: Column(
+                        children: [
+                          Row(children: [
+                            Text('結論'),
+                            CupertinoSwitch(
+                              value: true,
+                              onChanged: (value) {
+                                value = false;
                           },
                         )
                       ]),
-                      Text('購入を検討しつつ、２年は賃貸'),
+                          Text('購入を検討しつつ、２年は賃貸'),
                     ],
                   ),
                 )),
