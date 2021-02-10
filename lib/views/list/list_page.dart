@@ -4,47 +4,36 @@ import 'package:flutter/cupertino.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';
 
 class ListPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-
     ///Theme使う場合はconst入れない
-    final primaryColor = CupertinoTheme
-        .of(context)
-        .primaryColor;
-    final accentColor = CupertinoTheme
-        .of(context)
-        .primaryContrastingColor;
-    final regularTextStyle = CupertinoTheme
-        .of(context)
-        .textTheme
-        .textStyle;
+    final accentColor = CupertinoTheme.of(context).primaryContrastingColor;
 
     return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          backgroundColor: primaryColor,
-          middle: const Text(
-            'Compare List',
-            style: middleTextStyle,
-          ),
-          trailing: const Text(
-            '編集',
-            style: trailingTextStyle,
-          ),
+      //todo trailing修正時はconst削除
+      navigationBar: const CupertinoNavigationBar(
+        middle: const Text(
+          'Compare List',
+          style: middleTextStyle,
         ),
-        child: Scaffold(
+        trailing: const Text(
+          '編集',
+          style: trailingTextStyle,
+        ),
+      ),
+      child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
         body: Column(
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 8),
             Container(
-              margin: EdgeInsets.all(10),
+              margin: EdgeInsets.all(8),
               width: double.infinity,
               child: Card(
                   child: GFAccordion(
-                    title: '賃貸と購入',
-                    //trueで最初から開いた状態
-                    showAccordion: true,
+                title: '賃貸と購入',
+                //trueで最初から開いた状態
+                showAccordion: true,
                     collapsedIcon: Icon(Icons.details),
                     collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
                     contentChild: Column(
@@ -52,16 +41,16 @@ class ListPage extends StatelessWidget {
                         Row(children: [
                           Text('結論'),
                           CupertinoSwitch(
-                            value: true,
-                            onChanged: (value) {
-                              value = false;
-                            },
-                          )
-                        ]),
+                        value: true,
+                        onChanged: (value) {
+                          value = false;
+                        },
+                      )
+                    ]),
                         Text('購入を検討しつつ、２年は賃貸'),
-                      ],
-                    ),
-                  )),
+                  ],
+                ),
+              )),
             ),
           ],
         ),
@@ -74,7 +63,7 @@ class ListPage extends StatelessWidget {
             onPressed: () => print('押したぜFAB'),
           ),
         ),
-    ),
-      );
+      ),
+    );
   }
 }
