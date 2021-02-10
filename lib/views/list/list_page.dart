@@ -7,7 +7,6 @@ class ListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //todo ここでそれぞれのページにAppBarをおく
 
     ///Theme使う場合はconst入れない
     final primaryColor = CupertinoTheme
@@ -71,8 +70,7 @@ class ListPage extends StatelessWidget {
           height: 56,
           child: FloatingActionButton(
             backgroundColor: accentColor,
-//              const Color(0xFFFF7043),
-            child: Icon(Icons.add, color: const Color(0xFF000000), size: 40),
+            child: const Icon(Icons.add, color: Colors.black, size: 40),
             onPressed: () => print('押したぜFAB'),
           ),
         ),

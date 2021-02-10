@@ -1,6 +1,6 @@
 import 'package:compare_2way/views/list/list_page.dart';
 import 'package:compare_2way/views/setting/setting_page.dart';
-import 'package:compare_2way/views/tag/tagPage.dart';
+import 'package:compare_2way/views/tag/tag_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
