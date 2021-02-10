@@ -20,7 +20,7 @@ class ListPage extends StatelessWidget {
         .textTheme
         .textStyle;
 
-    return   Scaffold(
+    return  Scaffold(
       backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
@@ -51,14 +51,6 @@ class ListPage extends StatelessWidget {
                   ),
                 )),
           ),
-          Text('Cupertino!!!', style: regularTextStyle),
-          const SizedBox(height: 20),
-          CupertinoTextField(
-            keyboardType: TextInputType.text,
-            controller: TextEditingController(),
-          ),
-          const SizedBox(height: 20),
-          Text('テキストスタイルの変更確認', style: regularTextStyle),
         ],
       ),
       floatingActionButton: SizedBox(

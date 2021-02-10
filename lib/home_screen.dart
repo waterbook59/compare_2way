@@ -1,5 +1,6 @@
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/views/list_page/list_page.dart';
+import 'package:compare_2way/views/setting/setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';
@@ -10,6 +11,9 @@ class HomeScreen extends StatelessWidget {
     final primaryColor = CupertinoTheme
         .of(context)
         .primaryColor;
+    final accentColor = CupertinoTheme
+        .of(context)
+        .primaryContrastingColor;
 
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
@@ -29,15 +33,21 @@ class HomeScreen extends StatelessWidget {
         child: SafeArea(
           child: CupertinoTabScaffold(
             tabBar: CupertinoTabBar(
-                items: [
+              backgroundColor: Colors.white,
+                activeColor: accentColor,
+                items: const [
+                   BottomNavigationBarItem(
+                     icon:Icon(CupertinoIcons.news),
+                     title:Text('リスト'),
+                   ),
+                   BottomNavigationBarItem(
+                     icon: Icon(CupertinoIcons.folder),
+                     title: Text('カテゴリ'),
+                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.clock,color: Colors.white,),
-                    title: Text('テストページ1',style:TextStyle(color: Colors.white),)
-          ),
-                  BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.book),
-              title: Text('テストページ2'),
-            ),
+                    icon: Icon(CupertinoIcons.settings),
+                    title: Text('設定'),
+                  ),
                 ],
                ),
             tabBuilder: (context, index) {
@@ -50,7 +60,8 @@ class HomeScreen extends StatelessWidget {
                     case 1:
                       return Container(child: Text('ウッピャッぽー'),);
                       break;
-
+                    case 2:
+                    return SettingPage();
                   }
                   return Container();
                 },
