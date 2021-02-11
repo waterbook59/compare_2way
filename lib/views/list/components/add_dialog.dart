@@ -9,7 +9,7 @@ class AddDialog extends StatelessWidget {
   ///保存おしたらDB登録とComparePageへ移動
   final VoidCallback onSave;
 
-  TextEditingController _way1Controler =TextEditingController();
+  TextEditingController _way1Controller =TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +32,11 @@ class AddDialog extends StatelessWidget {
           const SizedBox(height: 8,),
           InputPart(
             label: 'way1',
-            textEditingController: _way1Controler,
+            textEditingController: _way1Controller,
           ),
           const SizedBox(height: 8,),
           RaisedButton(
+            child: Text('比較'),
             //todo
             onPressed: ()=>print('DBに項目登録して比較画面に遷移'),
           )

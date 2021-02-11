@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class InputPart extends StatelessWidget {
@@ -20,19 +21,21 @@ class InputPart extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(label,
+//
 //todo style設定
+          style: TextStyle(color: Colors.black),
 //          style: addTaskTextStyle,
           textAlign: TextAlign.start,),
         Padding(
           padding: const EdgeInsets.only(top: 15),
-          child: TextField(
+          child: CupertinoTextField(
             controller: textEditingController,
 //            enabled: isTextInputEnabled,
             //todo style設定
 //            style: inputTextStyle,
             keyboardType: TextInputType.text,
             //decoration:InputDecoration()をいれるとバリデーション後エラーメッセージ表示
-            decoration: InputDecoration(errorText: errorText),
+//            decoration: InputDecoration(errorText: errorText),
             //リアルタイムで入力した文字を返せる
             onChanged: didChanged,
 //            textAlign: TextAlign.center,
