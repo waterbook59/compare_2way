@@ -17,6 +17,7 @@ dependencies:
 
   getwidget: ^1.2.4
   flutter_icons: ^1.1.0
+  provider: ^4.3.3
 
 dev_dependencies:
   flutter_test:
