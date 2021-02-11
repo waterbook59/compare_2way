@@ -8,5 +8,19 @@ class AddViewModel extends ChangeNotifier{
 
   final CompareRepository _compareRepository;
 
+  TextEditingController get way1Controller=> _way1Controller ;
+  TextEditingController get way2Controller => _way2Controller;
+  //the getter 'text' was called on null flutterエラーがでたら
+  // TextEditingController();必要
+  // It looks like you have not initialized your TextEditingController.
+  TextEditingController _way1Controller =TextEditingController();
+  TextEditingController _way2Controller = TextEditingController();
+
+
+  Future<void> createComparisonItems() async{
+    //todo モデルクラス(compare)に比較項目を登録
+    print('DBへ登録');
+  }
+
 }
 

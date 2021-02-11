@@ -1,6 +1,6 @@
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/views/common/page_transition.dart';
-import 'package:compare_2way/views/list/components/add_dialog.dart';
+import 'package:compare_2way/views/list/add_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 

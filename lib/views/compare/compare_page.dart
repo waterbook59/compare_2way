@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';
 
+
+//todo bottomNavbarがあるとややこしいので、Screenへ変更
 class ComparePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
