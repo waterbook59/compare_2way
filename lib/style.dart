@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 ///ヒラギノ使う場合はassetsにfontsデータを入れる必要なし
 const regularFontJa = 'Hiragino Kaku Gothic ProN';
 
-
-
-
+///CupertinoNavigationBar
 //NavigationMiddle
-const middleTextStyle =
-    TextStyle(fontSize: 18, color: Colors.white);
+const middleTextStyle = TextStyle(fontSize: 18, color: Colors.white);
+
+const middleJaTextStyle =
+    TextStyle(fontFamily: regularFontJa, fontSize: 18, color: Colors.white);
 
 //NavigationTrailing
 const trailingTextStyle =
-TextStyle(fontFamily: regularFontJa, fontSize: 14, color: Colors.white);
+    TextStyle(fontFamily: regularFontJa, fontSize: 14, color: Colors.white);

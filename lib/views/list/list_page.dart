@@ -27,12 +27,7 @@ class ListPage extends StatelessWidget {
         backgroundColor: CupertinoTheme
             .of(context)
             .scaffoldBackgroundColor,
-        body: Column(
-          children: [
-            Center(child: Text('リスト表示')),
-
-            ],
-        ),
+        body: const Center(child: Text('リスト表示')),
         floatingActionButton: SizedBox(
           width: 56,
           height: 56,

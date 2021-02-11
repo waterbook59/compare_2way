@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 class InputPart extends StatelessWidget {
   final String label;
+  final String placeholder;
+  final bool autofocus;
   final TextEditingController textEditingController;
   final String errorText;
   final ValueChanged<String> didChanged;
@@ -10,7 +12,7 @@ class InputPart extends StatelessWidget {
   // ignore: sort_constructors_first
   const InputPart(
       {this.label, this.textEditingController,
-        this.errorText, this.didChanged});
+        this.errorText, this.didChanged, this.placeholder, this.autofocus});
 
 //  final bool isTextInputEnabled;
 
@@ -20,16 +22,20 @@ class InputPart extends StatelessWidget {
       //TextとTextField左寄せ、デフォルトは中央よせ
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(label,
-//
-//todo style設定
-          style: TextStyle(color: Colors.black),
-//          style: addTaskTextStyle,
-          textAlign: TextAlign.start,),
         Padding(
-          padding: const EdgeInsets.only(top: 15),
+          padding: const EdgeInsets.only(left:40),
+          child: Text(label,
+//todo style設定
+            style: TextStyle(color: Colors.black),
+//          style: addTaskTextStyle,
+            textAlign: TextAlign.start,),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 16,left: 40,right: 40),
           child: CupertinoTextField(
             controller: textEditingController,
+            placeholder: placeholder,
+            autofocus: autofocus,
 //            enabled: isTextInputEnabled,
             //todo style設定
 //            style: inputTextStyle,
