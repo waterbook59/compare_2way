@@ -1,10 +1,8 @@
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/views/common/page_transition.dart';
-import 'package:compare_2way/views/common/show_modal_dialog.dart';
 import 'package:compare_2way/views/list/components/add_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:getwidget/components/accordian/gf_accordian.dart';
 
 class ListPage extends StatelessWidget {
   @override
@@ -31,17 +29,8 @@ class ListPage extends StatelessWidget {
             .scaffoldBackgroundColor,
         body: Column(
           children: [
-            const Center(child: Text('リスト表示')),
-            ///画面遷移をmaterialAppのshowModalBottomSheetのように下からに変えたい
-            ///animationControllerをviewModelで持って、
-            ///FABをおしたらPageTransitionのanimationControllerを変更する
-//              PageTransition(
-//                animationController: viewModel.animationController,
-//                dialogWidget:
-//                AddDialog(
-//                    onSave: () => print('addDialogのonSave')
-//                ),
-//              ),
+            Center(child: Text('リスト表示')),
+
             ],
         ),
         floatingActionButton: SizedBox(
@@ -52,8 +41,6 @@ class ListPage extends StatelessWidget {
               child: const Icon(Icons.add, color: Colors.black, size: 40),
 
             onPressed: () => _saveComparisonItems(context),
-              ///画面遷移をmaterialAppのshowModalBottomSheetのように下からに変えたい
-//              onPressed: () =>_changeAnimationController(context),
 
           ),
         ),
@@ -69,10 +56,5 @@ class ListPage extends StatelessWidget {
     ));
   }
 
-///画面遷移をmaterialAppのshowModalBottomSheetのように下からに変えたい
-//  void _changeAnimationController(BuildContext context) {
-//    /// ここでPageTransitionのコントローラーを変更するメソッド
-//    viewModel.changeAmimationController();
-//  }
 
 }
