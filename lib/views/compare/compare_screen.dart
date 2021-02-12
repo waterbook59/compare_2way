@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';
 
-class ComparePage extends StatelessWidget {
+
+//todo bottomNavbarがあるとややこしいので、Screenへ変更
+class CompareScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accentColor = CupertinoTheme.of(context).primaryContrastingColor;
@@ -52,15 +54,6 @@ class ComparePage extends StatelessWidget {
                   )),
             ),
           ],
-        ),
-        floatingActionButton: SizedBox(
-          width: 56,
-          height: 56,
-          child: FloatingActionButton(
-            backgroundColor: accentColor,
-            child: const Icon(Icons.add, color: Colors.black, size: 40),
-            onPressed: () => print('押したぜFAB'),
-          ),
         ),
       ),
     );
