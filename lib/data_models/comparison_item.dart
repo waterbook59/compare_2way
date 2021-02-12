@@ -2,8 +2,8 @@ import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 
 ///モデルクラスのイメージは取得するときのリスト１行分に何の項目を入れるか
-class CompareItem {
-  CompareItem(
+class ComparisonItem {
+  ComparisonItem(
       {this.dataId,
       this.itemTitle,
       this.way1Title,

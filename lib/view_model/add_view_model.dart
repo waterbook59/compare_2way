@@ -1,3 +1,4 @@
+import 'package:compare_2way/data_models/comparison_item.dart';
 import 'package:compare_2way/models/repository/compare_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,12 @@ class AddViewModel extends ChangeNotifier{
 
   Future<void> createComparisonItems() async{
     //todo モデルクラス(compare)に比較項目を登録
+    final comparisonItem = ComparisonItem(
+      way1Title: _way1Controller.text,
+      way2Title: _way2Controller.text,
+    );
+
+    await _compareRepository.createComparisonItems(comparisonItem);
     print('DBへ登録');
     notifyListeners();
 
