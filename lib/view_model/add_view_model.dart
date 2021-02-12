@@ -20,6 +20,14 @@ class AddViewModel extends ChangeNotifier{
   Future<void> createComparisonItems() async{
     //todo モデルクラス(compare)に比較項目を登録
     print('DBへ登録');
+    notifyListeners();
+
+  }
+
+  Future<void> initializeController() async{
+    _way1Controller.text ='';
+    _way2Controller.text ='';
+    notifyListeners();
   }
 
 }

@@ -38,6 +38,7 @@ class InputPart extends StatelessWidget {
             autofocus: autofocus,
 //            enabled: isTextInputEnabled,
             //todo style設定
+            style: TextStyle(color: Colors.black),
 //            style: inputTextStyle,
             keyboardType: TextInputType.text,
             //decoration:InputDecoration()をいれるとバリデーション後エラーメッセージ表示
