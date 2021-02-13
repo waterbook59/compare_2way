@@ -1597,6 +1597,9 @@ abstract class _$ComparisonItemDB extends GeneratedDatabase {
   $ComparisonItemIdRecordsTable _comparisonItemIdRecords;
   $ComparisonItemIdRecordsTable get comparisonItemIdRecords =>
       _comparisonItemIdRecords ??= $ComparisonItemIdRecordsTable(this);
+  ComparisonItemDao _comparisonItemDao;
+  ComparisonItemDao get comparisonItemDao =>
+      _comparisonItemDao ??= ComparisonItemDao(this as ComparisonItemDB);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override

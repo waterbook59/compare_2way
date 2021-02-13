@@ -5,6 +5,8 @@ import 'package:moor/moor.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
+import 'comparison_item_dao.dart';
+
 
 part 'comparison_item_database.g.dart';
 
@@ -111,7 +113,7 @@ class ComparisonItemRecords {
   Way1DemeritRecords,
   TagOverviewRecords,
   ComparisonItemIdRecords
-])
+],daos: [ComparisonItemDao])
 class ComparisonItemDB  extends _$ComparisonItemDB{
   ComparisonItemDB() : super(_openConnection());
 
