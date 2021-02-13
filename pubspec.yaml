@@ -18,7 +18,7 @@ dependencies:
   getwidget: ^1.2.4
   flutter_icons: ^1.1.0
   provider: ^4.3.3
-  moor: ^3.4.0
+  moor: ^2.4.0
   sqlite3_flutter_libs: ^0.3.0
   path_provider: ^1.6.27
   path: ^1.7.0
@@ -28,7 +28,7 @@ dev_dependencies:
     sdk: flutter
 
   pedantic_mono: ^1.10.0+3
-  moor_generator: ^3.3.1
+  moor_generator: ^2.4.0
   build_runner: ^1.10.1
 
 
