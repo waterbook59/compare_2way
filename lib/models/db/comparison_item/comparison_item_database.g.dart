@@ -63,6 +63,80 @@ class ComparisonOverviewRecord extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}conclusion']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || dataId != null) {
+      map['data_id'] = Variable<int>(dataId);
+    }
+    if (!nullToAbsent || comparisonItemId != null) {
+      map['comparison_item_id'] = Variable<String>(comparisonItemId);
+    }
+    if (!nullToAbsent || itemTitle != null) {
+      map['item_title'] = Variable<String>(itemTitle);
+    }
+    if (!nullToAbsent || way1Title != null) {
+      map['way1_title'] = Variable<String>(way1Title);
+    }
+    if (!nullToAbsent || way1Demerit != null) {
+      map['way1_demerit'] = Variable<String>(way1Demerit);
+    }
+    if (!nullToAbsent || way1Evaluate != null) {
+      map['way1_evaluate'] = Variable<int>(way1Evaluate);
+    }
+    if (!nullToAbsent || way2Title != null) {
+      map['way2_title'] = Variable<String>(way2Title);
+    }
+    if (!nullToAbsent || way2Evaluate != null) {
+      map['way2_evaluate'] = Variable<int>(way2Evaluate);
+    }
+    if (!nullToAbsent || tags != null) {
+      map['tags'] = Variable<String>(tags);
+    }
+    if (!nullToAbsent || favorite != null) {
+      map['favorite'] = Variable<bool>(favorite);
+    }
+    if (!nullToAbsent || conclusion != null) {
+      map['conclusion'] = Variable<String>(conclusion);
+    }
+    return map;
+  }
+
+  ComparisonOverviewRecordsCompanion toCompanion(bool nullToAbsent) {
+    return ComparisonOverviewRecordsCompanion(
+      dataId:
+          dataId == null && nullToAbsent ? const Value.absent() : Value(dataId),
+      comparisonItemId: comparisonItemId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(comparisonItemId),
+      itemTitle: itemTitle == null && nullToAbsent
+          ? const Value.absent()
+          : Value(itemTitle),
+      way1Title: way1Title == null && nullToAbsent
+          ? const Value.absent()
+          : Value(way1Title),
+      way1Demerit: way1Demerit == null && nullToAbsent
+          ? const Value.absent()
+          : Value(way1Demerit),
+      way1Evaluate: way1Evaluate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(way1Evaluate),
+      way2Title: way2Title == null && nullToAbsent
+          ? const Value.absent()
+          : Value(way2Title),
+      way2Evaluate: way2Evaluate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(way2Evaluate),
+      tags: tags == null && nullToAbsent ? const Value.absent() : Value(tags),
+      favorite: favorite == null && nullToAbsent
+          ? const Value.absent()
+          : Value(favorite),
+      conclusion: conclusion == null && nullToAbsent
+          ? const Value.absent()
+          : Value(conclusion),
+    );
+  }
+
   factory ComparisonOverviewRecord.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -96,42 +170,6 @@ class ComparisonOverviewRecord extends DataClass
       'favorite': serializer.toJson<bool>(favorite),
       'conclusion': serializer.toJson<String>(conclusion),
     };
-  }
-
-  @override
-  ComparisonOverviewRecordsCompanion createCompanion(bool nullToAbsent) {
-    return ComparisonOverviewRecordsCompanion(
-      dataId:
-          dataId == null && nullToAbsent ? const Value.absent() : Value(dataId),
-      comparisonItemId: comparisonItemId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(comparisonItemId),
-      itemTitle: itemTitle == null && nullToAbsent
-          ? const Value.absent()
-          : Value(itemTitle),
-      way1Title: way1Title == null && nullToAbsent
-          ? const Value.absent()
-          : Value(way1Title),
-      way1Demerit: way1Demerit == null && nullToAbsent
-          ? const Value.absent()
-          : Value(way1Demerit),
-      way1Evaluate: way1Evaluate == null && nullToAbsent
-          ? const Value.absent()
-          : Value(way1Evaluate),
-      way2Title: way2Title == null && nullToAbsent
-          ? const Value.absent()
-          : Value(way2Title),
-      way2Evaluate: way2Evaluate == null && nullToAbsent
-          ? const Value.absent()
-          : Value(way2Evaluate),
-      tags: tags == null && nullToAbsent ? const Value.absent() : Value(tags),
-      favorite: favorite == null && nullToAbsent
-          ? const Value.absent()
-          : Value(favorite),
-      conclusion: conclusion == null && nullToAbsent
-          ? const Value.absent()
-          : Value(conclusion),
-    );
   }
 
   ComparisonOverviewRecord copyWith(
@@ -257,6 +295,34 @@ class ComparisonOverviewRecordsCompanion
         itemTitle = Value(itemTitle),
         way1Title = Value(way1Title),
         way2Title = Value(way2Title);
+  static Insertable<ComparisonOverviewRecord> custom({
+    Expression<int> dataId,
+    Expression<String> comparisonItemId,
+    Expression<String> itemTitle,
+    Expression<String> way1Title,
+    Expression<String> way1Demerit,
+    Expression<int> way1Evaluate,
+    Expression<String> way2Title,
+    Expression<int> way2Evaluate,
+    Expression<String> tags,
+    Expression<bool> favorite,
+    Expression<String> conclusion,
+  }) {
+    return RawValuesInsertable({
+      if (dataId != null) 'data_id': dataId,
+      if (comparisonItemId != null) 'comparison_item_id': comparisonItemId,
+      if (itemTitle != null) 'item_title': itemTitle,
+      if (way1Title != null) 'way1_title': way1Title,
+      if (way1Demerit != null) 'way1_demerit': way1Demerit,
+      if (way1Evaluate != null) 'way1_evaluate': way1Evaluate,
+      if (way2Title != null) 'way2_title': way2Title,
+      if (way2Evaluate != null) 'way2_evaluate': way2Evaluate,
+      if (tags != null) 'tags': tags,
+      if (favorite != null) 'favorite': favorite,
+      if (conclusion != null) 'conclusion': conclusion,
+    });
+  }
+
   ComparisonOverviewRecordsCompanion copyWith(
       {Value<int> dataId,
       Value<String> comparisonItemId,
@@ -282,6 +348,63 @@ class ComparisonOverviewRecordsCompanion
       favorite: favorite ?? this.favorite,
       conclusion: conclusion ?? this.conclusion,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (dataId.present) {
+      map['data_id'] = Variable<int>(dataId.value);
+    }
+    if (comparisonItemId.present) {
+      map['comparison_item_id'] = Variable<String>(comparisonItemId.value);
+    }
+    if (itemTitle.present) {
+      map['item_title'] = Variable<String>(itemTitle.value);
+    }
+    if (way1Title.present) {
+      map['way1_title'] = Variable<String>(way1Title.value);
+    }
+    if (way1Demerit.present) {
+      map['way1_demerit'] = Variable<String>(way1Demerit.value);
+    }
+    if (way1Evaluate.present) {
+      map['way1_evaluate'] = Variable<int>(way1Evaluate.value);
+    }
+    if (way2Title.present) {
+      map['way2_title'] = Variable<String>(way2Title.value);
+    }
+    if (way2Evaluate.present) {
+      map['way2_evaluate'] = Variable<int>(way2Evaluate.value);
+    }
+    if (tags.present) {
+      map['tags'] = Variable<String>(tags.value);
+    }
+    if (favorite.present) {
+      map['favorite'] = Variable<bool>(favorite.value);
+    }
+    if (conclusion.present) {
+      map['conclusion'] = Variable<String>(conclusion.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ComparisonOverviewRecordsCompanion(')
+          ..write('dataId: $dataId, ')
+          ..write('comparisonItemId: $comparisonItemId, ')
+          ..write('itemTitle: $itemTitle, ')
+          ..write('way1Title: $way1Title, ')
+          ..write('way1Demerit: $way1Demerit, ')
+          ..write('way1Evaluate: $way1Evaluate, ')
+          ..write('way2Title: $way2Title, ')
+          ..write('way2Evaluate: $way2Evaluate, ')
+          ..write('tags: $tags, ')
+          ..write('favorite: $favorite, ')
+          ..write('conclusion: $conclusion')
+          ..write(')'))
+        .toString();
   }
 }
 
@@ -439,66 +562,72 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
   @override
   final String actualTableName = 'comparison_overview_records';
   @override
-  VerificationContext validateIntegrity(ComparisonOverviewRecordsCompanion d,
+  VerificationContext validateIntegrity(
+      Insertable<ComparisonOverviewRecord> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.dataId.present) {
-      context.handle(
-          _dataIdMeta, dataId.isAcceptableValue(d.dataId.value, _dataIdMeta));
+    final data = instance.toColumns(true);
+    if (data.containsKey('data_id')) {
+      context.handle(_dataIdMeta,
+          dataId.isAcceptableOrUnknown(data['data_id'], _dataIdMeta));
     }
-    if (d.comparisonItemId.present) {
+    if (data.containsKey('comparison_item_id')) {
       context.handle(
           _comparisonItemIdMeta,
-          comparisonItemId.isAcceptableValue(
-              d.comparisonItemId.value, _comparisonItemIdMeta));
+          comparisonItemId.isAcceptableOrUnknown(
+              data['comparison_item_id'], _comparisonItemIdMeta));
     } else if (isInserting) {
       context.missing(_comparisonItemIdMeta);
     }
-    if (d.itemTitle.present) {
+    if (data.containsKey('item_title')) {
       context.handle(_itemTitleMeta,
-          itemTitle.isAcceptableValue(d.itemTitle.value, _itemTitleMeta));
+          itemTitle.isAcceptableOrUnknown(data['item_title'], _itemTitleMeta));
     } else if (isInserting) {
       context.missing(_itemTitleMeta);
     }
-    if (d.way1Title.present) {
+    if (data.containsKey('way1_title')) {
       context.handle(_way1TitleMeta,
-          way1Title.isAcceptableValue(d.way1Title.value, _way1TitleMeta));
+          way1Title.isAcceptableOrUnknown(data['way1_title'], _way1TitleMeta));
     } else if (isInserting) {
       context.missing(_way1TitleMeta);
     }
-    if (d.way1Demerit.present) {
-      context.handle(_way1DemeritMeta,
-          way1Demerit.isAcceptableValue(d.way1Demerit.value, _way1DemeritMeta));
+    if (data.containsKey('way1_demerit')) {
+      context.handle(
+          _way1DemeritMeta,
+          way1Demerit.isAcceptableOrUnknown(
+              data['way1_demerit'], _way1DemeritMeta));
     }
-    if (d.way1Evaluate.present) {
+    if (data.containsKey('way1_evaluate')) {
       context.handle(
           _way1EvaluateMeta,
-          way1Evaluate.isAcceptableValue(
-              d.way1Evaluate.value, _way1EvaluateMeta));
+          way1Evaluate.isAcceptableOrUnknown(
+              data['way1_evaluate'], _way1EvaluateMeta));
     }
-    if (d.way2Title.present) {
+    if (data.containsKey('way2_title')) {
       context.handle(_way2TitleMeta,
-          way2Title.isAcceptableValue(d.way2Title.value, _way2TitleMeta));
+          way2Title.isAcceptableOrUnknown(data['way2_title'], _way2TitleMeta));
     } else if (isInserting) {
       context.missing(_way2TitleMeta);
     }
-    if (d.way2Evaluate.present) {
+    if (data.containsKey('way2_evaluate')) {
       context.handle(
           _way2EvaluateMeta,
-          way2Evaluate.isAcceptableValue(
-              d.way2Evaluate.value, _way2EvaluateMeta));
+          way2Evaluate.isAcceptableOrUnknown(
+              data['way2_evaluate'], _way2EvaluateMeta));
     }
-    if (d.tags.present) {
+    if (data.containsKey('tags')) {
       context.handle(
-          _tagsMeta, tags.isAcceptableValue(d.tags.value, _tagsMeta));
+          _tagsMeta, tags.isAcceptableOrUnknown(data['tags'], _tagsMeta));
     }
-    if (d.favorite.present) {
+    if (data.containsKey('favorite')) {
       context.handle(_favoriteMeta,
-          favorite.isAcceptableValue(d.favorite.value, _favoriteMeta));
+          favorite.isAcceptableOrUnknown(data['favorite'], _favoriteMeta));
     }
-    if (d.conclusion.present) {
-      context.handle(_conclusionMeta,
-          conclusion.isAcceptableValue(d.conclusion.value, _conclusionMeta));
+    if (data.containsKey('conclusion')) {
+      context.handle(
+          _conclusionMeta,
+          conclusion.isAcceptableOrUnknown(
+              data['conclusion'], _conclusionMeta));
     }
     return context;
   }
@@ -511,46 +640,6 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
     return ComparisonOverviewRecord.fromData(data, _db,
         prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(ComparisonOverviewRecordsCompanion d) {
-    final map = <String, Variable>{};
-    if (d.dataId.present) {
-      map['data_id'] = Variable<int, IntType>(d.dataId.value);
-    }
-    if (d.comparisonItemId.present) {
-      map['comparison_item_id'] =
-          Variable<String, StringType>(d.comparisonItemId.value);
-    }
-    if (d.itemTitle.present) {
-      map['item_title'] = Variable<String, StringType>(d.itemTitle.value);
-    }
-    if (d.way1Title.present) {
-      map['way1_title'] = Variable<String, StringType>(d.way1Title.value);
-    }
-    if (d.way1Demerit.present) {
-      map['way1_demerit'] = Variable<String, StringType>(d.way1Demerit.value);
-    }
-    if (d.way1Evaluate.present) {
-      map['way1_evaluate'] = Variable<int, IntType>(d.way1Evaluate.value);
-    }
-    if (d.way2Title.present) {
-      map['way2_title'] = Variable<String, StringType>(d.way2Title.value);
-    }
-    if (d.way2Evaluate.present) {
-      map['way2_evaluate'] = Variable<int, IntType>(d.way2Evaluate.value);
-    }
-    if (d.tags.present) {
-      map['tags'] = Variable<String, StringType>(d.tags.value);
-    }
-    if (d.favorite.present) {
-      map['favorite'] = Variable<bool, BoolType>(d.favorite.value);
-    }
-    if (d.conclusion.present) {
-      map['conclusion'] = Variable<String, StringType>(d.conclusion.value);
-    }
-    return map;
   }
 
   @override
@@ -582,6 +671,35 @@ class Way1MeritRecord extends DataClass implements Insertable<Way1MeritRecord> {
           .mapFromDatabaseResponse(data['${effectivePrefix}way1_merit_desc']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || way1MeritId != null) {
+      map['way1_merit_id'] = Variable<int>(way1MeritId);
+    }
+    if (!nullToAbsent || comparisonItemId != null) {
+      map['comparison_item_id'] = Variable<String>(comparisonItemId);
+    }
+    if (!nullToAbsent || way1MeritDesc != null) {
+      map['way1_merit_desc'] = Variable<String>(way1MeritDesc);
+    }
+    return map;
+  }
+
+  Way1MeritRecordsCompanion toCompanion(bool nullToAbsent) {
+    return Way1MeritRecordsCompanion(
+      way1MeritId: way1MeritId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(way1MeritId),
+      comparisonItemId: comparisonItemId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(comparisonItemId),
+      way1MeritDesc: way1MeritDesc == null && nullToAbsent
+          ? const Value.absent()
+          : Value(way1MeritDesc),
+    );
+  }
+
   factory Way1MeritRecord.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -599,21 +717,6 @@ class Way1MeritRecord extends DataClass implements Insertable<Way1MeritRecord> {
       'comparisonItemId': serializer.toJson<String>(comparisonItemId),
       'way1MeritDesc': serializer.toJson<String>(way1MeritDesc),
     };
-  }
-
-  @override
-  Way1MeritRecordsCompanion createCompanion(bool nullToAbsent) {
-    return Way1MeritRecordsCompanion(
-      way1MeritId: way1MeritId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(way1MeritId),
-      comparisonItemId: comparisonItemId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(comparisonItemId),
-      way1MeritDesc: way1MeritDesc == null && nullToAbsent
-          ? const Value.absent()
-          : Value(way1MeritDesc),
-    );
   }
 
   Way1MeritRecord copyWith(
@@ -659,6 +762,18 @@ class Way1MeritRecordsCompanion extends UpdateCompanion<Way1MeritRecord> {
     @required String comparisonItemId,
     this.way1MeritDesc = const Value.absent(),
   }) : comparisonItemId = Value(comparisonItemId);
+  static Insertable<Way1MeritRecord> custom({
+    Expression<int> way1MeritId,
+    Expression<String> comparisonItemId,
+    Expression<String> way1MeritDesc,
+  }) {
+    return RawValuesInsertable({
+      if (way1MeritId != null) 'way1_merit_id': way1MeritId,
+      if (comparisonItemId != null) 'comparison_item_id': comparisonItemId,
+      if (way1MeritDesc != null) 'way1_merit_desc': way1MeritDesc,
+    });
+  }
+
   Way1MeritRecordsCompanion copyWith(
       {Value<int> way1MeritId,
       Value<String> comparisonItemId,
@@ -668,6 +783,31 @@ class Way1MeritRecordsCompanion extends UpdateCompanion<Way1MeritRecord> {
       comparisonItemId: comparisonItemId ?? this.comparisonItemId,
       way1MeritDesc: way1MeritDesc ?? this.way1MeritDesc,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (way1MeritId.present) {
+      map['way1_merit_id'] = Variable<int>(way1MeritId.value);
+    }
+    if (comparisonItemId.present) {
+      map['comparison_item_id'] = Variable<String>(comparisonItemId.value);
+    }
+    if (way1MeritDesc.present) {
+      map['way1_merit_desc'] = Variable<String>(way1MeritDesc.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Way1MeritRecordsCompanion(')
+          ..write('way1MeritId: $way1MeritId, ')
+          ..write('comparisonItemId: $comparisonItemId, ')
+          ..write('way1MeritDesc: $way1MeritDesc')
+          ..write(')'))
+        .toString();
   }
 }
 
@@ -725,26 +865,29 @@ class $Way1MeritRecordsTable extends Way1MeritRecords
   @override
   final String actualTableName = 'way1_merit_records';
   @override
-  VerificationContext validateIntegrity(Way1MeritRecordsCompanion d,
+  VerificationContext validateIntegrity(Insertable<Way1MeritRecord> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.way1MeritId.present) {
-      context.handle(_way1MeritIdMeta,
-          way1MeritId.isAcceptableValue(d.way1MeritId.value, _way1MeritIdMeta));
+    final data = instance.toColumns(true);
+    if (data.containsKey('way1_merit_id')) {
+      context.handle(
+          _way1MeritIdMeta,
+          way1MeritId.isAcceptableOrUnknown(
+              data['way1_merit_id'], _way1MeritIdMeta));
     }
-    if (d.comparisonItemId.present) {
+    if (data.containsKey('comparison_item_id')) {
       context.handle(
           _comparisonItemIdMeta,
-          comparisonItemId.isAcceptableValue(
-              d.comparisonItemId.value, _comparisonItemIdMeta));
+          comparisonItemId.isAcceptableOrUnknown(
+              data['comparison_item_id'], _comparisonItemIdMeta));
     } else if (isInserting) {
       context.missing(_comparisonItemIdMeta);
     }
-    if (d.way1MeritDesc.present) {
+    if (data.containsKey('way1_merit_desc')) {
       context.handle(
           _way1MeritDescMeta,
-          way1MeritDesc.isAcceptableValue(
-              d.way1MeritDesc.value, _way1MeritDescMeta));
+          way1MeritDesc.isAcceptableOrUnknown(
+              data['way1_merit_desc'], _way1MeritDescMeta));
     }
     return context;
   }
@@ -755,23 +898,6 @@ class $Way1MeritRecordsTable extends Way1MeritRecords
   Way1MeritRecord map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
     return Way1MeritRecord.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(Way1MeritRecordsCompanion d) {
-    final map = <String, Variable>{};
-    if (d.way1MeritId.present) {
-      map['way1_merit_id'] = Variable<int, IntType>(d.way1MeritId.value);
-    }
-    if (d.comparisonItemId.present) {
-      map['comparison_item_id'] =
-          Variable<String, StringType>(d.comparisonItemId.value);
-    }
-    if (d.way1MeritDesc.present) {
-      map['way1_merit_desc'] =
-          Variable<String, StringType>(d.way1MeritDesc.value);
-    }
-    return map;
   }
 
   @override
@@ -804,6 +930,35 @@ class Way1DemeritRecord extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}way1_demerit_desc']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || way1DemeritId != null) {
+      map['way1_demerit_id'] = Variable<int>(way1DemeritId);
+    }
+    if (!nullToAbsent || comparisonItemId != null) {
+      map['comparison_item_id'] = Variable<String>(comparisonItemId);
+    }
+    if (!nullToAbsent || way1DemeritDesc != null) {
+      map['way1_demerit_desc'] = Variable<String>(way1DemeritDesc);
+    }
+    return map;
+  }
+
+  Way1DemeritRecordsCompanion toCompanion(bool nullToAbsent) {
+    return Way1DemeritRecordsCompanion(
+      way1DemeritId: way1DemeritId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(way1DemeritId),
+      comparisonItemId: comparisonItemId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(comparisonItemId),
+      way1DemeritDesc: way1DemeritDesc == null && nullToAbsent
+          ? const Value.absent()
+          : Value(way1DemeritDesc),
+    );
+  }
+
   factory Way1DemeritRecord.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -821,21 +976,6 @@ class Way1DemeritRecord extends DataClass
       'comparisonItemId': serializer.toJson<String>(comparisonItemId),
       'way1DemeritDesc': serializer.toJson<String>(way1DemeritDesc),
     };
-  }
-
-  @override
-  Way1DemeritRecordsCompanion createCompanion(bool nullToAbsent) {
-    return Way1DemeritRecordsCompanion(
-      way1DemeritId: way1DemeritId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(way1DemeritId),
-      comparisonItemId: comparisonItemId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(comparisonItemId),
-      way1DemeritDesc: way1DemeritDesc == null && nullToAbsent
-          ? const Value.absent()
-          : Value(way1DemeritDesc),
-    );
   }
 
   Way1DemeritRecord copyWith(
@@ -883,6 +1023,18 @@ class Way1DemeritRecordsCompanion extends UpdateCompanion<Way1DemeritRecord> {
     @required String comparisonItemId,
     this.way1DemeritDesc = const Value.absent(),
   }) : comparisonItemId = Value(comparisonItemId);
+  static Insertable<Way1DemeritRecord> custom({
+    Expression<int> way1DemeritId,
+    Expression<String> comparisonItemId,
+    Expression<String> way1DemeritDesc,
+  }) {
+    return RawValuesInsertable({
+      if (way1DemeritId != null) 'way1_demerit_id': way1DemeritId,
+      if (comparisonItemId != null) 'comparison_item_id': comparisonItemId,
+      if (way1DemeritDesc != null) 'way1_demerit_desc': way1DemeritDesc,
+    });
+  }
+
   Way1DemeritRecordsCompanion copyWith(
       {Value<int> way1DemeritId,
       Value<String> comparisonItemId,
@@ -892,6 +1044,31 @@ class Way1DemeritRecordsCompanion extends UpdateCompanion<Way1DemeritRecord> {
       comparisonItemId: comparisonItemId ?? this.comparisonItemId,
       way1DemeritDesc: way1DemeritDesc ?? this.way1DemeritDesc,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (way1DemeritId.present) {
+      map['way1_demerit_id'] = Variable<int>(way1DemeritId.value);
+    }
+    if (comparisonItemId.present) {
+      map['comparison_item_id'] = Variable<String>(comparisonItemId.value);
+    }
+    if (way1DemeritDesc.present) {
+      map['way1_demerit_desc'] = Variable<String>(way1DemeritDesc.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Way1DemeritRecordsCompanion(')
+          ..write('way1DemeritId: $way1DemeritId, ')
+          ..write('comparisonItemId: $comparisonItemId, ')
+          ..write('way1DemeritDesc: $way1DemeritDesc')
+          ..write(')'))
+        .toString();
   }
 }
 
@@ -949,28 +1126,29 @@ class $Way1DemeritRecordsTable extends Way1DemeritRecords
   @override
   final String actualTableName = 'way1_demerit_records';
   @override
-  VerificationContext validateIntegrity(Way1DemeritRecordsCompanion d,
+  VerificationContext validateIntegrity(Insertable<Way1DemeritRecord> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.way1DemeritId.present) {
+    final data = instance.toColumns(true);
+    if (data.containsKey('way1_demerit_id')) {
       context.handle(
           _way1DemeritIdMeta,
-          way1DemeritId.isAcceptableValue(
-              d.way1DemeritId.value, _way1DemeritIdMeta));
+          way1DemeritId.isAcceptableOrUnknown(
+              data['way1_demerit_id'], _way1DemeritIdMeta));
     }
-    if (d.comparisonItemId.present) {
+    if (data.containsKey('comparison_item_id')) {
       context.handle(
           _comparisonItemIdMeta,
-          comparisonItemId.isAcceptableValue(
-              d.comparisonItemId.value, _comparisonItemIdMeta));
+          comparisonItemId.isAcceptableOrUnknown(
+              data['comparison_item_id'], _comparisonItemIdMeta));
     } else if (isInserting) {
       context.missing(_comparisonItemIdMeta);
     }
-    if (d.way1DemeritDesc.present) {
+    if (data.containsKey('way1_demerit_desc')) {
       context.handle(
           _way1DemeritDescMeta,
-          way1DemeritDesc.isAcceptableValue(
-              d.way1DemeritDesc.value, _way1DemeritDescMeta));
+          way1DemeritDesc.isAcceptableOrUnknown(
+              data['way1_demerit_desc'], _way1DemeritDescMeta));
     }
     return context;
   }
@@ -981,23 +1159,6 @@ class $Way1DemeritRecordsTable extends Way1DemeritRecords
   Way1DemeritRecord map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
     return Way1DemeritRecord.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(Way1DemeritRecordsCompanion d) {
-    final map = <String, Variable>{};
-    if (d.way1DemeritId.present) {
-      map['way1_demerit_id'] = Variable<int, IntType>(d.way1DemeritId.value);
-    }
-    if (d.comparisonItemId.present) {
-      map['comparison_item_id'] =
-          Variable<String, StringType>(d.comparisonItemId.value);
-    }
-    if (d.way1DemeritDesc.present) {
-      map['way1_demerit_desc'] =
-          Variable<String, StringType>(d.way1DemeritDesc.value);
-    }
-    return map;
   }
 
   @override
@@ -1023,6 +1184,28 @@ class TagOverviewRecord extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}tag_title']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || tagId != null) {
+      map['tag_id'] = Variable<String>(tagId);
+    }
+    if (!nullToAbsent || tagTitle != null) {
+      map['tag_title'] = Variable<String>(tagTitle);
+    }
+    return map;
+  }
+
+  TagOverviewRecordsCompanion toCompanion(bool nullToAbsent) {
+    return TagOverviewRecordsCompanion(
+      tagId:
+          tagId == null && nullToAbsent ? const Value.absent() : Value(tagId),
+      tagTitle: tagTitle == null && nullToAbsent
+          ? const Value.absent()
+          : Value(tagTitle),
+    );
+  }
+
   factory TagOverviewRecord.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -1038,17 +1221,6 @@ class TagOverviewRecord extends DataClass
       'tagId': serializer.toJson<String>(tagId),
       'tagTitle': serializer.toJson<String>(tagTitle),
     };
-  }
-
-  @override
-  TagOverviewRecordsCompanion createCompanion(bool nullToAbsent) {
-    return TagOverviewRecordsCompanion(
-      tagId:
-          tagId == null && nullToAbsent ? const Value.absent() : Value(tagId),
-      tagTitle: tagTitle == null && nullToAbsent
-          ? const Value.absent()
-          : Value(tagTitle),
-    );
   }
 
   TagOverviewRecord copyWith({String tagId, String tagTitle}) =>
@@ -1087,12 +1259,43 @@ class TagOverviewRecordsCompanion extends UpdateCompanion<TagOverviewRecord> {
     @required String tagTitle,
   })  : tagId = Value(tagId),
         tagTitle = Value(tagTitle);
+  static Insertable<TagOverviewRecord> custom({
+    Expression<String> tagId,
+    Expression<String> tagTitle,
+  }) {
+    return RawValuesInsertable({
+      if (tagId != null) 'tag_id': tagId,
+      if (tagTitle != null) 'tag_title': tagTitle,
+    });
+  }
+
   TagOverviewRecordsCompanion copyWith(
       {Value<String> tagId, Value<String> tagTitle}) {
     return TagOverviewRecordsCompanion(
       tagId: tagId ?? this.tagId,
       tagTitle: tagTitle ?? this.tagTitle,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (tagId.present) {
+      map['tag_id'] = Variable<String>(tagId.value);
+    }
+    if (tagTitle.present) {
+      map['tag_title'] = Variable<String>(tagTitle.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TagOverviewRecordsCompanion(')
+          ..write('tagId: $tagId, ')
+          ..write('tagTitle: $tagTitle')
+          ..write(')'))
+        .toString();
   }
 }
 
@@ -1134,18 +1337,19 @@ class $TagOverviewRecordsTable extends TagOverviewRecords
   @override
   final String actualTableName = 'tag_overview_records';
   @override
-  VerificationContext validateIntegrity(TagOverviewRecordsCompanion d,
+  VerificationContext validateIntegrity(Insertable<TagOverviewRecord> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.tagId.present) {
+    final data = instance.toColumns(true);
+    if (data.containsKey('tag_id')) {
       context.handle(
-          _tagIdMeta, tagId.isAcceptableValue(d.tagId.value, _tagIdMeta));
+          _tagIdMeta, tagId.isAcceptableOrUnknown(data['tag_id'], _tagIdMeta));
     } else if (isInserting) {
       context.missing(_tagIdMeta);
     }
-    if (d.tagTitle.present) {
+    if (data.containsKey('tag_title')) {
       context.handle(_tagTitleMeta,
-          tagTitle.isAcceptableValue(d.tagTitle.value, _tagTitleMeta));
+          tagTitle.isAcceptableOrUnknown(data['tag_title'], _tagTitleMeta));
     } else if (isInserting) {
       context.missing(_tagTitleMeta);
     }
@@ -1158,18 +1362,6 @@ class $TagOverviewRecordsTable extends TagOverviewRecords
   TagOverviewRecord map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
     return TagOverviewRecord.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(TagOverviewRecordsCompanion d) {
-    final map = <String, Variable>{};
-    if (d.tagId.present) {
-      map['tag_id'] = Variable<String, StringType>(d.tagId.value);
-    }
-    if (d.tagTitle.present) {
-      map['tag_title'] = Variable<String, StringType>(d.tagTitle.value);
-    }
-    return map;
   }
 
   @override
@@ -1196,6 +1388,28 @@ class ComparisonItemIdRecord extends DataClass
           data['${effectivePrefix}comparison_item_id']),
     );
   }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || tagId != null) {
+      map['tag_id'] = Variable<String>(tagId);
+    }
+    if (!nullToAbsent || comparisonItemId != null) {
+      map['comparison_item_id'] = Variable<String>(comparisonItemId);
+    }
+    return map;
+  }
+
+  ComparisonItemIdRecordsCompanion toCompanion(bool nullToAbsent) {
+    return ComparisonItemIdRecordsCompanion(
+      tagId:
+          tagId == null && nullToAbsent ? const Value.absent() : Value(tagId),
+      comparisonItemId: comparisonItemId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(comparisonItemId),
+    );
+  }
+
   factory ComparisonItemIdRecord.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -1211,17 +1425,6 @@ class ComparisonItemIdRecord extends DataClass
       'tagId': serializer.toJson<String>(tagId),
       'comparisonItemId': serializer.toJson<String>(comparisonItemId),
     };
-  }
-
-  @override
-  ComparisonItemIdRecordsCompanion createCompanion(bool nullToAbsent) {
-    return ComparisonItemIdRecordsCompanion(
-      tagId:
-          tagId == null && nullToAbsent ? const Value.absent() : Value(tagId),
-      comparisonItemId: comparisonItemId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(comparisonItemId),
-    );
   }
 
   ComparisonItemIdRecord copyWith({String tagId, String comparisonItemId}) =>
@@ -1261,12 +1464,43 @@ class ComparisonItemIdRecordsCompanion
     @required String comparisonItemId,
   })  : tagId = Value(tagId),
         comparisonItemId = Value(comparisonItemId);
+  static Insertable<ComparisonItemIdRecord> custom({
+    Expression<String> tagId,
+    Expression<String> comparisonItemId,
+  }) {
+    return RawValuesInsertable({
+      if (tagId != null) 'tag_id': tagId,
+      if (comparisonItemId != null) 'comparison_item_id': comparisonItemId,
+    });
+  }
+
   ComparisonItemIdRecordsCompanion copyWith(
       {Value<String> tagId, Value<String> comparisonItemId}) {
     return ComparisonItemIdRecordsCompanion(
       tagId: tagId ?? this.tagId,
       comparisonItemId: comparisonItemId ?? this.comparisonItemId,
     );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (tagId.present) {
+      map['tag_id'] = Variable<String>(tagId.value);
+    }
+    if (comparisonItemId.present) {
+      map['comparison_item_id'] = Variable<String>(comparisonItemId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ComparisonItemIdRecordsCompanion(')
+          ..write('tagId: $tagId, ')
+          ..write('comparisonItemId: $comparisonItemId')
+          ..write(')'))
+        .toString();
   }
 }
 
@@ -1310,20 +1544,22 @@ class $ComparisonItemIdRecordsTable extends ComparisonItemIdRecords
   @override
   final String actualTableName = 'comparison_item_id_records';
   @override
-  VerificationContext validateIntegrity(ComparisonItemIdRecordsCompanion d,
+  VerificationContext validateIntegrity(
+      Insertable<ComparisonItemIdRecord> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
-    if (d.tagId.present) {
+    final data = instance.toColumns(true);
+    if (data.containsKey('tag_id')) {
       context.handle(
-          _tagIdMeta, tagId.isAcceptableValue(d.tagId.value, _tagIdMeta));
+          _tagIdMeta, tagId.isAcceptableOrUnknown(data['tag_id'], _tagIdMeta));
     } else if (isInserting) {
       context.missing(_tagIdMeta);
     }
-    if (d.comparisonItemId.present) {
+    if (data.containsKey('comparison_item_id')) {
       context.handle(
           _comparisonItemIdMeta,
-          comparisonItemId.isAcceptableValue(
-              d.comparisonItemId.value, _comparisonItemIdMeta));
+          comparisonItemId.isAcceptableOrUnknown(
+              data['comparison_item_id'], _comparisonItemIdMeta));
     } else if (isInserting) {
       context.missing(_comparisonItemIdMeta);
     }
@@ -1336,19 +1572,6 @@ class $ComparisonItemIdRecordsTable extends ComparisonItemIdRecords
   ComparisonItemIdRecord map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
     return ComparisonItemIdRecord.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  Map<String, Variable> entityToSql(ComparisonItemIdRecordsCompanion d) {
-    final map = <String, Variable>{};
-    if (d.tagId.present) {
-      map['tag_id'] = Variable<String, StringType>(d.tagId.value);
-    }
-    if (d.comparisonItemId.present) {
-      map['comparison_item_id'] =
-          Variable<String, StringType>(d.comparisonItemId.value);
-    }
-    return map;
   }
 
   @override

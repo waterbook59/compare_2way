@@ -1,4 +1,10 @@
+import 'dart:io';
+
+import 'package:moor/ffi.dart';
 import 'package:moor/moor.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
+//import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
 part 'comparison_item_database.g.dart';
 
@@ -43,22 +49,16 @@ class ComparisonOverviewRecords extends Table {
 //comparisonItemIdをテーブル紐付けに使う
 class Way1MeritRecords extends Table {
   IntColumn get way1MeritId => integer().autoIncrement()();
-
   TextColumn get comparisonItemId => text()();
-
   TextColumn get way1MeritDesc => text().nullable()();
-
   @override
   Set<Column> get primaryKey => {way1MeritId};
 }
 //テーブルway1Demerit
 class Way1DemeritRecords extends Table {
   IntColumn get way1DemeritId => integer().autoIncrement()();
-
   TextColumn get comparisonItemId => text()();
-
   TextColumn get way1DemeritDesc => text().nullable()();
-
   @override
   Set<Column> get primaryKey => {way1DemeritId};
 }
@@ -78,14 +78,12 @@ class TagOverviewRecords extends Table {
 
 class ComparisonItemIdRecords extends Table {
   TextColumn get tagId => text()();
-
   TextColumn get comparisonItemId => text()();
 }
 
 //タグ結合クラス
 class TagRecords {
   TagRecords({this.tagOverviewRecords, this.comparisonItemIds,});
-
   final TagOverviewRecords tagOverviewRecords;
   final ComparisonItemIdRecords comparisonItemIds;
 
@@ -114,6 +112,20 @@ class ComparisonItemRecords {
   TagOverviewRecords,
   ComparisonItemIdRecords
 ])
-class ComparisonItemDB {
+class ComparisonItemDB  extends _$ComparisonItemDB{
+  ComparisonItemDB() : super(_openConnection());
 
+
+  @override
+  int get schemaVersion => 1;
+
+}
+
+LazyDatabase _openConnection() {
+
+  return LazyDatabase(() async {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    //Fileはdart.ioインポート
+    final file = File(p.join(dbFolder.path, 'comparison_item.db'));
+    return VmDatabase(file);
 }
