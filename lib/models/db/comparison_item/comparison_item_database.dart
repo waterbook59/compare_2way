@@ -4,7 +4,7 @@ import 'package:moor/ffi.dart';
 import 'package:moor/moor.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-//import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
+
 
 part 'comparison_item_database.g.dart';
 
@@ -128,4 +128,5 @@ LazyDatabase _openConnection() {
     //Fileはdart.ioインポート
     final file = File(p.join(dbFolder.path, 'comparison_item.db'));
     return VmDatabase(file);
+  });
 }
