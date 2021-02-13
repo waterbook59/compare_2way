@@ -1,6 +1,7 @@
 class Way1Merit{
-  Way1Merit({this.way1MeritId,this.way1MeritDesc});
+  Way1Merit({ this.way1MeritId,this.comparisonItemId,this.way1MeritDesc});
   final int way1MeritId;
+  final String comparisonItemId;
   final String way1MeritDesc;
 }
 

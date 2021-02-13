@@ -5,7 +5,8 @@ import 'package:compare_2way/data_models/merit_demerit.dart';
 class ComparisonItem {
   ComparisonItem(
       {this.dataId,
-      this.itemTitle,
+        this.comparisonItemId,
+        this.itemTitle,
       this.way1Title,
       this.way1Merit,
       this.way1Demerit,
@@ -18,12 +19,13 @@ class ComparisonItem {
       this.way3Merit,
       this.way3Demerit,
         this.way3Evaluate,
-      this.tags,
+      this.tagTitles,//dataIdに紐づくタグのタイトルだけ
       this.favorite,
       this.conclusion});
 
   final int dataId;
-  final int itemTitle;
+  final String comparisonItemId;
+  final String itemTitle;
 
   final String way1Title;
   final List<Way1Merit> way1Merit;
@@ -40,7 +42,7 @@ class ComparisonItem {
   final List<Way3Demerit> way3Demerit;
   final int way3Evaluate;
 
-  final List<Tag> tags;
+  final List<Tag> tagTitles;
   final bool favorite;
 
   final String conclusion;
