@@ -14,4 +14,8 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     with _$ComparisonItemDaoMixin {
   ComparisonItemDao(ComparisonItemDB itemDB) : super(itemDB);
 
+
+
+
+
 }
