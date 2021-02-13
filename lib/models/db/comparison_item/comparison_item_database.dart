@@ -5,11 +5,14 @@ part 'comparison_item_database.g.dart';
 ///comparison_item結合(ComparisonOverviewRecords+Way1MeritRecords+..+TagRecords)
 class ComparisonOverviewRecords extends Table {
   IntColumn get dataId => integer().autoIncrement()();
+
   TextColumn get comparisonItemId => text()(); //UuIdで他のテーブルとの結合に使用の可能性
   TextColumn get itemTitle => text()();
 
   TextColumn get way1Title => text()();
+
   TextColumn get way1Demerit => text().nullable()();
+
   IntColumn get way1Evaluate =>
       integer().withDefault(const Constant(0))(); // 評価、初期ゼロ
 
@@ -27,8 +30,11 @@ class ComparisonOverviewRecords extends Table {
 //  =>integer().withDefault(const Constant(0))();// 評価、初期ゼロ
 
   TextColumn get tags => text().nullable()();
+
   BoolColumn get favorite => boolean().withDefault(const Constant(false))();
+
   TextColumn get conclusion => text().nullable()();
+
   @override
   Set<Column> get primaryKey => {dataId};
 }
@@ -37,16 +43,22 @@ class ComparisonOverviewRecords extends Table {
 //comparisonItemIdをテーブル紐付けに使う
 class Way1MeritRecords extends Table {
   IntColumn get way1MeritId => integer().autoIncrement()();
+
   TextColumn get comparisonItemId => text()();
+
   TextColumn get way1MeritDesc => text().nullable()();
+
   @override
   Set<Column> get primaryKey => {way1MeritId};
 }
 //テーブルway1Demerit
 class Way1DemeritRecords extends Table {
   IntColumn get way1DemeritId => integer().autoIncrement()();
+
   TextColumn get comparisonItemId => text()();
+
   TextColumn get way1DemeritDesc => text().nullable()();
+
   @override
   Set<Column> get primaryKey => {way1DemeritId};
 }
@@ -58,20 +70,22 @@ class Way1DemeritRecords extends Table {
 //}
 
 ///タグ結合(TagRecords=TagOverviewRecords+ComparisonItemIdRecords)
-class TagOverviewRecords extends Table{
+class TagOverviewRecords extends Table {
   //autoIncrementのidあった方がいいかも
-  TextColumn get tagId => text()();//タグを結合するためにComparisonItemIdとは別のUuid
+  TextColumn get tagId => text()(); //タグを結合するためにComparisonItemIdとは別のUuid
   TextColumn get tagTitle => text()();
 }
 
-class ComparisonItemIdRecords extends Table{
+class ComparisonItemIdRecords extends Table {
   TextColumn get tagId => text()();
+
   TextColumn get comparisonItemId => text()();
 }
 
 //タグ結合クラス
-class TagRecords{
+class TagRecords {
   TagRecords({this.tagOverviewRecords, this.comparisonItemIds,});
+
   final TagOverviewRecords tagOverviewRecords;
   final ComparisonItemIdRecords comparisonItemIds;
 
@@ -79,11 +93,10 @@ class TagRecords{
 
 ///comparison_item結合クラス
 class ComparisonItemRecords {
-  ComparisonItemRecords(
-      {this.comparisonOverviewRecords,
-        this.way1meritRecords,
-        this.way1DemeritRecords,
-      this.tagRecords});
+  ComparisonItemRecords({this.comparisonOverviewRecords,
+    this.way1meritRecords,
+    this.way1DemeritRecords,
+    this.tagRecords});
 
   final ComparisonOverviewRecords comparisonOverviewRecords;
   final Way1MeritRecords way1meritRecords;
@@ -94,5 +107,13 @@ class ComparisonItemRecords {
 }
 
 
-@UseMoor(tables: [ComparisonItemRecords])
-class CompareListDB
+@UseMoor(tables: [
+  ComparisonOverviewRecords,
+  Way1MeritRecords,
+  Way1DemeritRecords,
+  TagOverviewRecords,
+  ComparisonItemIdRecords
+])
+class ComparisonItemDB {
+
+}
