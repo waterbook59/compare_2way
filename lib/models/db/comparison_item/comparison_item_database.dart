@@ -18,7 +18,6 @@ class ComparisonOverviewRecords extends Table {
   TextColumn get itemTitle => text()();
 
   TextColumn get way1Title => text()();
-  TextColumn get way1Demerit => text().nullable()();
   IntColumn get way1Evaluate =>
       integer().withDefault(const Constant(0))(); // 評価、初期ゼロ
 
@@ -34,7 +33,7 @@ class ComparisonOverviewRecords extends Table {
 //  IntColumn get way3Evaluate
 //  =>integer().withDefault(const Constant(0))();// 評価、初期ゼロ
 
-  TextColumn get tags => text().nullable()();
+//  TextColumn get tags => text().nullable()();
   BoolColumn get favorite => boolean().withDefault(const Constant(false))();
   TextColumn get conclusion => text().nullable()();
 
