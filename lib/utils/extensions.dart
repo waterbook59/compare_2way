@@ -36,14 +36,15 @@ extension ConvertToComparisonItemRecord on ComparisonItem{
     //todo
 //    way1MeritId:autoIncrementにしてるので、そのままにしてみる
     //List<メリット詳細>=>1つずつのメリットへ分解
-    final way1MeritRecords = <Way1MeritRecord >[];
+    ///way1MeritDescsはway1MeritRecordと同義だた、daoでinsertするときややこしいので名前変更
+    final way1MeritDescs = <Way1MeritRecord>[];
     comparisonItem.way1Merit.forEach((way1MeritSingle) {
-      way1MeritRecords.add(Way1MeritRecord(
+      way1MeritDescs.add(Way1MeritRecord(
         comparisonItemId: way1MeritSingle.comparisonItemId,
         way1MeritDesc: way1MeritSingle.way1MeritDesc,
       ));
     });
-    return way1MeritRecords;
+    return way1MeritDescs;
   }
 
 

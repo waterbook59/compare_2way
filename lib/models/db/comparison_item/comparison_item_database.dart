@@ -4,16 +4,12 @@ import 'package:moor/ffi.dart';
 import 'package:moor/moor.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-
 import 'comparison_item_dao.dart';
-
-
 part 'comparison_item_database.g.dart';
 
 ///comparison_item結合(ComparisonOverviewRecords+Way1MeritRecords+..+TagRecords)
 class ComparisonOverviewRecords extends Table {
   IntColumn get dataId => integer().autoIncrement()();
-
   TextColumn get comparisonItemId => text()(); //UuIdで他のテーブルとの結合に使用の可能性
   TextColumn get itemTitle => text()();
 
@@ -23,9 +19,10 @@ class ComparisonOverviewRecords extends Table {
 
   //todo way2テーブルはあとで追加
   TextColumn get way2Title => text()();
+  IntColumn get way2Evaluate => integer().withDefault(const Constant(0))();
 //  TextColumn get way2Merit => text().nullable()();
 //  TextColumn get way2Demerit => text().nullable()();
-  IntColumn get way2Evaluate => integer().withDefault(const Constant(0))();
+
 
 //  TextColumn get way3Title => text().nullable()();
 //  TextColumn get way3Merit => text().nullable()();

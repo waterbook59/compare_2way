@@ -13,11 +13,9 @@ class ComparisonOverviewRecord extends DataClass
   final String comparisonItemId;
   final String itemTitle;
   final String way1Title;
-  final String way1Demerit;
   final int way1Evaluate;
   final String way2Title;
   final int way2Evaluate;
-  final String tags;
   final bool favorite;
   final String conclusion;
   ComparisonOverviewRecord(
@@ -25,11 +23,9 @@ class ComparisonOverviewRecord extends DataClass
       @required this.comparisonItemId,
       @required this.itemTitle,
       @required this.way1Title,
-      this.way1Demerit,
       @required this.way1Evaluate,
       @required this.way2Title,
       @required this.way2Evaluate,
-      this.tags,
       @required this.favorite,
       this.conclusion});
   factory ComparisonOverviewRecord.fromData(
@@ -48,15 +44,12 @@ class ComparisonOverviewRecord extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}item_title']),
       way1Title: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}way1_title']),
-      way1Demerit: stringType
-          .mapFromDatabaseResponse(data['${effectivePrefix}way1_demerit']),
       way1Evaluate: intType
           .mapFromDatabaseResponse(data['${effectivePrefix}way1_evaluate']),
       way2Title: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}way2_title']),
       way2Evaluate: intType
           .mapFromDatabaseResponse(data['${effectivePrefix}way2_evaluate']),
-      tags: stringType.mapFromDatabaseResponse(data['${effectivePrefix}tags']),
       favorite:
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}favorite']),
       conclusion: stringType
@@ -78,9 +71,6 @@ class ComparisonOverviewRecord extends DataClass
     if (!nullToAbsent || way1Title != null) {
       map['way1_title'] = Variable<String>(way1Title);
     }
-    if (!nullToAbsent || way1Demerit != null) {
-      map['way1_demerit'] = Variable<String>(way1Demerit);
-    }
     if (!nullToAbsent || way1Evaluate != null) {
       map['way1_evaluate'] = Variable<int>(way1Evaluate);
     }
@@ -89,9 +79,6 @@ class ComparisonOverviewRecord extends DataClass
     }
     if (!nullToAbsent || way2Evaluate != null) {
       map['way2_evaluate'] = Variable<int>(way2Evaluate);
-    }
-    if (!nullToAbsent || tags != null) {
-      map['tags'] = Variable<String>(tags);
     }
     if (!nullToAbsent || favorite != null) {
       map['favorite'] = Variable<bool>(favorite);
@@ -115,9 +102,6 @@ class ComparisonOverviewRecord extends DataClass
       way1Title: way1Title == null && nullToAbsent
           ? const Value.absent()
           : Value(way1Title),
-      way1Demerit: way1Demerit == null && nullToAbsent
-          ? const Value.absent()
-          : Value(way1Demerit),
       way1Evaluate: way1Evaluate == null && nullToAbsent
           ? const Value.absent()
           : Value(way1Evaluate),
@@ -127,7 +111,6 @@ class ComparisonOverviewRecord extends DataClass
       way2Evaluate: way2Evaluate == null && nullToAbsent
           ? const Value.absent()
           : Value(way2Evaluate),
-      tags: tags == null && nullToAbsent ? const Value.absent() : Value(tags),
       favorite: favorite == null && nullToAbsent
           ? const Value.absent()
           : Value(favorite),
@@ -145,11 +128,9 @@ class ComparisonOverviewRecord extends DataClass
       comparisonItemId: serializer.fromJson<String>(json['comparisonItemId']),
       itemTitle: serializer.fromJson<String>(json['itemTitle']),
       way1Title: serializer.fromJson<String>(json['way1Title']),
-      way1Demerit: serializer.fromJson<String>(json['way1Demerit']),
       way1Evaluate: serializer.fromJson<int>(json['way1Evaluate']),
       way2Title: serializer.fromJson<String>(json['way2Title']),
       way2Evaluate: serializer.fromJson<int>(json['way2Evaluate']),
-      tags: serializer.fromJson<String>(json['tags']),
       favorite: serializer.fromJson<bool>(json['favorite']),
       conclusion: serializer.fromJson<String>(json['conclusion']),
     );
@@ -162,11 +143,9 @@ class ComparisonOverviewRecord extends DataClass
       'comparisonItemId': serializer.toJson<String>(comparisonItemId),
       'itemTitle': serializer.toJson<String>(itemTitle),
       'way1Title': serializer.toJson<String>(way1Title),
-      'way1Demerit': serializer.toJson<String>(way1Demerit),
       'way1Evaluate': serializer.toJson<int>(way1Evaluate),
       'way2Title': serializer.toJson<String>(way2Title),
       'way2Evaluate': serializer.toJson<int>(way2Evaluate),
-      'tags': serializer.toJson<String>(tags),
       'favorite': serializer.toJson<bool>(favorite),
       'conclusion': serializer.toJson<String>(conclusion),
     };
@@ -177,11 +156,9 @@ class ComparisonOverviewRecord extends DataClass
           String comparisonItemId,
           String itemTitle,
           String way1Title,
-          String way1Demerit,
           int way1Evaluate,
           String way2Title,
           int way2Evaluate,
-          String tags,
           bool favorite,
           String conclusion}) =>
       ComparisonOverviewRecord(
@@ -189,11 +166,9 @@ class ComparisonOverviewRecord extends DataClass
         comparisonItemId: comparisonItemId ?? this.comparisonItemId,
         itemTitle: itemTitle ?? this.itemTitle,
         way1Title: way1Title ?? this.way1Title,
-        way1Demerit: way1Demerit ?? this.way1Demerit,
         way1Evaluate: way1Evaluate ?? this.way1Evaluate,
         way2Title: way2Title ?? this.way2Title,
         way2Evaluate: way2Evaluate ?? this.way2Evaluate,
-        tags: tags ?? this.tags,
         favorite: favorite ?? this.favorite,
         conclusion: conclusion ?? this.conclusion,
       );
@@ -204,11 +179,9 @@ class ComparisonOverviewRecord extends DataClass
           ..write('comparisonItemId: $comparisonItemId, ')
           ..write('itemTitle: $itemTitle, ')
           ..write('way1Title: $way1Title, ')
-          ..write('way1Demerit: $way1Demerit, ')
           ..write('way1Evaluate: $way1Evaluate, ')
           ..write('way2Title: $way2Title, ')
           ..write('way2Evaluate: $way2Evaluate, ')
-          ..write('tags: $tags, ')
           ..write('favorite: $favorite, ')
           ..write('conclusion: $conclusion')
           ..write(')'))
@@ -225,17 +198,13 @@ class ComparisonOverviewRecord extends DataClass
               $mrjc(
                   way1Title.hashCode,
                   $mrjc(
-                      way1Demerit.hashCode,
+                      way1Evaluate.hashCode,
                       $mrjc(
-                          way1Evaluate.hashCode,
+                          way2Title.hashCode,
                           $mrjc(
-                              way2Title.hashCode,
-                              $mrjc(
-                                  way2Evaluate.hashCode,
-                                  $mrjc(
-                                      tags.hashCode,
-                                      $mrjc(favorite.hashCode,
-                                          conclusion.hashCode)))))))))));
+                              way2Evaluate.hashCode,
+                              $mrjc(favorite.hashCode,
+                                  conclusion.hashCode)))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -244,11 +213,9 @@ class ComparisonOverviewRecord extends DataClass
           other.comparisonItemId == this.comparisonItemId &&
           other.itemTitle == this.itemTitle &&
           other.way1Title == this.way1Title &&
-          other.way1Demerit == this.way1Demerit &&
           other.way1Evaluate == this.way1Evaluate &&
           other.way2Title == this.way2Title &&
           other.way2Evaluate == this.way2Evaluate &&
-          other.tags == this.tags &&
           other.favorite == this.favorite &&
           other.conclusion == this.conclusion);
 }
@@ -259,11 +226,9 @@ class ComparisonOverviewRecordsCompanion
   final Value<String> comparisonItemId;
   final Value<String> itemTitle;
   final Value<String> way1Title;
-  final Value<String> way1Demerit;
   final Value<int> way1Evaluate;
   final Value<String> way2Title;
   final Value<int> way2Evaluate;
-  final Value<String> tags;
   final Value<bool> favorite;
   final Value<String> conclusion;
   const ComparisonOverviewRecordsCompanion({
@@ -271,11 +236,9 @@ class ComparisonOverviewRecordsCompanion
     this.comparisonItemId = const Value.absent(),
     this.itemTitle = const Value.absent(),
     this.way1Title = const Value.absent(),
-    this.way1Demerit = const Value.absent(),
     this.way1Evaluate = const Value.absent(),
     this.way2Title = const Value.absent(),
     this.way2Evaluate = const Value.absent(),
-    this.tags = const Value.absent(),
     this.favorite = const Value.absent(),
     this.conclusion = const Value.absent(),
   });
@@ -284,11 +247,9 @@ class ComparisonOverviewRecordsCompanion
     @required String comparisonItemId,
     @required String itemTitle,
     @required String way1Title,
-    this.way1Demerit = const Value.absent(),
     this.way1Evaluate = const Value.absent(),
     @required String way2Title,
     this.way2Evaluate = const Value.absent(),
-    this.tags = const Value.absent(),
     this.favorite = const Value.absent(),
     this.conclusion = const Value.absent(),
   })  : comparisonItemId = Value(comparisonItemId),
@@ -300,11 +261,9 @@ class ComparisonOverviewRecordsCompanion
     Expression<String> comparisonItemId,
     Expression<String> itemTitle,
     Expression<String> way1Title,
-    Expression<String> way1Demerit,
     Expression<int> way1Evaluate,
     Expression<String> way2Title,
     Expression<int> way2Evaluate,
-    Expression<String> tags,
     Expression<bool> favorite,
     Expression<String> conclusion,
   }) {
@@ -313,11 +272,9 @@ class ComparisonOverviewRecordsCompanion
       if (comparisonItemId != null) 'comparison_item_id': comparisonItemId,
       if (itemTitle != null) 'item_title': itemTitle,
       if (way1Title != null) 'way1_title': way1Title,
-      if (way1Demerit != null) 'way1_demerit': way1Demerit,
       if (way1Evaluate != null) 'way1_evaluate': way1Evaluate,
       if (way2Title != null) 'way2_title': way2Title,
       if (way2Evaluate != null) 'way2_evaluate': way2Evaluate,
-      if (tags != null) 'tags': tags,
       if (favorite != null) 'favorite': favorite,
       if (conclusion != null) 'conclusion': conclusion,
     });
@@ -328,11 +285,9 @@ class ComparisonOverviewRecordsCompanion
       Value<String> comparisonItemId,
       Value<String> itemTitle,
       Value<String> way1Title,
-      Value<String> way1Demerit,
       Value<int> way1Evaluate,
       Value<String> way2Title,
       Value<int> way2Evaluate,
-      Value<String> tags,
       Value<bool> favorite,
       Value<String> conclusion}) {
     return ComparisonOverviewRecordsCompanion(
@@ -340,11 +295,9 @@ class ComparisonOverviewRecordsCompanion
       comparisonItemId: comparisonItemId ?? this.comparisonItemId,
       itemTitle: itemTitle ?? this.itemTitle,
       way1Title: way1Title ?? this.way1Title,
-      way1Demerit: way1Demerit ?? this.way1Demerit,
       way1Evaluate: way1Evaluate ?? this.way1Evaluate,
       way2Title: way2Title ?? this.way2Title,
       way2Evaluate: way2Evaluate ?? this.way2Evaluate,
-      tags: tags ?? this.tags,
       favorite: favorite ?? this.favorite,
       conclusion: conclusion ?? this.conclusion,
     );
@@ -365,9 +318,6 @@ class ComparisonOverviewRecordsCompanion
     if (way1Title.present) {
       map['way1_title'] = Variable<String>(way1Title.value);
     }
-    if (way1Demerit.present) {
-      map['way1_demerit'] = Variable<String>(way1Demerit.value);
-    }
     if (way1Evaluate.present) {
       map['way1_evaluate'] = Variable<int>(way1Evaluate.value);
     }
@@ -376,9 +326,6 @@ class ComparisonOverviewRecordsCompanion
     }
     if (way2Evaluate.present) {
       map['way2_evaluate'] = Variable<int>(way2Evaluate.value);
-    }
-    if (tags.present) {
-      map['tags'] = Variable<String>(tags.value);
     }
     if (favorite.present) {
       map['favorite'] = Variable<bool>(favorite.value);
@@ -396,11 +343,9 @@ class ComparisonOverviewRecordsCompanion
           ..write('comparisonItemId: $comparisonItemId, ')
           ..write('itemTitle: $itemTitle, ')
           ..write('way1Title: $way1Title, ')
-          ..write('way1Demerit: $way1Demerit, ')
           ..write('way1Evaluate: $way1Evaluate, ')
           ..write('way2Title: $way2Title, ')
           ..write('way2Evaluate: $way2Evaluate, ')
-          ..write('tags: $tags, ')
           ..write('favorite: $favorite, ')
           ..write('conclusion: $conclusion')
           ..write(')'))
@@ -460,20 +405,6 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
     );
   }
 
-  final VerificationMeta _way1DemeritMeta =
-      const VerificationMeta('way1Demerit');
-  GeneratedTextColumn _way1Demerit;
-  @override
-  GeneratedTextColumn get way1Demerit =>
-      _way1Demerit ??= _constructWay1Demerit();
-  GeneratedTextColumn _constructWay1Demerit() {
-    return GeneratedTextColumn(
-      'way1_demerit',
-      $tableName,
-      true,
-    );
-  }
-
   final VerificationMeta _way1EvaluateMeta =
       const VerificationMeta('way1Evaluate');
   GeneratedIntColumn _way1Evaluate;
@@ -508,18 +439,6 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
         defaultValue: const Constant(0));
   }
 
-  final VerificationMeta _tagsMeta = const VerificationMeta('tags');
-  GeneratedTextColumn _tags;
-  @override
-  GeneratedTextColumn get tags => _tags ??= _constructTags();
-  GeneratedTextColumn _constructTags() {
-    return GeneratedTextColumn(
-      'tags',
-      $tableName,
-      true,
-    );
-  }
-
   final VerificationMeta _favoriteMeta = const VerificationMeta('favorite');
   GeneratedBoolColumn _favorite;
   @override
@@ -547,11 +466,9 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
         comparisonItemId,
         itemTitle,
         way1Title,
-        way1Demerit,
         way1Evaluate,
         way2Title,
         way2Evaluate,
-        tags,
         favorite,
         conclusion
       ];
@@ -591,12 +508,6 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
     } else if (isInserting) {
       context.missing(_way1TitleMeta);
     }
-    if (data.containsKey('way1_demerit')) {
-      context.handle(
-          _way1DemeritMeta,
-          way1Demerit.isAcceptableOrUnknown(
-              data['way1_demerit'], _way1DemeritMeta));
-    }
     if (data.containsKey('way1_evaluate')) {
       context.handle(
           _way1EvaluateMeta,
@@ -614,10 +525,6 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
           _way2EvaluateMeta,
           way2Evaluate.isAcceptableOrUnknown(
               data['way2_evaluate'], _way2EvaluateMeta));
-    }
-    if (data.containsKey('tags')) {
-      context.handle(
-          _tagsMeta, tags.isAcceptableOrUnknown(data['tags'], _tagsMeta));
     }
     if (data.containsKey('favorite')) {
       context.handle(_favoriteMeta,

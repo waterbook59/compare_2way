@@ -12,10 +12,10 @@ class CompareRepository {
     try {
       final comparisonOverviewRecord =
           comparisonItem.toOverviewRecord(comparisonItem);
-      final way1MeritRecords = comparisonItem.toWay1MeritRecord(comparisonItem);
+      final way1MeritDescs = comparisonItem.toWay1MeritRecord(comparisonItem);
 
       await _comparisonItemDao.addItem(
-          comparisonOverviewRecord, way1MeritRecords);
+          comparisonOverviewRecord, way1MeritDescs);
     } on SqliteException catch (e) {
       //ここでエラーを返さずにviewとviewModelのvalidationの条件に同じタイトルを弾くようにしてみる
       print('repositoryエラー:この問題はすでに登録${e.toString()}');
