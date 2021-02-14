@@ -11,6 +11,8 @@ extension ConvertToComparisonItemRecord on ComparisonItem{
   ComparisonItemRecord toRecord(ComparisonItem comparisonItem){
     // var wordRecord = WordRecord();のインスタンスは作らず直接代入
     //varではなくfinalでも良い
+    ///comparisonItemをまず４つのテーブルに格納できるよう変換
+
     final  comparisonItemRecord = ComparisonItemRecord(
       dataId:comparisonItem.detaId,
       itemTitle:comparisonItem.itemTitle ?? '',
