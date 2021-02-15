@@ -6,7 +6,7 @@ import 'package:uuid/uuid.dart';
 class AddViewModel extends ChangeNotifier{
   AddViewModel({
     CompareRepository compareRepository,
-}):_compareRepository =compareRepository;
+}):_compareRepository = compareRepository;
 
   final CompareRepository _compareRepository;
 

@@ -16,12 +16,20 @@ class CompareRepository {
       final way1DemeritDescs =
           comparisonItem.toWay1DemeritRecord(comparisonItem);
 
-      await _comparisonItemDao.addItem(
+      await _comparisonItemDao.insertDB(
           comparisonOverviewRecord, way1MeritDescs,way1DemeritDescs);
+      print('登録完了');
+
     } on SqliteException catch (e) {
       //ここでエラーを返さずにviewとviewModelのvalidationの条件に同じタイトルを弾くようにしてみる
       print('repositoryエラー:この問題はすでに登録${e.toString()}');
     }
   }
+
+  //todo Read
+  //resultはComparisonItemRecord
+//  result = await _comparisonItemDao.getJoinedItemList();
+//List<ComparisonItemRecord>
+
 //  CompareRepository({})
 }

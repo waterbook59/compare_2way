@@ -28,6 +28,7 @@ class ComparisonItem {
   final String itemTitle;
 
   final String way1Title;
+  //todo リストなのでway1Meritsにリファクタリング
   final List<Way1Merit> way1Merit;
   final List<Way1Demerit> way1Demerit;
   final int way1Evaluate;

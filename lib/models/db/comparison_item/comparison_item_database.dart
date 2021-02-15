@@ -84,15 +84,16 @@ class TagRecords {
 
 ///comparison_item結合クラス
 class ComparisonItemRecord {
-  ComparisonItemRecord({this.comparisonOverviewRecord,
-    this.way1meritRecord,
+  ComparisonItemRecord({
+    this.comparisonOverviewRecord,
+    this.way1MeritRecord,
     this.way1DemeritRecord,
 //    this.tagRecord
   });
 
   final ComparisonOverviewRecord comparisonOverviewRecord;
-  final Way1MeritRecord way1meritRecord;
-  final Way1DemeritRecord way1DemeritRecord;
+  final List<Way1MeritRecord> way1MeritRecord;
+  final List<Way1DemeritRecord> way1DemeritRecord;
 //  final TagRecord tagRecord;
 
 
