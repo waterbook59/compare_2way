@@ -47,6 +47,25 @@ extension ConvertToComparisonItemRecord on ComparisonItem{
     return way1MeritDescs;
   }
 
+  List<Way1DemeritRecord> toWay1DemeritRecord(ComparisonItem comparisonItem){
+//    way1MeritId:autoIncrementにしてるので、そのままにしてみる
+    //List<メリット詳細>=>1つずつのメリットへ分解
+    ///way1MeritDescsはway1MeritRecordと同義だた、daoでinsertするときややこしいので名前変更
+    final way1DemeritDescs = <Way1DemeritRecord>[];
+
+    comparisonItem.way1Demerit.forEach((way1DemeritSingle) {
+      way1DemeritDescs.add(Way1DemeritRecord(
+        comparisonItemId: way1DemeritSingle.comparisonItemId,
+//        comparisonItemId: way1DemeritSingle.comparisonItemId,
+        way1DemeritDesc: way1DemeritSingle.way1DemeritDesc,
+      ));
+    });
+    return  way1DemeritDescs;
+  }
+
+
+
+
 
 }
 

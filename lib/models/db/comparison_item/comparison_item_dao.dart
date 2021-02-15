@@ -27,4 +27,28 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     });
   }
 
+  ///overviewとway1Meritを内部結合?(2個以上の複数テーブル結合の場合queryの中でinnerJoin繰り返す)
+  Future<List<ComparisonItemRecord>> getJoinedItemList() async {
+    final query = select(productRecords).join([
+      innerJoin(productRecordImages,
+          productRecordImages.productId.equalsExp(productRecords.productId)),
+    ]);
+    //print('query:${query.toString()}'); //queryはJoinedSelectStatement
+    final rows = await query.get();
+    final data = rows.map((resultRow) {
+      return JoinedProduct(
+        productRecord: resultRow.readTable(productRecords),
+        productRecordImage: resultRow.readTable(productRecordImages),
+      );
+    }).toList();
+    return data;
+  }
+
+
+
+
+
+
+
+
 }
