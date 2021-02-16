@@ -1,3 +1,5 @@
+import 'package:compare_2way/models/db/comparison_item/comparison_item_dao.dart';
+import 'package:compare_2way/models/db/comparison_item/comparison_item_database.dart';
 import 'package:compare_2way/models/repository/compare_repository.dart';
 import 'package:compare_2way/view_model/add_view_model.dart';
 import 'package:provider/provider.dart';
@@ -10,16 +12,19 @@ List<SingleChildWidget> globalProviders = [
 ];
 
 List<SingleChildWidget> independentModels =[
-//  Provider<CompareListDB>(
-//    create(_) => CompareListDB(),
-//    dispose: (_, db) => db.close(),
-//  ),
+  Provider<ComparisonItemDB>(
+    create:(_) => ComparisonItemDB(),
+    dispose: (_, db) => db.close(),
+  ),
   ];
 
 List<SingleChildWidget> dependentModels =[
-//  ProxyProvider<CompareListDB,CompareListDao>(
-//    update: (_,db,dao)=>CompareListDao(db),
-//  ),
+  ProxyProvider<ComparisonItemDB,ComparisonItemDao>(
+    update: (_,db,dao)=>ComparisonItemDao(db),
+  ),
+  ProxyProvider<ComparisonItemDao,CompareRepository>(
+    update: (_,dao,repository)=>CompareRepository(comparisonItemDao: dao),
+  ),
   ];
 
 List<SingleChildWidget> viewModels =[

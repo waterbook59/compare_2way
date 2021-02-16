@@ -9,16 +9,16 @@ import 'home_screen.dart';
 void main() {
   runApp(
       ///MultiProvider変更前
-      ChangeNotifierProvider<AddViewModel>(
-        create: (context) => AddViewModel(),
-        child: MyApp(),
-  ));
+//      ChangeNotifierProvider<AddViewModel>(
+//        create: (context) => AddViewModel(),
+//        child: MyApp(),
+//  ));
 
   ///MultiProvider変更後
-//      MultiProvider(
-//        providers: globalProviders,
-//        child: MyApp(),
-//      ));
+      MultiProvider(
+        providers: globalProviders,
+        child: MyApp(),
+      ));
 }
 
 class MyApp extends StatelessWidget {
