@@ -11,23 +11,27 @@ class CompareRepository {
   Future<void> createComparisonItems(ComparisonItem comparisonItem) async {
     try {
       final comparisonOverviewRecord =
-          comparisonItem.toOverviewRecord(comparisonItem);
-      final way1MeritDescs = comparisonItem.toWay1MeritRecord(comparisonItem);
-      final way1DemeritDescs =
-          comparisonItem.toWay1DemeritRecord(comparisonItem);
+      comparisonItem.toOverviewRecord(comparisonItem);
+      //  comparisonItem.way1MeritとcomparisonItem.way1Demeritがnullなのでextensions内の
+      //forEachでエラー：The method 'forEach' was called on null.
+      // final way1MeritDescs = comparisonItem.toWay1MeritRecord(comparisonItem);
+      // final way1DemeritDescs =
+      //    comparisonItem.toWay1DemeritRecord(comparisonItem);
 
-      await _comparisonItemDao.insertDB(
-          comparisonOverviewRecord, way1MeritDescs,way1DemeritDescs);
-      print('登録完了');
+//      await _comparisonItemDao.insertDB(
+//          comparisonOverviewRecord, way1MeritDescs,way1DemeritDescs);
 
+      await _comparisonItemDao.insertComparisonOverviewDB(
+          comparisonOverviewRecord);
+      print('way1とway2のタイトル登録完了');
     } on SqliteException catch (e) {
       //ここでエラーを返さずにviewとviewModelのvalidationの条件に同じタイトルを弾くようにしてみる
       print('repositoryエラー:この問題はすでに登録${e.toString()}');
     }
   }
 
-  //todo Read
-  //resultはComparisonItemRecord
+//todo Read
+//resultはComparisonItemRecord
 //  result = await _comparisonItemDao.getJoinedItemList();
 //List<ComparisonItemRecord>
 
