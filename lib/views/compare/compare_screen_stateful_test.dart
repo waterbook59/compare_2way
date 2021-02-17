@@ -10,28 +10,23 @@ class CompareScreenStatefulTest extends StatefulWidget {
 }
 
 class _CompareScreenStatefulTestState extends State<CompareScreenStatefulTest> {
-  //初期表示は出しながら、ボタンおしたらリストの中身をどんどん追加していけるか
+
+  //初期表示は出しながら、ボタンおしたらリストの中身をどんどん追加してく
   //テキストフィールドをリスト形式で表す
-  //初期表示のデータをTextEditingControllerとして出せるか
+  //初期表示のデータをTextEditingControllerとして出す
   // 適当なリスト用データ
-  List<String> items = [
+  static List<String> items = [
     'Content 1',
     'Content 2',
     'Content 3',
   ];
 
-  //最初は１つだけ出したい
-  List<TextEditingController> _controllers =
-      List.generate(1, (i) => TextEditingController());
+  //最初は１つだけ、データが既に入っている場合は取得時に入っている数を出したい
+  //データが既に入っている場合は、初期表示として表す
+  //List.generate(初期の表示数,(i)=>TextEditingController());
+ final List<TextEditingController> _controllers =
+      List.generate(items.length, (i) => TextEditingController(text: items[i]));
 
-//  List<TextEditingController> textItems = [
-//    TextEditingController(),
-////    'Content 1',
-////    'Content 2',
-////    'Content 3',
-//  ];
-
-//  List<TextEditingController> textFieldControllers = <TextEditingController>[];
 
   @override
   void initState() {
@@ -46,11 +41,11 @@ class _CompareScreenStatefulTestState extends State<CompareScreenStatefulTest> {
     return CupertinoPageScaffold(
       //todo trailing修正時はconst削除
       navigationBar: const CupertinoNavigationBar(
-        middle: const Text(
+        middle:  Text(
           'Compare List',
           style: middleTextStyle,
         ),
-        trailing: const Text(
+        trailing:  Text(
           '編集',
           style: trailingTextStyle,
         ),
@@ -65,10 +60,12 @@ class _CompareScreenStatefulTestState extends State<CompareScreenStatefulTest> {
               return CupertinoTextField(
                 placeholder: 'メリットを入力してください',
                 controller: _controllers[index],
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
               );
             }),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: accentColor,
+          child: const Icon(Icons.add, color: Colors.black, size: 40),
           onPressed: () => addListItem(context),
         ),
       ),
