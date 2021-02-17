@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';
 
 
-//todo bottomNavbarがあるとややこしいので、Screenへ変更
 class CompareScreen extends StatelessWidget {
+
+
+
   @override
   Widget build(BuildContext context) {
     final accentColor = CupertinoTheme.of(context).primaryContrastingColor;
@@ -30,32 +32,36 @@ class CompareScreen extends StatelessWidget {
             Container(
               margin: EdgeInsets.all(8),
               width: double.infinity,
-              child: Card(
-                  child: GFAccordion(
-                    title: '賃貸と購入',
-                    //trueで最初から開いた状態
-                    showAccordion: true,
-                    collapsedIcon: Icon(Icons.details),
-                    collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
-                    contentChild: Column(
-                      children: [
-                        Row(children: [
-                          Text('結論'),
-                          CupertinoSwitch(
-                            value: true,
-                            onChanged: (value) {
-                              value = false;
-                            },
-                          )
-                        ]),
-                        Text('購入を検討しつつ、２年は賃貸'),
-                      ],
-                    ),
-                  )),
+              child: GFAccordion(
+                title: 'way1',
+                //trueで最初から開いた状態
+                showAccordion: true,
+//                collapsedIcon: Icon(Icons.details),
+                collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
+                contentChild: Column(
+                  children: [
+                    Row(children: [
+                      Text('結論'),
+                      CupertinoSwitch(
+                        value: true,
+                        onChanged: (value) {
+                          value = false;
+                        },
+                      )
+                    ]),
+                    Text('購入を検討しつつ、２年は賃貸'),
+                  ],
+                ),
+              ),
             ),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: ()=>addList(context),
         ),
       ),
     );
   }
+
+  void addList(BuildContext context) {}
 }

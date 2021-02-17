@@ -2,6 +2,7 @@ import 'package:compare_2way/style.dart';
 import 'package:compare_2way/view_model/add_view_model.dart';
 import 'package:compare_2way/views/common/input_part.dart';
 import 'package:compare_2way/views/compare/compare_screen.dart';
+import 'package:compare_2way/views/compare/compare_screen_stateful_test.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +67,7 @@ class AddScreen extends StatelessWidget {
     final viewModel = Provider.of<AddViewModel>(context, listen: false);
     await viewModel.createComparisonItems();
     await Navigator.pushReplacement(context,
-        MaterialPageRoute<void>(builder: (context) => CompareScreen()));
+        MaterialPageRoute<void>(builder: (context) => CompareScreenStatefulTest()));
 
     await viewModel.initializeController();
     print('テキストコントローラー初期化');
