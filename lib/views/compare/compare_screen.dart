@@ -11,6 +11,17 @@ class CompareScreen extends StatelessWidget {
 
   final String comparisonItemId;
 
+
+  static const IconData hand_thumbsup_fill = IconData(
+      0xf6b8, fontFamily: CupertinoIcons.iconFont,
+      fontPackage: CupertinoIcons.iconFontPackage);
+
+  static const IconData hand_thumbsdown_fill = IconData(
+      0xf6b6, fontFamily:  CupertinoIcons.iconFont,
+      fontPackage: CupertinoIcons.iconFontPackage);
+
+
+
   //todo itemsはList<Merit>に変更
   static List<String> items = [
     'Content 1',
@@ -47,88 +58,210 @@ class CompareScreen extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
-        body: Column(
-          children: [
-            const SizedBox(height: 8),
-            const Text('メリット'),
-            const SizedBox(
-              height: 8,
-            ),
-            Consumer<CompareViewModel>(
-              builder: (context, compareViewModel, child)
-            //データ取得前にリストを取りに行くので[0]のデータがなく、
-            // RangeError (index): Invalid value: Valid value range is empty: 0
-            // のエラー表示
-                  {
-                return FutureBuilder(
-                  future: compareViewModel.getOverview(comparisonItemId),
-                  builder: (context,
-                      AsyncSnapshot<List<ComparisonOverview>> snapshot) {
-                    if (snapshot.hasData && snapshot.data.isEmpty) {
-                      print('EmptyView通った');
-                      return Container();
-                    } else {
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount:
-                              compareViewModel.comparisonOverviews.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Text(
-                              compareViewModel
-                                  .comparisonOverviews[index].way1Title,
-                              style: TextStyle(color: Colors.black),
-                            );
-                          });
-                    }
-                  },
-                );
-              },
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Consumer<CompareViewModel>(
-              builder: (context, compareViewModel, child) {
-                return FutureBuilder(
-                  future: compareViewModel.getOverview(comparisonItemId),
-                  builder: (context,
-                      AsyncSnapshot<List<ComparisonOverview>> snapshot) {
-                    if (snapshot.hasData && snapshot.data.isEmpty) {
-                      print('EmptyView通った');
-                      return Container();
-                    } else {
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount:
-                          compareViewModel.comparisonOverviews.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Text(
-                              compareViewModel
-                                  .comparisonOverviews[index].way2Title,
-                              style: TextStyle(color: Colors.black),
-                            );
-                          });
-                    }
-                  },
-                );
-              },
-            ),
-            ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: _controllers.length,
-                itemBuilder: (context, index) {
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 8),
+          ///メリットアイコン
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(children: [
+                  //hand_thumbsup_fill constant
+                  Icon(Icons.thumb_up,color: accentColor,),
+                  const SizedBox(width: 4),
+                  const Text('メリット')]),
+              ),
+//              const SizedBox(height: 4,),
+          ///way1 メリット
+              Consumer<CompareViewModel>(
+                builder: (context, compareViewModel, child)
+              //データ取得前にリストを取りに行くので[0]のデータがなく、
+              // RangeError (index): Invalid value: Valid value range is empty: 0
+              // のエラー表示
+                    {
+                  return FutureBuilder(
+                    future: compareViewModel.getOverview(comparisonItemId),
+                    builder: (context,
+                        AsyncSnapshot<List<ComparisonOverview>> snapshot) {
+                      if (snapshot.hasData && snapshot.data.isEmpty) {
+                        print('EmptyView通った');
+                        return Container();
+                      } else {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            physics:const  NeverScrollableScrollPhysics(),
+                            itemCount:
+                                compareViewModel.comparisonOverviews.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return GFAccordion(
+                              title: compareViewModel.
+                              comparisonOverviews[index].way1Title,
+                              titleBorderRadius: accordionTopBorderRadius ,
+                              contentBorderRadius: accordionBottomBorderRadius,
+                              collapsedTitleBackgroundColor:  Color(0xFFE0E0E0),
+                              contentChild:ListView.builder(
+                                    shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: _controllers.length,
+                                    itemBuilder: (context, index) {
 //              textItems.add(new TextEditingController());
-
-                  return CupertinoTextField(
-                    placeholder: 'メリットを入力してください',
-                    controller: _controllers[index],
-                    style: const TextStyle(color: Colors.black),
+                                      return CupertinoTextField(
+                                        placeholder: 'メリットを入力してください',
+                                        controller: _controllers[index],
+                                    style: const TextStyle(color: Colors.black),
+                                      );
+                                    }),
+                                );
+                            });
+                      }
+                    },
                   );
-                }),
-          ],
+                },
+              ),
+//              const SizedBox(height: 4,),
+          ///way2 メリット
+              Consumer<CompareViewModel>(
+                builder: (context, compareViewModel, child) {
+                  return FutureBuilder(
+                    future: compareViewModel.getOverview(comparisonItemId),
+                    builder: (context,
+                        AsyncSnapshot<List<ComparisonOverview>> snapshot) {
+                      if (snapshot.hasData && snapshot.data.isEmpty) {
+                        print('EmptyView通った');
+                        return Container();
+                      } else {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount:
+                            compareViewModel.comparisonOverviews.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return GFAccordion(
+                                title:
+                                  compareViewModel
+                                      .comparisonOverviews[index].way2Title,
+                                titleBorderRadius: accordionTopBorderRadius ,
+                                contentBorderRadius: accordionBottomBorderRadius,
+                                collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
+                                contentChild:ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: _controllers.length,
+                                    itemBuilder: (context, index) {
+//              textItems.add(new TextEditingController());
+                                      return CupertinoTextField(
+                                        placeholder: 'メリットを入力してください',
+                                        controller: _controllers[index],
+                                        style: const TextStyle(color: Colors.black),
+                                      );
+                                    }),
+                                );
+
+                            });
+                      }
+                    },
+                  );
+                },
+              ),
+              const SizedBox(height: 8,),
+          ///デメリットアイコン
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(children: [
+                  //hand_thumbsdown_fill
+                 Icon(Icons.thumb_down,color: accentColor),
+                  const SizedBox(width: 4),
+                  const Text('デメリット')]),
+              ),
+          ///way1 デメリット
+              Consumer<CompareViewModel>(
+                builder: (context, compareViewModel, child)
+                {
+                  return FutureBuilder(
+                    future: compareViewModel.getOverview(comparisonItemId),
+                    builder: (context,
+                        AsyncSnapshot<List<ComparisonOverview>> snapshot) {
+                      if (snapshot.hasData && snapshot.data.isEmpty) {
+                        print('EmptyView通った');
+                        return Container();
+                      } else {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount:
+                            compareViewModel.comparisonOverviews.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return GFAccordion(
+                                title: compareViewModel.
+                                comparisonOverviews[index].way1Title,
+                                titleBorderRadius: accordionTopBorderRadius ,
+                                contentBorderRadius: accordionBottomBorderRadius,
+                                collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
+                                contentChild:ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: _controllers.length,
+                                    itemBuilder: (context, index) {
+//              textItems.add(new TextEditingController());
+                                      return CupertinoTextField(
+                                        placeholder: 'メリットを入力してください',
+                                        controller: _controllers[index],
+                                        style: const TextStyle(color: Colors.black),
+                                      );
+                                    }),
+                              );
+                            });
+                      }
+                    },
+                  );
+                },
+              ),
+          ///way2 デメリット
+              Consumer<CompareViewModel>(
+                builder: (context, compareViewModel, child) {
+                  return FutureBuilder(
+                    future: compareViewModel.getOverview(comparisonItemId),
+                    builder: (context,
+                        AsyncSnapshot<List<ComparisonOverview>> snapshot) {
+                      if (snapshot.hasData && snapshot.data.isEmpty) {
+                        print('EmptyView通った');
+                        return Container();
+                      } else {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount:
+                            compareViewModel.comparisonOverviews.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return GFAccordion(
+                                title:
+                                compareViewModel
+                                    .comparisonOverviews[index].way2Title,
+                                collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
+                                titleBorderRadius: accordionTopBorderRadius ,
+                                contentBorderRadius: accordionBottomBorderRadius,
+                                contentChild:ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: _controllers.length,
+                                    itemBuilder: (context, index) {
+//              textItems.add(new TextEditingController());
+                                      return CupertinoTextField(
+                                        placeholder: 'メリットを入力してください',
+                                        controller: _controllers[index],
+                                        style: const TextStyle(color: Colors.black),
+                                      );
+                                    }),
+                              );
+
+                            });
+                      }
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => addList(context),
