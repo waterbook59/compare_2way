@@ -8,8 +8,8 @@ class CompareViewModel extends ChangeNotifier {
   }) : _compareRepository = compareRepository;
 
   final CompareRepository _compareRepository;
-
   List<ComparisonOverview> _comparisonOverviews = <ComparisonOverview>[];
+  List<ComparisonOverview> get comparisonOverviews => _comparisonOverviews;
 
   Future<List<ComparisonOverview>> getOverview(String comparisonItemId) async {
     _comparisonOverviews =

@@ -112,7 +112,7 @@ class _CompareScreenStatefulTestState extends State<CompareScreenStatefulTest> {
   Future<void> _getWayTitle(String comparisonItemId) async{
     //comparisonItemIdをキーにしてComparisonOverviewRecordからway1Title,way2Titleとってくる
     //todo リストからway1タイトルのみ取り出し
-     comparisonOverviewRecord = comparisonItemDao.getWay1Title(comparisonItemId)
+     comparisonOverviewRecord = comparisonItemDao.getOverview(comparisonItemId)
     as List<ComparisonOverviewRecord>;
     way1Title = comparisonOverviewRecord[0].way1Title;
     way2Title = comparisonOverviewRecord[0].way2Title;

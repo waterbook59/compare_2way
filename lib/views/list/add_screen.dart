@@ -80,7 +80,7 @@ class AddScreen extends StatelessWidget {
     ///createComparisonItems()メソッドで設定したcomparisonItemIdを次の画面にわたすには？
     await Navigator.pushReplacement(context,
         MaterialPageRoute<void>(builder: (context) =>
-            CompareScreenStatefulTest(comparisonItemId:comparisonItem.comparisonItemId)));
+            CompareScreen(comparisonItemId:comparisonItem.comparisonItemId)));
 
     await viewModel.initializeController();
     print('テキストコントローラー初期化');
