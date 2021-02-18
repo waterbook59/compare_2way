@@ -1,3 +1,4 @@
+import 'package:compare_2way/data_models/comparison_item.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/view_model/add_view_model.dart';
 import 'package:compare_2way/views/common/input_part.dart';
@@ -6,6 +7,7 @@ import 'package:compare_2way/views/compare/compare_screen_stateful_test.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class AddScreen extends StatelessWidget {
   @override
@@ -65,9 +67,20 @@ class AddScreen extends StatelessWidget {
 
   Future<void> _createComparisonItems(BuildContext context) async {
     final viewModel = Provider.of<AddViewModel>(context, listen: false);
-    await viewModel.createComparisonItems();
+
+    // モデルクラス(compare)に比較項目を登録(idを次の画面に渡したいのでview側で設定)
+    final comparisonItem = ComparisonItem(
+      //comparisonItemIdをuuidで生成
+      comparisonItemId: Uuid().v1(),
+      way1Title: viewModel.way1Controller.text,
+      way2Title: viewModel.way2Controller.text,
+    );
+
+    await viewModel.createComparisonItems(comparisonItem);
+    ///createComparisonItems()メソッドで設定したcomparisonItemIdを次の画面にわたすには？
     await Navigator.pushReplacement(context,
-        MaterialPageRoute<void>(builder: (context) => CompareScreenStatefulTest()));
+        MaterialPageRoute<void>(builder: (context) =>
+            CompareScreenStatefulTest(comparisonItemId:comparisonItem.comparisonItemId)));
 
     await viewModel.initializeController();
     print('テキストコントローラー初期化');

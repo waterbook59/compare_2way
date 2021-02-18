@@ -76,6 +76,13 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 //    return data;
   }
 
+  ///idをもとにway1タイトル、way2タイトルをとってくる
+  ///  //2.暗記済がfalse(暗記してないもの)だけを取ってくるクエリ
+  //  Future<List<WordRecord>> get memorizedExcludeWords => (select(wordRecords)..where((t)=>t.isMemorized.equals(false))).get();
+  Future<List<ComparisonOverviewRecord>> getWay1Title(String comparisonItemId)
+  =>(select(comparisonOverviewRecords)
+    ..where((t) =>t.comparisonItemId.equals(comparisonItemId))).get();
+
 
 
 

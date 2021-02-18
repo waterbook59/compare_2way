@@ -19,14 +19,7 @@ class AddViewModel extends ChangeNotifier{
   TextEditingController _way2Controller = TextEditingController();
 
 
-  Future<void> createComparisonItems() async{
-    //todo モデルクラス(compare)に比較項目を登録
-    final comparisonItem = ComparisonItem(
-      //comparisonItemIdをuuidで生成
-      comparisonItemId: Uuid().v1(),
-      way1Title: _way1Controller.text,
-      way2Title: _way2Controller.text,
-    );
+  Future<void> createComparisonItems(ComparisonItem comparisonItem) async{
 
     await _compareRepository.createComparisonItems(comparisonItem);
     print('DBへ登録');
