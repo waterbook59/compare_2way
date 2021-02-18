@@ -1,16 +1,25 @@
 import 'package:compare_2way/style.dart';
+import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';
+import 'package:provider/provider.dart';
 
 
 class CompareScreen extends StatelessWidget {
 
-
+  const CompareScreen({this.comparisonItemId});
+  final String comparisonItemId;
 
   @override
   Widget build(BuildContext context) {
     final accentColor = CupertinoTheme.of(context).primaryContrastingColor;
+
+    final viewModel = Provider.of<CompareViewModel>(context,listen: false);
+    //普通にここのFuture内でstream.listenして通知すればbodyをStatefulにしなくても良い
+    Future((){
+      viewModel.getOverview(comparisonItemId);
+    });
 
     return CupertinoPageScaffold(
       //todo trailing修正時はconst削除
