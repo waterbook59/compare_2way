@@ -13,7 +13,8 @@ class TablePart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accentColor = CupertinoTheme.of(context).primaryContrastingColor;
+    final accentColor = Theme.of(context).accentColor;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Table(
@@ -47,8 +48,13 @@ class TablePart extends StatelessWidget {
                 style: const TextStyle(fontSize: 16),
               )),
             ),
-             EvaluatePicker(),
-             Center(child: Text('✖️')),
+             ///高さを設定しないと'!_debugDoingThisLayout': is not true.エラー
+             SizedBox(
+                 height:50,
+                 child: EvaluateDropdown()),
+             SizedBox(
+              height:50,
+              child: EvaluateDropdown()),
           ]),
           TableRow(children: [
             SizedBox(
@@ -59,8 +65,12 @@ class TablePart extends StatelessWidget {
                 style: const TextStyle(fontSize: 16),
               )),
             ),
-            Center(child: Text('○')),
-            Center(child: Text('△️')),
+            SizedBox(
+                height:50,
+                child: EvaluateDropdown()),
+            SizedBox(
+                height:50,
+                child: EvaluateDropdown()),
           ]),
         ],
       ),

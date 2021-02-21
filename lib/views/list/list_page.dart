@@ -7,9 +7,12 @@ import 'package:flutter/cupertino.dart';
 class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final accentColor = CupertinoTheme
-        .of(context)
-        .primaryContrastingColor;
+
+//    final accentColor = CupertinoTheme
+//        .of(context)
+//        .primaryContrastingColor;
+
+    final accentColor = Theme.of(context).accentColor;
 
     return CupertinoPageScaffold(
       //todo trailing修正時はconst削除

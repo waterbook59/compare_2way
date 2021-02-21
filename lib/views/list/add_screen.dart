@@ -14,8 +14,9 @@ class AddScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<AddViewModel>(context, listen: false);
 
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
+    return Scaffold(
+      appBar:
+       const CupertinoNavigationBar(
         //todo キャンセル表示で入力破棄するかalertDialogで聞く
 //        leading:const Text('キャンセル'),
         middle: const Text(
@@ -31,7 +32,7 @@ class AddScreen extends StatelessWidget {
           style: trailingTextStyle,
         ),
       ),
-      child: SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(

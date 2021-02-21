@@ -40,7 +40,7 @@ class CompareScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accentColor = CupertinoTheme.of(context).primaryContrastingColor;
+    final accentColor = Theme.of(context).accentColor;
 
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     ///ページ冒頭かFutureBuilderどちらかでいい
@@ -49,9 +49,9 @@ class CompareScreen extends StatelessWidget {
 //        },
 //      );
 
-    return CupertinoPageScaffold(
+    return Scaffold(
       //todo trailing修正時はconst削除
-      navigationBar: const CupertinoNavigationBar(
+      appBar: const CupertinoNavigationBar(
         middle: Text(
           'Compare List',
           style: middleTextStyle,
@@ -61,7 +61,7 @@ class CompareScreen extends StatelessWidget {
           style: trailingTextStyle,
         ),
       ),
-      child: Scaffold(
+      body: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
         body: SingleChildScrollView(
           child: Column(
