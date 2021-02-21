@@ -1,6 +1,9 @@
+import 'package:compare_2way/views/compare/components/evaluate_dropdown.dart';
 import 'package:compare_2way/views/compare/components/icon_title.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'evaluate_picker.dart';
 
 class TablePart extends StatelessWidget {
   TablePart({this.way1Title, this.way2Title});
@@ -44,7 +47,7 @@ class TablePart extends StatelessWidget {
                 style: const TextStyle(fontSize: 16),
               )),
             ),
-             Center(child: Text('◎')),
+             EvaluatePicker(),
              Center(child: Text('✖️')),
           ]),
           TableRow(children: [

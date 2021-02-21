@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    //todo MaterialAppで書けばMaterialの中でCupertinoWidget使えるのでは
     return CupertinoApp(
       debugShowCheckedModeBanner: false,
       title: 'Compare 2way',
