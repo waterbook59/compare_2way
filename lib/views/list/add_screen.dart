@@ -13,10 +13,15 @@ class AddScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<AddViewModel>(context, listen: false);
+    final primaryColor = Theme.of(context).primaryColor;
+    final accentColor = Theme.of(context).accentColor;
+
 
     return Scaffold(
       appBar:
-       const CupertinoNavigationBar(
+          //todo 背景色設定
+        CupertinoNavigationBar(
+          backgroundColor: primaryColor,
         //todo キャンセル表示で入力破棄するかalertDialogで聞く
 //        leading:const Text('キャンセル'),
         middle: const Text(

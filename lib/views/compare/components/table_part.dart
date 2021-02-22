@@ -3,8 +3,6 @@ import 'package:compare_2way/views/compare/components/icon_title.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'evaluate_picker.dart';
-
 class TablePart extends StatelessWidget {
   TablePart({this.way1Title, this.way2Title});
 
@@ -39,6 +37,7 @@ class TablePart extends StatelessWidget {
               iconColor: accentColor,
             ),
           ]),
+          ///way1行
           TableRow(children: [
             SizedBox(
               height: 48,
@@ -51,11 +50,13 @@ class TablePart extends StatelessWidget {
              ///高さを設定しないと'!_debugDoingThisLayout': is not true.エラー
              SizedBox(
                  height:50,
+                 //todo popupMenuで選んだ値は外で別のWidgetで受けるのかも(RowにしてText()とか)
                  child: EvaluateDropdown()),
              SizedBox(
               height:50,
               child: EvaluateDropdown()),
           ]),
+          ///way2行
           TableRow(children: [
             SizedBox(
               height: 48,
