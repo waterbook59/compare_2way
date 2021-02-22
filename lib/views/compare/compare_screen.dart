@@ -225,7 +225,6 @@ class CompareScreen extends StatelessWidget {
                               TablePart(
                             way1Title: viewModel.way1Title,
                             way2Title: viewModel.way2Title,
-                            way1MeritEvaluate: viewModel.way1MeritEvaluate,
                             way1DemeritEvaluate: viewModel.way1DemeritEvaluate,
                             way2MeritEvaluate: viewModel.way2MeritEvaluate,
                             way2DemeritEvaluate: viewModel.way2DemeritEvaluate,

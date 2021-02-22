@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 class TablePart extends StatelessWidget {
   TablePart({
     this.way1Title,
-    this.way1MeritEvaluate,
     this.way1DemeritEvaluate,
     this.way2Title,
     this.way2MeritEvaluate,
@@ -16,11 +15,19 @@ class TablePart extends StatelessWidget {
   });
 
   final String way1Title;
-  final int way1MeritEvaluate;
   final int way1DemeritEvaluate;
   final String way2Title;
   final int way2MeritEvaluate;
   final int way2DemeritEvaluate;
+
+  ///evaluatePickerのリスト
+  final List<String> evaluates = <String>[
+    '',
+    '◎',
+    '○',
+    '△',
+    '×',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +41,7 @@ class TablePart extends StatelessWidget {
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         border: TableBorder.all(),
         children: [
+          ///タイトル行
           TableRow(children: [
             Container(
               //figmaでは24
@@ -70,14 +78,15 @@ class TablePart extends StatelessWidget {
                 builder: (context, compareViewModel, child) {
               return SizedBox(
                   height: 50,
-                  //todo popupMenuで選んだ値は外で別のWidgetで受けるのかも(RowにしてText()とか)
-                  ///Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
+                  //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
                   child: Row(children: [
                     Expanded(
                         flex: 2,
-                        child: Center(
-                            child:
-                                Text(viewModel.way1MeritEvaluate.toString()))),
+                        child: Text(
+                          evaluates[viewModel.way1MeritEvaluate],
+                          style: TextStyle(fontSize: 40),
+                          textAlign: TextAlign.right,
+                        )),
                     Expanded(
                         flex: 1,
                         child: EvaluateDropdown(
@@ -90,6 +99,8 @@ class TablePart extends StatelessWidget {
                         )),
                   ]));
             }),
+
+            ///way1DemeritEvaluate
             SizedBox(height: 50, child: EvaluateDropdown()),
           ]),
 
@@ -103,7 +114,11 @@ class TablePart extends StatelessWidget {
                 style: const TextStyle(fontSize: 16),
               )),
             ),
+
+            ///way2MeritEvaluate
             SizedBox(height: 50, child: EvaluateDropdown()),
+
+            ///way2DemeritEvaluate
             SizedBox(height: 50, child: EvaluateDropdown()),
           ]),
         ],
