@@ -39,7 +39,7 @@ class ComparisonOverviewRecords extends Table {
 //  TextColumn get tags => text().nullable()();
   BoolColumn get favorite => boolean().withDefault(const Constant(false))();
   TextColumn get conclusion => text().nullable()();
-  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get createdAt => dateTime().nullable()();
 
   @override
   Set<Column> get primaryKey => {dataId};

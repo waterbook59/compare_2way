@@ -33,7 +33,7 @@ class ComparisonOverviewRecord extends DataClass
       @required this.way2DemeritEvaluate,
       @required this.favorite,
       this.conclusion,
-      @required this.createdAt});
+      this.createdAt});
   factory ComparisonOverviewRecord.fromData(
       Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
@@ -317,12 +317,11 @@ class ComparisonOverviewRecordsCompanion
     this.way2DemeritEvaluate = const Value.absent(),
     this.favorite = const Value.absent(),
     this.conclusion = const Value.absent(),
-    @required DateTime createdAt,
+    this.createdAt = const Value.absent(),
   })  : comparisonItemId = Value(comparisonItemId),
         itemTitle = Value(itemTitle),
         way1Title = Value(way1Title),
-        way2Title = Value(way2Title),
-        createdAt = Value(createdAt);
+        way2Title = Value(way2Title);
   static Insertable<ComparisonOverviewRecord> custom({
     Expression<int> dataId,
     Expression<String> comparisonItemId,
@@ -583,7 +582,7 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
     return GeneratedDateTimeColumn(
       'created_at',
       $tableName,
-      false,
+      true,
     );
   }
 
@@ -681,8 +680,6 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at'], _createdAtMeta));
-    } else if (isInserting) {
-      context.missing(_createdAtMeta);
     }
     return context;
   }
