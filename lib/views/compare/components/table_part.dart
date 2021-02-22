@@ -4,10 +4,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TablePart extends StatelessWidget {
-  TablePart({this.way1Title, this.way2Title});
+  TablePart(
+      {this.way1Title,
+      this.way1MeritEvaluate,
+      this.way1DemeritEvaluate,
+      this.way2Title,
+      this.way2MeritEvaluate,
+      this.way2DemeritEvaluate});
 
   final String way1Title;
+  final int way1MeritEvaluate;
+  final int way1DemeritEvaluate;
   final String way2Title;
+  final int way2MeritEvaluate;
+  final int way2DemeritEvaluate;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +47,7 @@ class TablePart extends StatelessWidget {
               iconColor: accentColor,
             ),
           ]),
+
           ///way1行
           TableRow(children: [
             SizedBox(
@@ -47,24 +58,27 @@ class TablePart extends StatelessWidget {
                 style: const TextStyle(fontSize: 16),
               )),
             ),
-             ///高さを設定しないと'!_debugDoingThisLayout': is not true.エラー
-             SizedBox(
-                   height:50,
-                   //todo popupMenuで選んだ値は外で別のWidgetで受けるのかも(RowにしてText()とか)
-                 ///Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
-                   child: Row(children:[
-                     Expanded(flex:2,child: Center(child: Text('◎'))),
-                     Expanded(flex:1,child: EvaluateDropdown(
-//                       initialValue: ,
-                     onSelected: (newValue){
-                       print(newValue);
-                     },
-                     )),
-             ])),
-             SizedBox(
-              height:50,
-              child: EvaluateDropdown()),
+
+          ///way1MeritEvaluate
+            ///高さを設定しないと'!_debugDoingThisLayout': is not true.エラー
+            SizedBox(
+                height: 50,
+                //todo popupMenuで選んだ値は外で別のWidgetで受けるのかも(RowにしてText()とか)
+                ///Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
+                child: Row(children: [
+                  Expanded(flex: 2, child: Center(child: Text('◎'))),
+                  Expanded(
+                      flex: 1,
+                      child: EvaluateDropdown(
+                       initialValue: way1MeritEvaluate,
+                        onSelected: (newValue) {
+                          print(newValue);
+                        },
+                      )),
+                ])),
+            SizedBox(height: 50, child: EvaluateDropdown()),
           ]),
+
           ///way2行
           TableRow(children: [
             SizedBox(
@@ -75,12 +89,8 @@ class TablePart extends StatelessWidget {
                 style: const TextStyle(fontSize: 16),
               )),
             ),
-            SizedBox(
-                height:50,
-                child: EvaluateDropdown()),
-            SizedBox(
-                height:50,
-                child: EvaluateDropdown()),
+            SizedBox(height: 50, child: EvaluateDropdown()),
+            SizedBox(height: 50, child: EvaluateDropdown()),
           ]),
         ],
       ),

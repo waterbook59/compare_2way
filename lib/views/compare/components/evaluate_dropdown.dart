@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 class EvaluateDropdown extends StatefulWidget {
   EvaluateDropdown({this.initialValue,this.onSelected});
 
-  String initialValue ;
-  Function(String) onSelected;
+  int initialValue ;
+  Function(int) onSelected;
 
 
   @override
@@ -19,30 +19,30 @@ class _EvaluateDropdownState extends State<EvaluateDropdown> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: PopupMenuButton<String>(
+        child: PopupMenuButton<int>(
           initialValue: widget.initialValue ,
           elevation: 0,
           icon: const Icon(Icons.arrow_drop_down),
 //          iconSize: 30,
-          itemBuilder:(BuildContext context )=> <PopupMenuEntry<String>>[
-            PopupMenuItem(
-              value: '0',
+          itemBuilder:(BuildContext context )=> <PopupMenuEntry<int>>[
+            const PopupMenuItem(
+              value: 0,
               child: Center(child: Text('-',style: TextStyle(fontSize: 40),)),
             ),
-            PopupMenuItem(
-              value: '1',
+            const PopupMenuItem(
+              value: 1,
               child: Center(child: Text('◎',style: TextStyle(fontSize: 40),)),
             ),
-            PopupMenuItem(
-              value: '2',
+            const PopupMenuItem(
+              value: 2,
               child: Center(child: Text('○',style: TextStyle(fontSize: 40),)),
             ),
-            PopupMenuItem(
-              value: '3',
+            const PopupMenuItem(
+              value: 3,
               child: Center(child: Text('△',style: TextStyle(fontSize: 40),)),
             ),
-            PopupMenuItem(
-              value: '4',
+            const PopupMenuItem(
+              value: 4,
               child: Center(child: Text('×',style: TextStyle(fontSize: 40),)),
             )
           ],

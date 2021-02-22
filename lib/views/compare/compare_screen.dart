@@ -6,14 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
-
 import 'components/table_part.dart';
 
 class CompareScreen extends StatelessWidget {
   CompareScreen({this.comparisonItemId});
 
   final String comparisonItemId;
-
 
   static const IconData hand_thumbsup_fill = IconData(
       0xf6b8, fontFamily: CupertinoIcons.iconFont,
@@ -22,8 +20,6 @@ class CompareScreen extends StatelessWidget {
   static const IconData hand_thumbsdown_fill = IconData(
       0xf6b6, fontFamily:  CupertinoIcons.iconFont,
       fontPackage: CupertinoIcons.iconFontPackage);
-
-
 
   //todo itemsはList<Merit>に変更
   static List<String> items = [
@@ -258,12 +254,11 @@ class CompareScreen extends StatelessWidget {
                 },
               ),
           ///テーブル
-              //todo ぐるぐるしてしまう
               Consumer<CompareViewModel>(
                 builder:(context,compareViewModel,child) {
                   return
                     FutureBuilder(
-                        future: compareViewModel.getWaitOverview(comparisonItemId),
+                    future: compareViewModel.getWaitOverview(comparisonItemId),
                         builder: (context,
                             AsyncSnapshot<List<ComparisonOverview>> snapshot) {
                           if (snapshot.hasData && snapshot.data.isEmpty) {
@@ -272,8 +267,13 @@ class CompareScreen extends StatelessWidget {
                           } else {
                             return
                               TablePart(
-                              way1Title: viewModel.way1Title,
-                              way2Title: viewModel.way2Title,);
+                            way1Title: viewModel.way1Title,
+                            way2Title: viewModel.way2Title,
+                            way1MeritEvaluate: viewModel.way1MeritEvaluate,
+                            way1DemeritEvaluate: viewModel.way1DemeritEvaluate,
+                            way2MeritEvaluate: viewModel.way2MeritEvaluate,
+                            way2DemeritEvaluate: viewModel.way2DemeritEvaluate,
+                              );
                           }
                         }
                     );
