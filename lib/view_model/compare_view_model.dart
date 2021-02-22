@@ -54,6 +54,11 @@ class CompareViewModel extends ChangeNotifier {
 
   }
 
+  Future<void> setWay1MeritNewValue(int newValue) async{
+    _way1MeritEvaluate = newValue;
+    notifyListeners();
+  }
+
 
   //todo 登録・更新時createdAtをDateTime.now()に変更
 

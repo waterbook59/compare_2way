@@ -1,16 +1,19 @@
+import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/evaluate_dropdown.dart';
 import 'package:compare_2way/views/compare/components/icon_title.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TablePart extends StatelessWidget {
-  TablePart(
-      {this.way1Title,
-      this.way1MeritEvaluate,
-      this.way1DemeritEvaluate,
-      this.way2Title,
-      this.way2MeritEvaluate,
-      this.way2DemeritEvaluate});
+  TablePart({
+    this.way1Title,
+    this.way1MeritEvaluate,
+    this.way1DemeritEvaluate,
+    this.way2Title,
+    this.way2MeritEvaluate,
+    this.way2DemeritEvaluate,
+  });
 
   final String way1Title;
   final int way1MeritEvaluate;
@@ -22,6 +25,8 @@ class TablePart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accentColor = Theme.of(context).accentColor;
+
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -59,24 +64,32 @@ class TablePart extends StatelessWidget {
               )),
             ),
 
-          ///way1MeritEvaluate
-            ///高さを設定しないと'!_debugDoingThisLayout': is not true.エラー
-            SizedBox(
-                height: 50,
-                //todo popupMenuで選んだ値は外で別のWidgetで受けるのかも(RowにしてText()とか)
-                ///Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
-                child: Row(children: [
-                  Expanded(flex: 2, child: Center(child: Text('◎'))),
-                  Expanded(
-                      flex: 1,
-                      child: EvaluateDropdown(
-                       initialValue: way1MeritEvaluate,
-                        onSelected: (newValue) {
-                         //todo compareScreenへnewValueを戻す
-                          print(newValue);
-                        },
-                      )),
-                ])),
+            ///way1MeritEvaluate
+            //高さを設定しないと'!_debugDoingThisLayout': is not true.エラー
+            Consumer<CompareViewModel>(
+                builder: (context, compareViewModel, child) {
+              return SizedBox(
+                  height: 50,
+                  //todo popupMenuで選んだ値は外で別のWidgetで受けるのかも(RowにしてText()とか)
+                  ///Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
+                  child: Row(children: [
+                    Expanded(
+                        flex: 2,
+                        child: Center(
+                            child:
+                                Text(viewModel.way1MeritEvaluate.toString()))),
+                    Expanded(
+                        flex: 1,
+                        child: EvaluateDropdown(
+                          initialValue: viewModel.way1MeritEvaluate,
+                          onSelected: (newValue) {
+                            print(newValue);
+                            // compareScreenへnewValueを戻す
+                            viewModel.setWay1MeritNewValue(newValue);
+                          },
+                        )),
+                  ]));
+            }),
             SizedBox(height: 50, child: EvaluateDropdown()),
           ]),
 

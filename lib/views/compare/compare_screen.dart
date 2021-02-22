@@ -71,16 +71,10 @@ class CompareScreen extends StatelessWidget {
                 iconData: Icons.thumb_up,
                 iconColor: accentColor,
               ),
-//              const SizedBox(height: 4,),
+
           ///way1 メリット
-              Consumer<CompareViewModel>(
-                builder: (context, compareViewModel, child)
-              //データ取得前にリストを取りに行くので[0]のデータがなく、
-              // RangeError (index): Invalid value: Valid value range is empty: 0
-              // のエラー表示
-                    {
-                  return FutureBuilder(
-                    future: compareViewModel.getWaitOverview(comparisonItemId),
+            FutureBuilder(
+                    future: viewModel.getWaitOverview(comparisonItemId),
                     builder: (context,
                         AsyncSnapshot<List<ComparisonOverview>> snapshot) {
                       if (snapshot.hasData && snapshot.data.isEmpty) {
@@ -109,55 +103,40 @@ class CompareScreen extends StatelessWidget {
                                 );
                             }
                       }
-                  );
-                },
-              ),
-//              const SizedBox(height: 4,),
+                  ),
           ///way2 メリット
-              Consumer<CompareViewModel>(
-                builder: (context, compareViewModel, child) {
-                  return FutureBuilder(
-                    future: compareViewModel.getWaitOverview(comparisonItemId),
+                    FutureBuilder(
+                    future: viewModel.getWaitOverview(comparisonItemId),
                     builder: (context,
                         AsyncSnapshot<List<ComparisonOverview>> snapshot) {
                       if (snapshot.hasData && snapshot.data.isEmpty) {
                         print('EmptyView通った');
                         return Container();
                       } else {
-                        return ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount:
-                            compareViewModel.comparisonOverviews.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return GFAccordion(
-                                title:
-                                  compareViewModel
-                                      .comparisonOverviews[index].way2Title,
-                                titleBorderRadius: accordionTopBorderRadius ,
-                                contentBorderRadius: accordionBottomBorderRadius,
-                                collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
-                                showAccordion: true,
-                                contentChild:ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: _controllers.length,
-                                    itemBuilder: (context, index) {
+                        return
+                          GFAccordion(
+                            title:
+                              viewModel.way2Title,
+                            titleBorderRadius: accordionTopBorderRadius ,
+                            contentBorderRadius: accordionBottomBorderRadius,
+                            collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
+                            showAccordion: true,
+                            contentChild:ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: _controllers.length,
+                                itemBuilder: (context, index) {
 //              textItems.add(new TextEditingController());
-                                      return CupertinoTextField(
-                                        placeholder: 'メリットを入力してください',
-                                        controller: _controllers[index],
-                                        style: const TextStyle(color: Colors.black),
+                                return CupertinoTextField(
+                                  placeholder: 'メリットを入力してください',
+                                  controller: _controllers[index],
+                                  style: const TextStyle(color: Colors.black),
                                       );
                                     }),
                                 );
-
-                            });
                       }
                     },
-                  );
-                },
-              ),
+                  ),
               const SizedBox(height: 8,),
           ///デメリットアイコン
               IconTitle(
@@ -166,99 +145,76 @@ class CompareScreen extends StatelessWidget {
                 iconColor: accentColor,
               ),
           ///way1 デメリット
-              Consumer<CompareViewModel>(
-                builder: (context, compareViewModel, child)
-                {
-                  return FutureBuilder(
-                    future: compareViewModel.getWaitOverview(comparisonItemId),
-                    builder: (context,
-                        AsyncSnapshot<List<ComparisonOverview>> snapshot) {
-                      if (snapshot.hasData && snapshot.data.isEmpty) {
-                        print('EmptyView通った');
-                        return Container();
-                      } else {
-                        return ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount:
-                            compareViewModel.comparisonOverviews.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return GFAccordion(
-                                title: compareViewModel.
-                                comparisonOverviews[index].way1Title,
-                                titleBorderRadius: accordionTopBorderRadius ,
-                                contentBorderRadius: accordionBottomBorderRadius,
-                                collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
-                                showAccordion: true,
-                                contentChild:ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: _controllers.length,
-                                    itemBuilder: (context, index) {
-//              textItems.add(new TextEditingController());
-                                      return CupertinoTextField(
-                                        placeholder: 'メリットを入力してください',
-                                        controller: _controllers[index],
-                                        style: const TextStyle(color: Colors.black),
-                                      );
-                                    }),
-                              );
-                            });
-                      }
-                    },
-                  );
-                },
-              ),
-          ///way2 デメリット
-              Consumer<CompareViewModel>(
-                builder: (context, compareViewModel, child) {
-                  return FutureBuilder(
-                    future: compareViewModel.getWaitOverview(comparisonItemId),
-                    builder: (context,
-                        AsyncSnapshot<List<ComparisonOverview>> snapshot) {
-                      if (snapshot.hasData && snapshot.data.isEmpty) {
-                        print('EmptyView通った');
-                        return Container();
-                      } else {
-                        return ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount:
-                            compareViewModel.comparisonOverviews.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return GFAccordion(
-                                title:
-                                compareViewModel
-                                    .comparisonOverviews[index].way2Title,
-                                collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
-                                titleBorderRadius: accordionTopBorderRadius ,
-                                contentBorderRadius: accordionBottomBorderRadius,
-                                showAccordion: true,
-                                contentChild:ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: _controllers.length,
-                                    itemBuilder: (context, index) {
-//              textItems.add(new TextEditingController());
-                                      return CupertinoTextField(
-                                        placeholder: 'メリットを入力してください',
-                                        controller: _controllers[index],
-                                        style: const TextStyle(color: Colors.black),
-                                      );
-                                    }),
-                              );
-                            });
-                      }
-                    },
-                  );
-                },
-              ),
-          ///テーブル
-              Consumer<CompareViewModel>(
-                builder:(context,compareViewModel,child) {
-                  return
+
                     FutureBuilder(
-                    future: compareViewModel.getWaitOverview(comparisonItemId),
+                    future: viewModel.getWaitOverview(comparisonItemId),
+                    builder: (context,
+                        AsyncSnapshot<List<ComparisonOverview>> snapshot) {
+                      if (snapshot.hasData && snapshot.data.isEmpty) {
+                        print('EmptyView通った');
+                        return Container();
+                      } else {
+                      return
+                        GFAccordion(
+                            title: viewModel.way1Title,
+                            titleBorderRadius: accordionTopBorderRadius ,
+                            contentBorderRadius: accordionBottomBorderRadius,
+                            collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
+                            showAccordion: true,
+                            contentChild:ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: _controllers.length,
+                                itemBuilder: (context, index) {
+      //              textItems.add(new TextEditingController());
+                                  return CupertinoTextField(
+                                    placeholder: 'メリットを入力してください',
+                                    controller: _controllers[index],
+                                    style: const TextStyle(color: Colors.black),
+                              );
+                            }),
+                      );
+                      }
+                    },
+                  ),
+          ///way2 デメリット
+//              Consumer<CompareViewModel>(
+//                builder: (context, compareViewModel, child) {
+//                  return
+            FutureBuilder(
+                    future: viewModel.getWaitOverview(comparisonItemId),
+                    builder: (context,
+                        AsyncSnapshot<List<ComparisonOverview>> snapshot) {
+                      if (snapshot.hasData && snapshot.data.isEmpty) {
+                        print('EmptyView通った');
+                        return Container();
+                      } else {
+                        return GFAccordion(
+                          title:
+                          viewModel.way2Title,
+                          collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
+                          titleBorderRadius: accordionTopBorderRadius ,
+                          contentBorderRadius: accordionBottomBorderRadius,
+                          showAccordion: true,
+                          contentChild:ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: _controllers.length,
+                              itemBuilder: (context, index) {
+//              textItems.add(new TextEditingController());
+                                return CupertinoTextField(
+                                  placeholder: 'メリットを入力してください',
+                                  controller: _controllers[index],
+                                  style: const TextStyle(color: Colors.black),
+                                );
+                              }),
+                        );
+                      }
+                    },
+                  ),
+          ///テーブル
+                    FutureBuilder(
+                    future: viewModel.getWaitOverview(comparisonItemId),
                         builder: (context,
                             AsyncSnapshot<List<ComparisonOverview>> snapshot) {
                           if (snapshot.hasData && snapshot.data.isEmpty) {
@@ -276,9 +232,7 @@ class CompareScreen extends StatelessWidget {
                               );
                           }
                         }
-                    );
-                }
-              ),
+                    ),
             ],
           ),
         ),

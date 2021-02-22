@@ -48,7 +48,6 @@ class _EvaluateDropdownState extends State<EvaluateDropdown> {
           ],
           onSelected: (newValue){
             setState(() {
-              //todo 選択したものと連動できるか
               widget.initialValue =newValue;
               widget.onSelected(newValue);
             });
