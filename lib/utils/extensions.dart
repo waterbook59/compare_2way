@@ -29,6 +29,7 @@ extension ConvertToComparisonItemRecord on ComparisonItem{
       //      tags:comparisonItem.tags??'',
       favorite: comparisonItem.favorite ?? false,
       conclusion: comparisonItem.conclusion ?? '',
+      createdAt:comparisonItem.createdAt,
     );
     return comparisonOverviewRecord;
   }

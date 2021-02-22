@@ -75,6 +75,7 @@ class AddScreen extends StatelessWidget {
     final viewModel = Provider.of<AddViewModel>(context, listen: false);
 
     // モデルクラス(compare)に比較項目を登録(idを次の画面に渡したいのでview側で設定)
+    //todo ComparisonItemではなく、ComparisonOverviewに変更しては？？
     final comparisonItem = ComparisonItem(
       //comparisonItemIdをuuidで生成
       comparisonItemId: Uuid().v1(),

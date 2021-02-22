@@ -54,4 +54,7 @@ class CompareViewModel extends ChangeNotifier {
 
   }
 
+
+  //todo 登録・更新時createdAtをDateTime.now()に変更
+
 }

@@ -39,9 +39,12 @@ class ComparisonOverviewRecords extends Table {
 //  TextColumn get tags => text().nullable()();
   BoolColumn get favorite => boolean().withDefault(const Constant(false))();
   TextColumn get conclusion => text().nullable()();
+  DateTimeColumn get createdAt => dateTime()();
 
   @override
   Set<Column> get primaryKey => {dataId};
+
+
 }
 
 //テーブルway1Merit
@@ -117,6 +120,7 @@ class ComparisonItemDB  extends _$ComparisonItemDB{
   ComparisonItemDB() : super(_openConnection());
 
 
+  ///リリース後の項目編集はschemaVersionのupdateとMigrationが必須
   @override
   int get schemaVersion => 1;
 

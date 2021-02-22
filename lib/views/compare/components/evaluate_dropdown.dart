@@ -20,7 +20,7 @@ class _EvaluateDropdownState extends State<EvaluateDropdown> {
     return Scaffold(
       body: Center(
         child: PopupMenuButton<int>(
-          initialValue: widget.initialValue ,
+          initialValue: widget.initialValue,
           elevation: 0,
           icon: const Icon(Icons.arrow_drop_down),
 //          iconSize: 30,
@@ -48,6 +48,8 @@ class _EvaluateDropdownState extends State<EvaluateDropdown> {
           ],
           onSelected: (newValue){
             setState(() {
+              //todo 選択したものと連動できるか
+              widget.initialValue =newValue;
               widget.onSelected(newValue);
             });
           },

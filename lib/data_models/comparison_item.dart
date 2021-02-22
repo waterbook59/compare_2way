@@ -24,7 +24,8 @@ class ComparisonItem {
         this.way3DemeritEvaluate,
       this.tagTitles,//dataIdに紐づくタグのタイトルだけ
       this.favorite,
-      this.conclusion});
+      this.conclusion,
+        this.createdAt});
 
   final int dataId;
   final String comparisonItemId;
@@ -53,6 +54,7 @@ class ComparisonItem {
   final bool favorite;
 
   final String conclusion;
+  final DateTime createdAt;
 }
 
 //List<CompareItem>取得できれば下記いらないはず

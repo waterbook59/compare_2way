@@ -72,6 +72,7 @@ class TablePart extends StatelessWidget {
                       child: EvaluateDropdown(
                        initialValue: way1MeritEvaluate,
                         onSelected: (newValue) {
+                         //todo compareScreenへnewValueを戻す
                           print(newValue);
                         },
                       )),

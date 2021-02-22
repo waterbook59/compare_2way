@@ -20,6 +20,7 @@ class ComparisonOverviewRecord extends DataClass
   final int way2DemeritEvaluate;
   final bool favorite;
   final String conclusion;
+  final DateTime createdAt;
   ComparisonOverviewRecord(
       {@required this.dataId,
       @required this.comparisonItemId,
@@ -31,7 +32,8 @@ class ComparisonOverviewRecord extends DataClass
       @required this.way2MeritEvaluate,
       @required this.way2DemeritEvaluate,
       @required this.favorite,
-      this.conclusion});
+      this.conclusion,
+      @required this.createdAt});
   factory ComparisonOverviewRecord.fromData(
       Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
@@ -39,6 +41,7 @@ class ComparisonOverviewRecord extends DataClass
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
     final boolType = db.typeSystem.forDartType<bool>();
+    final dateTimeType = db.typeSystem.forDartType<DateTime>();
     return ComparisonOverviewRecord(
       dataId:
           intType.mapFromDatabaseResponse(data['${effectivePrefix}data_id']),
@@ -62,6 +65,8 @@ class ComparisonOverviewRecord extends DataClass
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}favorite']),
       conclusion: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}conclusion']),
+      createdAt: dateTimeType
+          .mapFromDatabaseResponse(data['${effectivePrefix}created_at']),
     );
   }
   @override
@@ -100,6 +105,9 @@ class ComparisonOverviewRecord extends DataClass
     if (!nullToAbsent || conclusion != null) {
       map['conclusion'] = Variable<String>(conclusion);
     }
+    if (!nullToAbsent || createdAt != null) {
+      map['created_at'] = Variable<DateTime>(createdAt);
+    }
     return map;
   }
 
@@ -137,6 +145,9 @@ class ComparisonOverviewRecord extends DataClass
       conclusion: conclusion == null && nullToAbsent
           ? const Value.absent()
           : Value(conclusion),
+      createdAt: createdAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdAt),
     );
   }
 
@@ -157,6 +168,7 @@ class ComparisonOverviewRecord extends DataClass
           serializer.fromJson<int>(json['way2DemeritEvaluate']),
       favorite: serializer.fromJson<bool>(json['favorite']),
       conclusion: serializer.fromJson<String>(json['conclusion']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
   @override
@@ -174,6 +186,7 @@ class ComparisonOverviewRecord extends DataClass
       'way2DemeritEvaluate': serializer.toJson<int>(way2DemeritEvaluate),
       'favorite': serializer.toJson<bool>(favorite),
       'conclusion': serializer.toJson<String>(conclusion),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
 
@@ -188,7 +201,8 @@ class ComparisonOverviewRecord extends DataClass
           int way2MeritEvaluate,
           int way2DemeritEvaluate,
           bool favorite,
-          String conclusion}) =>
+          String conclusion,
+          DateTime createdAt}) =>
       ComparisonOverviewRecord(
         dataId: dataId ?? this.dataId,
         comparisonItemId: comparisonItemId ?? this.comparisonItemId,
@@ -201,6 +215,7 @@ class ComparisonOverviewRecord extends DataClass
         way2DemeritEvaluate: way2DemeritEvaluate ?? this.way2DemeritEvaluate,
         favorite: favorite ?? this.favorite,
         conclusion: conclusion ?? this.conclusion,
+        createdAt: createdAt ?? this.createdAt,
       );
   @override
   String toString() {
@@ -215,7 +230,8 @@ class ComparisonOverviewRecord extends DataClass
           ..write('way2MeritEvaluate: $way2MeritEvaluate, ')
           ..write('way2DemeritEvaluate: $way2DemeritEvaluate, ')
           ..write('favorite: $favorite, ')
-          ..write('conclusion: $conclusion')
+          ..write('conclusion: $conclusion, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
@@ -239,8 +255,10 @@ class ComparisonOverviewRecord extends DataClass
                                   way2MeritEvaluate.hashCode,
                                   $mrjc(
                                       way2DemeritEvaluate.hashCode,
-                                      $mrjc(favorite.hashCode,
-                                          conclusion.hashCode)))))))))));
+                                      $mrjc(
+                                          favorite.hashCode,
+                                          $mrjc(conclusion.hashCode,
+                                              createdAt.hashCode))))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -255,7 +273,8 @@ class ComparisonOverviewRecord extends DataClass
           other.way2MeritEvaluate == this.way2MeritEvaluate &&
           other.way2DemeritEvaluate == this.way2DemeritEvaluate &&
           other.favorite == this.favorite &&
-          other.conclusion == this.conclusion);
+          other.conclusion == this.conclusion &&
+          other.createdAt == this.createdAt);
 }
 
 class ComparisonOverviewRecordsCompanion
@@ -271,6 +290,7 @@ class ComparisonOverviewRecordsCompanion
   final Value<int> way2DemeritEvaluate;
   final Value<bool> favorite;
   final Value<String> conclusion;
+  final Value<DateTime> createdAt;
   const ComparisonOverviewRecordsCompanion({
     this.dataId = const Value.absent(),
     this.comparisonItemId = const Value.absent(),
@@ -283,6 +303,7 @@ class ComparisonOverviewRecordsCompanion
     this.way2DemeritEvaluate = const Value.absent(),
     this.favorite = const Value.absent(),
     this.conclusion = const Value.absent(),
+    this.createdAt = const Value.absent(),
   });
   ComparisonOverviewRecordsCompanion.insert({
     this.dataId = const Value.absent(),
@@ -296,10 +317,12 @@ class ComparisonOverviewRecordsCompanion
     this.way2DemeritEvaluate = const Value.absent(),
     this.favorite = const Value.absent(),
     this.conclusion = const Value.absent(),
+    @required DateTime createdAt,
   })  : comparisonItemId = Value(comparisonItemId),
         itemTitle = Value(itemTitle),
         way1Title = Value(way1Title),
-        way2Title = Value(way2Title);
+        way2Title = Value(way2Title),
+        createdAt = Value(createdAt);
   static Insertable<ComparisonOverviewRecord> custom({
     Expression<int> dataId,
     Expression<String> comparisonItemId,
@@ -312,6 +335,7 @@ class ComparisonOverviewRecordsCompanion
     Expression<int> way2DemeritEvaluate,
     Expression<bool> favorite,
     Expression<String> conclusion,
+    Expression<DateTime> createdAt,
   }) {
     return RawValuesInsertable({
       if (dataId != null) 'data_id': dataId,
@@ -327,6 +351,7 @@ class ComparisonOverviewRecordsCompanion
         'way2_demerit_evaluate': way2DemeritEvaluate,
       if (favorite != null) 'favorite': favorite,
       if (conclusion != null) 'conclusion': conclusion,
+      if (createdAt != null) 'created_at': createdAt,
     });
   }
 
@@ -341,7 +366,8 @@ class ComparisonOverviewRecordsCompanion
       Value<int> way2MeritEvaluate,
       Value<int> way2DemeritEvaluate,
       Value<bool> favorite,
-      Value<String> conclusion}) {
+      Value<String> conclusion,
+      Value<DateTime> createdAt}) {
     return ComparisonOverviewRecordsCompanion(
       dataId: dataId ?? this.dataId,
       comparisonItemId: comparisonItemId ?? this.comparisonItemId,
@@ -354,6 +380,7 @@ class ComparisonOverviewRecordsCompanion
       way2DemeritEvaluate: way2DemeritEvaluate ?? this.way2DemeritEvaluate,
       favorite: favorite ?? this.favorite,
       conclusion: conclusion ?? this.conclusion,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -393,6 +420,9 @@ class ComparisonOverviewRecordsCompanion
     if (conclusion.present) {
       map['conclusion'] = Variable<String>(conclusion.value);
     }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
     return map;
   }
 
@@ -409,7 +439,8 @@ class ComparisonOverviewRecordsCompanion
           ..write('way2MeritEvaluate: $way2MeritEvaluate, ')
           ..write('way2DemeritEvaluate: $way2DemeritEvaluate, ')
           ..write('favorite: $favorite, ')
-          ..write('conclusion: $conclusion')
+          ..write('conclusion: $conclusion, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
@@ -544,6 +575,18 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
     );
   }
 
+  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  GeneratedDateTimeColumn _createdAt;
+  @override
+  GeneratedDateTimeColumn get createdAt => _createdAt ??= _constructCreatedAt();
+  GeneratedDateTimeColumn _constructCreatedAt() {
+    return GeneratedDateTimeColumn(
+      'created_at',
+      $tableName,
+      false,
+    );
+  }
+
   @override
   List<GeneratedColumn> get $columns => [
         dataId,
@@ -556,7 +599,8 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
         way2MeritEvaluate,
         way2DemeritEvaluate,
         favorite,
-        conclusion
+        conclusion,
+        createdAt
       ];
   @override
   $ComparisonOverviewRecordsTable get asDslTable => this;
@@ -633,6 +677,12 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
           _conclusionMeta,
           conclusion.isAcceptableOrUnknown(
               data['conclusion'], _conclusionMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at'], _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
     }
     return context;
   }
