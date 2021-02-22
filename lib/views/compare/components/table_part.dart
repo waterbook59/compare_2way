@@ -49,9 +49,18 @@ class TablePart extends StatelessWidget {
             ),
              ///高さを設定しないと'!_debugDoingThisLayout': is not true.エラー
              SizedBox(
-                 height:50,
-                 //todo popupMenuで選んだ値は外で別のWidgetで受けるのかも(RowにしてText()とか)
-                 child: EvaluateDropdown()),
+                   height:50,
+                   //todo popupMenuで選んだ値は外で別のWidgetで受けるのかも(RowにしてText()とか)
+                 ///Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
+                   child: Row(children:[
+                     Expanded(flex:2,child: Center(child: Text('◎'))),
+                     Expanded(flex:1,child: EvaluateDropdown(
+//                       initialValue: ,
+                     onSelected: (newValue){
+                       print(newValue);
+                     },
+                     )),
+             ])),
              SizedBox(
               height:50,
               child: EvaluateDropdown()),
