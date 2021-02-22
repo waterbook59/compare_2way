@@ -33,7 +33,7 @@ class TablePart extends StatelessWidget {
   Widget build(BuildContext context) {
     final accentColor = Theme.of(context).accentColor;
 
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+//    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -41,7 +41,7 @@ class TablePart extends StatelessWidget {
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         border: TableBorder.all(),
         children: [
-          ///タイトル行
+      ///タイトル行
           TableRow(children: [
             Container(
               //figmaでは24
@@ -60,9 +60,9 @@ class TablePart extends StatelessWidget {
               iconColor: accentColor,
             ),
           ]),
-
-          ///way1行
+      ///way1行
           TableRow(children: [
+            ///way1タイトル
             SizedBox(
               height: 48,
               child: Center(
@@ -71,7 +71,6 @@ class TablePart extends StatelessWidget {
                 style: const TextStyle(fontSize: 16),
               )),
             ),
-
             ///way1MeritEvaluate
             //高さを設定しないと'!_debugDoingThisLayout': is not true.エラー
             Consumer<CompareViewModel>(
@@ -83,29 +82,53 @@ class TablePart extends StatelessWidget {
                     Expanded(
                         flex: 2,
                         child: Text(
-                          evaluates[viewModel.way1MeritEvaluate],
+                          evaluates[compareViewModel.way1MeritEvaluate],
                           style: TextStyle(fontSize: 40),
                           textAlign: TextAlign.right,
                         )),
                     Expanded(
                         flex: 1,
                         child: EvaluateDropdown(
-                          initialValue: viewModel.way1MeritEvaluate,
-                          onSelected: (newValue) {
+                          initialValue: compareViewModel.way1MeritEvaluate,
+                          onSelected: (newValue) async{
                             print(newValue);
                             // compareScreenへnewValueを戻す
-                            viewModel.setWay1MeritNewValue(newValue);
+                        await compareViewModel.setWay1MeritNewValue(newValue);
                           },
                         )),
                   ]));
             }),
-
             ///way1DemeritEvaluate
-            SizedBox(height: 50, child: EvaluateDropdown()),
+            Consumer<CompareViewModel>(
+                builder: (context, compareViewModel, child) {
+                  return SizedBox(
+                      height: 50,
+                      //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
+                      child: Row(children: [
+                        Expanded(
+                            flex: 2,
+                            child: Text(
+                              evaluates[compareViewModel.way1DemeritEvaluate],
+                              style: TextStyle(fontSize: 40),
+                              textAlign: TextAlign.right,
+                            )),
+                        Expanded(
+                            flex: 1,
+                            child: EvaluateDropdown(
+                              initialValue:compareViewModel.way1DemeritEvaluate,
+                              onSelected: (newValue) async{
+                                print(newValue);
+                                // compareScreenへnewValueを戻す
+                        await compareViewModel.setWay1DemeritNewValue(newValue);
+                              },
+                            )),
+                      ]));
+                }),
           ]),
 
-          ///way2行
+      ///way2行
           TableRow(children: [
+            ///way1タイトル
             SizedBox(
               height: 48,
               child: Center(
@@ -114,12 +137,58 @@ class TablePart extends StatelessWidget {
                 style: const TextStyle(fontSize: 16),
               )),
             ),
-
             ///way2MeritEvaluate
-            SizedBox(height: 50, child: EvaluateDropdown()),
-
+            Consumer<CompareViewModel>(
+                builder: (context, compareViewModel, child) {
+                  return SizedBox(
+                      height: 50,
+                      //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
+                      child: Row(children: [
+                        Expanded(
+                            flex: 2,
+                            child: Text(
+                              evaluates[compareViewModel.way2MeritEvaluate],
+                              style: TextStyle(fontSize: 40),
+                              textAlign: TextAlign.right,
+                            )),
+                        Expanded(
+                            flex: 1,
+                            child: EvaluateDropdown(
+                              initialValue: compareViewModel.way2MeritEvaluate,
+                              onSelected: (newValue) async{
+                                print(newValue);
+                                // compareScreenへnewValueを戻す
+                          await compareViewModel.setWay2MeritNewValue(newValue);
+                              },
+                            )),
+                      ]));
+                }),
             ///way2DemeritEvaluate
-            SizedBox(height: 50, child: EvaluateDropdown()),
+            Consumer<CompareViewModel>(
+                builder: (context, compareViewModel, child) {
+                  return SizedBox(
+                      height: 50,
+                      //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
+                      child: Row(children: [
+                        Expanded(
+                            flex: 2,
+                            child: Text(
+                              evaluates[compareViewModel.way2DemeritEvaluate],
+                              style: TextStyle(fontSize: 40),
+                              textAlign: TextAlign.right,
+                            )),
+                        Expanded(
+                            flex: 1,
+                            child: EvaluateDropdown(
+                              initialValue:compareViewModel.way2DemeritEvaluate,
+                              onSelected: (newValue) async{
+                                print(newValue);
+                                // compareScreenへnewValueを戻す
+                        await compareViewModel.setWay2DemeritNewValue(newValue);
+                              },
+                            )),
+                      ]));
+                }),
           ]),
         ],
       ),
