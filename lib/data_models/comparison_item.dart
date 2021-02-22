@@ -10,15 +10,18 @@ class ComparisonItem {
       this.way1Title,
       this.way1Merit,
       this.way1Demerit,
-        this.way1Evaluate,
+        this.way1MeritEvaluate,
+        this.way1DemeritEvaluate,
       this.way2Title,
       this.way2Merit,
       this.way2Demerit,
-        this.way2Evaluate,
+        this.way2MeritEvaluate,
+        this.way2DemeritEvaluate,
       this.way3Title,
       this.way3Merit,
       this.way3Demerit,
-        this.way3Evaluate,
+        this.way3MeritEvaluate,
+        this.way3DemeritEvaluate,
       this.tagTitles,//dataIdに紐づくタグのタイトルだけ
       this.favorite,
       this.conclusion});
@@ -31,17 +34,20 @@ class ComparisonItem {
   //todo リストなのでway1Meritsにリファクタリング
   final List<Way1Merit> way1Merit;
   final List<Way1Demerit> way1Demerit;
-  final int way1Evaluate;
+  final int way1MeritEvaluate;
+  final int way1DemeritEvaluate;
 
   final String way2Title;
   final List<Way2Merit> way2Merit;
   final List<Way2Demerit> way2Demerit;
-  final int way2Evaluate;
+  final int way2MeritEvaluate;
+  final int way2DemeritEvaluate;
 
   final String way3Title;
   final List<Way3Merit> way3Merit;
   final List<Way3Demerit> way3Demerit;
-  final int way3Evaluate;
+  final int way3MeritEvaluate;
+  final int way3DemeritEvaluate;
 
   final List<Tag> tagTitles;
   final bool favorite;

@@ -14,21 +14,27 @@ class ComparisonOverviewRecords extends Table {
   TextColumn get itemTitle => text()();
 
   TextColumn get way1Title => text()();
-  IntColumn get way1Evaluate =>
+  IntColumn get way1MeritEvaluate =>
+      integer().withDefault(const Constant(0))(); // 評価、初期ゼロ
+  IntColumn get way1DemeritEvaluate =>
       integer().withDefault(const Constant(0))(); // 評価、初期ゼロ
 
   //todo way2テーブルはあとで追加
   TextColumn get way2Title => text()();
-  IntColumn get way2Evaluate => integer().withDefault(const Constant(0))();
+  IntColumn get way2MeritEvaluate => integer().withDefault(const Constant(0))();
+  IntColumn get way2DemeritEvaluate =>
+      integer().withDefault(const Constant(0))();
+
 //  TextColumn get way2Merit => text().nullable()();
 //  TextColumn get way2Demerit => text().nullable()();
-
 
 //  TextColumn get way3Title => text().nullable()();
 //  TextColumn get way3Merit => text().nullable()();
 //  TextColumn get way3Demerit => text().nullable()();
-//  IntColumn get way3Evaluate
-//  =>integer().withDefault(const Constant(0))();// 評価、初期ゼロ
+//  IntColumn get way3MeritEvaluate
+//  =>integer().withDefault(const Constant(0))();
+//  IntColumn get way3DemeritEvaluate =>
+//      integer().withDefault(const Constant(0))();
 
 //  TextColumn get tags => text().nullable()();
   BoolColumn get favorite => boolean().withDefault(const Constant(false))();

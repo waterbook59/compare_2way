@@ -13,9 +13,11 @@ class ComparisonOverviewRecord extends DataClass
   final String comparisonItemId;
   final String itemTitle;
   final String way1Title;
-  final int way1Evaluate;
+  final int way1MeritEvaluate;
+  final int way1DemeritEvaluate;
   final String way2Title;
-  final int way2Evaluate;
+  final int way2MeritEvaluate;
+  final int way2DemeritEvaluate;
   final bool favorite;
   final String conclusion;
   ComparisonOverviewRecord(
@@ -23,9 +25,11 @@ class ComparisonOverviewRecord extends DataClass
       @required this.comparisonItemId,
       @required this.itemTitle,
       @required this.way1Title,
-      @required this.way1Evaluate,
+      @required this.way1MeritEvaluate,
+      @required this.way1DemeritEvaluate,
       @required this.way2Title,
-      @required this.way2Evaluate,
+      @required this.way2MeritEvaluate,
+      @required this.way2DemeritEvaluate,
       @required this.favorite,
       this.conclusion});
   factory ComparisonOverviewRecord.fromData(
@@ -44,12 +48,16 @@ class ComparisonOverviewRecord extends DataClass
           .mapFromDatabaseResponse(data['${effectivePrefix}item_title']),
       way1Title: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}way1_title']),
-      way1Evaluate: intType
-          .mapFromDatabaseResponse(data['${effectivePrefix}way1_evaluate']),
+      way1MeritEvaluate: intType.mapFromDatabaseResponse(
+          data['${effectivePrefix}way1_merit_evaluate']),
+      way1DemeritEvaluate: intType.mapFromDatabaseResponse(
+          data['${effectivePrefix}way1_demerit_evaluate']),
       way2Title: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}way2_title']),
-      way2Evaluate: intType
-          .mapFromDatabaseResponse(data['${effectivePrefix}way2_evaluate']),
+      way2MeritEvaluate: intType.mapFromDatabaseResponse(
+          data['${effectivePrefix}way2_merit_evaluate']),
+      way2DemeritEvaluate: intType.mapFromDatabaseResponse(
+          data['${effectivePrefix}way2_demerit_evaluate']),
       favorite:
           boolType.mapFromDatabaseResponse(data['${effectivePrefix}favorite']),
       conclusion: stringType
@@ -71,14 +79,20 @@ class ComparisonOverviewRecord extends DataClass
     if (!nullToAbsent || way1Title != null) {
       map['way1_title'] = Variable<String>(way1Title);
     }
-    if (!nullToAbsent || way1Evaluate != null) {
-      map['way1_evaluate'] = Variable<int>(way1Evaluate);
+    if (!nullToAbsent || way1MeritEvaluate != null) {
+      map['way1_merit_evaluate'] = Variable<int>(way1MeritEvaluate);
+    }
+    if (!nullToAbsent || way1DemeritEvaluate != null) {
+      map['way1_demerit_evaluate'] = Variable<int>(way1DemeritEvaluate);
     }
     if (!nullToAbsent || way2Title != null) {
       map['way2_title'] = Variable<String>(way2Title);
     }
-    if (!nullToAbsent || way2Evaluate != null) {
-      map['way2_evaluate'] = Variable<int>(way2Evaluate);
+    if (!nullToAbsent || way2MeritEvaluate != null) {
+      map['way2_merit_evaluate'] = Variable<int>(way2MeritEvaluate);
+    }
+    if (!nullToAbsent || way2DemeritEvaluate != null) {
+      map['way2_demerit_evaluate'] = Variable<int>(way2DemeritEvaluate);
     }
     if (!nullToAbsent || favorite != null) {
       map['favorite'] = Variable<bool>(favorite);
@@ -102,15 +116,21 @@ class ComparisonOverviewRecord extends DataClass
       way1Title: way1Title == null && nullToAbsent
           ? const Value.absent()
           : Value(way1Title),
-      way1Evaluate: way1Evaluate == null && nullToAbsent
+      way1MeritEvaluate: way1MeritEvaluate == null && nullToAbsent
           ? const Value.absent()
-          : Value(way1Evaluate),
+          : Value(way1MeritEvaluate),
+      way1DemeritEvaluate: way1DemeritEvaluate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(way1DemeritEvaluate),
       way2Title: way2Title == null && nullToAbsent
           ? const Value.absent()
           : Value(way2Title),
-      way2Evaluate: way2Evaluate == null && nullToAbsent
+      way2MeritEvaluate: way2MeritEvaluate == null && nullToAbsent
           ? const Value.absent()
-          : Value(way2Evaluate),
+          : Value(way2MeritEvaluate),
+      way2DemeritEvaluate: way2DemeritEvaluate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(way2DemeritEvaluate),
       favorite: favorite == null && nullToAbsent
           ? const Value.absent()
           : Value(favorite),
@@ -128,9 +148,13 @@ class ComparisonOverviewRecord extends DataClass
       comparisonItemId: serializer.fromJson<String>(json['comparisonItemId']),
       itemTitle: serializer.fromJson<String>(json['itemTitle']),
       way1Title: serializer.fromJson<String>(json['way1Title']),
-      way1Evaluate: serializer.fromJson<int>(json['way1Evaluate']),
+      way1MeritEvaluate: serializer.fromJson<int>(json['way1MeritEvaluate']),
+      way1DemeritEvaluate:
+          serializer.fromJson<int>(json['way1DemeritEvaluate']),
       way2Title: serializer.fromJson<String>(json['way2Title']),
-      way2Evaluate: serializer.fromJson<int>(json['way2Evaluate']),
+      way2MeritEvaluate: serializer.fromJson<int>(json['way2MeritEvaluate']),
+      way2DemeritEvaluate:
+          serializer.fromJson<int>(json['way2DemeritEvaluate']),
       favorite: serializer.fromJson<bool>(json['favorite']),
       conclusion: serializer.fromJson<String>(json['conclusion']),
     );
@@ -143,9 +167,11 @@ class ComparisonOverviewRecord extends DataClass
       'comparisonItemId': serializer.toJson<String>(comparisonItemId),
       'itemTitle': serializer.toJson<String>(itemTitle),
       'way1Title': serializer.toJson<String>(way1Title),
-      'way1Evaluate': serializer.toJson<int>(way1Evaluate),
+      'way1MeritEvaluate': serializer.toJson<int>(way1MeritEvaluate),
+      'way1DemeritEvaluate': serializer.toJson<int>(way1DemeritEvaluate),
       'way2Title': serializer.toJson<String>(way2Title),
-      'way2Evaluate': serializer.toJson<int>(way2Evaluate),
+      'way2MeritEvaluate': serializer.toJson<int>(way2MeritEvaluate),
+      'way2DemeritEvaluate': serializer.toJson<int>(way2DemeritEvaluate),
       'favorite': serializer.toJson<bool>(favorite),
       'conclusion': serializer.toJson<String>(conclusion),
     };
@@ -156,9 +182,11 @@ class ComparisonOverviewRecord extends DataClass
           String comparisonItemId,
           String itemTitle,
           String way1Title,
-          int way1Evaluate,
+          int way1MeritEvaluate,
+          int way1DemeritEvaluate,
           String way2Title,
-          int way2Evaluate,
+          int way2MeritEvaluate,
+          int way2DemeritEvaluate,
           bool favorite,
           String conclusion}) =>
       ComparisonOverviewRecord(
@@ -166,9 +194,11 @@ class ComparisonOverviewRecord extends DataClass
         comparisonItemId: comparisonItemId ?? this.comparisonItemId,
         itemTitle: itemTitle ?? this.itemTitle,
         way1Title: way1Title ?? this.way1Title,
-        way1Evaluate: way1Evaluate ?? this.way1Evaluate,
+        way1MeritEvaluate: way1MeritEvaluate ?? this.way1MeritEvaluate,
+        way1DemeritEvaluate: way1DemeritEvaluate ?? this.way1DemeritEvaluate,
         way2Title: way2Title ?? this.way2Title,
-        way2Evaluate: way2Evaluate ?? this.way2Evaluate,
+        way2MeritEvaluate: way2MeritEvaluate ?? this.way2MeritEvaluate,
+        way2DemeritEvaluate: way2DemeritEvaluate ?? this.way2DemeritEvaluate,
         favorite: favorite ?? this.favorite,
         conclusion: conclusion ?? this.conclusion,
       );
@@ -179,9 +209,11 @@ class ComparisonOverviewRecord extends DataClass
           ..write('comparisonItemId: $comparisonItemId, ')
           ..write('itemTitle: $itemTitle, ')
           ..write('way1Title: $way1Title, ')
-          ..write('way1Evaluate: $way1Evaluate, ')
+          ..write('way1MeritEvaluate: $way1MeritEvaluate, ')
+          ..write('way1DemeritEvaluate: $way1DemeritEvaluate, ')
           ..write('way2Title: $way2Title, ')
-          ..write('way2Evaluate: $way2Evaluate, ')
+          ..write('way2MeritEvaluate: $way2MeritEvaluate, ')
+          ..write('way2DemeritEvaluate: $way2DemeritEvaluate, ')
           ..write('favorite: $favorite, ')
           ..write('conclusion: $conclusion')
           ..write(')'))
@@ -198,13 +230,17 @@ class ComparisonOverviewRecord extends DataClass
               $mrjc(
                   way1Title.hashCode,
                   $mrjc(
-                      way1Evaluate.hashCode,
+                      way1MeritEvaluate.hashCode,
                       $mrjc(
-                          way2Title.hashCode,
+                          way1DemeritEvaluate.hashCode,
                           $mrjc(
-                              way2Evaluate.hashCode,
-                              $mrjc(favorite.hashCode,
-                                  conclusion.hashCode)))))))));
+                              way2Title.hashCode,
+                              $mrjc(
+                                  way2MeritEvaluate.hashCode,
+                                  $mrjc(
+                                      way2DemeritEvaluate.hashCode,
+                                      $mrjc(favorite.hashCode,
+                                          conclusion.hashCode)))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -213,9 +249,11 @@ class ComparisonOverviewRecord extends DataClass
           other.comparisonItemId == this.comparisonItemId &&
           other.itemTitle == this.itemTitle &&
           other.way1Title == this.way1Title &&
-          other.way1Evaluate == this.way1Evaluate &&
+          other.way1MeritEvaluate == this.way1MeritEvaluate &&
+          other.way1DemeritEvaluate == this.way1DemeritEvaluate &&
           other.way2Title == this.way2Title &&
-          other.way2Evaluate == this.way2Evaluate &&
+          other.way2MeritEvaluate == this.way2MeritEvaluate &&
+          other.way2DemeritEvaluate == this.way2DemeritEvaluate &&
           other.favorite == this.favorite &&
           other.conclusion == this.conclusion);
 }
@@ -226,9 +264,11 @@ class ComparisonOverviewRecordsCompanion
   final Value<String> comparisonItemId;
   final Value<String> itemTitle;
   final Value<String> way1Title;
-  final Value<int> way1Evaluate;
+  final Value<int> way1MeritEvaluate;
+  final Value<int> way1DemeritEvaluate;
   final Value<String> way2Title;
-  final Value<int> way2Evaluate;
+  final Value<int> way2MeritEvaluate;
+  final Value<int> way2DemeritEvaluate;
   final Value<bool> favorite;
   final Value<String> conclusion;
   const ComparisonOverviewRecordsCompanion({
@@ -236,9 +276,11 @@ class ComparisonOverviewRecordsCompanion
     this.comparisonItemId = const Value.absent(),
     this.itemTitle = const Value.absent(),
     this.way1Title = const Value.absent(),
-    this.way1Evaluate = const Value.absent(),
+    this.way1MeritEvaluate = const Value.absent(),
+    this.way1DemeritEvaluate = const Value.absent(),
     this.way2Title = const Value.absent(),
-    this.way2Evaluate = const Value.absent(),
+    this.way2MeritEvaluate = const Value.absent(),
+    this.way2DemeritEvaluate = const Value.absent(),
     this.favorite = const Value.absent(),
     this.conclusion = const Value.absent(),
   });
@@ -247,9 +289,11 @@ class ComparisonOverviewRecordsCompanion
     @required String comparisonItemId,
     @required String itemTitle,
     @required String way1Title,
-    this.way1Evaluate = const Value.absent(),
+    this.way1MeritEvaluate = const Value.absent(),
+    this.way1DemeritEvaluate = const Value.absent(),
     @required String way2Title,
-    this.way2Evaluate = const Value.absent(),
+    this.way2MeritEvaluate = const Value.absent(),
+    this.way2DemeritEvaluate = const Value.absent(),
     this.favorite = const Value.absent(),
     this.conclusion = const Value.absent(),
   })  : comparisonItemId = Value(comparisonItemId),
@@ -261,9 +305,11 @@ class ComparisonOverviewRecordsCompanion
     Expression<String> comparisonItemId,
     Expression<String> itemTitle,
     Expression<String> way1Title,
-    Expression<int> way1Evaluate,
+    Expression<int> way1MeritEvaluate,
+    Expression<int> way1DemeritEvaluate,
     Expression<String> way2Title,
-    Expression<int> way2Evaluate,
+    Expression<int> way2MeritEvaluate,
+    Expression<int> way2DemeritEvaluate,
     Expression<bool> favorite,
     Expression<String> conclusion,
   }) {
@@ -272,9 +318,13 @@ class ComparisonOverviewRecordsCompanion
       if (comparisonItemId != null) 'comparison_item_id': comparisonItemId,
       if (itemTitle != null) 'item_title': itemTitle,
       if (way1Title != null) 'way1_title': way1Title,
-      if (way1Evaluate != null) 'way1_evaluate': way1Evaluate,
+      if (way1MeritEvaluate != null) 'way1_merit_evaluate': way1MeritEvaluate,
+      if (way1DemeritEvaluate != null)
+        'way1_demerit_evaluate': way1DemeritEvaluate,
       if (way2Title != null) 'way2_title': way2Title,
-      if (way2Evaluate != null) 'way2_evaluate': way2Evaluate,
+      if (way2MeritEvaluate != null) 'way2_merit_evaluate': way2MeritEvaluate,
+      if (way2DemeritEvaluate != null)
+        'way2_demerit_evaluate': way2DemeritEvaluate,
       if (favorite != null) 'favorite': favorite,
       if (conclusion != null) 'conclusion': conclusion,
     });
@@ -285,9 +335,11 @@ class ComparisonOverviewRecordsCompanion
       Value<String> comparisonItemId,
       Value<String> itemTitle,
       Value<String> way1Title,
-      Value<int> way1Evaluate,
+      Value<int> way1MeritEvaluate,
+      Value<int> way1DemeritEvaluate,
       Value<String> way2Title,
-      Value<int> way2Evaluate,
+      Value<int> way2MeritEvaluate,
+      Value<int> way2DemeritEvaluate,
       Value<bool> favorite,
       Value<String> conclusion}) {
     return ComparisonOverviewRecordsCompanion(
@@ -295,9 +347,11 @@ class ComparisonOverviewRecordsCompanion
       comparisonItemId: comparisonItemId ?? this.comparisonItemId,
       itemTitle: itemTitle ?? this.itemTitle,
       way1Title: way1Title ?? this.way1Title,
-      way1Evaluate: way1Evaluate ?? this.way1Evaluate,
+      way1MeritEvaluate: way1MeritEvaluate ?? this.way1MeritEvaluate,
+      way1DemeritEvaluate: way1DemeritEvaluate ?? this.way1DemeritEvaluate,
       way2Title: way2Title ?? this.way2Title,
-      way2Evaluate: way2Evaluate ?? this.way2Evaluate,
+      way2MeritEvaluate: way2MeritEvaluate ?? this.way2MeritEvaluate,
+      way2DemeritEvaluate: way2DemeritEvaluate ?? this.way2DemeritEvaluate,
       favorite: favorite ?? this.favorite,
       conclusion: conclusion ?? this.conclusion,
     );
@@ -318,14 +372,20 @@ class ComparisonOverviewRecordsCompanion
     if (way1Title.present) {
       map['way1_title'] = Variable<String>(way1Title.value);
     }
-    if (way1Evaluate.present) {
-      map['way1_evaluate'] = Variable<int>(way1Evaluate.value);
+    if (way1MeritEvaluate.present) {
+      map['way1_merit_evaluate'] = Variable<int>(way1MeritEvaluate.value);
+    }
+    if (way1DemeritEvaluate.present) {
+      map['way1_demerit_evaluate'] = Variable<int>(way1DemeritEvaluate.value);
     }
     if (way2Title.present) {
       map['way2_title'] = Variable<String>(way2Title.value);
     }
-    if (way2Evaluate.present) {
-      map['way2_evaluate'] = Variable<int>(way2Evaluate.value);
+    if (way2MeritEvaluate.present) {
+      map['way2_merit_evaluate'] = Variable<int>(way2MeritEvaluate.value);
+    }
+    if (way2DemeritEvaluate.present) {
+      map['way2_demerit_evaluate'] = Variable<int>(way2DemeritEvaluate.value);
     }
     if (favorite.present) {
       map['favorite'] = Variable<bool>(favorite.value);
@@ -343,9 +403,11 @@ class ComparisonOverviewRecordsCompanion
           ..write('comparisonItemId: $comparisonItemId, ')
           ..write('itemTitle: $itemTitle, ')
           ..write('way1Title: $way1Title, ')
-          ..write('way1Evaluate: $way1Evaluate, ')
+          ..write('way1MeritEvaluate: $way1MeritEvaluate, ')
+          ..write('way1DemeritEvaluate: $way1DemeritEvaluate, ')
           ..write('way2Title: $way2Title, ')
-          ..write('way2Evaluate: $way2Evaluate, ')
+          ..write('way2MeritEvaluate: $way2MeritEvaluate, ')
+          ..write('way2DemeritEvaluate: $way2DemeritEvaluate, ')
           ..write('favorite: $favorite, ')
           ..write('conclusion: $conclusion')
           ..write(')'))
@@ -405,14 +467,25 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
     );
   }
 
-  final VerificationMeta _way1EvaluateMeta =
-      const VerificationMeta('way1Evaluate');
-  GeneratedIntColumn _way1Evaluate;
+  final VerificationMeta _way1MeritEvaluateMeta =
+      const VerificationMeta('way1MeritEvaluate');
+  GeneratedIntColumn _way1MeritEvaluate;
   @override
-  GeneratedIntColumn get way1Evaluate =>
-      _way1Evaluate ??= _constructWay1Evaluate();
-  GeneratedIntColumn _constructWay1Evaluate() {
-    return GeneratedIntColumn('way1_evaluate', $tableName, false,
+  GeneratedIntColumn get way1MeritEvaluate =>
+      _way1MeritEvaluate ??= _constructWay1MeritEvaluate();
+  GeneratedIntColumn _constructWay1MeritEvaluate() {
+    return GeneratedIntColumn('way1_merit_evaluate', $tableName, false,
+        defaultValue: const Constant(0));
+  }
+
+  final VerificationMeta _way1DemeritEvaluateMeta =
+      const VerificationMeta('way1DemeritEvaluate');
+  GeneratedIntColumn _way1DemeritEvaluate;
+  @override
+  GeneratedIntColumn get way1DemeritEvaluate =>
+      _way1DemeritEvaluate ??= _constructWay1DemeritEvaluate();
+  GeneratedIntColumn _constructWay1DemeritEvaluate() {
+    return GeneratedIntColumn('way1_demerit_evaluate', $tableName, false,
         defaultValue: const Constant(0));
   }
 
@@ -428,14 +501,25 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
     );
   }
 
-  final VerificationMeta _way2EvaluateMeta =
-      const VerificationMeta('way2Evaluate');
-  GeneratedIntColumn _way2Evaluate;
+  final VerificationMeta _way2MeritEvaluateMeta =
+      const VerificationMeta('way2MeritEvaluate');
+  GeneratedIntColumn _way2MeritEvaluate;
   @override
-  GeneratedIntColumn get way2Evaluate =>
-      _way2Evaluate ??= _constructWay2Evaluate();
-  GeneratedIntColumn _constructWay2Evaluate() {
-    return GeneratedIntColumn('way2_evaluate', $tableName, false,
+  GeneratedIntColumn get way2MeritEvaluate =>
+      _way2MeritEvaluate ??= _constructWay2MeritEvaluate();
+  GeneratedIntColumn _constructWay2MeritEvaluate() {
+    return GeneratedIntColumn('way2_merit_evaluate', $tableName, false,
+        defaultValue: const Constant(0));
+  }
+
+  final VerificationMeta _way2DemeritEvaluateMeta =
+      const VerificationMeta('way2DemeritEvaluate');
+  GeneratedIntColumn _way2DemeritEvaluate;
+  @override
+  GeneratedIntColumn get way2DemeritEvaluate =>
+      _way2DemeritEvaluate ??= _constructWay2DemeritEvaluate();
+  GeneratedIntColumn _constructWay2DemeritEvaluate() {
+    return GeneratedIntColumn('way2_demerit_evaluate', $tableName, false,
         defaultValue: const Constant(0));
   }
 
@@ -466,9 +550,11 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
         comparisonItemId,
         itemTitle,
         way1Title,
-        way1Evaluate,
+        way1MeritEvaluate,
+        way1DemeritEvaluate,
         way2Title,
-        way2Evaluate,
+        way2MeritEvaluate,
+        way2DemeritEvaluate,
         favorite,
         conclusion
       ];
@@ -508,11 +594,17 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
     } else if (isInserting) {
       context.missing(_way1TitleMeta);
     }
-    if (data.containsKey('way1_evaluate')) {
+    if (data.containsKey('way1_merit_evaluate')) {
       context.handle(
-          _way1EvaluateMeta,
-          way1Evaluate.isAcceptableOrUnknown(
-              data['way1_evaluate'], _way1EvaluateMeta));
+          _way1MeritEvaluateMeta,
+          way1MeritEvaluate.isAcceptableOrUnknown(
+              data['way1_merit_evaluate'], _way1MeritEvaluateMeta));
+    }
+    if (data.containsKey('way1_demerit_evaluate')) {
+      context.handle(
+          _way1DemeritEvaluateMeta,
+          way1DemeritEvaluate.isAcceptableOrUnknown(
+              data['way1_demerit_evaluate'], _way1DemeritEvaluateMeta));
     }
     if (data.containsKey('way2_title')) {
       context.handle(_way2TitleMeta,
@@ -520,11 +612,17 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
     } else if (isInserting) {
       context.missing(_way2TitleMeta);
     }
-    if (data.containsKey('way2_evaluate')) {
+    if (data.containsKey('way2_merit_evaluate')) {
       context.handle(
-          _way2EvaluateMeta,
-          way2Evaluate.isAcceptableOrUnknown(
-              data['way2_evaluate'], _way2EvaluateMeta));
+          _way2MeritEvaluateMeta,
+          way2MeritEvaluate.isAcceptableOrUnknown(
+              data['way2_merit_evaluate'], _way2MeritEvaluateMeta));
+    }
+    if (data.containsKey('way2_demerit_evaluate')) {
+      context.handle(
+          _way2DemeritEvaluateMeta,
+          way2DemeritEvaluate.isAcceptableOrUnknown(
+              data['way2_demerit_evaluate'], _way2DemeritEvaluateMeta));
     }
     if (data.containsKey('favorite')) {
       context.handle(_favoriteMeta,
