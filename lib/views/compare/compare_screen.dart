@@ -8,6 +8,7 @@ import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
 import 'components/table_part.dart';
 
+//todo backgroundcolor設定
 class CompareScreen extends StatelessWidget {
   CompareScreen({this.comparisonItemId});
 
@@ -46,20 +47,29 @@ class CompareScreen extends StatelessWidget {
 //        },
 //      );
 
-    return Scaffold(
-      //todo trailing修正時はconst削除
-      appBar:  CupertinoNavigationBar(
+    return CupertinoPageScaffold(
+      navigationBar:  CupertinoNavigationBar(
         backgroundColor: primaryColor,
+//        leading: Icon(CupertinoIcons.back),
         middle: const Text(
           'Compare List',
           style: middleTextStyle,
         ),
-        trailing:const Text(
-          '編集',
-          style: trailingTextStyle,
-        ),
+        trailing:
+        Row(
+          mainAxisSize:MainAxisSize.min ,
+          children:[
+            GestureDetector(
+              child:  Icon(
+                  CupertinoIcons.check_mark_circled,
+              color: Colors.white,),
+              onTap: ()=>print('完了！'),
+            ),
+            const SizedBox(width: 16,),
+            const Text('編集', style: trailingTextStyle,),
+        ]),
       ),
-      body: Scaffold(
+      child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
         body: SingleChildScrollView(
           child: Column(
@@ -240,16 +250,15 @@ class CompareScreen extends StatelessWidget {
               ///結論TextArea
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                  child: TextFormField(
-                    // any number you need (It works as the rows for the textarea)
-                    minLines: 6,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
+                child: TextFormField(
+                // any number you need (It works as the rows for the textarea)
+                  minLines: 6,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(2),
+                    ),
                   ),
                 ),
               ),
