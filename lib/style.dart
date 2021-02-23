@@ -27,16 +27,4 @@ const accordionBottomBorderRadius = BorderRadius.only(
     bottomRight:Radius.circular(5));
 
 
-///evaluatePickerのリスト
-const List<String> colors = const <String>[
-    'Red',
-    'Yellow',
-    'Amber',
-    'Blue',
-    'Black',
-    'Pink',
-    'Purple',
-    'White',
-    'Grey',
-    'Green',
-];
+

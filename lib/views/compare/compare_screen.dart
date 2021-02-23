@@ -50,11 +50,11 @@ class CompareScreen extends StatelessWidget {
       //todo trailing修正時はconst削除
       appBar:  CupertinoNavigationBar(
         backgroundColor: primaryColor,
-        middle: Text(
+        middle: const Text(
           'Compare List',
           style: middleTextStyle,
         ),
-        trailing: Text(
+        trailing:const Text(
           '編集',
           style: trailingTextStyle,
         ),
@@ -63,15 +63,15 @@ class CompareScreen extends StatelessWidget {
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
         body: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment:CrossAxisAlignment.start ,
             children: [
-              const SizedBox(height: 8),
+            const SizedBox(height: 8),
           ///メリットアイコン
-              IconTitle(
+            IconTitle(
                 title:'メリット' ,
                 iconData: Icons.thumb_up,
                 iconColor: accentColor,
               ),
-
           ///way1 メリット
             FutureBuilder(
                     future: viewModel.getWaitOverview(comparisonItemId),
@@ -105,7 +105,7 @@ class CompareScreen extends StatelessWidget {
                       }
                   ),
           ///way2 メリット
-                    FutureBuilder(
+            FutureBuilder(
                     future: viewModel.getWaitOverview(comparisonItemId),
                     builder: (context,
                         AsyncSnapshot<List<ComparisonOverview>> snapshot) {
@@ -137,16 +137,15 @@ class CompareScreen extends StatelessWidget {
                       }
                     },
                   ),
-              const SizedBox(height: 8,),
+            const SizedBox(height: 8,),
           ///デメリットアイコン
-              IconTitle(
+            IconTitle(
                 title:'デメリット' ,
                 iconData: Icons.thumb_down,
                 iconColor: accentColor,
               ),
           ///way1 デメリット
-
-                    FutureBuilder(
+            FutureBuilder(
                     future: viewModel.getWaitOverview(comparisonItemId),
                     builder: (context,
                         AsyncSnapshot<List<ComparisonOverview>> snapshot) {
@@ -178,9 +177,6 @@ class CompareScreen extends StatelessWidget {
                     },
                   ),
           ///way2 デメリット
-//              Consumer<CompareViewModel>(
-//                builder: (context, compareViewModel, child) {
-//                  return
             FutureBuilder(
                     future: viewModel.getWaitOverview(comparisonItemId),
                     builder: (context,
@@ -212,8 +208,14 @@ class CompareScreen extends StatelessWidget {
                       }
                     },
                   ),
+             const SizedBox(height: 4,),
+             const Padding(
+               padding:  EdgeInsets.symmetric(horizontal:8 ),
+               child:  Text('自己評価',textAlign: TextAlign.left,),
+             ),
+             const SizedBox(height: 4,),
           ///テーブル
-                    FutureBuilder(
+            FutureBuilder(
                     future: viewModel.getWaitOverview(comparisonItemId),
                         builder: (context,
                             AsyncSnapshot<List<ComparisonOverview>> snapshot) {
@@ -225,13 +227,41 @@ class CompareScreen extends StatelessWidget {
                               TablePart(
                             way1Title: viewModel.way1Title,
                             way2Title: viewModel.way2Title,
-                            way1DemeritEvaluate: viewModel.way1DemeritEvaluate,
-                            way2MeritEvaluate: viewModel.way2MeritEvaluate,
-                            way2DemeritEvaluate: viewModel.way2DemeritEvaluate,
                               );
                           }
                         }
                     ),
+             const SizedBox(height: 16,),
+             const Padding(
+                padding:  EdgeInsets.symmetric(horizontal:8 ),
+                child:  Text('結論',textAlign: TextAlign.left,),
+              ),
+             const SizedBox(height: 4,),
+              ///結論TextArea
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                  child: TextFormField(
+                    // any number you need (It works as the rows for the textarea)
+                    minLines: 6,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16,),
+              ///ボタン
+              Center(
+                child: RaisedButton(
+                  child: Text('登録'),
+                color: accentColor,
+                onPressed: ()=>print('登録'),),
+              ),
+              const SizedBox(height: 16,),
             ],
           ),
         ),

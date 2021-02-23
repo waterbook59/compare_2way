@@ -8,17 +8,11 @@ import 'package:provider/provider.dart';
 class TablePart extends StatelessWidget {
   TablePart({
     this.way1Title,
-    this.way1DemeritEvaluate,
     this.way2Title,
-    this.way2MeritEvaluate,
-    this.way2DemeritEvaluate,
   });
 
   final String way1Title;
-  final int way1DemeritEvaluate;
   final String way2Title;
-  final int way2MeritEvaluate;
-  final int way2DemeritEvaluate;
 
   ///evaluatePickerのリスト
   final List<String> evaluates = <String>[
