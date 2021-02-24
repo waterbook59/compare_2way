@@ -39,6 +39,7 @@ class CompareScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor = Theme.of(context).accentColor;
+    final _testController = TextEditingController();
 
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     ///ページ冒頭かFutureBuilderどちらかでいい
@@ -63,7 +64,7 @@ class CompareScreen extends StatelessWidget {
               child:  Icon(
                   CupertinoIcons.check_mark_circled,
               color: Colors.white,),
-              onTap: ()=>print('完了！'),
+              onTap: ()=>_updateItem(_testController.text),
             ),
             const SizedBox(width: 16,),
             const Text('編集', style: trailingTextStyle,),
@@ -252,6 +253,7 @@ class CompareScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: TextFormField(
                 // any number you need (It works as the rows for the textarea)
+                  controller: _testController,
                   minLines: 6,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
@@ -260,6 +262,7 @@ class CompareScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
+                  onSaved:(value)=>_updateItem,
                 ),
               ),
               const SizedBox(height: 16,),
@@ -268,7 +271,7 @@ class CompareScreen extends StatelessWidget {
                 child: RaisedButton(
                   child: Text('登録'),
                 color: accentColor,
-                onPressed: ()=>print('登録'),),
+                onPressed: ()=>_updateItem(_testController.text)),
               ),
               const SizedBox(height: 16,),
             ],
@@ -284,5 +287,11 @@ class CompareScreen extends StatelessWidget {
   void addList(BuildContext context) {
     //todo viewModelでメソッド実行してnotifyListener
     _controllers.add(TextEditingController());
+  }
+
+  Future<void> _updateItem(String value) async{
+    print('update完了');
+    print('testController:$value');
+
   }
 }

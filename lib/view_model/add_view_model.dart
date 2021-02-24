@@ -33,5 +33,7 @@ class AddViewModel extends ChangeNotifier{
     notifyListeners();
   }
 
+  //todo textControllerを破棄
+
 }
 

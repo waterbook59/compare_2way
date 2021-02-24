@@ -71,6 +71,8 @@ class AddScreen extends StatelessWidget {
     );
   }
 
+  ///way1,way2タイトル作成
+  //todo 押せる・押せないはinsta_cloneのcomment_input_part参照
   Future<void> _createComparisonItems(BuildContext context) async {
     final viewModel = Provider.of<AddViewModel>(context, listen: false);
 
