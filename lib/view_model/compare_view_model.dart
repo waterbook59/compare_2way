@@ -26,6 +26,9 @@ class CompareViewModel extends ChangeNotifier {
   int get way3MeritEvaluate => _way3MeritEvaluate;
   int _way3DemeritEvaluate =0;
   int get way3DemeritEvaluate => _way3DemeritEvaluate;
+  TextEditingController _conclusionController = TextEditingController();
+  TextEditingController get conclusionController => _conclusionController;
+  //todo conclusion用のcontrollerの設定必要？
 
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
@@ -49,6 +52,8 @@ class CompareViewModel extends ChangeNotifier {
      _way1DemeritEvaluate = comparisonOverviews[0].way1DemeritEvaluate;
      _way2MeritEvaluate = comparisonOverviews[0].way2MeritEvaluate;
      _way2DemeritEvaluate  =comparisonOverviews[0].way2DemeritEvaluate;
+     _conclusionController.text = comparisonOverviews[0].conclusion;
+
      //todo way3Evaluate
     print('FutureBuilderのway2のタイトル:$_way2Title');
 
@@ -76,6 +81,29 @@ class CompareViewModel extends ChangeNotifier {
 
 
   //todo 登録・更新時createdAtをDateTime.now()に変更
+  //todo itemTitle,favorite,way3追加
+  Future<void> saveComparisonItem(String comparisonItemId) async{
+
+    final updateOverview = ComparisonOverview(
+      comparisonItemId: comparisonItemId,
+      way1Title: _way1Title,
+      way2Title: _way2Title,
+      way1MeritEvaluate: _way1MeritEvaluate,
+      way1DemeritEvaluate: _way1DemeritEvaluate,
+      way2MeritEvaluate: _way2MeritEvaluate,
+      way2DemeritEvaluate: _way2DemeritEvaluate,
+      conclusion: _conclusionController.text,
+      createdAt: DateTime.now(),
+    );
+    await _compareRepository.saveComparisonItem(updateOverview);
+  }
+
+
+
+
+
+
+
 
 //todo textControllerを破棄
 }

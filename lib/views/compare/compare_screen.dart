@@ -39,8 +39,6 @@ class CompareScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor = Theme.of(context).accentColor;
-    final _testController = TextEditingController();
-
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     ///ページ冒頭かFutureBuilderどちらかでいい
 //    Future(() {
@@ -52,21 +50,23 @@ class CompareScreen extends StatelessWidget {
       navigationBar:  CupertinoNavigationBar(
         backgroundColor: primaryColor,
 //        leading: Icon(CupertinoIcons.back),
-        middle: const Text(
-          'Compare List',
+        middle: const Text('Compare List',
           style: middleTextStyle,
         ),
         trailing:
         Row(
           mainAxisSize:MainAxisSize.min ,
           children:[
+            ///保存完了ボタン
             GestureDetector(
               child:  Icon(
                   CupertinoIcons.check_mark_circled,
               color: Colors.white,),
-              onTap: ()=>_updateItem(_testController.text),
+              onTap: ()=>_saveItem(context,comparisonItemId),
             ),
             const SizedBox(width: 16,),
+            ///編集ボタン
+            //todo タイトル、比較項目編集
             const Text('編集', style: trailingTextStyle,),
         ]),
       ),
@@ -249,29 +249,46 @@ class CompareScreen extends StatelessWidget {
               ),
              const SizedBox(height: 4,),
               ///結論TextArea
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: TextFormField(
-                // any number you need (It works as the rows for the textarea)
-                  controller: _testController,
+              FutureBuilder(
+                future: viewModel.getWaitOverview(comparisonItemId),
+                builder: (context,AsyncSnapshot<List<ComparisonOverview>> snapshot){
+                  if (snapshot.hasData && snapshot.data.isEmpty) {
+                    print('EmptyView通った');
+                    return Container();
+                  } else {
+                    return  Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: TextFormField(
+                  // any number you need (It works as the rows for the textarea)
+                  controller: viewModel.conclusionController,
                   minLines: 6,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2),
-                    ),
+                  border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(2),
                   ),
-                  onSaved:(value)=>_updateItem,
-                ),
+                  ),
+                  ),
+                  );
+                  }
+                },
+
               ),
               const SizedBox(height: 16,),
-              ///ボタン
+              ///タグエリア
+              const Padding(
+                padding:  EdgeInsets.symmetric(horizontal:8 ),
+                child:  Text('タグ',textAlign: TextAlign.left,),
+              ),
+              const SizedBox(height: 4,),
+              const IconButton(icon: Icon(Icons.add), onPressed: null,),
+              ///保存ボタン
               Center(
                 child: RaisedButton(
-                  child: Text('登録'),
+                  child: Text('保存'),
                 color: accentColor,
-                onPressed: ()=>_updateItem(_testController.text)),
+                onPressed:()=> _saveItem(context,comparisonItemId)),
               ),
               const SizedBox(height: 16,),
             ],
@@ -289,9 +306,14 @@ class CompareScreen extends StatelessWidget {
     _controllers.add(TextEditingController());
   }
 
-  Future<void> _updateItem(String value) async{
+  ///保存ボタンロジック
+  Future<void> _saveItem(BuildContext context,String comparisonItemId) async{
+
+    //todo Merit/Demerit,tagの更新
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     print('update完了');
-    print('testController:$value');
+    await viewModel.saveComparisonItem(comparisonItemId);
+
 
   }
 }

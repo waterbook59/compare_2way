@@ -11,7 +11,6 @@ class CompareRepository {
   final ComparisonItemDao _comparisonItemDao;
   List<ComparisonOverview> _overviewResults = <ComparisonOverview>[];
 
-
   Future<void> createComparisonItems(ComparisonItem comparisonItem) async {
     try {
       ///ComparisonItem=>ComparisonOverviewRecord
@@ -41,8 +40,22 @@ class CompareRepository {
         await _comparisonItemDao.getOverview(comparisonItemId);
 
     ///comparisonOverviewRecords=>comparisonOverview
-   return _overviewResults = resultComparisonOverviewRecords
+    return _overviewResults = resultComparisonOverviewRecords
         .toComparisonOverviews(resultComparisonOverviewRecords);
+  }
+
+  ///保存
+  Future<void> saveComparisonItem(ComparisonOverview updateOverview) async {
+    try {
+      ///ComparisonOverview=>ComparisonOverviewRecord
+      final comparisonOverviewRecord =
+          updateOverview.toComparisonOverviewRecord(updateOverview);
+      await _comparisonItemDao
+          .saveComparisonOverviewDB(comparisonOverviewRecord);
+      print('comparisonOverviewRecord保存完了');
+    } on SqliteException catch (e) {
+      print('repository保存エラー:${e.toString()}');
+    }
   }
 
 //todo Read

@@ -37,15 +37,14 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   ///3つのテーブルにデータ格納
   Future<void> insertDB(
-      ComparisonOverviewRecord comparisonOverviewRecord,
-      List<Way1MeritRecord> way1MeritDescs,
-      List<Way1DemeritRecord> way1DemeritDescs) =>
+          ComparisonOverviewRecord comparisonOverviewRecord,
+          List<Way1MeritRecord> way1MeritDescs,
+          List<Way1DemeritRecord> way1DemeritDescs) =>
       transaction(() async {
         await insertComparisonOverviewDB(comparisonOverviewRecord);
         await insertWay1MeritRecordDB(way1MeritDescs);
         await insertWay1DemeritRecordDB(way1DemeritDescs);
       });
-
 
   //todo データ取得はあとで
   ///overviewとway1Meritを内部結合?(2個以上の複数テーブル結合の場合queryの中でinnerJoin繰り返す)
@@ -79,13 +78,13 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   ///idをもとにway1タイトル、way2タイトルをとってくる
   ///  //2.暗記済がfalse(暗記してないもの)だけを取ってくるクエリ
   //  Future<List<WordRecord>> get memorizedExcludeWords => (select(wordRecords)..where((t)=>t.isMemorized.equals(false))).get();
-  Future<List<ComparisonOverviewRecord>> getOverview(String comparisonItemId)
-  =>(select(comparisonOverviewRecords)
-    ..where((t) =>t.comparisonItemId.equals(comparisonItemId))).get();
+  Future<List<ComparisonOverviewRecord>> getOverview(String comparisonItemId) =>
+      (select(comparisonOverviewRecords)
+            ..where((t) => t.comparisonItemId.equals(comparisonItemId)))
+          .get();
 
-
-
-
-
-
+  ///comparisonOverviewの保存
+  Future<void> saveComparisonOverviewDB(
+          ComparisonOverviewRecord comparisonOverviewRecord) =>
+      update(comparisonOverviewRecords).replace(comparisonOverviewRecord);
 }

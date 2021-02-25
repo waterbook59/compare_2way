@@ -33,6 +33,7 @@ class AddViewModel extends ChangeNotifier{
     notifyListeners();
   }
 
+//todo 登録・更新時createdAtをDateTime.now()に変更
   //todo textControllerを破棄
 
 }

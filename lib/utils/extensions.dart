@@ -66,7 +66,7 @@ extension ConvertToComparisonItemRecord on ComparisonItem{
   }
 }
 
-///DBのComparisonOverviewRecordのリストをモデルクラスのリストへ変換
+///DBのComparisonOverviewRecordのリスト=>モデルクラスComparisonOverviewのリスト
 extension ConvertToComparisonOverviewRecord on List<ComparisonOverviewRecord>{
 
   List<ComparisonOverview> toComparisonOverviews(
@@ -94,6 +94,33 @@ extension ConvertToComparisonOverviewRecord on List<ComparisonOverviewRecord>{
       );
     });
     return comparisonOverviews;
+  }
+}
+
+///保存の場合はリスト型でやりとり必要ない
+///モデルクラスComparisonOverview=>DBのComparisonOverviewRecord
+extension ConvertToComparisonOverview on ComparisonOverview{
+
+  ComparisonOverviewRecord toComparisonOverviewRecord(
+      ComparisonOverview comparisonOverview) {
+    final comparisonOverviewRecord =  ComparisonOverviewRecord(
+      dataId: comparisonOverview.dataId ?? 0,
+      comparisonItemId: comparisonOverview.comparisonItemId ?? '',
+      itemTitle: comparisonOverview.itemTitle ?? '',
+      way1Title: comparisonOverview.way1Title ?? '',
+      way1MeritEvaluate: comparisonOverview.way1MeritEvaluate ?? 0,
+      way1DemeritEvaluate: comparisonOverview.way1DemeritEvaluate ?? 0,
+      way2Title:  comparisonOverview.way2Title ?? '',
+      way2MeritEvaluate: comparisonOverview.way2MeritEvaluate ?? 0,
+      way2DemeritEvaluate: comparisonOverview.way2DemeritEvaluate ?? 0,
+//todo way3追加
+//            way3Title:  comparisonOverviewRecord.way3Title ?? '',
+//            way3Evaluate: comparisonOverviewRecord.way3Evaluate ?? 0,
+      favorite: comparisonOverview.favorite ?? false,
+      conclusion: comparisonOverview.conclusion ?? '',
+      createdAt: comparisonOverview.createdAt,
+    );
+    return comparisonOverviewRecord;
   }
 }
 
