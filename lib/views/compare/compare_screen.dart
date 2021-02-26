@@ -9,7 +9,6 @@ import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
 import 'components/table_part.dart';
 
-//todo backgroundcolor設定
 class CompareScreen extends StatelessWidget {
   CompareScreen({this.comparisonItemId});
 
@@ -51,6 +50,7 @@ class CompareScreen extends StatelessWidget {
       navigationBar:  CupertinoNavigationBar(
         backgroundColor: primaryColor,
 //        leading: Icon(CupertinoIcons.back),
+      //todo もどるボタンの時にAddScreenのTextEditingContorllerがdisposeされた後に使われたというエラーでる
         middle: const Text('Compare List',
           style: middleTextStyle,
         ),

@@ -1,9 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-///Screenへの通知を行い、登録ボタンを押せるか判断するためstatefulへ変更
+class TextFieldPart extends StatelessWidget {
 
-class InputPart extends StatelessWidget {
+  const TextFieldPart(
+      {this.label, this.textEditingController,
+        this.errorText, this.didChanged, this.placeholder, this.autofocus});
   final String label;
   final String placeholder;
   final bool autofocus;
@@ -11,12 +13,6 @@ class InputPart extends StatelessWidget {
   final String errorText;
   final ValueChanged<String> didChanged;
 
-  // ignore: sort_constructors_first
-  const InputPart(
-      {this.label, this.textEditingController,
-        this.errorText, this.didChanged, this.placeholder, this.autofocus});
-
-//  final bool isTextInputEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +29,7 @@ class InputPart extends StatelessWidget {
             textAlign: TextAlign.start,),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 8,left: 40,right: 40),
+          padding: const EdgeInsets.only(top: 16,left: 40,right: 40),
           child: CupertinoTextField(
             controller: textEditingController,
             placeholder: placeholder,
@@ -53,5 +49,4 @@ class InputPart extends StatelessWidget {
       ],
     );
   }
-
 }

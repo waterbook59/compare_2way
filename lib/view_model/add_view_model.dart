@@ -10,14 +10,17 @@ class AddViewModel extends ChangeNotifier{
 
   final CompareRepository _compareRepository;
 
+  TextEditingController _titleController =TextEditingController();
+  TextEditingController get titleController=> _titleController ;
   TextEditingController _way1Controller =TextEditingController();
   TextEditingController get way1Controller=> _way1Controller ;
   TextEditingController _way2Controller = TextEditingController();
   TextEditingController get way2Controller => _way2Controller;
 
   //テキスト入力してるかどうか
-  bool  _isCreateItemEnabled = false;
-  bool get isCreateItemEnabled => _isCreateItemEnabled;
+  bool  isCreateItemEnabled = false;
+//  bool  _isCreateItemEnabled = false;
+//  bool get isCreateItemEnabled => _isCreateItemEnabled;
 
 
   Future<void> createComparisonItems(ComparisonItem comparisonItem) async{

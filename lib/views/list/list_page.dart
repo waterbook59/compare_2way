@@ -46,9 +46,8 @@ class ListPage extends StatelessWidget {
     );
   }
 
-  //todo DB登録とComparePageへ移動
+  // DB登録とComparePageへ移動
   void _saveComparisonItems(BuildContext context) {
-    print('DB登録とComparePageへ移動');
 
 ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
         Navigator.of(context,rootNavigator: true).push(MaterialPageRoute<void>(
