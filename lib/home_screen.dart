@@ -22,9 +22,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 
-    final accentColor = CupertinoTheme
-        .of(context)
-        .primaryContrastingColor;
+//    final accentColor = CupertinoTheme
+//        .of(context)
+//        .primaryContrastingColor;
+    final accentColor = Theme.of(context).accentColor;
 
     return
       SafeArea(

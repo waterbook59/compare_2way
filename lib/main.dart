@@ -25,7 +25,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
+    //todo MaterialAppで書けばMaterialの中でCupertinoWidget使えるのでは
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title:'Compare 2way' ,
+      theme: ThemeData(
+        primaryColor: Color(0xFF363A44),
+        accentColor: Color(0xFFFF7043),
+        scaffoldBackgroundColor: Color(0xFFF5F5F5),
+        ),
+      home: HomeScreen(),
+    );
+      CupertinoApp(
       debugShowCheckedModeBanner: false,
       title: 'Compare 2way',
       theme: const CupertinoThemeData(

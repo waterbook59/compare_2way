@@ -16,7 +16,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   //id,タイトル,評価等１行ですむもの
   Future<void> insertComparisonOverviewDB(
-          ComparisonOverviewRecord comparisonOverviewRecord) =>
+      ComparisonOverviewRecord comparisonOverviewRecord) =>
       into(comparisonOverviewRecords).insert(comparisonOverviewRecord);
 
   Future<void> insertWay1MeritRecordDB(
@@ -36,8 +36,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   }
 
   ///3つのテーブルにデータ格納
-  Future<void> insertDB(
-      ComparisonOverviewRecord comparisonOverviewRecord,
+  Future<void> insertDB(ComparisonOverviewRecord comparisonOverviewRecord,
       List<Way1MeritRecord> way1MeritDescs,
       List<Way1DemeritRecord> way1DemeritDescs) =>
       transaction(() async {
@@ -45,7 +44,6 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
         await insertWay1MeritRecordDB(way1MeritDescs);
         await insertWay1DemeritRecordDB(way1DemeritDescs);
       });
-
 
   //todo データ取得はあとで
   ///overviewとway1Meritを内部結合?(2個以上の複数テーブル結合の場合queryの中でinnerJoin繰り返す)
@@ -65,7 +63,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     final data = rows.map((resultRow) {
       return ComparisonItemRecord(
         comparisonOverviewRecord:
-            resultRow.readTable(comparisonOverviewRecords),
+        resultRow.readTable(comparisonOverviewRecords),
 
         //行で入っているway1MeritRecordをList<Way1MeritRecord>にする必要あり
 //        way1MeritRecord: resultRow.readTable(List<way1MeritRecords> as TableInfo),
@@ -76,9 +74,19 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 //    return data;
   }
 
+  ///idをもとにway1タイトル、way2タイトルをとってくる
+  ///  //2.暗記済がfalse(暗記してないもの)だけを取ってくるクエリ
+  //  Future<List<WordRecord>> get memorizedExcludeWords => (select(wordRecords)..where((t)=>t.isMemorized.equals(false))).get();
+  Future<List<ComparisonOverviewRecord>> getOverview(String comparisonItemId) =>
+      (select(comparisonOverviewRecords)
+        ..where((t) => t.comparisonItemId.equals(comparisonItemId)))
+          .get();
 
-
-
-
-
+  ///comparisonOverviewの保存
+  Future<void> saveComparisonOverviewDB(String comparisonItemId,
+      ComparisonOverviewRecordsCompanion overviewCompanion) {
+    return (update(comparisonOverviewRecords)
+      ..where((it) => it.comparisonItemId.equals(comparisonItemId))).write(
+        overviewCompanion);
+  }
 }
