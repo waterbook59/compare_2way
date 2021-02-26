@@ -56,6 +56,7 @@ class CompareRepository {
       //todo extensionsの中で一気にやる
       ///ComparisonOverviewRecord=>ComparisonOverviewRecordsCompanion
       final overviewCompanion = ComparisonOverviewRecordsCompanion(
+        //アップデート要素がないものを入れるとnullでエラー(Companionに入れるのは値が更新できるものだけ)
 //        dataId: Value(comparisonOverviewRecord.dataId),
         comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
 //todo itemTitle addScreenに足したら加える
