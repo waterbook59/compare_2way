@@ -20,11 +20,10 @@ const trailingTextStyle =
 
 //アコーディオンの丸み
 const accordionTopBorderRadius = BorderRadius.only(
-    topLeft: Radius.circular(5),
-    topRight:Radius.circular(5));
+    topLeft: Radius.circular(5), topRight: Radius.circular(5));
 const accordionBottomBorderRadius = BorderRadius.only(
-    bottomLeft: Radius.circular(5),
-    bottomRight:Radius.circular(5));
+    bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5));
 
-
-
+//比較のRaisedButton
+//var createButtonBorderRadius =
+//    RoundedRectangleBorder(borderRadius: BorderRadius.circular(20));

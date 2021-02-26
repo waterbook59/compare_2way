@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+///Screenへの通知を行い、登録ボタンを押せるか判断するためstatefulへ変更
+
 class InputPart extends StatelessWidget {
   final String label;
   final String placeholder;
@@ -31,7 +33,7 @@ class InputPart extends StatelessWidget {
             textAlign: TextAlign.start,),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 16,left: 40,right: 40),
+          padding: const EdgeInsets.only(top: 8,left: 40,right: 40),
           child: CupertinoTextField(
             controller: textEditingController,
             placeholder: placeholder,
