@@ -1,8 +1,10 @@
 import 'package:compare_2way/data_models/comparison_item.dart';
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_dao.dart';
+import 'package:compare_2way/models/db/comparison_item/comparison_item_database.dart';
 import 'package:compare_2way/utils/extensions.dart';
 import 'package:moor/ffi.dart';
+import 'package:moor/moor.dart';
 
 class CompareRepository {
   CompareRepository({ComparisonItemDao comparisonItemDao})
@@ -45,13 +47,34 @@ class CompareRepository {
   }
 
   ///保存
-  Future<void> saveComparisonItem(ComparisonOverview updateOverview) async {
+  Future<void> saveComparisonItem(
+      String comparisonItemId, ComparisonOverview updateOverview) async {
     try {
       ///ComparisonOverview=>ComparisonOverviewRecord
       final comparisonOverviewRecord =
           updateOverview.toComparisonOverviewRecord(updateOverview);
-      await _comparisonItemDao
-          .saveComparisonOverviewDB(comparisonOverviewRecord);
+      //todo extensionsの中で一気にやる
+      ///ComparisonOverviewRecord=>ComparisonOverviewRecordsCompanion
+      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+//        dataId: Value(comparisonOverviewRecord.dataId),
+        comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
+//todo itemTitle addScreenに足したら加える
+//        itemTitle: Value(comparisonOverviewRecord.itemTitle),
+        way1Title: Value(comparisonOverviewRecord.way1Title),
+        way1MeritEvaluate: Value(comparisonOverviewRecord.way1MeritEvaluate),
+        way1DemeritEvaluate:
+            Value(comparisonOverviewRecord.way1DemeritEvaluate),
+        way2Title: Value(comparisonOverviewRecord.way2Title),
+        way2MeritEvaluate: Value(comparisonOverviewRecord.way2MeritEvaluate),
+        way2DemeritEvaluate:
+            Value(comparisonOverviewRecord.way2DemeritEvaluate),
+//        favorite: Value(comparisonOverviewRecord.favorite),
+        conclusion: Value(comparisonOverviewRecord.conclusion),
+        createdAt: Value(comparisonOverviewRecord.createdAt),
+      );
+
+      await _comparisonItemDao.saveComparisonOverviewDB(
+          comparisonItemId, overviewCompanion);
       print('comparisonOverviewRecord保存完了');
     } on SqliteException catch (e) {
       print('repository保存エラー:${e.toString()}');

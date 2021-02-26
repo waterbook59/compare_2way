@@ -80,7 +80,6 @@ class CompareViewModel extends ChangeNotifier {
   }
 
 
-  //todo 登録・更新時createdAtをDateTime.now()に変更
   //todo itemTitle,favorite,way3追加
   Future<void> saveComparisonItem(String comparisonItemId) async{
 
@@ -95,7 +94,7 @@ class CompareViewModel extends ChangeNotifier {
       conclusion: _conclusionController.text,
       createdAt: DateTime.now(),
     );
-    await _compareRepository.saveComparisonItem(updateOverview);
+    await _compareRepository.saveComparisonItem(comparisonItemId,updateOverview);
   }
 
 
