@@ -4,6 +4,7 @@ import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/icon_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
 import 'components/table_part.dart';
@@ -311,8 +312,10 @@ class CompareScreen extends StatelessWidget {
 
     //todo Merit/Demerit,tagの更新
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    print('update完了');
     await viewModel.saveComparisonItem(comparisonItemId);
+    await Fluttertoast.showToast(
+    msg: '保存完了',
+    );
 
 
   }
