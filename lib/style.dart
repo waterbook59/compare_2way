@@ -18,6 +18,10 @@ const middleJaTextStyle =
 const trailingTextStyle =
     TextStyle(fontFamily: regularFontJa, fontSize: 14, color: Colors.white);
 
+//CompareScreenタイトル
+const itemTitleTextStyle =
+    TextStyle(fontFamily: regularFontJa, fontSize: 18,);
+
 //アコーディオンの丸み
 const accordionTopBorderRadius = BorderRadius.only(
     topLeft: Radius.circular(5), topRight: Radius.circular(5));

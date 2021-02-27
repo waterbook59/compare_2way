@@ -49,9 +49,7 @@ class CompareScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar:  CupertinoNavigationBar(
         backgroundColor: primaryColor,
-      //todo もどるボタンの時にAddScreenのTextEditingContorllerがdisposeされた後に使われたというエラーでる
-        //Navigator.popになってることが要因？？もしくはAddScreenでdisposeする必要がないかも
-        middle: const Text('ItemTitle',
+        middle: const Text('Compare List',
           style: middleTextStyle,
         ),
         trailing:
@@ -77,6 +75,10 @@ class CompareScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment:CrossAxisAlignment.start ,
             children: [
+            const SizedBox(height: 16),
+          //todo Selectorで更新
+          ///タイトル
+            Center(child: Text(viewModel.itemTitle,style: itemTitleTextStyle,)),
             const SizedBox(height: 8),
           ///メリットアイコン
             IconTitle(
