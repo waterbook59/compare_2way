@@ -1,8 +1,9 @@
 import 'package:compare_2way/style.dart';
-import 'package:compare_2way/views/common/page_transition.dart';
 import 'package:compare_2way/views/list/add_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+
+
 
 class ListPage extends StatelessWidget {
   @override
@@ -46,9 +47,8 @@ class ListPage extends StatelessWidget {
     );
   }
 
-  //todo DB登録とComparePageへ移動
+  // DB登録とComparePageへ移動
   void _saveComparisonItems(BuildContext context) {
-    print('DB登録とComparePageへ移動');
 
 ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
         Navigator.of(context,rootNavigator: true).push(MaterialPageRoute<void>(

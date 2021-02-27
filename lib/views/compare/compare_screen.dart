@@ -9,7 +9,6 @@ import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
 import 'components/table_part.dart';
 
-//todo backgroundcolor設定
 class CompareScreen extends StatelessWidget {
   CompareScreen({this.comparisonItemId});
 
@@ -50,7 +49,6 @@ class CompareScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar:  CupertinoNavigationBar(
         backgroundColor: primaryColor,
-//        leading: Icon(CupertinoIcons.back),
         middle: const Text('Compare List',
           style: middleTextStyle,
         ),
@@ -77,6 +75,10 @@ class CompareScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment:CrossAxisAlignment.start ,
             children: [
+            const SizedBox(height: 16),
+          //todo Selectorで更新
+          ///タイトル
+            Center(child: Text(viewModel.itemTitle,style: itemTitleTextStyle,)),
             const SizedBox(height: 8),
           ///メリットアイコン
             IconTitle(

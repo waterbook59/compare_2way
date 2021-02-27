@@ -1,7 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-class InputPart extends StatelessWidget {
+class TextFieldPart extends StatelessWidget {
+
+  const TextFieldPart(
+      {this.label, this.textEditingController,
+        this.errorText, this.didChanged, this.placeholder, this.autofocus});
   final String label;
   final String placeholder;
   final bool autofocus;
@@ -9,12 +13,6 @@ class InputPart extends StatelessWidget {
   final String errorText;
   final ValueChanged<String> didChanged;
 
-  // ignore: sort_constructors_first
-  const InputPart(
-      {this.label, this.textEditingController,
-        this.errorText, this.didChanged, this.placeholder, this.autofocus});
-
-//  final bool isTextInputEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -51,5 +49,4 @@ class InputPart extends StatelessWidget {
       ],
     );
   }
-
 }
