@@ -70,7 +70,7 @@ class CompareScreen extends StatelessWidget {
         ]),
       ),
       child: Scaffold(
-        backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment:CrossAxisAlignment.start ,

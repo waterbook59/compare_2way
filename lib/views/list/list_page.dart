@@ -1,23 +1,26 @@
 import 'package:compare_2way/style.dart';
+import 'package:compare_2way/view_model/list_view_model.dart';
 import 'package:compare_2way/views/list/add_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 
 
 class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
-//    final accentColor = CupertinoTheme
-//        .of(context)
-//        .primaryContrastingColor;
-
+    final primaryColor = Theme.of(context).primaryColor;
     final accentColor = Theme.of(context).accentColor;
+    final viewModel = Provider.of<ListViewModel>(context, listen: false);
+    //    Future(() {
+//      viewModel.getOverview(comparisonItemId);
+//        },
+//      );
 
     return CupertinoPageScaffold(
-      //todo trailing修正時はconst削除
-      navigationBar: const CupertinoNavigationBar(
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: primaryColor,
         middle: const Text(
           'Compare List',
           style: middleTextStyle,
@@ -28,10 +31,9 @@ class ListPage extends StatelessWidget {
         ),
       ),
       child: Scaffold(
-        backgroundColor: CupertinoTheme
-            .of(context)
-            .scaffoldBackgroundColor,
-        body: const Center(child: Text('リスト表示')),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: SingleChildScrollView(
+            child:  Center(child: Text('リスト表示'))),
         floatingActionButton: SizedBox(
           width: 56,
           height: 56,
