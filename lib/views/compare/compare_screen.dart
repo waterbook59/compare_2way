@@ -47,6 +47,7 @@ class CompareScreen extends StatelessWidget {
 //      );
 
     return CupertinoPageScaffold(
+      //todo listPageに戻る時に再ビルドさせるには？pushReplacement?
       navigationBar:  CupertinoNavigationBar(
         backgroundColor: primaryColor,
         middle: const Text('Compare List',
