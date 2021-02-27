@@ -60,7 +60,7 @@ class CompareRepository {
 //        dataId: Value(comparisonOverviewRecord.dataId),
         comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
 //todo itemTitle addScreenに足したら加える
-//        itemTitle: Value(comparisonOverviewRecord.itemTitle),
+        itemTitle: Value(comparisonOverviewRecord.itemTitle),
         way1Title: Value(comparisonOverviewRecord.way1Title),
         way1MeritEvaluate: Value(comparisonOverviewRecord.way1MeritEvaluate),
         way1DemeritEvaluate:

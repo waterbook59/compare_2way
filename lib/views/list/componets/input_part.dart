@@ -1,4 +1,5 @@
 import 'package:compare_2way/data_models/comparison_item.dart';
+import 'package:compare_2way/style.dart';
 import 'package:compare_2way/view_model/add_view_model.dart';
 import 'package:compare_2way/views/compare/compare_screen.dart';
 import 'package:compare_2way/views/list/componets/text_field_part.dart';
@@ -8,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 ///Screenへの通知を行い、登録ボタンを押せるか判断するためstatefulへ変更
-
+///Changenoitfierのbuilder内で実行しないとエラー？？？(instacloneのcommentscreenの場所確認)
 class InputPart extends StatefulWidget {
 
   @override
@@ -33,60 +34,91 @@ class _InputPartState extends State<InputPart> {
   @override
   void dispose() {
     _titleController.dispose();
+    _way1Controller.dispose();
+    _way2Controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final accentColor = Theme
-        .of(context)
-        .accentColor;
+    final primaryColor = Theme.of(context).primaryColor;
+    final accentColor = Theme.of(context).accentColor;
     return
-    Column(children: [
-      ///タイトル
-      TextFieldPart(
-        label: 'タイトル',
-        placeholder: 'タイトルを入力',
-        autofocus: true,
-        textEditingController: _titleController,
+    CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: primaryColor,
+        //todo キャンセル表示で入力破棄するかalertDialogで聞く&textcontrollerクリア
+//        leading:const Text('キャンセル'),
+        middle: const Text(
+          '新規作成',
+          style: middleTextStyle,
+        ),
+
+        /// 下から出てくる場合は右上に比較ボタンでもいいかも
+        trailing:
+        //todo  onPressedでDBに項目登録して比較画面に遷移
+        const Text(
+          '比較',
+          style: trailingTextStyle,
+        ),
       ),
-      const SizedBox(height: 24),
-      ///way1
-      TextFieldPart(
-        label: 'way1',
-        placeholder: '比較項目を入力',
-        autofocus: false,
-        textEditingController: _way1Controller,
+      child: Scaffold(
+        backgroundColor:  CupertinoTheme
+            .of(context)
+            .scaffoldBackgroundColor,
+        body: SingleChildScrollView(
+          child: Column(children: [
+            ///タイトル
+            TextFieldPart(
+              label: 'タイトル',
+              placeholder: 'タイトルを入力',
+              autofocus: true,
+              textEditingController: _titleController,
+            ),
+            const SizedBox(height: 24),
+            ///way1
+            TextFieldPart(
+              label: 'way1',
+              placeholder: '比較項目を入力',
+              autofocus: false,
+              textEditingController: _way1Controller,
+            ),
+            const SizedBox(height: 8),
+            const Text('と', style: TextStyle(color: Colors.black)),
+            const SizedBox(height: 8),
+            ///way2
+            TextFieldPart(
+              label: 'way2',
+              placeholder: '比較項目を入力',
+              autofocus: false,
+              textEditingController: _way2Controller,
+            ),
+            const SizedBox(height: 40),
+            ///button
+            RaisedButton(
+              child: const Text('比較'),
+              color: accentColor,
+              shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20)),
+            //todo
+              onPressed:isCreateItemEnabled
+              ? () => _createComparisonItems(context)
+              : null,
+          ),
+          ],),
+        ),
       ),
-      const SizedBox(height: 8),
-      const Text('と', style: TextStyle(color: Colors.black)),
-      const SizedBox(height: 8),
-      ///way2
-      TextFieldPart(
-        label: 'way2',
-        placeholder: '比較項目を入力',
-        autofocus: false,
-        textEditingController: _way2Controller,
-      ),
-      const SizedBox(height: 40),
-      ///button
-      RaisedButton(
-        child: const Text('比較'),
-        color: accentColor,
-        shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20)),
-      //todo
-        onPressed:isCreateItemEnabled
-        ? () => _createComparisonItems(context)
-        : null,
-    ),
-    ],);
+    );
 
   }
 
   ///ここでAddViewModelのisCreateItemEnabledをセットする
   void _onInputChanged() {
     final viewModel = Provider.of<AddViewModel>(context, listen: false);
+
+    viewModel.title = _titleController.text;
+    viewModel.way1Title = _way1Controller.text;
+    viewModel.way2Title = _way2Controller.text;
     setState(() {
       if (
           _titleController.text.isNotEmpty &&
@@ -111,9 +143,9 @@ class _InputPartState extends State<InputPart> {
     final comparisonItem = ComparisonItem(
       //comparisonItemIdをuuidで生成
       comparisonItemId: Uuid().v1(),
-      itemTitle: _titleController.text,
-      way1Title: _way1Controller.text,
-      way2Title: _way2Controller.text,
+      itemTitle: viewModel.title,
+      way1Title: viewModel.way1Title,
+      way2Title: viewModel.way2Title,
     );
 
     await viewModel.createComparisonItems(comparisonItem);
@@ -125,10 +157,11 @@ class _InputPartState extends State<InputPart> {
             builder: (context) =>
                 CompareScreen(
                     comparisonItemId: comparisonItem.comparisonItemId)));
-
-    _titleController.clear();
-    _way1Controller.clear();
-    _way2Controller.clear();
+///この時点でcontrollerが破棄されるので、CompareScreenから戻るときにclearメソッドがあると、
+    ///Once you have called dispose() on a TextEditingController,のエラー出る
+//    _titleController.clear();
+//    _way1Controller.clear();
+//    _way2Controller.clear();
     print('テキストコントローラー初期化');
   }
 
