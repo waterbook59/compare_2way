@@ -1,10 +1,9 @@
 import 'package:compare_2way/style.dart';
-import 'package:compare_2way/views/common/page_transition.dart';
 import 'package:compare_2way/views/list/add_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'componets/input_part.dart';
+
 
 class ListPage extends StatelessWidget {
   @override
@@ -53,7 +52,7 @@ class ListPage extends StatelessWidget {
 
 ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
         Navigator.of(context,rootNavigator: true).push(MaterialPageRoute<void>(
-      builder: (context) => InputPart(),
+      builder: (context) => AddScreen(),
     ));
   }
 

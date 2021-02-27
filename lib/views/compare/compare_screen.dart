@@ -51,7 +51,7 @@ class CompareScreen extends StatelessWidget {
         backgroundColor: primaryColor,
       //todo もどるボタンの時にAddScreenのTextEditingContorllerがdisposeされた後に使われたというエラーでる
         //Navigator.popになってることが要因？？もしくはAddScreenでdisposeする必要がないかも
-        middle: const Text('Compare List',
+        middle: const Text('ItemTitle',
           style: middleTextStyle,
         ),
         trailing:

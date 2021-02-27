@@ -10,6 +10,8 @@ class CompareViewModel extends ChangeNotifier {
   final CompareRepository _compareRepository;
   List<ComparisonOverview> _comparisonOverviews = <ComparisonOverview>[];
   List<ComparisonOverview> get comparisonOverviews => _comparisonOverviews;
+  String _itemTitle ='';
+  String get itemTitle => _itemTitle;
   String _way1Title ='';
   String get way1Title => _way1Title;
   String _way2Title ='';
@@ -46,6 +48,7 @@ class CompareViewModel extends ChangeNotifier {
   Future<List<ComparisonOverview>> getWaitOverview(String comparisonItemId) async {
     _comparisonOverviews =
     await _compareRepository.getOverview(comparisonItemId);
+     _itemTitle = comparisonOverviews[0].itemTitle;
      _way1Title = comparisonOverviews[0].way1Title;
      _way2Title = comparisonOverviews[0].way2Title;
      _way1MeritEvaluate = comparisonOverviews[0].way1MeritEvaluate;
@@ -85,6 +88,7 @@ class CompareViewModel extends ChangeNotifier {
 
     final updateOverview = ComparisonOverview(
       comparisonItemId: comparisonItemId,
+      itemTitle: _itemTitle,
       way1Title: _way1Title,
       way2Title: _way2Title,
       way1MeritEvaluate: _way1MeritEvaluate,

@@ -48,7 +48,7 @@ class AddScreen extends StatelessWidget {
                 height: 48,
               ),
 ///InputPart
-//              InputPart(context: context,),
+              InputPart(),
             ],
           ),
         ),

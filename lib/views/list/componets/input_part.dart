@@ -41,74 +41,47 @@ class _InputPartState extends State<InputPart> {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).primaryColor;
     final accentColor = Theme.of(context).accentColor;
     return
-    CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: primaryColor,
-        //todo キャンセル表示で入力破棄するかalertDialogで聞く&textcontrollerクリア
-//        leading:const Text('キャンセル'),
-        middle: const Text(
-          '新規作成',
-          style: middleTextStyle,
-        ),
-
-        /// 下から出てくる場合は右上に比較ボタンでもいいかも
-        trailing:
-        //todo  onPressedでDBに項目登録して比較画面に遷移
-        const Text(
-          '比較',
-          style: trailingTextStyle,
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor:  CupertinoTheme
-            .of(context)
-            .scaffoldBackgroundColor,
-        body: SingleChildScrollView(
-          child: Column(children: [
-            ///タイトル
-            TextFieldPart(
-              label: 'タイトル',
-              placeholder: 'タイトルを入力',
-              autofocus: true,
-              textEditingController: _titleController,
-            ),
-            const SizedBox(height: 24),
-            ///way1
-            TextFieldPart(
-              label: 'way1',
-              placeholder: '比較項目を入力',
-              autofocus: false,
-              textEditingController: _way1Controller,
-            ),
-            const SizedBox(height: 8),
-            const Text('と', style: TextStyle(color: Colors.black)),
-            const SizedBox(height: 8),
-            ///way2
-            TextFieldPart(
-              label: 'way2',
-              placeholder: '比較項目を入力',
-              autofocus: false,
-              textEditingController: _way2Controller,
-            ),
-            const SizedBox(height: 40),
-            ///button
-            RaisedButton(
-              child: const Text('比較'),
-              color: accentColor,
-              shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20)),
-            //todo
-              onPressed:isCreateItemEnabled
-              ? () => _createComparisonItems(context)
-              : null,
+        Column(children: [
+          ///タイトル
+          TextFieldPart(
+            label: 'タイトル',
+            placeholder: 'タイトルを入力',
+            autofocus: true,
+            textEditingController: _titleController,
           ),
-          ],),
+          const SizedBox(height: 24),
+          ///way1
+          TextFieldPart(
+            label: 'way1',
+            placeholder: '比較項目を入力',
+            autofocus: false,
+            textEditingController: _way1Controller,
+          ),
+          const SizedBox(height: 8),
+          const Text('と', style: TextStyle(color: Colors.black)),
+          const SizedBox(height: 8),
+          ///way2
+          TextFieldPart(
+            label: 'way2',
+            placeholder: '比較項目を入力',
+            autofocus: false,
+            textEditingController: _way2Controller,
+          ),
+          const SizedBox(height: 40),
+          ///button
+          RaisedButton(
+            child: const Text('比較'),
+            color: accentColor,
+            shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20)),
+            onPressed:isCreateItemEnabled
+            ? () => _createComparisonItems(context)
+            : null,
         ),
-      ),
-    );
+        ],);
+
 
   }
 
@@ -132,9 +105,8 @@ class _InputPartState extends State<InputPart> {
     });
   }
 
-  ///textEditingControllerをviewModel側でもたずに、ここでのcontrollerを入力して
-///createConparisonItems=>viewModel.createComparisonItems(comparisonItem);を実行
   // 押せる・押せないはinsta_cloneのcomment_input_part参照
+  ///textEditingControllerをview側で設定=>viewModelに設定するメソッド
   Future<void> _createComparisonItems(BuildContext context) async {
     final viewModel = Provider.of<AddViewModel>(context, listen: false);
 
@@ -150,19 +122,14 @@ class _InputPartState extends State<InputPart> {
 
     await viewModel.createComparisonItems(comparisonItem);
 
-    ///createComparisonItems()メソッドで設定したcomparisonItemIdを次の画面にわたすには？
     await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
             builder: (context) =>
                 CompareScreen(
                     comparisonItemId: comparisonItem.comparisonItemId)));
-///この時点でcontrollerが破棄されるので、CompareScreenから戻るときにclearメソッドがあると、
-    ///Once you have called dispose() on a TextEditingController,のエラー出る
-//    _titleController.clear();
-//    _way1Controller.clear();
-//    _way2Controller.clear();
-    print('テキストコントローラー初期化');
+            //この時点でcontrollerが破棄されるので、CompareScreenから戻るときにclearメソッドがあると、
+            //Once you have called dispose() on a TextEditingController,のエラー出る
   }
 
 }
