@@ -82,10 +82,16 @@ class CompareRepository {
     }
   }
 
-//todo Read
-//resultはComparisonItemRecord
-//  result = await _comparisonItemDao.getJoinedItemList();
-//List<ComparisonItemRecord>
+  // Read
+  Future<List<ComparisonOverview>> getOverviewList() async {
+    final comparisonOverviewRecords = await _comparisonItemDao.allOverviews;
+    return _overviewResults = comparisonOverviewRecords
+        .toComparisonOverviews(comparisonOverviewRecords);
+  }
 
-//  CompareRepository({})
+  Future<List<ComparisonOverview>>getList() async{
+    final comparisonOverviewRecords = await _comparisonItemDao.allOverviews;
+    return _overviewResults = comparisonOverviewRecords
+        .toComparisonOverviews(comparisonOverviewRecords);
+  }
 }

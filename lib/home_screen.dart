@@ -1,4 +1,5 @@
 import 'package:compare_2way/views/list/list_page.dart';
+import 'package:compare_2way/views/list/single_list_page.dart';
 import 'package:compare_2way/views/setting/setting_page.dart';
 import 'package:compare_2way/views/tag/tag_page.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   final _pages = [
-    ListPage(),
+    SingleListPage(),
     TagPage(),
     SettingPage(),
   ];
