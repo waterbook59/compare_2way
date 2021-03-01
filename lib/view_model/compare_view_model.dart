@@ -110,7 +110,21 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+///ListViewModelからの移行
+  //FutureBuilder用
+//リストをDBでとるのはConsumer側でやってるので、リストあるかどうかだけ返せばいいのでは？_overviews.isEmptyかどうかを返す
+//=>最初のbuildの時にConsumer側でリスト取得するまでリスト空の表示が出てしまう
+  Future<List<ComparisonOverview>> getList() async{
+    print('getList発動');
+    _comparisonOverviews  = await _compareRepository.getList();
+    print('getList非同期終了');
+    return _comparisonOverviews ;
+  }
 
+  //FutureBuilder用
+  Future<List<ComparisonOverview>> isOverviewList() async{
+    return _comparisonOverviews ;
+  }
 
 
 
