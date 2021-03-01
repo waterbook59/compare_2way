@@ -316,9 +316,12 @@ class CompareScreen extends StatelessWidget {
     //todo Merit/Demerit,tagの更新
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.saveComparisonItem(comparisonItemId);
+    ///保存と同時に取得してもList<ComparisonOverview>がそれぞれ独立してるのでListPage側で値更新されない
+    await viewModel.getOverviewList();
     await Fluttertoast.showToast(
     msg: '保存完了',
     );
+
 
 
   }

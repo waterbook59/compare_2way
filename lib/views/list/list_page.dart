@@ -28,23 +28,32 @@ class ListPage extends StatelessWidget {
           style: trailingTextStyle,
         ),
       ),
-      child: Scaffold(
+      child:
+      Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SingleChildScrollView(
-            child:  Consumer<ListViewModel>(
+            child:
+            Consumer<ListViewModel>(
               builder:(context,listViewModel,child){
-                return FutureBuilder(
-                  future: listViewModel.getList(),
+                return
+                FutureBuilder(
+                  future: listViewModel.isOverviewList(),
                   builder: (context,AsyncSnapshot<List<ComparisonOverview>> snapshot){
+                    print('snapshot.data:${snapshot.data}');
                     if (snapshot.hasData && snapshot.data.isEmpty) {
                       print('EmptyView通った');
-                      return  Center(child: Text('リスト追加してください'));
+                      return  Container(child: Center(child: Text('リスト追加してください')));
                     } else{
-                      print('snapshot.data:${snapshot.data}');
+              //snapshot.dataがnullでもこちらを通る(snapshot.hasDataはtrue,falseのはず)
+                      //todo FutureBuilderのみでもsnapshot.dataが複数回呼び出される謎
+//scaffold複数あるから(SingleListPageつくって確認)=>結局初回描画は２回呼び出される
+// ,FutureBuilder=>Consumerならうまくいく？
+                      print('ListView通った');
                       //todo ListView.separatedに変更
                       return SizedBox(
                         height: 400,
-                        child: ListView.builder(
+                        child:
+                        ListView.builder(
                           itemCount: listViewModel.overviews.length,
                           itemBuilder: (BuildContext context, int index){
                             final overview = listViewModel.overviews[index];

@@ -39,8 +39,6 @@ class CompareViewModel extends ChangeNotifier {
         await _compareRepository.getOverview(comparisonItemId);
     _way1Title = comparisonOverviews[0].way1Title;
     _way2Title = comparisonOverviews[0].way2Title;
-    print('way2のタイトル:$_way2Title');
-
     notifyListeners();
   }
 
@@ -99,8 +97,18 @@ class CompareViewModel extends ChangeNotifier {
       createdAt: DateTime.now(),
     );
     await _compareRepository.saveComparisonItem(comparisonItemId,updateOverview);
+    ///notifyListeners追加してもListPageでのリストに反映されない
+    notifyListeners();
   }
 
+  ///データ保存後に再取得(ListPageへ自動反映できない)
+  Future<void> getOverviewList() async{
+
+    print('getOverviewList発動');
+    _comparisonOverviews  = await _compareRepository.getOverviewList();
+    print('getOverviewList非同期終了');
+    notifyListeners();
+  }
 
 
 
