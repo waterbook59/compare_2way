@@ -1,5 +1,6 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/models/repository/compare_repository.dart';
+import 'package:compare_2way/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class CompareViewModel extends ChangeNotifier {
@@ -31,6 +32,8 @@ class CompareViewModel extends ChangeNotifier {
   TextEditingController _conclusionController = TextEditingController();
   TextEditingController get conclusionController => _conclusionController;
   //todo conclusion用のcontrollerの設定必要？
+
+  ListEditMode editStatus = ListEditMode.display;
 
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
@@ -124,6 +127,15 @@ class CompareViewModel extends ChangeNotifier {
   //FutureBuilder用
   Future<List<ComparisonOverview>> isOverviewList() async{
     return _comparisonOverviews ;
+  }
+
+  Future<void> changeEditStatus(ListEditMode editMode) async{
+      if(editMode== ListEditMode.edit){
+        editStatus = ListEditMode.display;
+      }else{
+        editStatus =  ListEditMode.edit;
+      }
+      notifyListeners();
   }
 
 

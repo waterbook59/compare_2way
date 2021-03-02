@@ -1,4 +1,5 @@
 import 'package:compare_2way/style.dart';
+import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/list/add_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +16,9 @@ class SingleListPage extends StatelessWidget {
         .of(context)
         .accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+//    if(viewModel.comparisonOverviews.isEmpty){
+//      Future(viewModel.getOverviewList);
+//    }
 
     return Scaffold(
       appBar: CupertinoNavigationBar(
@@ -24,77 +28,114 @@ class SingleListPage extends StatelessWidget {
           style: middleTextStyle,
         ),
         //todo 編集ボタンを押したら ListTile→ReorderableListView&CheckboxListTile
-        trailing: const Text(
-          '編集',
-          style: trailingTextStyle,
+        trailing: GestureDetector(
+            onTap: () => _changeEdit(context, viewModel.editStatus),
+            child: Consumer<CompareViewModel>(
+                builder: (context, compareViewModel, child) {
+                  return (viewModel.editStatus == ListEditMode.display)
+                      ? const Text(
+                    '編集',
+                    style: trailingTextStyle,
+                  )
+                      : const Text(
+                    '完了',
+                    style: trailingTextStyle,
+                  );
+                }
+            )
+
         ),
       ),
-      body:
+      body: Consumer<CompareViewModel>(
+          builder: (context, compareViewModel, child) {
+            return (viewModel.editStatus == ListEditMode.display)
 
-      ///SingleChildScrollViewのchildが中心にこない問題の解決法
-      LayoutBuilder(
-        builder: (context, constraints) =>
-            SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                  child: FutureBuilder(
-                    ///初回描画の時にgetListが２回発動される
-                    ///別のview(CompareScreenのconclusion入力など)で
-                    ///notifyListenersすると反応して再描画してしまう
-                    //todo Consumer=>Selectorへ変更を検討
-                    future: viewModel.getOverviewList(),
-                    builder: (context, AsyncSnapshot<void> snapshot) {
-                      // 成功処理
-                      return Consumer<CompareViewModel>(
-                        builder: (context, compareViewModel, child) {
+            ///通常時
+            //SingleChildScrollViewのchildが中心にこない問題の解決法
+                ? LayoutBuilder(
+              builder: (context, constraints) =>
+                  SingleChildScrollView(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                            minHeight: constraints.maxHeight),
+                        //初回描画の時にgetListが２回発動される
+                        child: FutureBuilder(
+
+                          ///別のview(CompareScreenのconclusion入力など)で
+                          ///notifyListenersすると反応して再描画してしまう
+                          //todo Consumer=>Selectorへ変更を検討
+                          future: viewModel.getList(),
+                          builder: (context, AsyncSnapshot<void> snapshot) {
+                            //リスト空の時の描画はこちらに書いてみる
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              if (viewModel.comparisonOverviews.isEmpty) {
+                                print('EmptyView通って描画');
+                                return Container(child: const Center(
+                                    child: Text('リスト追加してください')));
+                              } else {
+                                // 成功処理
+                                return
 //print(compareViewModel.comparisonOverviews.map((overview)
 // => overview.conclusion).toList());
-                          //リスト空の時
-                          if (compareViewModel.comparisonOverviews.isEmpty) {
-                            print('EmptyView通って描画');
-                            return Container(child: const Center(
-                                child: Text('リスト追加してください')));
-                          } else {
-                            print('ListView通って描画');
-                            // 成功処理
-                            return SizedBox(
-                              height: 600,
-                              child: ListView.builder(
-                                itemCount: compareViewModel.comparisonOverviews
-                                    .length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  final overview =
-                                  compareViewModel.comparisonOverviews[index];
-                                  return ListTile(
-                                    title: Text(overview.itemTitle),
-                                    //conclusionはConsumerで初回描画されない
-                                    subtitle: Text(overview.conclusion),
+                                  // 成功処理
+                                  SizedBox(
+                                    height: 600,
+                                    child: ListView.builder(
+                                      itemCount: compareViewModel
+                                          .comparisonOverviews
+                                          .length,
+                                      itemBuilder: (BuildContext context,
+                                          int index) {
+                                        final overview =
+                                        compareViewModel
+                                            .comparisonOverviews[index];
+                                        return ListTile(
+                                          title: Text(overview.itemTitle),
+                                          //conclusionはConsumerで初回描画されない
+                                          subtitle: Text(
+                                              overview.conclusion),
+                                        );
+                                      },
+                                    ),
                                   );
-                                },
-                              ),
-                            );
-                          }
-                        },
-                      );
-                    },
-                  ),
-                )),
-      ),
-      floatingActionButton: SizedBox(
-        width: 56,
-        height: 56,
-        child: FloatingActionButton(
-          ///heroTag設定しないとエラー：
-          ///There are multiple heroes that share the same tag within a subtree.
-          ///https://qiita.com/rei_012/items/c07e95b5793d943229e3
-          heroTag: 'hero1',
-          backgroundColor: accentColor,
-          child: const Icon(Icons.add, color: Colors.black, size: 40),
-          onPressed: () => _saveComparisonItems(context),
-        ),
+//                                    },
+//                                  );
+                              }
+                            }
+                            //時間かかる場合indicatorぐるぐるでもいいかも
+                            return Container();
+                          },
+                        ),
+                      )),
+            )
+
+            ///編集時
+                : const Text('編集モードです');
+          }),
+      floatingActionButton: Consumer<CompareViewModel>(
+          builder: (context, compareViewModel, child) {
+            return (viewModel.editStatus == ListEditMode.display)
+                ? SizedBox(
+              width: 56,
+              height: 56,
+              child: FloatingActionButton(
+
+                ///heroTag設定しないとエラー：
+                ///There are multiple heroes that share the same tag within a subtree.
+                ///https://qiita.com/rei_012/items/c07e95b5793d943229e3
+                heroTag: 'hero1',
+                backgroundColor: accentColor,
+                child: const Icon(Icons.add, color: Colors.black, size: 40),
+                onPressed: () => _saveComparisonItems(context),
+              ),
+
+            )
+                : Container();
+          }
       ),
     );
-  }
+  } //buildはここまで
 
   // DB登録とComparePageへ移動
   void _saveComparisonItems(BuildContext context) {
@@ -103,4 +144,12 @@ class SingleListPage extends StatelessWidget {
       builder: (context) => AddScreen(),
     ));
   }
+
+  Future<void> _changeEdit(BuildContext context,
+      ListEditMode editMode) async {
+    print('編集タップ！：$editMode');
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.changeEditStatus(editMode);
+  }
+
 }
