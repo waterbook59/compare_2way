@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SingleListPage extends StatelessWidget {
+   final bool _isSelected = false;
+
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme
@@ -27,7 +29,6 @@ class SingleListPage extends StatelessWidget {
           'Compare List',
           style: middleTextStyle,
         ),
-        //todo 編集ボタンを押したら ListTile→ReorderableListView&CheckboxListTile
         trailing: GestureDetector(
             onTap: () => _changeEdit(context, viewModel.editStatus),
             child: Consumer<CompareViewModel>(
@@ -60,9 +61,6 @@ class SingleListPage extends StatelessWidget {
                             minHeight: constraints.maxHeight),
                         //初回描画の時にgetListが２回発動される
                         child: FutureBuilder(
-
-                          ///別のview(CompareScreenのconclusion入力など)で
-                          ///notifyListenersすると反応して再描画してしまう
                           //todo Consumer=>Selectorへ変更を検討
                           future: viewModel.getList(),
                           builder: (context, AsyncSnapshot<void> snapshot) {
@@ -80,6 +78,7 @@ class SingleListPage extends StatelessWidget {
 // => overview.conclusion).toList());
                                   // 成功処理
                                   SizedBox(
+                                    //todo SizedBoxのheightを固定値から変更
                                     height: 600,
                                     child: ListView.builder(
                                       itemCount: compareViewModel
@@ -99,8 +98,6 @@ class SingleListPage extends StatelessWidget {
                                       },
                                     ),
                                   );
-//                                    },
-//                                  );
                               }
                             }
                             //時間かかる場合indicatorぐるぐるでもいいかも
@@ -109,9 +106,42 @@ class SingleListPage extends StatelessWidget {
                         ),
                       )),
             )
+            ///編集時  ListTile→ReorderableListView&CheckboxListTile
+                : LayoutBuilder(
+                builder: (context, constraints) =>
+                SingleChildScrollView(
+                    child:ConstrainedBox(
+                        constraints: BoxConstraints(
+                            minHeight: constraints.maxHeight),
+                        //初回描画の時にgetListが２回発動される
+                        child: SizedBox(
+                          height: 600,
+                          child: ListView.builder(
+                            itemCount: compareViewModel
+                              .comparisonOverviews
+                              .length,
+                            itemBuilder: (BuildContext context,
+                                int index) {
+                              final overview =
+                              compareViewModel
+                                  .comparisonOverviews[index];
+                              return CheckboxListTile(
+                                title: Text(overview.itemTitle),
+                                //conclusionはConsumerで初回描画されない
+                                subtitle: Text(
+                                    overview.conclusion),
+                                //チェックボックスを左側に
+                                controlAffinity: ListTileControlAffinity.leading,
+                                value: _isSelected,
+                              );
+                            },
+                          ),
+                        )
+//                        const Text('編集モードです')
+                    ),
+                )
+                );
 
-            ///編集時
-                : const Text('編集モードです');
           }),
       floatingActionButton: Consumer<CompareViewModel>(
           builder: (context, compareViewModel, child) {
