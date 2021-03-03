@@ -93,4 +93,12 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
           ..where((it) => it.comparisonItemId.equals(comparisonItemId)))
         .write(overviewCompanion);
   }
+
+  ///comparisonOverviewの削除
+  Future<void> deleteList(String comparisonItemId) =>
+  //comparisonOverviewRecordsテーブルのcomparisonItemIdと
+  // view側から持ってきたcomparisonItemIdが同じものを削除
+      (delete(comparisonOverviewRecords)
+            ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
+          .go();
 }

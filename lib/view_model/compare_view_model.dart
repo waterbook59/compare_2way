@@ -37,7 +37,7 @@ class CompareViewModel extends ChangeNotifier {
 
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
-  Future<List<ComparisonOverview>> getOverview(String comparisonItemId) async {
+  Future<void> getOverview(String comparisonItemId) async {
     _comparisonOverviews =
         await _compareRepository.getOverview(comparisonItemId);
     _way1Title = comparisonOverviews[0].way1Title;
@@ -60,7 +60,7 @@ class CompareViewModel extends ChangeNotifier {
 
      //todo way3Evaluate
     print('FutureBuilderのway2のタイトル:$_way2Title');
-
+    return _comparisonOverviews;
   }
 
   Future<void> setWay1MeritNewValue(int newValue) async{
@@ -136,6 +136,13 @@ class CompareViewModel extends ChangeNotifier {
         editStatus =  ListEditMode.edit;
       }
       notifyListeners();
+  }
+
+  Future<void> deleteList(String comparisonItemId) async{
+    //削除
+   await  _compareRepository.deleteList(comparisonItemId);
+    //データ取得?
+   notifyListeners();
   }
 
 

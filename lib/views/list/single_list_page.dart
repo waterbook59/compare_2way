@@ -100,6 +100,7 @@ class SingleListPage extends StatelessWidget {
                                             icon: Icons.remove_circle_outline,
                                             onTap: (){
                                                 print('削除します');
+                                                deleteList(context,overview.comparisonItemId);
                                             },)
                                           ],
                                           child: ListTile(
@@ -139,7 +140,9 @@ class SingleListPage extends StatelessWidget {
                               final overview =
                               compareViewModel
                                   .comparisonOverviews[index];
-                              return CheckboxListTile(
+                              return
+///checkかラジオボタンを押すと右からSlidableが出てきて削除ボタン表示される
+                                CheckboxListTile(
                                 title: Text(overview.itemTitle),
                                 //conclusionはConsumerで初回描画されない
                                 subtitle: Text(
@@ -194,6 +197,11 @@ class SingleListPage extends StatelessWidget {
     print('編集タップ！：$editMode');
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.changeEditStatus(editMode);
+  }
+
+  Future<void> deleteList(BuildContext context, String comparisonItemId) async{
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.deleteList(comparisonItemId);
   }
 
 }

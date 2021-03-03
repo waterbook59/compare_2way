@@ -82,7 +82,7 @@ class CompareRepository {
     }
   }
 
-  // Read
+  ///Read
   Future<List<ComparisonOverview>> getOverviewList() async {
     final comparisonOverviewRecords = await _comparisonItemDao.allOverviews;
     return _overviewResults = comparisonOverviewRecords
@@ -94,4 +94,16 @@ class CompareRepository {
     return _overviewResults = comparisonOverviewRecords
         .toComparisonOverviews(comparisonOverviewRecords);
   }
+
+  ///Delete
+  Future<void> deleteList(String comparisonItemId) async{
+//    final comparisonOverviewRecord =
+    //todo Merit/Dmerit、Tagのリストも同時に削除必要
+    await _comparisonItemDao.deleteList(comparisonItemId);
+    print('データ削除完了');
+  }
+
+
+
+
 }
