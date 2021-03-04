@@ -3,13 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class OverViewList extends StatelessWidget {
-   OverViewList(
-      {this.title, this.conclusion, this.createdAt, this.onDelete,});
+   const OverViewList(
+      {this.title, this.conclusion, this.createdAt, this.onDelete,this.onTap});
 
   final String title;
   final String conclusion;
   final String createdAt;
   final VoidCallback onDelete;
+  final VoidCallback onTap;
 
 
   @override
@@ -33,6 +34,7 @@ class OverViewList extends StatelessWidget {
                 bottom: BorderSide(
                     width: 0.5, color: Colors.grey))),
         child: ListTile(
+          onTap: onTap,
           title: Text(title),
           //conclusionはConsumerで初回描画されない
           subtitle: Text(conclusion),

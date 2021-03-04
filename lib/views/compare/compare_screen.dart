@@ -46,9 +46,9 @@ class CompareScreen extends StatelessWidget {
 //        },
 //      );
 
-    return CupertinoPageScaffold(
+    return Scaffold(
       //todo listPageに戻る時に再ビルドさせるには？pushReplacement?
-      navigationBar:  CupertinoNavigationBar(
+      appBar:  CupertinoNavigationBar(
         backgroundColor: primaryColor,
         middle: const Text('Compare List',
           style: middleTextStyle,
@@ -70,8 +70,6 @@ class CompareScreen extends StatelessWidget {
             const Text('編集', style: trailingTextStyle,),
         ]),
       ),
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment:CrossAxisAlignment.start ,
@@ -101,7 +99,7 @@ class CompareScreen extends StatelessWidget {
                                   viewModel.way1Title,
                               titleBorderRadius: accordionTopBorderRadius ,
                               contentBorderRadius: accordionBottomBorderRadius,
-                              showAccordion: true,
+                              showAccordion: false,
                               collapsedTitleBackgroundColor:  Color(0xFFE0E0E0),
                               contentChild:ListView.builder(
                                     shrinkWrap: true,
@@ -135,7 +133,7 @@ class CompareScreen extends StatelessWidget {
                             titleBorderRadius: accordionTopBorderRadius ,
                             contentBorderRadius: accordionBottomBorderRadius,
                             collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
-                            showAccordion: true,
+                            showAccordion: false,
                             contentChild:ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
@@ -174,7 +172,7 @@ class CompareScreen extends StatelessWidget {
                             titleBorderRadius: accordionTopBorderRadius ,
                             contentBorderRadius: accordionBottomBorderRadius,
                             collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
-                            showAccordion: true,
+                            showAccordion: false,
                             contentChild:ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
@@ -206,7 +204,7 @@ class CompareScreen extends StatelessWidget {
                           collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
                           titleBorderRadius: accordionTopBorderRadius ,
                           contentBorderRadius: accordionBottomBorderRadius,
-                          showAccordion: true,
+                          showAccordion: false,
                           contentChild:ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
@@ -301,7 +299,7 @@ class CompareScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           onPressed: () => addList(context),
         ),
-      ),
+
     );
   }
 

@@ -59,7 +59,7 @@ class CompareViewModel extends ChangeNotifier {
      _conclusionController.text = comparisonOverviews[0].conclusion;
 
      //todo way3Evaluate
-    print('FutureBuilderのway2のタイトル:$_way2Title');
+//    print('FutureBuilderのway2のタイトル:$_way2Title');
     return _comparisonOverviews;
   }
 
