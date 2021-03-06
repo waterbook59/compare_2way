@@ -29,8 +29,11 @@ class CompareViewModel extends ChangeNotifier {
   int get way3MeritEvaluate => _way3MeritEvaluate;
   int _way3DemeritEvaluate =0;
   int get way3DemeritEvaluate => _way3DemeritEvaluate;
+  //いらんかも
   TextEditingController _conclusionController = TextEditingController();
   TextEditingController get conclusionController => _conclusionController;
+  String conclusion ='';
+
   //todo conclusion用のcontrollerの設定必要？
 
   ListEditMode editStatus = ListEditMode.display;
@@ -96,7 +99,7 @@ class CompareViewModel extends ChangeNotifier {
       way1DemeritEvaluate: _way1DemeritEvaluate,
       way2MeritEvaluate: _way2MeritEvaluate,
       way2DemeritEvaluate: _way2DemeritEvaluate,
-      conclusion: _conclusionController.text,
+      conclusion: conclusion,
       createdAt: DateTime.now(),
     );
     await _compareRepository.saveComparisonItem(comparisonItemId,updateOverview);
