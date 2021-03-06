@@ -1,5 +1,6 @@
 import 'package:compare_2way/data_models/comparison_item.dart';
 import 'package:compare_2way/style.dart';
+import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/add_view_model.dart';
 import 'package:compare_2way/views/compare/compare_screen.dart';
 import 'package:compare_2way/views/list/componets/text_field_part.dart';
@@ -127,6 +128,8 @@ class _InputPartState extends State<InputPart> {
         MaterialPageRoute<void>(
             builder: (context) =>
                 CompareScreen(
+                  itemEditMode: ItemEditMode.add,
+
                     comparisonItemId: comparisonItem.comparisonItemId)));
             //この時点でcontrollerが破棄されるので、CompareScreenから戻るときにclearメソッドがあると、
             //Once you have called dispose() on a TextEditingController,のエラー出る

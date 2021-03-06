@@ -14,12 +14,8 @@ class SingleListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme
-        .of(context)
-        .primaryColor;
-    final accentColor = Theme
-        .of(context)
-        .accentColor;
+    final primaryColor = Theme.of(context).primaryColor;
+    final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 //    if(viewModel.comparisonOverviews.isEmpty){
 //      Future(viewModel.getOverviewList);
@@ -35,16 +31,16 @@ class SingleListPage extends StatelessWidget {
             onTap: () => _changeEdit(context, viewModel.editStatus),
             child: Consumer<CompareViewModel>(
                 builder: (context, compareViewModel, child) {
-                  return (viewModel.editStatus == ListEditMode.display)
-                      ? const Text(
-                    '編集',
-                    style: trailingTextStyle,
-                  )
-                      : const Text(
-                    '完了',
-                    style: trailingTextStyle,
-                  );
-                })),
+              return (viewModel.editStatus == ListEditMode.display)
+                  ? const Text(
+                      '編集',
+                      style: trailingTextStyle,
+                    )
+                  : const Text(
+                      '完了',
+                      style: trailingTextStyle,
+                    );
+            })),
       ),
       child: Scaffold(
 //        appBar: CupertinoNavigationBar(
@@ -70,120 +66,112 @@ class SingleListPage extends StatelessWidget {
 //        ),
         body: Consumer<CompareViewModel>(
             builder: (context, compareViewModel, child) {
-              return (viewModel.editStatus == ListEditMode.display)
+          return (viewModel.editStatus == ListEditMode.display)
 
               ///通常時
               //SingleChildScrollViewのchildが中心にこない問題の解決法
-                  ? LayoutBuilder(
-                builder: (context, constraints) =>
-                    SingleChildScrollView(
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                              minHeight: constraints.maxHeight),
-                          //初回描画の時にgetListが２回発動される
-                          child: FutureBuilder(
-                            //todo Consumer=>Selectorへ変更を検討
-                            future: viewModel.getList(),
-                            builder: (context,
-                                AsyncSnapshot<List<
-                                    ComparisonOverview>> snapshot) {
-                              if (snapshot.data == null) {
-                                print('snapshotがnull');
-                                return Container();
-                              }
+              ? LayoutBuilder(
+                  builder: (context, constraints) => SingleChildScrollView(
+                      child: ConstrainedBox(
+                    constraints:
+                        BoxConstraints(minHeight: constraints.maxHeight),
+                    //初回描画の時にgetListが２回発動される
+                    child: FutureBuilder(
+                      //todo Consumer=>Selectorへ変更を検討
+                      future: viewModel.getList(),
+                      builder: (context,
+                          AsyncSnapshot<List<ComparisonOverview>> snapshot) {
+                        if (snapshot.data == null) {
+                          print('snapshotがnull');
+                          return Container();
+                        }
 
-                              ///viewModel.comparisonOverviews.isEmptyだとEmptyView通ってしまう
-                              ///あくまでFutureBuilderで待った結果（snapshot.data）で条件分けすべき
-                              if (snapshot.hasData && snapshot.data.isEmpty) {
-                                print('EmptyView側通って描画');
-                                return Container(
-                                    child: const Center(
-                                        child: Text('リスト追加してください')));
-                              } else {
-                                print('ListView側通って描画');
-                                return
+                        ///viewModel.comparisonOverviews.isEmptyだとEmptyView通ってしまう
+                        ///あくまでFutureBuilderで待った結果（snapshot.data）で条件分けすべき
+                        if (snapshot.hasData && snapshot.data.isEmpty) {
+                          print('EmptyView側通って描画');
+                          return Container(
+                              child: const Center(child: Text('リスト追加してください')));
+                        } else {
+                          print('ListView側通って描画');
+                          return
 //print(compareViewModel.comparisonOverviews.map((overview)
 // => overview.conclusion).toList());
-                                  ListView.builder(
-                                    //ListView.builderの高さを自動指定
-                                    shrinkWrap: true,
-                                    itemCount: snapshot.data.length,
-                                    itemBuilder: (BuildContext context,
-                                        int index) {
-                                      final overview = snapshot.data[index];
-                                      return OverViewList(
-                                          title: overview.itemTitle,
-                                          conclusion: overview.conclusion,
-                                          onDelete: () =>
-                                              _deleteList(
-                                                  context,
-                                                  overview.comparisonItemId),
-                                          onTap: ()=> _updateList(
-                                          context, overview.comparisonItemId),);
-                                    },
-                                  );
-//                              }//ConnectionState.done
-                              }
-                              //時間かかる場合indicatorぐるぐるでもいいかも
-                              return Container();
+                              ListView.builder(
+                            //ListView.builderの高さを自動指定
+                            shrinkWrap: true,
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final overview = snapshot.data[index];
+                              return OverViewList(
+                                title: overview.itemTitle,
+                                conclusion: overview.conclusion,
+                                onDelete: () => _deleteList(
+                                    context, overview.comparisonItemId),
+                                onTap: () => _updateList(context, overview),
+                              );
                             },
-                          ),
-                        )),
-              )
+                          );
+//                              }//ConnectionState.done
+                        }
+                        //時間かかる場合indicatorぐるぐるでもいいかも
+                        return Container();
+                      },
+                    ),
+                  )),
+                )
 
               ///編集時  ListTile→ReorderableListView&CheckboxListTile
               //todo Consumerにしないと編集時リストがなくなる
-                  : LayoutBuilder(
-                  builder: (context, constraints) =>
-                      SingleChildScrollView(
+              : LayoutBuilder(
+                  builder: (context, constraints) => SingleChildScrollView(
                         child: ConstrainedBox(
-                            constraints:
-                            BoxConstraints(minHeight: constraints.maxHeight),
+                            constraints: BoxConstraints(
+                                minHeight: constraints.maxHeight),
                             //初回描画の時にgetListが２回発動される
                             child: ListView.builder(
                               shrinkWrap: true,
                               itemCount:
-                              compareViewModel.comparisonOverviews.length,
+                                  compareViewModel.comparisonOverviews.length,
                               itemBuilder: (BuildContext context, int index) {
                                 final overview =
-                                compareViewModel.comparisonOverviews[index];
+                                    compareViewModel.comparisonOverviews[index];
                                 return
 
-                                  ///checkかラジオボタンを押すと右からSlidableが出てきて削除ボタン表示される
-                                  CheckboxListTile(
-                                    title: Text(overview.itemTitle),
-                                    //conclusionはConsumerで初回描画されない
-                                    subtitle: Text(overview.conclusion),
-                                    //チェックボックスを左側に
-                                    controlAffinity:
-                                    ListTileControlAffinity.leading,
-                                    value: _isSelected,
-                                  );
+                                    ///checkかラジオボタンを押すと右からSlidableが出てきて削除ボタン表示される
+                                    CheckboxListTile(
+                                  title: Text(overview.itemTitle),
+                                  //conclusionはConsumerで初回描画されない
+                                  subtitle: Text(overview.conclusion),
+                                  //チェックボックスを左側に
+                                  controlAffinity:
+                                      ListTileControlAffinity.leading,
+                                  value: _isSelected,
+                                );
                               },
                             )
 //                        const Text('編集モードです')
-                        ),
+                            ),
                       ));
-            }),
+        }),
         floatingActionButton: Consumer<CompareViewModel>(
             builder: (context, compareViewModel, child) {
-              return (viewModel.editStatus == ListEditMode.display)
-                  ? SizedBox(
-                width: 56,
-                height: 56,
-                child: FloatingActionButton(
-
-                  ///heroTag設定しないとエラー：
-                  ///There are multiple heroes that share the same tag within a subtree.
-                  ///https://qiita.com/rei_012/items/c07e95b5793d943229e3
-                  heroTag: 'hero1',
-                  backgroundColor: accentColor,
-                  child: const Icon(Icons.add, color: Colors.black, size: 40),
-                  onPressed: () => _saveComparisonItems(context),
-                ),
-              )
-                  : Container();
-            }),
+          return (viewModel.editStatus == ListEditMode.display)
+              ? SizedBox(
+                  width: 56,
+                  height: 56,
+                  child: FloatingActionButton(
+                    ///heroTag設定しないとエラー：
+                    ///There are multiple heroes that share the same tag within a subtree.
+                    ///https://qiita.com/rei_012/items/c07e95b5793d943229e3
+                    heroTag: 'hero1',
+                    backgroundColor: accentColor,
+                    child: const Icon(Icons.add, color: Colors.black, size: 40),
+                    onPressed: () => _saveComparisonItems(context),
+                  ),
+                )
+              : Container();
+        }),
       ),
     );
   } //buildはここまで
@@ -202,16 +190,19 @@ class SingleListPage extends StatelessWidget {
     await viewModel.changeEditStatus(editMode);
   }
 
-  Future<void> _deleteList(BuildContext context,
-      String comparisonItemId) async {
+  Future<void> _deleteList(
+      BuildContext context, String comparisonItemId) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.deleteList(comparisonItemId);
   }
 
-  void _updateList(BuildContext context,
-      String comparisonItemId)  {
-    Navigator.push(context,
-        MaterialPageRoute<void>(builder: (context) =>
-            CompareScreen(comparisonItemId: comparisonItemId,)));
+  void _updateList(BuildContext context, ComparisonOverview updateOverview) {
+    Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+            builder: (context) => CompareScreen(
+                  itemEditMode: ItemEditMode.edit,
+                  comparisonOverview: updateOverview,
+                )));
   }
 }

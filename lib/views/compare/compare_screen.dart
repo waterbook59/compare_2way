@@ -1,5 +1,6 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/style.dart';
+import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/conclusion_input_part.dart';
 import 'package:compare_2way/views/compare/components/icon_title.dart';
@@ -11,9 +12,16 @@ import 'package:provider/provider.dart';
 import 'components/table_part.dart';
 
 class CompareScreen extends StatelessWidget {
-  CompareScreen({this.comparisonItemId});
+  const CompareScreen(
+      {
+//        this.comparisonItemId,
+      this.itemEditMode,
+      this.comparisonOverview});
 
-  final String comparisonItemId;
+  final ComparisonOverview comparisonOverview;
+  final ItemEditMode itemEditMode;
+
+//   final String comparisonItemId= updateOverview.comparisonItemId;
 
   static const IconData hand_thumbsup_fill = IconData(0xf6b8,
       fontFamily: CupertinoIcons.iconFont,
@@ -63,7 +71,8 @@ class CompareScreen extends StatelessWidget {
               CupertinoIcons.check_mark_circled,
               color: Colors.white,
             ),
-            onTap: () => _saveItem(context, comparisonItemId),
+            onTap: () =>
+                _saveItem(context, comparisonOverview.comparisonItemId),
           ),
           const SizedBox(
             width: 16,
@@ -78,38 +87,16 @@ class CompareScreen extends StatelessWidget {
         ]),
       ),
       child: Scaffold(
-        //listPageに戻る時に再ビルドさせるには？=>ListPageでConsumerしておけば問題なし
-//        appBar:  CupertinoNavigationBar(
-//          backgroundColor: primaryColor,
-//          middle: const Text('Compare List',
-//            style: middleTextStyle,
-//          ),
-//          trailing:
-//          Row(
-//            mainAxisSize:MainAxisSize.min ,
-//            children:[
-//              ///保存完了ボタン
-//              GestureDetector(
-//                child:  Icon(
-//                    CupertinoIcons.check_mark_circled,
-//                color: Colors.white,),
-//                onTap: ()=>_saveItem(context,comparisonItemId),
-//              ),
-//              const SizedBox(width: 16,),
-//              ///編集ボタン
-//              //todo タイトル、比較項目編集
-//              const Text('編集', style: trailingTextStyle,),
-//          ]),
-//        ),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              //todo Selectorで更新
+              //todo FutureBuilderいらないかも(compareOverviewをそのまま表示)
               ///タイトル
               FutureBuilder(
-                future: viewModel.getWaitOverview(comparisonItemId),
+                future: viewModel
+                    .getWaitOverview(comparisonOverview.comparisonItemId),
                 builder: (context,
                     AsyncSnapshot<List<ComparisonOverview>> snapshot) {
                   if (snapshot.hasData && snapshot.data.isEmpty) {
@@ -135,7 +122,7 @@ class CompareScreen extends StatelessWidget {
 
               ///way1 メリット
               FutureBuilder(
-                  future: viewModel.getWaitOverview(comparisonItemId),
+                  future: viewModel.getWaitOverview(comparisonOverview.comparisonItemId),
                   builder: (context,
                       AsyncSnapshot<List<ComparisonOverview>> snapshot) {
                     if (snapshot.hasData && snapshot.data.isEmpty) {
@@ -166,7 +153,7 @@ class CompareScreen extends StatelessWidget {
 
               ///way2 メリット
               FutureBuilder(
-                future: viewModel.getWaitOverview(comparisonItemId),
+                future: viewModel.getWaitOverview(comparisonOverview.comparisonItemId),
                 builder: (context,
                     AsyncSnapshot<List<ComparisonOverview>> snapshot) {
                   if (snapshot.hasData && snapshot.data.isEmpty) {
@@ -208,7 +195,7 @@ class CompareScreen extends StatelessWidget {
 
               ///way1 デメリット
               FutureBuilder(
-                future: viewModel.getWaitOverview(comparisonItemId),
+                future: viewModel.getWaitOverview(comparisonOverview.comparisonItemId),
                 builder: (context,
                     AsyncSnapshot<List<ComparisonOverview>> snapshot) {
                   if (snapshot.hasData && snapshot.data.isEmpty) {
@@ -240,7 +227,7 @@ class CompareScreen extends StatelessWidget {
 
               ///way2 デメリット
               FutureBuilder(
-                future: viewModel.getWaitOverview(comparisonItemId),
+                future: viewModel.getWaitOverview(comparisonOverview.comparisonItemId),
                 builder: (context,
                     AsyncSnapshot<List<ComparisonOverview>> snapshot) {
                   if (snapshot.hasData && snapshot.data.isEmpty) {
@@ -285,7 +272,7 @@ class CompareScreen extends StatelessWidget {
 
               ///テーブル=>ConclusionInputPartを使うとTablePart内のConsumerが回って入力がクリアされてしまう
               FutureBuilder(
-                  future: viewModel.getWaitOverview(comparisonItemId),
+                  future: viewModel.getWaitOverview(comparisonOverview.comparisonItemId),
                   builder: (context,
                       AsyncSnapshot<List<ComparisonOverview>> snapshot) {
                     if (snapshot.hasData && snapshot.data.isEmpty) {
@@ -293,8 +280,7 @@ class CompareScreen extends StatelessWidget {
                       return Container();
                     } else {
                       return TablePart(
-                        way1Title: viewModel.way1Title,
-                        way2Title: viewModel.way2Title,
+                        comparisonOverview: comparisonOverview,
                       );
                     }
                   }),
@@ -313,54 +299,8 @@ class CompareScreen extends StatelessWidget {
               ),
 
               ///結論TextArea
-//                FutureBuilder(
-//                  future: viewModel.getWaitOverview(comparisonItemId),
-//                  builder: (context,AsyncSnapshot<List<ComparisonOverview>> snapshot){
-//                    if (snapshot.hasData && snapshot.data.isEmpty) {
-//                      print('EmptyView通った');
-//                      return Container();
-//                    } else {
-//                      return  Padding(
-//                    padding: const EdgeInsets.symmetric(horizontal: 8),
-//                    child: TextFormField(
-//                    // any number you need (It works as the rows for the textarea)
-//                    controller: CompareViewModel.conclusionController,
-//                    minLines: 6,
-//                    keyboardType: TextInputType.multiline,
-//                    maxLines: null,
-//                    decoration: InputDecoration(
-//                    border: OutlineInputBorder(
-//                    borderRadius: BorderRadius.circular(2),
-//                    ),
-//                    ),
-//                    ),
-//                    );
-//                    }
-//                  },
-//                ),
-            ///Consumerの結論TextArea
-//              Consumer<CompareViewModel>(
-//                  builder: (context, compareViewModel, child) {
-//                    return  Padding(
-//                      padding: const EdgeInsets.symmetric(horizontal: 8),
-//                      child: TextFormField(
-//                        // any number you need (It works as the rows for the textarea)
-//                        controller: compareViewModel.conclusionController,
-//                        minLines: 6,
-//                        keyboardType: TextInputType.multiline,
-//                        maxLines: null,
-//                        decoration: InputDecoration(
-//                          border: OutlineInputBorder(
-//                            borderRadius: BorderRadius.circular(2),
-//                          ),
-//                        ),
-//                      ),
-//                    );
-//                  }
-//              ),
-
-            //todo 既に入力してあるconclusionを渡す
-            ConclusionInputPart(),
+              //todo 既に入力してあるconclusionを渡す
+              ConclusionInputPart(),
 
               const SizedBox(
                 height: 16,
@@ -387,7 +327,8 @@ class CompareScreen extends StatelessWidget {
                 child: RaisedButton(
                     child: Text('保存'),
                     color: accentColor,
-                    onPressed: () => _saveItem(context, comparisonItemId)),
+                    //todo 表示されている値をComparisonOverviewに変換して保存
+                    onPressed: () => _saveItem(context, comparisonOverview.comparisonItemId)),
               ),
               const SizedBox(
                 height: 16,
@@ -408,6 +349,7 @@ class CompareScreen extends StatelessWidget {
   }
 
   ///保存ボタンロジック
+  //todo 表示されている値をComparisonOverviewに変換して保存
   Future<void> _saveItem(BuildContext context, String comparisonItemId) async {
     //todo Merit/Demerit,tagの更新
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);

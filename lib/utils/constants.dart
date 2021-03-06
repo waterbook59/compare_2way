@@ -4,3 +4,8 @@ enum ListEditMode{
   display,
   edit
 }
+
+enum ItemEditMode{
+  add,
+  edit
+}
