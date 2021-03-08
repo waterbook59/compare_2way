@@ -1,4 +1,5 @@
 import 'package:compare_2way/data_models/comparison_item.dart';
+import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/add_view_model.dart';
@@ -24,6 +25,7 @@ class _InputPartState extends State<InputPart> {
   bool  isCreateItemEnabled = false;
 
 
+  //todo ListPageの更新が必要ないならaddListenerいらないかも（無駄に何度もConsumerが反応してしまうので。）
   @override
   void initState() {
   _titleController.addListener(_onInputChanged);
@@ -112,25 +114,40 @@ class _InputPartState extends State<InputPart> {
     final viewModel = Provider.of<AddViewModel>(context, listen: false);
 
     // モデルクラス(compare)に比較項目を登録(idを次の画面に渡したいのでview側で設定)
-    //todo ComparisonItemではなく、ComparisonOverviewに変更しては？？
-    final comparisonItem = ComparisonItem(
-      //comparisonItemIdをuuidで生成
+    //todo ComparisonItemではなく、ComparisonOverviewに変更
+    //ComparisonOverviewにしてCompareScreenへ値渡し
+//    final comparisonItem = ComparisonItem(
+//      //comparisonItemIdをuuidで生成
+//      comparisonItemId: Uuid().v1(),
+//      itemTitle: viewModel.title,
+//      way1Title: viewModel.way1Title,
+//      way2Title: viewModel.way2Title,
+//    );
+//    await viewModel.createComparisonItems(comparisonItem);
+
+    final comparisonOverview = ComparisonOverview(
       comparisonItemId: Uuid().v1(),
-      itemTitle: viewModel.title,
-      way1Title: viewModel.way1Title,
-      way2Title: viewModel.way2Title,
+      itemTitle: _titleController.text,
+      way1Title: _way1Controller.text,
+      way2Title: _way2Controller.text,
+      createdAt: DateTime.now(),
     );
 
-    await viewModel.createComparisonItems(comparisonItem);
+    //登録
+    await viewModel.createComparisonOverview(comparisonOverview);
+    //todo 読み込み=>compareScreenへ渡す
+    await viewModel.getComparisonOverview(comparisonOverview.comparisonItemId);
 
+    ///DBに登録されたcomparisonOverviewをCompareScreenへ渡したい
     await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
             builder: (context) =>
                 CompareScreen(
                   itemEditMode: ItemEditMode.add,
-
-                    comparisonItemId: comparisonItem.comparisonItemId)));
+                  comparisonOverview: viewModel.overviewDB,
+//                    comparisonItemId: comparisonItem.comparisonItemId
+                )));
             //この時点でcontrollerが破棄されるので、CompareScreenから戻るときにclearメソッドがあると、
             //Once you have called dispose() on a TextEditingController,のエラー出る
   }

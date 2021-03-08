@@ -19,7 +19,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   //id,タイトル,評価等１行ですむもの
   Future<void> insertComparisonOverviewDB(
-          ComparisonOverviewRecord comparisonOverviewRecord) =>
+      ComparisonOverviewRecord comparisonOverviewRecord) =>
       into(comparisonOverviewRecords).insert(comparisonOverviewRecord);
 
   Future<void> insertWay1MeritRecordDB(
@@ -39,10 +39,9 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   }
 
   ///3つのテーブルにデータ格納
-  Future<void> insertDB(
-          ComparisonOverviewRecord comparisonOverviewRecord,
-          List<Way1MeritRecord> way1MeritDescs,
-          List<Way1DemeritRecord> way1DemeritDescs) =>
+  Future<void> insertDB(ComparisonOverviewRecord comparisonOverviewRecord,
+      List<Way1MeritRecord> way1MeritDescs,
+      List<Way1DemeritRecord> way1DemeritDescs) =>
       transaction(() async {
         await insertComparisonOverviewDB(comparisonOverviewRecord);
         await insertWay1MeritRecordDB(way1MeritDescs);
@@ -67,7 +66,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     final data = rows.map((resultRow) {
       return ComparisonItemRecord(
         comparisonOverviewRecord:
-            resultRow.readTable(comparisonOverviewRecords),
+        resultRow.readTable(comparisonOverviewRecords),
 
         //行で入っているway1MeritRecordをList<Way1MeritRecord>にする必要あり
 //        way1MeritRecord: resultRow.readTable(List<way1MeritRecords> as TableInfo),
@@ -83,22 +82,34 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   //  Future<List<WordRecord>> get memorizedExcludeWords => (select(wordRecords)..where((t)=>t.isMemorized.equals(false))).get();
   Future<List<ComparisonOverviewRecord>> getOverview(String comparisonItemId) =>
       (select(comparisonOverviewRecords)
-            ..where((t) => t.comparisonItemId.equals(comparisonItemId)))
+        ..where((t) => t.comparisonItemId.equals(comparisonItemId)))
           .get();
 
   ///comparisonOverviewの保存
   Future<void> saveComparisonOverviewDB(String comparisonItemId,
       ComparisonOverviewRecordsCompanion overviewCompanion) {
     return (update(comparisonOverviewRecords)
-          ..where((it) => it.comparisonItemId.equals(comparisonItemId)))
+      ..where((it) => it.comparisonItemId.equals(comparisonItemId)))
         .write(overviewCompanion);
   }
 
   ///comparisonOverviewの削除
   Future<void> deleteList(String comparisonItemId) =>
-  //comparisonOverviewRecordsテーブルのcomparisonItemIdと
+      //comparisonOverviewRecordsテーブルのcomparisonItemIdと
   // view側から持ってきたcomparisonItemIdが同じものを削除
-      (delete(comparisonOverviewRecords)
-            ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
-          .go();
+  (delete(comparisonOverviewRecords)
+    ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
+      .go();
+
+
+  ///List<ComparisonOverview>ではなく、comparisonItemIdからComparisonOverview１行だけ取ってくる
+  Future<ComparisonOverviewRecord> getComparisonOverview(
+      String comparisonItemId) =>
+      (select(comparisonOverviewRecords)
+        ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
+          .getSingle();
+
+
+
+
 }

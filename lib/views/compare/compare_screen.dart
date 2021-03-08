@@ -271,19 +271,20 @@ class CompareScreen extends StatelessWidget {
               ),
 
               ///テーブル=>ConclusionInputPartを使うとTablePart内のConsumerが回って入力がクリアされてしまう
-              FutureBuilder(
-                  future: viewModel.getWaitOverview(comparisonOverview.comparisonItemId),
-                  builder: (context,
-                      AsyncSnapshot<List<ComparisonOverview>> snapshot) {
-                    if (snapshot.hasData && snapshot.data.isEmpty) {
-                      print('EmptyView通った');
-                      return Container();
-                    } else {
-                      return TablePart(
+//              FutureBuilder(
+//                  future: viewModel.getWaitOverview(comparisonOverview.comparisonItemId),
+//                  builder: (context,
+//                      AsyncSnapshot<List<ComparisonOverview>> snapshot) {
+//                    if (snapshot.hasData && snapshot.data.isEmpty) {
+//                      print('EmptyView通った');
+//                      return Container();
+//                    } else {
+//                      return
+                        TablePart(
                         comparisonOverview: comparisonOverview,
-                      );
-                    }
-                  }),
+                      ),
+//                    }
+//                  }),
               const SizedBox(
                 height: 16,
               ),

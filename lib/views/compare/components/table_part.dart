@@ -44,8 +44,12 @@ class _TablePartState extends State<TablePart> {
 
   @override
   void initState() {
+    print('listPageから渡ってきたway1MeritEvaluateの値:${widget.comparisonOverview.way1MeritEvaluate}');
     way1MeritDisplay = evaluates[widget.comparisonOverview.way1MeritEvaluate];
     way1DemeritDisplay =
+    evaluates[widget.comparisonOverview.way1DemeritEvaluate];
+    way2MeritDisplay = evaluates[widget.comparisonOverview.way1MeritEvaluate];
+    way2DemeritDisplay =
     evaluates[widget.comparisonOverview.way1DemeritEvaluate];
     super.initState();
   }
@@ -119,9 +123,11 @@ class _TablePartState extends State<TablePart> {
                         initialValue: widget.comparisonOverview
                             .way1MeritEvaluate,
                         onSelected: (newValue) {
-                          print(newValue);
+                          print('newValueをsetState:$newValue');
+//
                           setState(() {
                             way1MeritEvaluate = newValue;
+                            way1MeritDisplay = evaluates[newValue];
                           });
                           // compareScreenへnewValueを戻す
 //                        await compareViewModel.setWay1MeritNewValue(newValue);
@@ -151,7 +157,7 @@ class _TablePartState extends State<TablePart> {
                         onSelected: (newValue) {
                           print(newValue);
                           setState(() {
-                            way1DemeritEvaluate = newValue;
+                            way1DemeritDisplay = evaluates[newValue];
                           });
                         },
                       )),
@@ -194,7 +200,7 @@ class _TablePartState extends State<TablePart> {
                               onSelected: (newValue) {
                                 print(newValue);
                               setState(() {
-                                way2MeritEvaluate = newValue;
+                                way2MeritDisplay = evaluates[newValue];
                               });
                               },
                             )),
@@ -223,7 +229,7 @@ class _TablePartState extends State<TablePart> {
                               onSelected: (newValue)  {
                                 print(newValue);
                                 setState(() {
-                                  way2DemeritEvaluate =newValue;
+                                  way2DemeritDisplay = evaluates[newValue];
                                 });
                               },
                             )),

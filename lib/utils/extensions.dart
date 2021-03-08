@@ -66,7 +66,7 @@ extension ConvertToComparisonItemRecord on ComparisonItem {
 }
 
 ///DBのComparisonOverviewRecordのリスト=>モデルクラスComparisonOverviewのリスト
-extension ConvertToComparisonOverviewRecord on List<ComparisonOverviewRecord> {
+extension ConvertToComparisonOverviewRecords on List<ComparisonOverviewRecord> {
   List<ComparisonOverview> toComparisonOverviews(
       List<ComparisonOverviewRecord> comparisonOverviewRecords) {
     var comparisonOverviews = <ComparisonOverview>[];
@@ -104,18 +104,44 @@ extension ConvertToComparisonOverview on ComparisonOverview {
       comparisonItemId: updateOverview.comparisonItemId,
       itemTitle: updateOverview.itemTitle ,
       way1Title: updateOverview.way1Title ,
-      way1MeritEvaluate: updateOverview.way1MeritEvaluate ,
-      way1DemeritEvaluate:updateOverview.way1DemeritEvaluate,
+      way1MeritEvaluate: updateOverview.way1MeritEvaluate ?? 0,
+      way1DemeritEvaluate:updateOverview.way1DemeritEvaluate ?? 0,
       way2Title: updateOverview.way2Title,
-      way2MeritEvaluate: updateOverview.way2MeritEvaluate,
-      way2DemeritEvaluate: updateOverview.way2DemeritEvaluate,
+      way2MeritEvaluate: updateOverview.way2MeritEvaluate ??0,
+      way2DemeritEvaluate: updateOverview.way2DemeritEvaluate ??0,
 //todo way3追加
 //            way3Title:  comparisonOverviewRecord.way3Title ?? '',
 //            way3Evaluate: comparisonOverviewRecord.way3Evaluate ?? 0,
-      favorite: updateOverview.favorite,
-      conclusion: updateOverview.conclusion,
+      favorite: updateOverview.favorite ?? false,
+      conclusion: updateOverview.conclusion ?? '',
       createdAt: updateOverview.createdAt,
     );
     return comparisonOverviewRecord;
+  }
+}
+
+///リストじゃなくて、DBのComparisonOverviewRecordの１行=>ComparisonOverview
+extension ConvertToComparisonOverviewRecord on ComparisonOverviewRecord {
+  ComparisonOverview toComparisonOverview(
+      ComparisonOverviewRecord overviewRecord) {
+    final comparisonOverview =
+    ComparisonOverview(
+      dataId: overviewRecord.dataId,
+      comparisonItemId: overviewRecord.comparisonItemId,
+      itemTitle: overviewRecord.itemTitle ,
+      way1Title: overviewRecord.way1Title ,
+      way1MeritEvaluate: overviewRecord.way1MeritEvaluate ?? 0,
+      way1DemeritEvaluate:overviewRecord.way1DemeritEvaluate ?? 0,
+      way2Title: overviewRecord.way2Title,
+      way2MeritEvaluate: overviewRecord.way2MeritEvaluate ??0,
+      way2DemeritEvaluate: overviewRecord.way2DemeritEvaluate ??0,
+//todo way3追加
+//            way3Title:  comparisonOverviewRecord.way3Title ?? '',
+//            way3Evaluate: comparisonOverviewRecord.way3Evaluate ?? 0,
+      favorite: overviewRecord.favorite ?? false,
+      conclusion: overviewRecord.conclusion ?? '',
+      createdAt: overviewRecord.createdAt,
+    );
+    return comparisonOverview;
   }
 }
