@@ -88,26 +88,25 @@ class CompareViewModel extends ChangeNotifier {
 
 
   //todo itemTitle,favorite,way3追加
-  Future<void> saveComparisonItem(String comparisonItemId) async{
+  Future<void> saveComparisonItem(ComparisonOverview updateOverview) async{
 
-    final updateOverview = ComparisonOverview(
-      comparisonItemId: comparisonItemId,
-      itemTitle: _itemTitle,
-      way1Title: _way1Title,
-      way2Title: _way2Title,
-      way1MeritEvaluate: _way1MeritEvaluate,
-      way1DemeritEvaluate: _way1DemeritEvaluate,
-      way2MeritEvaluate: _way2MeritEvaluate,
-      way2DemeritEvaluate: _way2DemeritEvaluate,
-      conclusion: conclusion,
-      createdAt: DateTime.now(),
-    );
-    await _compareRepository.saveComparisonItem(comparisonItemId,updateOverview);
-    ///notifyListeners追加してもListPageでのリストに反映されない
-    notifyListeners();
+//    final updateOverview = ComparisonOverview(
+//      comparisonItemId: comparisonItemId,
+//      itemTitle: _itemTitle,
+//      way1Title: _way1Title,
+//      way2Title: _way2Title,
+//      way1MeritEvaluate: _way1MeritEvaluate,
+//      way1DemeritEvaluate: _way1DemeritEvaluate,
+//      way2MeritEvaluate: _way2MeritEvaluate,
+//      way2DemeritEvaluate: _way2DemeritEvaluate,
+//      conclusion: conclusion,
+//      createdAt: DateTime.now(),
+//    );
+    await _compareRepository.saveComparisonItem(updateOverview);
+//    notifyListeners();
   }
 
-  ///データ保存後に再取得(ListPageへ自動反映できない)
+  ///データ保存後に再取得
   Future<void> getOverviewList() async{
 
     print('getOverviewList発動');

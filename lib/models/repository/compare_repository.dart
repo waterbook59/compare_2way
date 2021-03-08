@@ -62,8 +62,7 @@ class CompareRepository {
   }
 
   ///保存
-  Future<void> saveComparisonItem(
-      String comparisonItemId, ComparisonOverview updateOverview) async {
+  Future<void> saveComparisonItem(ComparisonOverview updateOverview) async {
     try {
       ///ComparisonOverview=>ComparisonOverviewRecord
       final comparisonOverviewRecord =
@@ -89,7 +88,7 @@ class CompareRepository {
       );
 
       await _comparisonItemDao.saveComparisonOverviewDB(
-          comparisonItemId, overviewCompanion);
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
       print('comparisonOverviewRecord保存完了');
     } on SqliteException catch (e) {
       print('repository保存エラー:${e.toString()}');

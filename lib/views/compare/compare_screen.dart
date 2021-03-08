@@ -12,11 +12,10 @@ import 'package:provider/provider.dart';
 import 'components/table_part.dart';
 
 class CompareScreen extends StatelessWidget {
-  const CompareScreen(
-      {
+  const CompareScreen({
 //        this.comparisonItemId,
-      this.itemEditMode,
-      this.comparisonOverview});
+    this.itemEditMode,
+    this.comparisonOverview});
 
   final ComparisonOverview comparisonOverview;
   final ItemEditMode itemEditMode;
@@ -43,13 +42,29 @@ class CompareScreen extends StatelessWidget {
   //List.generate(初期の表示数,(i)=>TextEditingController());
   ///staticがないと、Text selection index was clamped (-1->0) to remain in boundsのエラーで入力がクリアされる
   static final List<TextEditingController> _controllers =
-      List.generate(items.length, (i) => TextEditingController(text: items[i]));
+  List.generate(items.length, (i) => TextEditingController(text: items[i]));
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).primaryColor;
-    final accentColor = Theme.of(context).accentColor;
+    final primaryColor = Theme
+        .of(context)
+        .primaryColor;
+    final accentColor = Theme
+        .of(context)
+        .accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+
+    final itemTitle = comparisonOverview.itemTitle;
+    final way1Title = comparisonOverview.way1Title;
+    final way2Title = comparisonOverview.way2Title;
+    var way1MeritEvaluate = comparisonOverview.way1MeritEvaluate;
+    var way1DemeritEvaluate = comparisonOverview.way1DemeritEvaluate;
+    var way2MeritEvaluate = comparisonOverview.way2MeritEvaluate;
+    var way2DemeritEvaluate = comparisonOverview.way2DemeritEvaluate;
+    var way3MeritEvaluate = comparisonOverview.way3MeritEvaluate;
+    var way3DemeritEvaluate = comparisonOverview.way3DemeritEvaluate;
+    final conclusionController = TextEditingController(text:
+    comparisonOverview.conclusion);
 
     ///ページ冒頭かFutureBuilderどちらかでいい
 //    Future(() {
@@ -65,14 +80,24 @@ class CompareScreen extends StatelessWidget {
           style: middleTextStyle,
         ),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+
           ///保存完了ボタン
           GestureDetector(
-            child: Icon(
+            child: const Icon(
               CupertinoIcons.check_mark_circled,
               color: Colors.white,
             ),
             onTap: () =>
-                _saveItem(context, comparisonOverview.comparisonItemId),
+                _saveItem(context,
+                    comparisonOverview,
+                    itemTitle,
+                    way1Title,
+                    way1MeritEvaluate,
+                    way1DemeritEvaluate,
+                    way2Title,
+                    way2MeritEvaluate,
+                    way2DemeritEvaluate,
+                    conclusionController),
           ),
           const SizedBox(
             width: 16,
@@ -104,10 +129,10 @@ class CompareScreen extends StatelessWidget {
                     return Container();
                   } else {
                     return Center(
-                        child: Text(
-                      viewModel.itemTitle,
-                      style: itemTitleTextStyle,
-                    ));
+                        child: Text(itemTitle,
+//                      viewModel.itemTitle,
+                          style: itemTitleTextStyle,
+                        ));
                   }
                 },
               ),
@@ -122,7 +147,8 @@ class CompareScreen extends StatelessWidget {
 
               ///way1 メリット
               FutureBuilder(
-                  future: viewModel.getWaitOverview(comparisonOverview.comparisonItemId),
+                  future: viewModel.getWaitOverview(
+                      comparisonOverview.comparisonItemId),
                   builder: (context,
                       AsyncSnapshot<List<ComparisonOverview>> snapshot) {
                     if (snapshot.hasData && snapshot.data.isEmpty) {
@@ -130,7 +156,7 @@ class CompareScreen extends StatelessWidget {
                       return Container();
                     } else {
                       return GFAccordion(
-                        title: viewModel.way1Title,
+                        title: way1Title,
                         titleBorderRadius: accordionTopBorderRadius,
                         contentBorderRadius: accordionBottomBorderRadius,
                         showAccordion: true,
@@ -153,7 +179,8 @@ class CompareScreen extends StatelessWidget {
 
               ///way2 メリット
               FutureBuilder(
-                future: viewModel.getWaitOverview(comparisonOverview.comparisonItemId),
+                future: viewModel.getWaitOverview(
+                    comparisonOverview.comparisonItemId),
                 builder: (context,
                     AsyncSnapshot<List<ComparisonOverview>> snapshot) {
                   if (snapshot.hasData && snapshot.data.isEmpty) {
@@ -161,11 +188,11 @@ class CompareScreen extends StatelessWidget {
                     return Container();
                   } else {
                     return GFAccordion(
-                      title: viewModel.way2Title,
+                      title: way2Title,
                       titleBorderRadius: accordionTopBorderRadius,
                       contentBorderRadius: accordionBottomBorderRadius,
                       collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
-                      showAccordion: false,
+                      showAccordion: true,
                       contentChild: ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
@@ -195,7 +222,8 @@ class CompareScreen extends StatelessWidget {
 
               ///way1 デメリット
               FutureBuilder(
-                future: viewModel.getWaitOverview(comparisonOverview.comparisonItemId),
+                future: viewModel.getWaitOverview(
+                    comparisonOverview.comparisonItemId),
                 builder: (context,
                     AsyncSnapshot<List<ComparisonOverview>> snapshot) {
                   if (snapshot.hasData && snapshot.data.isEmpty) {
@@ -203,11 +231,11 @@ class CompareScreen extends StatelessWidget {
                     return Container();
                   } else {
                     return GFAccordion(
-                      title: viewModel.way1Title,
+                      title: way1Title,
                       titleBorderRadius: accordionTopBorderRadius,
                       contentBorderRadius: accordionBottomBorderRadius,
                       collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
-                      showAccordion: false,
+                      showAccordion: true,
                       contentChild: ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
@@ -227,7 +255,8 @@ class CompareScreen extends StatelessWidget {
 
               ///way2 デメリット
               FutureBuilder(
-                future: viewModel.getWaitOverview(comparisonOverview.comparisonItemId),
+                future: viewModel.getWaitOverview(
+                    comparisonOverview.comparisonItemId),
                 builder: (context,
                     AsyncSnapshot<List<ComparisonOverview>> snapshot) {
                   if (snapshot.hasData && snapshot.data.isEmpty) {
@@ -235,7 +264,7 @@ class CompareScreen extends StatelessWidget {
                     return Container();
                   } else {
                     return GFAccordion(
-                      title: viewModel.way2Title,
+                      title: way2Title,
                       collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
                       titleBorderRadius: accordionTopBorderRadius,
                       contentBorderRadius: accordionBottomBorderRadius,
@@ -270,21 +299,28 @@ class CompareScreen extends StatelessWidget {
                 height: 4,
               ),
 
-              ///テーブル=>ConclusionInputPartを使うとTablePart内のConsumerが回って入力がクリアされてしまう
-//              FutureBuilder(
-//                  future: viewModel.getWaitOverview(comparisonOverview.comparisonItemId),
-//                  builder: (context,
-//                      AsyncSnapshot<List<ComparisonOverview>> snapshot) {
-//                    if (snapshot.hasData && snapshot.data.isEmpty) {
-//                      print('EmptyView通った');
-//                      return Container();
-//                    } else {
-//                      return
-                        TablePart(
-                        comparisonOverview: comparisonOverview,
-                      ),
-//                    }
-//                  }),
+              ///テーブル
+              TablePart(
+                way1Title: way1Title,
+                way1MeritEvaluate: way1MeritEvaluate,
+                way1DemeritEvaluate: way1DemeritEvaluate,
+                way2Title: way2Title,
+                way2MeritEvaluate: way2MeritEvaluate,
+                way2DemeritEvaluate: way2DemeritEvaluate,
+                way1MeritChanged: (newValue){
+                  way1MeritEvaluate =newValue;
+                },
+                way1DemeritChanged: (newValue){
+                  way1DemeritEvaluate =newValue;
+                },
+                way2MeritChanged: (newValue){
+                  way2MeritEvaluate =newValue;
+                },
+                way2DemeritChanged: (newValue){
+                  way2DemeritEvaluate =newValue;
+                },
+              ),
+
               const SizedBox(
                 height: 16,
               ),
@@ -301,7 +337,7 @@ class CompareScreen extends StatelessWidget {
 
               ///結論TextArea
               //todo 既に入力してあるconclusionを渡す
-              ConclusionInputPart(),
+              ConclusionInputPart(controller: conclusionController),
 
               const SizedBox(
                 height: 16,
@@ -329,7 +365,18 @@ class CompareScreen extends StatelessWidget {
                     child: Text('保存'),
                     color: accentColor,
                     //todo 表示されている値をComparisonOverviewに変換して保存
-                    onPressed: () => _saveItem(context, comparisonOverview.comparisonItemId)),
+                    onPressed: () =>
+                        _saveItem(
+                            context,
+                            comparisonOverview,
+                            itemTitle,
+                            way1Title,
+                            way1MeritEvaluate,
+                            way1DemeritEvaluate,
+                            way2Title,
+                            way2MeritEvaluate,
+                            way2DemeritEvaluate,
+                            conclusionController)),
               ),
               const SizedBox(
                 height: 16,
@@ -350,11 +397,32 @@ class CompareScreen extends StatelessWidget {
   }
 
   ///保存ボタンロジック
-  //todo 表示されている値をComparisonOverviewに変換して保存
-  Future<void> _saveItem(BuildContext context, String comparisonItemId) async {
+  //todo 表示されている値をComparisonOverviewに変換して保存(TablePartの値保存)
+
+  Future<void> _saveItem(BuildContext context,
+      ComparisonOverview comparisonOverview, String itemTitle, String way1Title,
+      int way1MeritEvaluate, int way1DemeritEvaluate, String way2Title,
+      int way2MeritEvaluate, int way2DemeritEvaluate,
+      TextEditingController conclusionController) async {
     //todo Merit/Demerit,tagの更新
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.saveComparisonItem(comparisonItemId);
+
+    final updateComparisonOverview = ComparisonOverview(
+        dataId: comparisonOverview.dataId,
+        comparisonItemId: comparisonOverview.comparisonItemId,
+        itemTitle: itemTitle,
+        way1Title: way1Title,
+        way1MeritEvaluate: way1MeritEvaluate,
+        way1DemeritEvaluate: way1DemeritEvaluate,
+        way2Title: way2Title,
+        way2MeritEvaluate: way2MeritEvaluate,
+        way2DemeritEvaluate: way2DemeritEvaluate,
+        conclusion: conclusionController.text,
+        favorite: comparisonOverview.favorite,
+        createdAt: DateTime.now(),
+    );
+
+    await viewModel.saveComparisonItem(updateComparisonOverview);
 
     ///保存と同時に取得してもList<ComparisonOverview>がそれぞれ独立してるのでListPage側で値更新されない
     await viewModel.getOverviewList();
@@ -362,4 +430,6 @@ class CompareScreen extends StatelessWidget {
       msg: '保存完了',
     );
   }
+
+
 }

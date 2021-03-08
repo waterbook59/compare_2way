@@ -4,23 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ConclusionInputPart extends StatefulWidget {
+  const ConclusionInputPart({this.controller});
+  final TextEditingController controller;
+
   @override
   _ConclusionInputPartState createState() => _ConclusionInputPartState();
 }
 
 class _ConclusionInputPartState extends State<ConclusionInputPart> {
 
-  final _conclusionController = TextEditingController();
+//  final _conclusionController = TextEditingController();
 
   @override
   void initState() {
-    _conclusionController.addListener(_onInputChanged);
+//    _conclusionController.addListener(_onInputChanged);
     super.initState();
   }
 
   @override
   void dispose() {
-    _conclusionController.dispose();
+//    _conclusionController.dispose();
     super.dispose();
   }
 
@@ -31,7 +34,7 @@ class _ConclusionInputPartState extends State<ConclusionInputPart> {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: TextFormField(
         // any number you need (It works as the rows for the textarea)
-        controller: _conclusionController,
+        controller: widget.controller,
         minLines: 6,
         keyboardType: TextInputType.multiline,
         maxLines: null,
@@ -44,13 +47,13 @@ class _ConclusionInputPartState extends State<ConclusionInputPart> {
     );
   }
 
-  void _onInputChanged() {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    //viewModelのプロパティに入力テキストをセット
-    viewModel.conclusion = _conclusionController.text;
-    //画面更新
-    setState(() {
-    });
-
-  }
+//  void _onInputChanged() {
+//    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+//    //viewModelのプロパティに入力テキストをセット
+//    viewModel.conclusion = _conclusionController.text;
+//    //画面更新
+//    setState(() {
+//    });
+//
+//  }
 }
