@@ -24,6 +24,7 @@ dependencies:
   path: ^1.7.0
   uuid: ^2.2.2
   fluttertoast: ^7.1.8
+  flutter_slidable: ^0.5.7
 
 dev_dependencies:
   flutter_test:

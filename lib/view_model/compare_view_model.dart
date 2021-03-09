@@ -1,5 +1,6 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/models/repository/compare_repository.dart';
+import 'package:compare_2way/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class CompareViewModel extends ChangeNotifier {
@@ -28,13 +29,18 @@ class CompareViewModel extends ChangeNotifier {
   int get way3MeritEvaluate => _way3MeritEvaluate;
   int _way3DemeritEvaluate =0;
   int get way3DemeritEvaluate => _way3DemeritEvaluate;
+  //いらんかも
   TextEditingController _conclusionController = TextEditingController();
   TextEditingController get conclusionController => _conclusionController;
+  String conclusion ='';
+
   //todo conclusion用のcontrollerの設定必要？
+
+  ListEditMode editStatus = ListEditMode.display;
 
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
-  Future<List<ComparisonOverview>> getOverview(String comparisonItemId) async {
+  Future<void> getOverview(String comparisonItemId) async {
     _comparisonOverviews =
         await _compareRepository.getOverview(comparisonItemId);
     _way1Title = comparisonOverviews[0].way1Title;
@@ -56,8 +62,8 @@ class CompareViewModel extends ChangeNotifier {
      _conclusionController.text = comparisonOverviews[0].conclusion;
 
      //todo way3Evaluate
-    print('FutureBuilderのway2のタイトル:$_way2Title');
-
+//    print('FutureBuilderのway2のタイトル:$_way2Title');
+    return _comparisonOverviews;
   }
 
   Future<void> setWay1MeritNewValue(int newValue) async{
@@ -81,39 +87,36 @@ class CompareViewModel extends ChangeNotifier {
   }
 
 
-  //todo itemTitle,favorite,way3追加
-  Future<void> saveComparisonItem(String comparisonItemId) async{
+  ///CompareScreenで表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
+  //todo favorite,way3追加
+  Future<void> saveComparisonItem(ComparisonOverview updateOverview) async{
 
-    final updateOverview = ComparisonOverview(
-      comparisonItemId: comparisonItemId,
-      itemTitle: _itemTitle,
-      way1Title: _way1Title,
-      way2Title: _way2Title,
-      way1MeritEvaluate: _way1MeritEvaluate,
-      way1DemeritEvaluate: _way1DemeritEvaluate,
-      way2MeritEvaluate: _way2MeritEvaluate,
-      way2DemeritEvaluate: _way2DemeritEvaluate,
-      conclusion: _conclusionController.text,
-      createdAt: DateTime.now(),
-    );
-    await _compareRepository.saveComparisonItem(comparisonItemId,updateOverview);
-    ///notifyListeners追加してもListPageでのリストに反映されない
+
+//    final updateOverview = ComparisonOverview(
+//      comparisonItemId: comparisonItemId,
+//      itemTitle: _itemTitle,
+//      way1Title: _way1Title,
+//      way2Title: _way2Title,
+//      way1MeritEvaluate: _way1MeritEvaluate,
+//      way1DemeritEvaluate: _way1DemeritEvaluate,
+//      way2MeritEvaluate: _way2MeritEvaluate,
+//      way2DemeritEvaluate: _way2DemeritEvaluate,
+//      conclusion: conclusion,
+//      createdAt: DateTime.now(),
+//    );
+    await _compareRepository.saveComparisonItem(updateOverview);
     notifyListeners();
   }
 
-  ///データ保存後に再取得(ListPageへ自動反映できない)
+  ///データ保存後に再取得
   Future<void> getOverviewList() async{
-
     print('getOverviewList発動');
     _comparisonOverviews  = await _compareRepository.getOverviewList();
     print('getOverviewList非同期終了');
     notifyListeners();
   }
 
-///ListViewModelからの移行
-  //FutureBuilder用
-//リストをDBでとるのはConsumer側でやってるので、リストあるかどうかだけ返せばいいのでは？_overviews.isEmptyかどうかを返す
-//=>最初のbuildの時にConsumer側でリスト取得するまでリスト空の表示が出てしまう
+  ///FutureBuilder用
   Future<List<ComparisonOverview>> getList() async{
     print('getList発動');
     _comparisonOverviews  = await _compareRepository.getList();
@@ -124,6 +127,22 @@ class CompareViewModel extends ChangeNotifier {
   //FutureBuilder用
   Future<List<ComparisonOverview>> isOverviewList() async{
     return _comparisonOverviews ;
+  }
+
+  Future<void> changeEditStatus(ListEditMode editMode) async{
+      if(editMode== ListEditMode.edit){
+        editStatus = ListEditMode.display;
+      }else{
+        editStatus =  ListEditMode.edit;
+      }
+      notifyListeners();
+  }
+
+  Future<void> deleteList(String comparisonItemId) async{
+    //削除
+   await  _compareRepository.deleteList(comparisonItemId);
+    //データ取得?
+   notifyListeners();
   }
 
 

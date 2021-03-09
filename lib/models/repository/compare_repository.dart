@@ -12,6 +12,7 @@ class CompareRepository {
 
   final ComparisonItemDao _comparisonItemDao;
   List<ComparisonOverview> _overviewResults = <ComparisonOverview>[];
+  ComparisonOverview _overviewResult;
 
   Future<void> createComparisonItems(ComparisonItem comparisonItem) async {
     try {
@@ -36,6 +37,20 @@ class CompareRepository {
     }
   }
 
+  ///comparisonOverview=>ComparisonOverviewRecordへ変換保存
+  Future<void> createComparisonOverview(
+      ComparisonOverview comparisonOverview) async {
+    try {
+      final comparisonOverviewRecord =
+          comparisonOverview.toComparisonOverviewRecord(comparisonOverview);
+      await _comparisonItemDao
+          .insertComparisonOverviewDB(comparisonOverviewRecord);
+      print('comparisonOverviewを新規登録');
+    } on SqliteException catch (e) {
+      print('repositoryエラー:${e.toString()}');
+    }
+  }
+
   Future<List<ComparisonOverview>> getOverview(String comparisonItemId) async {
     ///resultComparisonOverviewRecordsはList<ComparisonOverviewRecord>
     final resultComparisonOverviewRecords =
@@ -47,19 +62,19 @@ class CompareRepository {
   }
 
   ///保存
-  Future<void> saveComparisonItem(
-      String comparisonItemId, ComparisonOverview updateOverview) async {
+  Future<void> saveComparisonItem(ComparisonOverview updateOverview) async {
     try {
+
       ///ComparisonOverview=>ComparisonOverviewRecord
       final comparisonOverviewRecord =
           updateOverview.toComparisonOverviewRecord(updateOverview);
+
       //todo extensionsの中で一気にやる
       ///ComparisonOverviewRecord=>ComparisonOverviewRecordsCompanion
       final overviewCompanion = ComparisonOverviewRecordsCompanion(
         //アップデート要素がないものを入れるとnullでエラー(Companionに入れるのは値が更新できるものだけ)
 //        dataId: Value(comparisonOverviewRecord.dataId),
         comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
-//todo itemTitle addScreenに足したら加える
         itemTitle: Value(comparisonOverviewRecord.itemTitle),
         way1Title: Value(comparisonOverviewRecord.way1Title),
         way1MeritEvaluate: Value(comparisonOverviewRecord.way1MeritEvaluate),
@@ -75,23 +90,42 @@ class CompareRepository {
       );
 
       await _comparisonItemDao.saveComparisonOverviewDB(
-          comparisonItemId, overviewCompanion);
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
       print('comparisonOverviewRecord保存完了');
     } on SqliteException catch (e) {
       print('repository保存エラー:${e.toString()}');
     }
   }
 
-  // Read
+  ///Read
   Future<List<ComparisonOverview>> getOverviewList() async {
     final comparisonOverviewRecords = await _comparisonItemDao.allOverviews;
     return _overviewResults = comparisonOverviewRecords
         .toComparisonOverviews(comparisonOverviewRecords);
   }
 
-  Future<List<ComparisonOverview>>getList() async{
+  Future<List<ComparisonOverview>> getList() async {
     final comparisonOverviewRecords = await _comparisonItemDao.allOverviews;
     return _overviewResults = comparisonOverviewRecords
         .toComparisonOverviews(comparisonOverviewRecords);
+  }
+
+  ///Delete
+  Future<void> deleteList(String comparisonItemId) async {
+//    final comparisonOverviewRecord =
+    //todo Merit/Dmerit、Tagのリストも同時に削除必要
+    await _comparisonItemDao.deleteList(comparisonItemId);
+    print('データ削除完了');
+  }
+
+  ///List<ComparisonOverview>ではなく、comparisonItemIdからComparisonOverview１行だけ取ってくる
+  Future<ComparisonOverview> getComparisonOverview(
+      String comparisonItemId) async {
+    final comparisonOverviewRecord =
+        await _comparisonItemDao.getComparisonOverview(comparisonItemId);
+
+    ///ComparisonOverviewRecord=>ComparisonOverview
+    return _overviewResult =
+        comparisonOverviewRecord.toComparisonOverview(comparisonOverviewRecord);
   }
 }

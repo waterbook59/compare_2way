@@ -11,13 +11,9 @@ import 'package:uuid/uuid.dart';
 class AddScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<AddViewModel>(context, listen: false);
     final primaryColor = Theme
         .of(context)
         .primaryColor;
-    final accentColor = Theme
-        .of(context)
-        .accentColor;
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
