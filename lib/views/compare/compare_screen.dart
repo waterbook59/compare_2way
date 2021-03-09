@@ -14,14 +14,12 @@ import 'components/table_part.dart';
 class CompareScreen extends StatelessWidget {
   const CompareScreen(
       {
-//        this.comparisonItemId,
       this.itemEditMode,
       this.comparisonOverview});
 
   final ComparisonOverview comparisonOverview;
   final ItemEditMode itemEditMode;
 
-//   final String comparisonItemId= updateOverview.comparisonItemId;
 
   static const IconData hand_thumbsup_fill = IconData(0xf6b8,
       fontFamily: CupertinoIcons.iconFont,
@@ -64,12 +62,6 @@ class CompareScreen extends StatelessWidget {
     var conclusion = comparisonOverview.conclusion;
 
 
-    ///ページ冒頭かFutureBuilderどちらかでいい
-//    Future(() {
-//      viewModel.getOverview(comparisonItemId);
-//        },
-//      );
-
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
@@ -100,7 +92,6 @@ class CompareScreen extends StatelessWidget {
           const SizedBox(
             width: 16,
           ),
-
           ///編集ボタン
           //todo タイトル、比較項目編集
           const Text(
@@ -120,47 +111,21 @@ class CompareScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 16),
-                //todo FutureBuilderいらないかも(compareOverviewをそのまま表示)
+                // FutureBuilderいらない(compareOverviewをそのまま表示)
                 ///タイトル
-//              FutureBuilder(
-//                future: viewModel
-//                    .getWaitOverview(comparisonOverview.comparisonItemId),
-//                builder: (context,
-//                    AsyncSnapshot<List<ComparisonOverview>> snapshot) {
-//                  if (snapshot.hasData && snapshot.data.isEmpty) {
-//                    print('EmptyView通った');
-//                    return Container();
-//                  } else {
-//                    return
                 Center(
                   child: Text(
                         itemTitle,
-//                      viewModel.itemTitle,
                         style: itemTitleTextStyle,
                       )),
-//                  }
-//                },
-//              ),
                 const SizedBox(height: 8),
-
                 ///メリットアイコン
                 IconTitle(
                   title: 'メリット',
                   iconData: Icons.thumb_up,
                   iconColor: accentColor,
                 ),
-
                 ///way1 メリット
-//              FutureBuilder(
-//                  future: viewModel
-//                      .getWaitOverview(comparisonOverview.comparisonItemId),
-//                  builder: (context,
-//                      AsyncSnapshot<List<ComparisonOverview>> snapshot) {
-//                    if (snapshot.hasData && snapshot.data.isEmpty) {
-//                      print('EmptyView通った');
-//                      return Container();
-//                    } else {
-//                      return
                 GFAccordion(
                           title: way1Title,
                           titleBorderRadius: accordionTopBorderRadius,
@@ -180,19 +145,7 @@ class CompareScreen extends StatelessWidget {
                                 );
                               }),
                         ),
-//                    }
-//                  }),
                 ///way2 メリット
-//              FutureBuilder(
-//                future: viewModel
-//                    .getWaitOverview(comparisonOverview.comparisonItemId),
-//                builder: (context,
-//                    AsyncSnapshot<List<ComparisonOverview>> snapshot) {
-//                  if (snapshot.hasData && snapshot.data.isEmpty) {
-//                    print('EmptyView通った');
-//                    return Container();
-//                  } else {
-//                    return
                 GFAccordion(
                         title: way2Title,
                         titleBorderRadius: accordionTopBorderRadius,
@@ -212,31 +165,16 @@ class CompareScreen extends StatelessWidget {
                               );
                             }),
                       ),
-//                  }
-//                },
-//              ),
                 const SizedBox(
                   height: 8,
                 ),
-
                 ///デメリットアイコン
                 IconTitle(
                   title: 'デメリット',
                   iconData: Icons.thumb_down,
                   iconColor: accentColor,
                 ),
-
                 ///way1 デメリット
-//              FutureBuilder(
-//                future: viewModel
-//                    .getWaitOverview(comparisonOverview.comparisonItemId),
-//                builder: (context,
-//                    AsyncSnapshot<List<ComparisonOverview>> snapshot) {
-//                  if (snapshot.hasData && snapshot.data.isEmpty) {
-//                    print('EmptyView通った');
-//                    return Container();
-//                  } else {
-//                    return
                         GFAccordion(
                         title: way1Title,
                         titleBorderRadius: accordionTopBorderRadius,
@@ -248,7 +186,7 @@ class CompareScreen extends StatelessWidget {
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: _controllers.length,
                             itemBuilder: (context, index) {
-                              //              textItems.add(new TextEditingController());
+                              //textItems.add(new TextEditingController());
                               return CupertinoTextField(
                                 placeholder: 'メリットを入力してください',
                                 controller: _controllers[index],
@@ -256,20 +194,7 @@ class CompareScreen extends StatelessWidget {
                               );
                             }),
                       ),
-//                  }
-//                },
-//              ),
                 ///way2 デメリット
-//              FutureBuilder(
-//                future: viewModel
-//                    .getWaitOverview(comparisonOverview.comparisonItemId),
-//                builder: (context,
-//                    AsyncSnapshot<List<ComparisonOverview>> snapshot) {
-//                  if (snapshot.hasData && snapshot.data.isEmpty) {
-//                    print('EmptyView通った');
-//                    return Container();
-//                  } else {
-//                    return
                         GFAccordion(
                         title: way2Title,
                         collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
@@ -289,9 +214,6 @@ class CompareScreen extends StatelessWidget {
                               );
                             }),
                       ),
-//                  }
-//                },
-//              ),
                 const SizedBox(
                   height: 4,
                 ),
@@ -305,7 +227,6 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(
                   height: 4,
                 ),
-
                 ///テーブル
                 TablePart(
                   way1Title: way1Title,
@@ -327,7 +248,6 @@ class CompareScreen extends StatelessWidget {
                     way2DemeritEvaluate = newValue;
                   },
                 ),
-
                 const SizedBox(
                   height: 16,
                 ),
@@ -341,21 +261,17 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(
                   height: 4,
                 ),
-
                 ///結論TextArea
                 //todo 既に入力してあるconclusionを渡す
                 ConclusionInputPart(
                   conclusion: conclusion,
-//                  conclusionController: conclusionController,
                   inputChanged: (newConclusion) {
                     conclusion = newConclusion;
                   },
                 ),
-
                 const SizedBox(
                   height: 16,
                 ),
-
                 ///タグエリア
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
@@ -371,13 +287,12 @@ class CompareScreen extends StatelessWidget {
                   icon: Icon(Icons.add),
                   onPressed: null,
                 ),
-
                 ///保存ボタン
                 Center(
                   child: RaisedButton(
-                      child: Text('保存'),
+                      child: const Text('保存'),
                       color: accentColor,
-                      //todo 表示されている値をComparisonOverviewに変換して保存
+                      //表示されている値をComparisonOverviewに変換して保存
                       onPressed: () => _saveItem(
                           context,
                           comparisonOverview,

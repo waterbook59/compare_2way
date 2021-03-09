@@ -29,7 +29,6 @@ class _ConclusionInputPartState extends State<ConclusionInputPart> {
 
   @override
   void initState() {
-//    _conclusionController.addListener(_onInputChanged);
     _conclusionController.text = widget.conclusion;
     super.initState();
   }
@@ -63,23 +62,7 @@ class _ConclusionInputPartState extends State<ConclusionInputPart> {
       ),
     );
   }
+  //新しく入力した文字を表示=>onEditingCompleted
+  // CompareScreenへ渡す=>onChanged
 
-  ///新しく入力した文字を表示＆CompareScreenへ渡す
-//  void _inputChanged(String newConclusion) {
-//    setState(() {
-//      print('入力値：$newConclusion');
-//      _conclusionController.text = newConclusion;
-////      widget.inputChanged(newConclusion);
-//    });
-//  }
-
-//  void _onInputChanged() {
-//    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-//    //viewModelのプロパティに入力テキストをセット
-//    viewModel.conclusion = _conclusionController.text;
-//    //画面更新
-//    setState(() {
-//    });
-//
-//  }
 }
