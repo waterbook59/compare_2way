@@ -3,38 +3,55 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+///初期値をString conclusionで渡して、controllerは分割先で設定
 class ConclusionInputPart extends StatefulWidget {
-  const ConclusionInputPart({this.controller});
-  final TextEditingController controller;
+  const ConclusionInputPart(
+      {this.conclusion,
+      this.conclusionController,
+      this.inputChanged,
+      this.onEditingCompleted});
+
+  final TextEditingController conclusionController;
+  final String conclusion;
+
+  ///CompareScreenへ新しく入力した文字を渡す
+  ///final Function(String) inputChangedでも良い(ValueChangedは引数を<>で記載)
+//  final ValueChanged<String> inputChanged;
+  final Function(String) inputChanged;
+  final Function(String) onEditingCompleted;
 
   @override
   _ConclusionInputPartState createState() => _ConclusionInputPartState();
 }
 
 class _ConclusionInputPartState extends State<ConclusionInputPart> {
-
-//  final _conclusionController = TextEditingController();
+  final _conclusionController = TextEditingController();
 
   @override
   void initState() {
 //    _conclusionController.addListener(_onInputChanged);
+    _conclusionController.text = widget.conclusion;
     super.initState();
   }
 
+  ///disposeしないとCompareScreen側で保存されない
   @override
   void dispose() {
-//    _conclusionController.dispose();
+    _conclusionController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: TextFormField(
-        // any number you need (It works as the rows for the textarea)
-        controller: widget.controller,
+        //initialValueとcontrollerの両方は使用できない
+        controller: _conclusionController,
+        onChanged: widget.inputChanged,
+        onEditingComplete: () {
+          widget.onEditingCompleted(_conclusionController.text);
+        },
         minLines: 6,
         keyboardType: TextInputType.multiline,
         maxLines: null,
@@ -46,6 +63,15 @@ class _ConclusionInputPartState extends State<ConclusionInputPart> {
       ),
     );
   }
+
+  ///新しく入力した文字を表示＆CompareScreenへ渡す
+//  void _inputChanged(String newConclusion) {
+//    setState(() {
+//      print('入力値：$newConclusion');
+//      _conclusionController.text = newConclusion;
+////      widget.inputChanged(newConclusion);
+//    });
+//  }
 
 //  void _onInputChanged() {
 //    final viewModel = Provider.of<CompareViewModel>(context, listen: false);

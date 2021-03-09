@@ -64,9 +64,11 @@ class CompareRepository {
   ///保存
   Future<void> saveComparisonItem(ComparisonOverview updateOverview) async {
     try {
+
       ///ComparisonOverview=>ComparisonOverviewRecord
       final comparisonOverviewRecord =
           updateOverview.toComparisonOverviewRecord(updateOverview);
+
       //todo extensionsの中で一気にやる
       ///ComparisonOverviewRecord=>ComparisonOverviewRecordsCompanion
       final overviewCompanion = ComparisonOverviewRecordsCompanion(

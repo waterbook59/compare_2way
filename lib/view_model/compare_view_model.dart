@@ -87,8 +87,10 @@ class CompareViewModel extends ChangeNotifier {
   }
 
 
-  //todo itemTitle,favorite,way3追加
+  ///CompareScreenで表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
+  //todo favorite,way3追加
   Future<void> saveComparisonItem(ComparisonOverview updateOverview) async{
+
 
 //    final updateOverview = ComparisonOverview(
 //      comparisonItemId: comparisonItemId,
@@ -103,22 +105,18 @@ class CompareViewModel extends ChangeNotifier {
 //      createdAt: DateTime.now(),
 //    );
     await _compareRepository.saveComparisonItem(updateOverview);
-//    notifyListeners();
+    notifyListeners();
   }
 
   ///データ保存後に再取得
   Future<void> getOverviewList() async{
-
     print('getOverviewList発動');
     _comparisonOverviews  = await _compareRepository.getOverviewList();
     print('getOverviewList非同期終了');
     notifyListeners();
   }
 
-///ListViewModelからの移行
-  //FutureBuilder用
-//リストをDBでとるのはConsumer側でやってるので、リストあるかどうかだけ返せばいいのでは？_overviews.isEmptyかどうかを返す
-//=>最初のbuildの時にConsumer側でリスト取得するまでリスト空の表示が出てしまう
+  ///FutureBuilder用
   Future<List<ComparisonOverview>> getList() async{
     print('getList発動');
     _comparisonOverviews  = await _compareRepository.getList();

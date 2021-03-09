@@ -12,10 +12,11 @@ import 'package:provider/provider.dart';
 import 'components/table_part.dart';
 
 class CompareScreen extends StatelessWidget {
-  const CompareScreen({
+  const CompareScreen(
+      {
 //        this.comparisonItemId,
-    this.itemEditMode,
-    this.comparisonOverview});
+      this.itemEditMode,
+      this.comparisonOverview});
 
   final ComparisonOverview comparisonOverview;
   final ItemEditMode itemEditMode;
@@ -42,16 +43,12 @@ class CompareScreen extends StatelessWidget {
   //List.generate(初期の表示数,(i)=>TextEditingController());
   ///staticがないと、Text selection index was clamped (-1->0) to remain in boundsのエラーで入力がクリアされる
   static final List<TextEditingController> _controllers =
-  List.generate(items.length, (i) => TextEditingController(text: items[i]));
+      List.generate(items.length, (i) => TextEditingController(text: items[i]));
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme
-        .of(context)
-        .primaryColor;
-    final accentColor = Theme
-        .of(context)
-        .accentColor;
+    final primaryColor = Theme.of(context).primaryColor;
+    final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     final itemTitle = comparisonOverview.itemTitle;
@@ -63,8 +60,9 @@ class CompareScreen extends StatelessWidget {
     var way2DemeritEvaluate = comparisonOverview.way2DemeritEvaluate;
     var way3MeritEvaluate = comparisonOverview.way3MeritEvaluate;
     var way3DemeritEvaluate = comparisonOverview.way3DemeritEvaluate;
-    final conclusionController = TextEditingController(text:
-    comparisonOverview.conclusion);
+
+    var conclusion = comparisonOverview.conclusion;
+
 
     ///ページ冒頭かFutureBuilderどちらかでいい
 //    Future(() {
@@ -80,24 +78,24 @@ class CompareScreen extends StatelessWidget {
           style: middleTextStyle,
         ),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-
           ///保存完了ボタン
           GestureDetector(
             child: const Icon(
               CupertinoIcons.check_mark_circled,
               color: Colors.white,
             ),
-            onTap: () =>
-                _saveItem(context,
-                    comparisonOverview,
-                    itemTitle,
-                    way1Title,
-                    way1MeritEvaluate,
-                    way1DemeritEvaluate,
-                    way2Title,
-                    way2MeritEvaluate,
-                    way2DemeritEvaluate,
-                    conclusionController),
+            onTap: () => _saveItem(
+                context,
+                comparisonOverview,
+                itemTitle,
+                way1Title,
+                way1MeritEvaluate,
+                way1DemeritEvaluate,
+                way2Title,
+                way2MeritEvaluate,
+                way2DemeritEvaluate,
+                conclusion,
+            ),
           ),
           const SizedBox(
             width: 16,
@@ -112,55 +110,95 @@ class CompareScreen extends StatelessWidget {
         ]),
       ),
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-              //todo FutureBuilderいらないかも(compareOverviewをそのまま表示)
-              ///タイトル
-              FutureBuilder(
-                future: viewModel
-                    .getWaitOverview(comparisonOverview.comparisonItemId),
-                builder: (context,
-                    AsyncSnapshot<List<ComparisonOverview>> snapshot) {
-                  if (snapshot.hasData && snapshot.data.isEmpty) {
-                    print('EmptyView通った');
-                    return Container();
-                  } else {
-                    return Center(
-                        child: Text(itemTitle,
+        body: GestureDetector(
+          ///任意の場所をタップするだけでフォーカスを外すことができる
+          onTap: (){
+            FocusScope.of(context).unfocus();
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 16),
+                //todo FutureBuilderいらないかも(compareOverviewをそのまま表示)
+                ///タイトル
+//              FutureBuilder(
+//                future: viewModel
+//                    .getWaitOverview(comparisonOverview.comparisonItemId),
+//                builder: (context,
+//                    AsyncSnapshot<List<ComparisonOverview>> snapshot) {
+//                  if (snapshot.hasData && snapshot.data.isEmpty) {
+//                    print('EmptyView通った');
+//                    return Container();
+//                  } else {
+//                    return
+                Center(
+                  child: Text(
+                        itemTitle,
 //                      viewModel.itemTitle,
-                          style: itemTitleTextStyle,
-                        ));
-                  }
-                },
-              ),
-              const SizedBox(height: 8),
+                        style: itemTitleTextStyle,
+                      )),
+//                  }
+//                },
+//              ),
+                const SizedBox(height: 8),
 
-              ///メリットアイコン
-              IconTitle(
-                title: 'メリット',
-                iconData: Icons.thumb_up,
-                iconColor: accentColor,
-              ),
+                ///メリットアイコン
+                IconTitle(
+                  title: 'メリット',
+                  iconData: Icons.thumb_up,
+                  iconColor: accentColor,
+                ),
 
-              ///way1 メリット
-              FutureBuilder(
-                  future: viewModel.getWaitOverview(
-                      comparisonOverview.comparisonItemId),
-                  builder: (context,
-                      AsyncSnapshot<List<ComparisonOverview>> snapshot) {
-                    if (snapshot.hasData && snapshot.data.isEmpty) {
-                      print('EmptyView通った');
-                      return Container();
-                    } else {
-                      return GFAccordion(
-                        title: way1Title,
+                ///way1 メリット
+//              FutureBuilder(
+//                  future: viewModel
+//                      .getWaitOverview(comparisonOverview.comparisonItemId),
+//                  builder: (context,
+//                      AsyncSnapshot<List<ComparisonOverview>> snapshot) {
+//                    if (snapshot.hasData && snapshot.data.isEmpty) {
+//                      print('EmptyView通った');
+//                      return Container();
+//                    } else {
+//                      return
+                GFAccordion(
+                          title: way1Title,
+                          titleBorderRadius: accordionTopBorderRadius,
+                          contentBorderRadius: accordionBottomBorderRadius,
+                          showAccordion: true,
+                          collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
+                          contentChild: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: _controllers.length,
+                              itemBuilder: (context, index) {
+//              textItems.add(new TextEditingController());
+                                return CupertinoTextField(
+                                  placeholder: 'メリットを入力してください',
+                                  controller: _controllers[index],
+                                  style: const TextStyle(color: Colors.black),
+                                );
+                              }),
+                        ),
+//                    }
+//                  }),
+                ///way2 メリット
+//              FutureBuilder(
+//                future: viewModel
+//                    .getWaitOverview(comparisonOverview.comparisonItemId),
+//                builder: (context,
+//                    AsyncSnapshot<List<ComparisonOverview>> snapshot) {
+//                  if (snapshot.hasData && snapshot.data.isEmpty) {
+//                    print('EmptyView通った');
+//                    return Container();
+//                  } else {
+//                    return
+                GFAccordion(
+                        title: way2Title,
                         titleBorderRadius: accordionTopBorderRadius,
                         contentBorderRadius: accordionBottomBorderRadius,
-                        showAccordion: true,
                         collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
+                        showAccordion: true,
                         contentChild: ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -173,215 +211,191 @@ class CompareScreen extends StatelessWidget {
                                 style: const TextStyle(color: Colors.black),
                               );
                             }),
-                      );
-                    }
-                  }),
+                      ),
+//                  }
+//                },
+//              ),
+                const SizedBox(
+                  height: 8,
+                ),
 
-              ///way2 メリット
-              FutureBuilder(
-                future: viewModel.getWaitOverview(
-                    comparisonOverview.comparisonItemId),
-                builder: (context,
-                    AsyncSnapshot<List<ComparisonOverview>> snapshot) {
-                  if (snapshot.hasData && snapshot.data.isEmpty) {
-                    print('EmptyView通った');
-                    return Container();
-                  } else {
-                    return GFAccordion(
-                      title: way2Title,
-                      titleBorderRadius: accordionTopBorderRadius,
-                      contentBorderRadius: accordionBottomBorderRadius,
-                      collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
-                      showAccordion: true,
-                      contentChild: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _controllers.length,
-                          itemBuilder: (context, index) {
+                ///デメリットアイコン
+                IconTitle(
+                  title: 'デメリット',
+                  iconData: Icons.thumb_down,
+                  iconColor: accentColor,
+                ),
+
+                ///way1 デメリット
+//              FutureBuilder(
+//                future: viewModel
+//                    .getWaitOverview(comparisonOverview.comparisonItemId),
+//                builder: (context,
+//                    AsyncSnapshot<List<ComparisonOverview>> snapshot) {
+//                  if (snapshot.hasData && snapshot.data.isEmpty) {
+//                    print('EmptyView通った');
+//                    return Container();
+//                  } else {
+//                    return
+                        GFAccordion(
+                        title: way1Title,
+                        titleBorderRadius: accordionTopBorderRadius,
+                        contentBorderRadius: accordionBottomBorderRadius,
+                        collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
+                        showAccordion: true,
+                        contentChild: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: _controllers.length,
+                            itemBuilder: (context, index) {
+                              //              textItems.add(new TextEditingController());
+                              return CupertinoTextField(
+                                placeholder: 'メリットを入力してください',
+                                controller: _controllers[index],
+                                style: const TextStyle(color: Colors.black),
+                              );
+                            }),
+                      ),
+//                  }
+//                },
+//              ),
+                ///way2 デメリット
+//              FutureBuilder(
+//                future: viewModel
+//                    .getWaitOverview(comparisonOverview.comparisonItemId),
+//                builder: (context,
+//                    AsyncSnapshot<List<ComparisonOverview>> snapshot) {
+//                  if (snapshot.hasData && snapshot.data.isEmpty) {
+//                    print('EmptyView通った');
+//                    return Container();
+//                  } else {
+//                    return
+                        GFAccordion(
+                        title: way2Title,
+                        collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
+                        titleBorderRadius: accordionTopBorderRadius,
+                        contentBorderRadius: accordionBottomBorderRadius,
+                        showAccordion: false,
+                        contentChild: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: _controllers.length,
+                            itemBuilder: (context, index) {
 //              textItems.add(new TextEditingController());
-                            return CupertinoTextField(
-                              placeholder: 'メリットを入力してください',
-                              controller: _controllers[index],
-                              style: const TextStyle(color: Colors.black),
-                            );
-                          }),
-                    );
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-
-              ///デメリットアイコン
-              IconTitle(
-                title: 'デメリット',
-                iconData: Icons.thumb_down,
-                iconColor: accentColor,
-              ),
-
-              ///way1 デメリット
-              FutureBuilder(
-                future: viewModel.getWaitOverview(
-                    comparisonOverview.comparisonItemId),
-                builder: (context,
-                    AsyncSnapshot<List<ComparisonOverview>> snapshot) {
-                  if (snapshot.hasData && snapshot.data.isEmpty) {
-                    print('EmptyView通った');
-                    return Container();
-                  } else {
-                    return GFAccordion(
-                      title: way1Title,
-                      titleBorderRadius: accordionTopBorderRadius,
-                      contentBorderRadius: accordionBottomBorderRadius,
-                      collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
-                      showAccordion: true,
-                      contentChild: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _controllers.length,
-                          itemBuilder: (context, index) {
-                            //              textItems.add(new TextEditingController());
-                            return CupertinoTextField(
-                              placeholder: 'メリットを入力してください',
-                              controller: _controllers[index],
-                              style: const TextStyle(color: Colors.black),
-                            );
-                          }),
-                    );
-                  }
-                },
-              ),
-
-              ///way2 デメリット
-              FutureBuilder(
-                future: viewModel.getWaitOverview(
-                    comparisonOverview.comparisonItemId),
-                builder: (context,
-                    AsyncSnapshot<List<ComparisonOverview>> snapshot) {
-                  if (snapshot.hasData && snapshot.data.isEmpty) {
-                    print('EmptyView通った');
-                    return Container();
-                  } else {
-                    return GFAccordion(
-                      title: way2Title,
-                      collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
-                      titleBorderRadius: accordionTopBorderRadius,
-                      contentBorderRadius: accordionBottomBorderRadius,
-                      showAccordion: false,
-                      contentChild: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _controllers.length,
-                          itemBuilder: (context, index) {
-//              textItems.add(new TextEditingController());
-                            return CupertinoTextField(
-                              placeholder: 'メリットを入力してください',
-                              controller: _controllers[index],
-                              style: const TextStyle(color: Colors.black),
-                            );
-                          }),
-                    );
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  '自己評価',
-                  textAlign: TextAlign.left,
+                              return CupertinoTextField(
+                                placeholder: 'メリットを入力してください',
+                                controller: _controllers[index],
+                                style: const TextStyle(color: Colors.black),
+                              );
+                            }),
+                      ),
+//                  }
+//                },
+//              ),
+                const SizedBox(
+                  height: 4,
                 ),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-
-              ///テーブル
-              TablePart(
-                way1Title: way1Title,
-                way1MeritEvaluate: way1MeritEvaluate,
-                way1DemeritEvaluate: way1DemeritEvaluate,
-                way2Title: way2Title,
-                way2MeritEvaluate: way2MeritEvaluate,
-                way2DemeritEvaluate: way2DemeritEvaluate,
-                way1MeritChanged: (newValue){
-                  way1MeritEvaluate =newValue;
-                },
-                way1DemeritChanged: (newValue){
-                  way1DemeritEvaluate =newValue;
-                },
-                way2MeritChanged: (newValue){
-                  way2MeritEvaluate =newValue;
-                },
-                way2DemeritChanged: (newValue){
-                  way2DemeritEvaluate =newValue;
-                },
-              ),
-
-              const SizedBox(
-                height: 16,
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  '結論',
-                  textAlign: TextAlign.left,
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    '自己評価',
+                    textAlign: TextAlign.left,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-
-              ///結論TextArea
-              //todo 既に入力してあるconclusionを渡す
-              ConclusionInputPart(controller: conclusionController),
-
-              const SizedBox(
-                height: 16,
-              ),
-
-              ///タグエリア
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  'タグ',
-                  textAlign: TextAlign.left,
+                const SizedBox(
+                  height: 4,
                 ),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              const IconButton(
-                icon: Icon(Icons.add),
-                onPressed: null,
-              ),
 
-              ///保存ボタン
-              Center(
-                child: RaisedButton(
-                    child: Text('保存'),
-                    color: accentColor,
-                    //todo 表示されている値をComparisonOverviewに変換して保存
-                    onPressed: () =>
-                        _saveItem(
-                            context,
-                            comparisonOverview,
-                            itemTitle,
-                            way1Title,
-                            way1MeritEvaluate,
-                            way1DemeritEvaluate,
-                            way2Title,
-                            way2MeritEvaluate,
-                            way2DemeritEvaluate,
-                            conclusionController)),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-            ],
+                ///テーブル
+                TablePart(
+                  way1Title: way1Title,
+                  way1MeritEvaluate: way1MeritEvaluate,
+                  way1DemeritEvaluate: way1DemeritEvaluate,
+                  way2Title: way2Title,
+                  way2MeritEvaluate: way2MeritEvaluate,
+                  way2DemeritEvaluate: way2DemeritEvaluate,
+                  way1MeritChanged: (newValue) {
+                    way1MeritEvaluate = newValue;
+                  },
+                  way1DemeritChanged: (newValue) {
+                    way1DemeritEvaluate = newValue;
+                  },
+                  way2MeritChanged: (newValue) {
+                    way2MeritEvaluate = newValue;
+                  },
+                  way2DemeritChanged: (newValue) {
+                    way2DemeritEvaluate = newValue;
+                  },
+                ),
+
+                const SizedBox(
+                  height: 16,
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    '結論',
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+
+                ///結論TextArea
+                //todo 既に入力してあるconclusionを渡す
+                ConclusionInputPart(
+                  conclusion: conclusion,
+//                  conclusionController: conclusionController,
+                  inputChanged: (newConclusion) {
+                    conclusion = newConclusion;
+                  },
+                ),
+
+                const SizedBox(
+                  height: 16,
+                ),
+
+                ///タグエリア
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    'タグ',
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                const IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: null,
+                ),
+
+                ///保存ボタン
+                Center(
+                  child: RaisedButton(
+                      child: Text('保存'),
+                      color: accentColor,
+                      //todo 表示されている値をComparisonOverviewに変換して保存
+                      onPressed: () => _saveItem(
+                          context,
+                          comparisonOverview,
+                          itemTitle,
+                          way1Title,
+                          way1MeritEvaluate,
+                          way1DemeritEvaluate,
+                          way2Title,
+                          way2MeritEvaluate,
+                          way2DemeritEvaluate,
+                          conclusion,
+                      )),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+              ],
+            ),
           ),
         ),
         floatingActionButton: FloatingActionButton(
@@ -397,39 +411,43 @@ class CompareScreen extends StatelessWidget {
   }
 
   ///保存ボタンロジック
-  //todo 表示されている値をComparisonOverviewに変換して保存(TablePartの値保存)
+  //表示されている値をComparisonOverviewに変換して保存(TablePartの値保存)
 
-  Future<void> _saveItem(BuildContext context,
-      ComparisonOverview comparisonOverview, String itemTitle, String way1Title,
-      int way1MeritEvaluate, int way1DemeritEvaluate, String way2Title,
-      int way2MeritEvaluate, int way2DemeritEvaluate,
-      TextEditingController conclusionController) async {
+  Future<void> _saveItem(
+      BuildContext context,
+      ComparisonOverview comparisonOverview,
+      String itemTitle,
+      String way1Title,
+      int way1MeritEvaluate,
+      int way1DemeritEvaluate,
+      String way2Title,
+      int way2MeritEvaluate,
+      int way2DemeritEvaluate,
+      String conclusion,
+      ) async {
     //todo Merit/Demerit,tagの更新
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     final updateComparisonOverview = ComparisonOverview(
-        dataId: comparisonOverview.dataId,
-        comparisonItemId: comparisonOverview.comparisonItemId,
-        itemTitle: itemTitle,
-        way1Title: way1Title,
-        way1MeritEvaluate: way1MeritEvaluate,
-        way1DemeritEvaluate: way1DemeritEvaluate,
-        way2Title: way2Title,
-        way2MeritEvaluate: way2MeritEvaluate,
-        way2DemeritEvaluate: way2DemeritEvaluate,
-        conclusion: conclusionController.text,
-        favorite: comparisonOverview.favorite,
-        createdAt: DateTime.now(),
+      dataId: comparisonOverview.dataId,
+      comparisonItemId: comparisonOverview.comparisonItemId,
+      itemTitle: itemTitle,
+      way1Title: way1Title,
+      way1MeritEvaluate: way1MeritEvaluate,
+      way1DemeritEvaluate: way1DemeritEvaluate,
+      way2Title: way2Title,
+      way2MeritEvaluate: way2MeritEvaluate,
+      way2DemeritEvaluate: way2DemeritEvaluate,
+      conclusion: conclusion,
+      favorite: comparisonOverview.favorite,
+      createdAt: DateTime.now(),
     );
 
-    await viewModel.saveComparisonItem(updateComparisonOverview);
 
-    ///保存と同時に取得してもList<ComparisonOverview>がそれぞれ独立してるのでListPage側で値更新されない
-    await viewModel.getOverviewList();
+    ///表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
+    await viewModel.saveComparisonItem(updateComparisonOverview);
     await Fluttertoast.showToast(
       msg: '保存完了',
     );
   }
-
-
 }

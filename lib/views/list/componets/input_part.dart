@@ -135,7 +135,7 @@ class _InputPartState extends State<InputPart> {
 
     //登録
     await viewModel.createComparisonOverview(comparisonOverview);
-    //todo 読み込み=>compareScreenへ渡す
+    //読み込み=>compareScreenへ渡す
     await viewModel.getComparisonOverview(comparisonOverview.comparisonItemId);
 
     ///DBに登録されたcomparisonOverviewをCompareScreenへ渡したい
