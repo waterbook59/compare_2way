@@ -55,12 +55,18 @@ class CompareScreen extends StatelessWidget {
     final itemTitle = comparisonOverview.itemTitle;
     final way1Title = comparisonOverview.way1Title;
     final way2Title = comparisonOverview.way2Title;
+
     final way1MeritEvaluate = comparisonOverview.way1MeritEvaluate;
     final way1DemeritEvaluate = comparisonOverview.way1DemeritEvaluate;
     final way2MeritEvaluate = comparisonOverview.way2MeritEvaluate;
     final way2DemeritEvaluate = comparisonOverview.way2DemeritEvaluate;
     final way3MeritEvaluate = comparisonOverview.way3MeritEvaluate;
     final way3DemeritEvaluate = comparisonOverview.way3DemeritEvaluate;
+    /// はじめにviewModelへのセット(しないと前回の値がviewModel側に残る)
+    viewModel..setWay1MeritNewValue(way1MeritEvaluate)
+      ..setWay1DemeritNewValue(way1DemeritEvaluate)
+      ..setWay2MeritNewValue(way2MeritEvaluate)
+      ..setWay2DemeritNewValue(way2DemeritEvaluate);
 
     var conclusion = comparisonOverview.conclusion;
 
@@ -262,6 +268,7 @@ class CompareScreen extends StatelessWidget {
 //                ),
                 ///Statelessの場合はFormのkeyはGlobalObjectKey
                 ///GlobalKeyはキーボードが開いてすぐ閉じる
+                //todo Formだけを修正して次開くとTabelが別の表示が現れる
                 Form(
               key: conclusionFormKey,
                   child: Padding(
@@ -370,12 +377,14 @@ class CompareScreen extends StatelessWidget {
       createdAt: DateTime.now(),
     );
     print('保存ボタン押した時のconclusion:${updateComparisonOverview.conclusion}');
+    //前回の保存した値が残ったまま=>画面開くときに値をviewModelへセット
     print('保存ボタン押した時のway1MeritEvaluate:${updateComparisonOverview.way1MeritEvaluate}');
     ///表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
     await viewModel.saveComparisonItem(updateComparisonOverview);
     await Fluttertoast.showToast(
       msg: '保存完了',
     );
+
   }
 
   Future<void> _backListPage(BuildContext context) async{
