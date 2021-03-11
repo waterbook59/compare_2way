@@ -12,14 +12,9 @@ class TablePart extends StatefulWidget {
      this.way1Title,
      this.way1MeritEvaluate,
      this.way1DemeritEvaluate,
-     this.way1MeritChanged,
-     this.way1DemeritChanged,
      this.way2Title,
      this.way2MeritEvaluate,
      this.way2DemeritEvaluate,
-     this.way2MeritChanged,
-     this.way2DemeritChanged,
-
   });
 
     final String way1Title;
@@ -31,10 +26,10 @@ class TablePart extends StatefulWidget {
 
 
   /// CompareScreenへ値を渡して保存
-   final Function(int) way1MeritChanged;
-   final Function(int) way1DemeritChanged;
-   final Function(int) way2MeritChanged;
-   final Function(int) way2DemeritChanged;
+//   final Function(int) way1MeritChanged;
+//   final Function(int) way1DemeritChanged;
+//   final Function(int) way2MeritChanged;
+//   final Function(int) way2DemeritChanged;
 
   @override
   _TablePartState createState() => _TablePartState();
@@ -58,12 +53,18 @@ class _TablePartState extends State<TablePart> {
   @override
   void initState() {
 //    print('listPageから渡ってきたway1MeritEvaluateの値:${widget.way1MeritEvaluate}');
+  //listpageからgetListで得られた値が渡ってきてセット
     way1MeritDisplay = evaluates[widget.way1MeritEvaluate];
     way1DemeritDisplay = evaluates[widget.way1DemeritEvaluate];
     way2MeritDisplay = evaluates[widget.way2MeritEvaluate];
     way2DemeritDisplay =
         evaluates[widget.way2DemeritEvaluate];
     super.initState();
+  }
+  @override
+  void dispose() {
+
+    super.dispose();
   }
 
   @override
@@ -122,6 +123,7 @@ class _TablePartState extends State<TablePart> {
                         style: const TextStyle(fontSize: 40),
                         textAlign: TextAlign.right,
                       )),
+                  //todo EvaluateDropdownで選択したときもフォーカス外す(キーボード下げる)
                   Expanded(
                       flex: 1,
                       child: EvaluateDropdown(

@@ -113,7 +113,7 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  ///FutureBuilder用
+  ///ListPageのFutureBuilder用
   Future<List<ComparisonOverview>> getList() async{
     print('getList発動');
     _comparisonOverviews  = await _compareRepository.getList();
