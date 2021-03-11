@@ -109,6 +109,7 @@ class SingleListPage extends StatelessWidget {
                                 onDelete: () => _deleteList(
                                     context, overview.comparisonItemId),
                                 onTap: () => _updateList(context, overview),
+                                listDecoration: listDecoration,
                               );
                             },
                           );

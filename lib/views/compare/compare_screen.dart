@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
+import 'components/my_custom_form.dart';
 import 'components/table_part.dart';
 
 class CompareScreen extends StatelessWidget {
@@ -48,16 +49,18 @@ class CompareScreen extends StatelessWidget {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    ///Statelessの場合はGlobalObjectKeyを使う
+    const conclusionFormKey = GlobalObjectKey<FormState>('__KEY1__');
 
     final itemTitle = comparisonOverview.itemTitle;
     final way1Title = comparisonOverview.way1Title;
     final way2Title = comparisonOverview.way2Title;
-    var way1MeritEvaluate = comparisonOverview.way1MeritEvaluate;
-    var way1DemeritEvaluate = comparisonOverview.way1DemeritEvaluate;
-    var way2MeritEvaluate = comparisonOverview.way2MeritEvaluate;
-    var way2DemeritEvaluate = comparisonOverview.way2DemeritEvaluate;
-    var way3MeritEvaluate = comparisonOverview.way3MeritEvaluate;
-    var way3DemeritEvaluate = comparisonOverview.way3DemeritEvaluate;
+    final way1MeritEvaluate = comparisonOverview.way1MeritEvaluate;
+    final way1DemeritEvaluate = comparisonOverview.way1DemeritEvaluate;
+    final way2MeritEvaluate = comparisonOverview.way2MeritEvaluate;
+    final way2DemeritEvaluate = comparisonOverview.way2DemeritEvaluate;
+    final way3MeritEvaluate = comparisonOverview.way3MeritEvaluate;
+    final way3DemeritEvaluate = comparisonOverview.way3DemeritEvaluate;
 
     var conclusion = comparisonOverview.conclusion;
 
@@ -65,6 +68,9 @@ class CompareScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
+        leading: GestureDetector(child: const Icon(Icons.arrow_back_ios),
+        onTap: ()=> _backListPage(context)),
+
         middle: const Text(
           'Compare List',
           style: middleTextStyle,
@@ -76,18 +82,17 @@ class CompareScreen extends StatelessWidget {
               CupertinoIcons.check_mark_circled,
               color: Colors.white,
             ),
-            onTap: () => _saveItem(
+            onTap: () {
+              conclusionFormKey.currentState.save();
+              return _saveItem(
                 context,
                 comparisonOverview,
                 itemTitle,
                 way1Title,
-                way1MeritEvaluate,
-                way1DemeritEvaluate,
                 way2Title,
-                way2MeritEvaluate,
-                way2DemeritEvaluate,
                 conclusion,
-            ),
+            );
+            },
           ),
           const SizedBox(
             width: 16,
@@ -102,8 +107,9 @@ class CompareScreen extends StatelessWidget {
       ),
       child: Scaffold(
         body: GestureDetector(
-          ///任意の場所をタップするだけでフォーカスを外すことができる
+          ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
           onTap: (){
+            print('GestureDetectorをonTap!');
             FocusScope.of(context).unfocus();
           },
           child: SingleChildScrollView(
@@ -127,12 +133,12 @@ class CompareScreen extends StatelessWidget {
                 ),
                 ///way1 メリット
                 GFAccordion(
-                          title: way1Title,
-                          titleBorderRadius: accordionTopBorderRadius,
-                          contentBorderRadius: accordionBottomBorderRadius,
-                          showAccordion: true,
-                          collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
-                          contentChild: ListView.builder(
+                        title: way1Title,
+                        titleBorderRadius: accordionTopBorderRadius,
+                        contentBorderRadius: accordionBottomBorderRadius,
+                        showAccordion: false,
+                        collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
+                        contentChild: ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: _controllers.length,
@@ -150,8 +156,8 @@ class CompareScreen extends StatelessWidget {
                         title: way2Title,
                         titleBorderRadius: accordionTopBorderRadius,
                         contentBorderRadius: accordionBottomBorderRadius,
-                        collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
-                        showAccordion: true,
+                        collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
+                        showAccordion: false,
                         contentChild: ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -179,8 +185,8 @@ class CompareScreen extends StatelessWidget {
                         title: way1Title,
                         titleBorderRadius: accordionTopBorderRadius,
                         contentBorderRadius: accordionBottomBorderRadius,
-                        collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
-                        showAccordion: true,
+                        collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
+                        showAccordion: false,
                         contentChild: ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -197,7 +203,7 @@ class CompareScreen extends StatelessWidget {
                 ///way2 デメリット
                         GFAccordion(
                         title: way2Title,
-                        collapsedTitleBackgroundColor: Color(0xFFE0E0E0),
+                        collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
                         titleBorderRadius: accordionTopBorderRadius,
                         contentBorderRadius: accordionBottomBorderRadius,
                         showAccordion: false,
@@ -228,6 +234,7 @@ class CompareScreen extends StatelessWidget {
                   height: 4,
                 ),
                 ///テーブル
+                //todo onChangedだと、テーブル=>結論入力=>保存にすると保存できない
                 TablePart(
                   way1Title: way1Title,
                   way1MeritEvaluate: way1MeritEvaluate,
@@ -235,18 +242,6 @@ class CompareScreen extends StatelessWidget {
                   way2Title: way2Title,
                   way2MeritEvaluate: way2MeritEvaluate,
                   way2DemeritEvaluate: way2DemeritEvaluate,
-                  way1MeritChanged: (newValue) {
-                    way1MeritEvaluate = newValue;
-                  },
-                  way1DemeritChanged: (newValue) {
-                    way1DemeritEvaluate = newValue;
-                  },
-                  way2MeritChanged: (newValue) {
-                    way2MeritEvaluate = newValue;
-                  },
-                  way2DemeritChanged: (newValue) {
-                    way2DemeritEvaluate = newValue;
-                  },
                 ),
                 const SizedBox(
                   height: 16,
@@ -261,14 +256,34 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(
                   height: 4,
                 ),
-                ///結論TextArea
-                //todo 既に入力してあるconclusionを渡す
-                ConclusionInputPart(
-                  conclusion: conclusion,
-                  inputChanged: (newConclusion) {
+                ///結論TextArea:MaterialForm
+//                MyCustomForm(
+//                  conclusion: conclusion,
+//                ),
+                ///Statelessの場合はFormのkeyはGlobalObjectKey
+                ///GlobalKeyはキーボードが開いてすぐ閉じる
+                Form(
+              key: conclusionFormKey,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: TextFormField(
+                  //initialValueとcontrollerの両方は使用できない
+                  initialValue:conclusion,
+                  onSaved: (newConclusion){
                     conclusion = newConclusion;
                   },
+                  ///onSaved+key設定でFormの内容保存できる？
+                  minLines: 6,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
                 ),
+              ),//Padding
+            ),
                 const SizedBox(
                   height: 16,
                 ),
@@ -293,18 +308,17 @@ class CompareScreen extends StatelessWidget {
                       child: const Text('保存'),
                       color: accentColor,
                       //表示されている値をComparisonOverviewに変換して保存
-                      onPressed: () => _saveItem(
+                      onPressed: () {
+                        conclusionFormKey.currentState.save();
+                        return _saveItem(
                           context,
                           comparisonOverview,
                           itemTitle,
                           way1Title,
-                          way1MeritEvaluate,
-                          way1DemeritEvaluate,
                           way2Title,
-                          way2MeritEvaluate,
-                          way2DemeritEvaluate,
                           conclusion,
-                      )),
+                      );
+                      }),
                 ),
                 const SizedBox(
                   height: 16,
@@ -333,13 +347,11 @@ class CompareScreen extends StatelessWidget {
       ComparisonOverview comparisonOverview,
       String itemTitle,
       String way1Title,
-      int way1MeritEvaluate,
-      int way1DemeritEvaluate,
       String way2Title,
-      int way2MeritEvaluate,
-      int way2DemeritEvaluate,
       String conclusion,
       ) async {
+    //保存ボタン押したらキーボード閉じる
+    FocusScope.of(context).unfocus();
     //todo Merit/Demerit,tagの更新
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
@@ -348,21 +360,28 @@ class CompareScreen extends StatelessWidget {
       comparisonItemId: comparisonOverview.comparisonItemId,
       itemTitle: itemTitle,
       way1Title: way1Title,
-      way1MeritEvaluate: way1MeritEvaluate,
-      way1DemeritEvaluate: way1DemeritEvaluate,
+      way1MeritEvaluate: viewModel.way1MeritEvaluate,
+      way1DemeritEvaluate: viewModel.way1DemeritEvaluate,
       way2Title: way2Title,
-      way2MeritEvaluate: way2MeritEvaluate,
-      way2DemeritEvaluate: way2DemeritEvaluate,
+      way2MeritEvaluate: viewModel.way2MeritEvaluate,
+      way2DemeritEvaluate: viewModel.way2DemeritEvaluate,
       conclusion: conclusion,
       favorite: comparisonOverview.favorite,
       createdAt: DateTime.now(),
     );
-
-
+    print('保存ボタン押した時のconclusion:${updateComparisonOverview.conclusion}');
+    print('保存ボタン押した時のway1MeritEvaluate:${updateComparisonOverview.way1MeritEvaluate}');
     ///表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
     await viewModel.saveComparisonItem(updateComparisonOverview);
     await Fluttertoast.showToast(
       msg: '保存完了',
     );
+  }
+
+  Future<void> _backListPage(BuildContext context) async{
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.backListPage();
+     Navigator.pop(context);
+
   }
 }

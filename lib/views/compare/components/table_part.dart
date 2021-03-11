@@ -1,7 +1,9 @@
+import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/evaluate_dropdown.dart';
 import 'package:compare_2way/views/compare/components/icon_title.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 ///Statefulへ変更:余裕あればSelector導入
@@ -67,6 +69,7 @@ class _TablePartState extends State<TablePart> {
   @override
   Widget build(BuildContext context) {
     final accentColor = Theme.of(context).accentColor;
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -128,7 +131,8 @@ class _TablePartState extends State<TablePart> {
                           print('newValueをsetState:$newValue');
                           setState(() {
                             way1MeritDisplay = evaluates[newValue];
-                            widget.way1MeritChanged(newValue);
+                            ///CompareScreenへ渡さずにviewModel側に保存
+                            viewModel.setWay1MeritNewValue(newValue);
                           });
                         },
                       )),
@@ -154,7 +158,7 @@ class _TablePartState extends State<TablePart> {
                           print(newValue);
                           setState(() {
                             way1DemeritDisplay = evaluates[newValue];
-                            widget.way1DemeritChanged(newValue);
+                            viewModel.setWay1DemeritNewValue(newValue);
                           });
                         },
                       )),
@@ -193,7 +197,7 @@ class _TablePartState extends State<TablePart> {
                           print(newValue);
                           setState(() {
                             way2MeritDisplay = evaluates[newValue];
-                            widget.way2MeritChanged(newValue);
+                            viewModel.setWay2MeritNewValue(newValue);
                           });
                         },
                       )),
@@ -219,7 +223,7 @@ class _TablePartState extends State<TablePart> {
                           print(newValue);
                           setState(() {
                             way2DemeritDisplay = evaluates[newValue];
-                            widget.way2DemeritChanged(newValue);
+                            viewModel.setWay2DemeritNewValue(newValue);
                           });
                         },
                       )),
