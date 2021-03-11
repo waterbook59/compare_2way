@@ -105,7 +105,7 @@ class CompareViewModel extends ChangeNotifier {
 //      createdAt: DateTime.now(),
 //    );
     await _compareRepository.saveComparisonItem(updateOverview);
-    notifyListeners();
+//    notifyListeners();
   }
 
   ///データ保存後に再取得
@@ -143,6 +143,10 @@ class CompareViewModel extends ChangeNotifier {
    await  _compareRepository.deleteList(comparisonItemId);
     //データ取得?
    notifyListeners();
+  }
+
+  Future<void> backListPage() {
+    notifyListeners();
   }
 
 

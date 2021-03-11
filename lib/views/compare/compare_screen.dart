@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
+import 'components/my_custom_form.dart';
 import 'components/table_part.dart';
 
 class CompareScreen extends StatelessWidget {
@@ -48,6 +49,10 @@ class CompareScreen extends StatelessWidget {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    ///Statelessの場合はGlobalObjectKeyを使う
+    const conclusionFormKey = GlobalObjectKey<FormState>('__KEY1__');
+//    final formKeyMaterial = GlobalKey<FormState>();//material
+//    final formKeyCupertino = GlobalKey<FormState>();//cupertino
 
     final itemTitle = comparisonOverview.itemTitle;
     final way1Title = comparisonOverview.way1Title;
@@ -65,6 +70,9 @@ class CompareScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
+        leading: GestureDetector(child: Icon(Icons.arrow_back_ios),
+        onTap: ()=> _backListPage(context)),
+
         middle: const Text(
           'Compare List',
           style: middleTextStyle,
@@ -76,7 +84,9 @@ class CompareScreen extends StatelessWidget {
               CupertinoIcons.check_mark_circled,
               color: Colors.white,
             ),
-            onTap: () => _saveItem(
+            onTap: () {
+              conclusionFormKey.currentState.save();
+              return _saveItem(
                 context,
                 comparisonOverview,
                 itemTitle,
@@ -87,7 +97,8 @@ class CompareScreen extends StatelessWidget {
                 way2MeritEvaluate,
                 way2DemeritEvaluate,
                 conclusion,
-            ),
+            );
+            },
           ),
           const SizedBox(
             width: 16,
@@ -104,6 +115,7 @@ class CompareScreen extends StatelessWidget {
         body: GestureDetector(
           ///任意の場所をタップするだけでフォーカスを外すことができる
           onTap: (){
+            print('GestureDetectorをonTap!');
             FocusScope.of(context).unfocus();
           },
           child: SingleChildScrollView(
@@ -228,6 +240,7 @@ class CompareScreen extends StatelessWidget {
                   height: 4,
                 ),
                 ///テーブル
+                //todo onChangedだと、テーブル=>結論入力=>保存にすると保存できない
                 TablePart(
                   way1Title: way1Title,
                   way1MeritEvaluate: way1MeritEvaluate,
@@ -261,14 +274,60 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(
                   height: 4,
                 ),
-                ///結論TextArea
-                //todo 既に入力してあるconclusionを渡す
-                ConclusionInputPart(
-                  conclusion: conclusion,
-                  inputChanged: (newConclusion) {
+                ///結論TextArea:MaterialForm
+//                MyCustomForm(
+//                  conclusion: conclusion,
+//                ),
+                Form(
+              ///Formにコンストラクタ経由でformKey渡すとキーボードが開いてすぐ閉じてしまう
+              ///とりあえずCompareScreenで実装（widget分割はあとで）
+              key: conclusionFormKey,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: TextFormField(
+                  //initialValueとcontrollerの両方は使用できない
+          initialValue:conclusion,
+//          onChanged: widget.inputChanged,
+//          onEditingComplete: () {
+//            widget.onEditingCompleted(_conclusionController.text);
+//          },
+                  onSaved: (newConclusion){
                     conclusion = newConclusion;
                   },
+                  ///onFiledSubmittedはdoneボタン時
+//        onFieldSubmitted: widget.onFieldSubmitted,
+                  ///onSaved+key設定でFormの内容保存できる？
+                  minLines: 6,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
                 ),
+              ),//Padding
+            ),
+
+
+
+                //todo 既に入力してあるconclusionを渡す
+//                ConclusionInputPart(
+//                  formKey: formKey,
+//                  conclusion: conclusion,
+//                  ///入力した文字を直接保存ボタンメソッドへ送る形(onSave?onFieldSubmitted?)
+//                  inputChanged: (newConclusion) {
+//                    print('inputChangedのnewConclusion:$newConclusion');
+//                    conclusion = newConclusion;
+//                  },
+////                  onFieldSubmitted: (newConclusion){
+////                    print('onFileSubmitted!');
+////                    FocusScope.of(context).requestFocus(focus);},
+//                    onSaved: (newConclusion){
+//                      print('onFileSaved!');
+//                      conclusion = newConclusion;
+//                    },
+//                ),
                 const SizedBox(
                   height: 16,
                 ),
@@ -293,7 +352,9 @@ class CompareScreen extends StatelessWidget {
                       child: const Text('保存'),
                       color: accentColor,
                       //表示されている値をComparisonOverviewに変換して保存
-                      onPressed: () => _saveItem(
+                      onPressed: () {
+                        conclusionFormKey.currentState.save();
+                        return _saveItem(
                           context,
                           comparisonOverview,
                           itemTitle,
@@ -304,7 +365,8 @@ class CompareScreen extends StatelessWidget {
                           way2MeritEvaluate,
                           way2DemeritEvaluate,
                           conclusion,
-                      )),
+                      );
+                      }),
                 ),
                 const SizedBox(
                   height: 16,
@@ -357,12 +419,19 @@ class CompareScreen extends StatelessWidget {
       favorite: comparisonOverview.favorite,
       createdAt: DateTime.now(),
     );
-
-
+    print('保存ボタン押した時のconclusion:${updateComparisonOverview.conclusion}');
+    print('保存ボタン押した時のway1MeritEvaluate:${updateComparisonOverview.way1MeritEvaluate}');
     ///表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
     await viewModel.saveComparisonItem(updateComparisonOverview);
     await Fluttertoast.showToast(
       msg: '保存完了',
     );
+  }
+
+  Future<void> _backListPage(BuildContext context) async{
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.backListPage();
+     Navigator.pop(context);
+
   }
 }

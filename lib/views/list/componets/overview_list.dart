@@ -3,20 +3,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class OverViewList extends StatelessWidget {
-   const OverViewList(
-      {this.title, this.conclusion, this.createdAt, this.onDelete,this.onTap});
+  const OverViewList(
+      {this.title,
+      this.conclusion,
+      this.createdAt,
+      this.onDelete,
+      this.onTap,
+      this.listDecoration});
 
   final String title;
   final String conclusion;
   final String createdAt;
   final VoidCallback onDelete;
   final VoidCallback onTap;
-
+  final BoxDecoration listDecoration;
 
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      actionPane: SlidableScrollActionPane(),
+      actionPane: const SlidableScrollActionPane(),
       secondaryActions: [
         IconSlideAction(
           caption: '削除',
@@ -29,10 +34,8 @@ class OverViewList extends StatelessWidget {
         )
       ],
       child: Container(
-        decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(
-                    width: 0.5, color: Colors.grey))),
+        //todo decorationはインスタンス設定してすっきり書く
+        decoration: listDecoration,
         child: ListTile(
           onTap: onTap,
           title: Text(title),

@@ -19,8 +19,10 @@ const trailingTextStyle =
     TextStyle(fontFamily: regularFontJa, fontSize: 14, color: Colors.white);
 
 //CompareScreenタイトル
-const itemTitleTextStyle =
-    TextStyle(fontFamily: regularFontJa, fontSize: 18,);
+const itemTitleTextStyle = TextStyle(
+  fontFamily: regularFontJa,
+  fontSize: 18,
+);
 
 //アコーディオンの丸み
 const accordionTopBorderRadius = BorderRadius.only(
@@ -31,3 +33,6 @@ const accordionBottomBorderRadius = BorderRadius.only(
 //比較のRaisedButton
 //var createButtonBorderRadius =
 //    RoundedRectangleBorder(borderRadius: BorderRadius.circular(20));
+
+const listDecoration = BoxDecoration(
+    border: Border(bottom: BorderSide(width: 0.5, color: Colors.grey)));
