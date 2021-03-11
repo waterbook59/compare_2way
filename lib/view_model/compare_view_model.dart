@@ -49,6 +49,7 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   ///FutureBuilder用(notifyListeners(リビルド)なし)
+  //todo getSingle()に変更してすっきり書く
   Future<List<ComparisonOverview>> getWaitOverview(String comparisonItemId) async {
     _comparisonOverviews =
     await _compareRepository.getOverview(comparisonItemId);
@@ -68,22 +69,18 @@ class CompareViewModel extends ChangeNotifier {
 
   Future<void> setWay1MeritNewValue(int newValue) async{
     _way1MeritEvaluate = newValue;
-    notifyListeners();
   }
 
   Future<void> setWay1DemeritNewValue(int newValue) async{
     _way1DemeritEvaluate = newValue;
-    notifyListeners();
   }
 
   Future<void> setWay2MeritNewValue(int newValue) async{
     _way2MeritEvaluate = newValue;
-    notifyListeners();
   }
 
   Future<void> setWay2DemeritNewValue(int newValue) async{
     _way2DemeritEvaluate = newValue;
-    notifyListeners();
   }
 
 
