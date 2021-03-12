@@ -87,6 +87,8 @@ extension ConvertToComparisonOverviewRecords on List<ComparisonOverviewRecord> {
 //            way3Evaluate: comparisonOverviewRecord.way3Evaluate ?? 0,
         favorite: comparisonOverviewRecord.favorite ?? false,
         conclusion: comparisonOverviewRecord.conclusion ?? '',
+        ///取得時のcreatedAt追加
+        createdAt: comparisonOverviewRecord.createdAt ,
       ));
     });
     return comparisonOverviews;

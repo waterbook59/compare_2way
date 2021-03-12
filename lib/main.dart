@@ -2,6 +2,7 @@ import 'package:compare_2way/di/providers.dart';
 import 'package:compare_2way/view_model/add_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'home_screen.dart';
@@ -30,10 +31,15 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title:'Compare 2way' ,
       theme: ThemeData(
-        primaryColor: Color(0xFF363A44),
-        accentColor: Color(0xFFFF7043),
-        scaffoldBackgroundColor: Color(0xFFF5F5F5),
+        primaryColor: const Color(0xFF363A44),
+        accentColor: const Color(0xFFFF7043),
+        scaffoldBackgroundColor: const Color(0xFFF5F5F5),
         ),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
       home: HomeScreen(),
     );
       CupertinoApp(

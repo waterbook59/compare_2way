@@ -2,14 +2,12 @@ import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
-import 'package:compare_2way/views/compare/components/conclusion_input_part.dart';
 import 'package:compare_2way/views/compare/components/icon_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
-import 'components/my_custom_form.dart';
 import 'components/table_part.dart';
 
 class CompareScreen extends StatelessWidget {
@@ -376,9 +374,10 @@ class CompareScreen extends StatelessWidget {
       favorite: comparisonOverview.favorite,
       createdAt: DateTime.now(),
     );
-    print('保存ボタン押した時のconclusion:${updateComparisonOverview.conclusion}');
+
+    print('保存ボタン押した時のcreatedAt:${updateComparisonOverview.createdAt}');
     //前回の保存した値が残ったまま=>画面開くときに値をviewModelへセット
-    print('保存ボタン押した時のway1MeritEvaluate:${updateComparisonOverview.way1MeritEvaluate}');
+//    print('保存ボタン押した時のway1MeritEvaluate:${updateComparisonOverview.way1MeritEvaluate}');
     ///表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
     await viewModel.saveComparisonItem(updateComparisonOverview);
     await Fluttertoast.showToast(
