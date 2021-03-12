@@ -38,9 +38,16 @@ class OverViewList extends StatelessWidget {
         decoration: listDecoration,
         child: ListTile(
           onTap: onTap,
-          title: Text(title+createdAt),
+          title: Text(title),
           //conclusionはConsumerで初回描画されない
-          subtitle: Text(conclusion),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('結論：$conclusion'),
+              Text(createdAt),
+            ],
+          ),
+//          isThreeLine: true,
         ),
       ),
     );

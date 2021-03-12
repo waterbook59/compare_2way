@@ -103,9 +103,6 @@ class SingleListPage extends StatelessWidget {
                             itemCount: snapshot.data.length,
                             itemBuilder: (BuildContext context, int index) {
                               final overview = snapshot.data[index];
-
-//     print('DBからのcreatedAt:${DateTime.parse(overview.createdAt as String)}');
-                              print('DBから:${overview.createdAt}');
                               //DateTime=>String変換
                             final formatter =
                                   DateFormat('yyyy/MM/dd(E) HH:mm:ss', 'ja_JP');
