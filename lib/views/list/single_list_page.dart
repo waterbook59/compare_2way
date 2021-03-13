@@ -2,7 +2,7 @@ import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
-import 'package:compare_2way/views/compare/compare_screen.dart';
+import 'package:compare_2way/views/compare/compare_screen_stateful.dart';
 import 'package:compare_2way/views/list/add_screen.dart';
 import 'package:compare_2way/views/list/componets/overview_list.dart';
 import 'package:flutter/cupertino.dart';

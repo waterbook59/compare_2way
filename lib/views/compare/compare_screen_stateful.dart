@@ -50,6 +50,8 @@ class CompareScreen extends StatelessWidget {
     ///Statelessの場合はGlobalObjectKeyを使う
     const conclusionFormKey = GlobalObjectKey<FormState>('__KEY1__');
 
+
+    ///initStateで渡ってきた値をセットする
     final itemTitle = comparisonOverview.itemTitle;
     final way1Title = comparisonOverview.way1Title;
     final way2Title = comparisonOverview.way2Title;
@@ -65,6 +67,7 @@ class CompareScreen extends StatelessWidget {
       ..setWay1DemeritNewValue(way1DemeritEvaluate)
       ..setWay2MeritNewValue(way2MeritEvaluate)
       ..setWay2DemeritNewValue(way2DemeritEvaluate);
+    print('viewModel/way1MeritEvaluate:${viewModel.way1MeritEvaluate}');
 
     var conclusion = comparisonOverview.conclusion;
 
@@ -267,6 +270,8 @@ class CompareScreen extends StatelessWidget {
                 ///Statelessの場合はFormのkeyはGlobalObjectKey
                 ///GlobalKeyはキーボードが開いてすぐ閉じる
                 //todo Formだけを修正して次開くとTabelが別の表示が現れる
+                //=>TextFormFieldを押すとaddListenersでcompareScreenが再ビルドされるので、
+                //そのときにtablePartに渡ってきた初期値がまた設定されてしまう
                 Form(
               key: conclusionFormKey,
                   child: Padding(
@@ -375,9 +380,8 @@ class CompareScreen extends StatelessWidget {
       createdAt: DateTime.now(),
     );
 
-    print('保存ボタン押した時のcreatedAt:${updateComparisonOverview.createdAt}');
     //前回の保存した値が残ったまま=>画面開くときに値をviewModelへセット
-//    print('保存ボタン押した時のway1MeritEvaluate:${updateComparisonOverview.way1MeritEvaluate}');
+    print('保存ボタン押した時のway1MeritEvaluate:${updateComparisonOverview.way1MeritEvaluate}');
     ///表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
     await viewModel.saveComparisonItem(updateComparisonOverview);
     await Fluttertoast.showToast(
