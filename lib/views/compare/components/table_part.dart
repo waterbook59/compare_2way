@@ -110,7 +110,6 @@ class _TablePartState extends State<TablePart> {
                 style: const TextStyle(fontSize: 16),
               )),
             ),
-
             ///way1MeritEvaluate
             //高さを設定しないと'!_debugDoingThisLayout': is not true.エラー
             SizedBox(
@@ -142,7 +141,6 @@ class _TablePartState extends State<TablePart> {
                         },
                       )),
                 ])),
-
             ///way1DemeritEvaluate
             SizedBox(
                 height: 50,
