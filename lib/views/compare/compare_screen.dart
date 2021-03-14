@@ -8,6 +8,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+import 'components/table_part.dart';
+
+///Table=>conclusionの順で編集すると結局Tableリセットされる問題を解決
 class CompareScreen extends StatelessWidget {
   const CompareScreen({this.itemEditMode, this.comparisonOverview});
 
@@ -23,19 +26,16 @@ class CompareScreen extends StatelessWidget {
         .of(context)
         .accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    //todo AddViewModelもCompareViewModelに統一
-    //compareOverview渡しでsetではなく、AddScreenで設定したものを読み込む形に
-//    if(viewModel.comparisonOverviews.isEmpty){
-    ///Table=>conclusionの順で編集すると結局Tableリセットされる？？？
-    ///enum で他の画面から渡ってきたときのみセットする形にすればできるかも
-    ///初回はstatus.set,それ以外はnotifyListeners(status.update)するとか
+
+    //initState的に他の画面から写ってきた時のみ読み込み
     if (viewModel.compareScreenStatus == CompareScreenStatus.set) {
+      print('compareScreenのFuture通過');
       Future(() => viewModel.setOverview(comparisonOverview));
       viewModel.compareScreenStatus = CompareScreenStatus.update;
-      print('compareScreenでのupdateOverview.conclusion:${comparisonOverview
-          .conclusion}');
-      print('compareScreenでのviewModel.conclusion:${viewModel.conclusion}');
-      print('compareScreen.status:${viewModel.compareScreenStatus}');
+//      print('compareScreenでのupdateOverview.conclusion:${comparisonOverview
+//          .conclusion}');
+//      print('compareScreenでのviewModel.conclusion:${viewModel.conclusion}');
+//      print('compareScreen.status:${viewModel.compareScreenStatus}');
     }
 
 
@@ -213,14 +213,15 @@ class CompareScreen extends StatelessWidget {
 
                 ///テーブル
                 //todo onChangedだと、テーブル=>結論入力=>保存にすると保存できない
-//                TablePart(
-//                  way1Title: way1Title,
-//                  way1MeritEvaluate: way1MeritEvaluate,
-//                  way1DemeritEvaluate: way1DemeritEvaluate,
-//                  way2Title: way2Title,
-//                  way2MeritEvaluate: way2MeritEvaluate,
-//                  way2DemeritEvaluate: way2DemeritEvaluate,
-//                ),
+                TablePart(
+                  way1Title: comparisonOverview.way1Title,
+                  way1MeritChanged: (newValue)=>_setWay1Merit(context,newValue),
+                  way1MeritEvaluate: comparisonOverview.way1MeritEvaluate,
+                  way1DemeritEvaluate:comparisonOverview.way1DemeritEvaluate,
+                  way2Title:comparisonOverview.way2Title,
+                  way2MeritEvaluate: comparisonOverview.way2MeritEvaluate,
+                  way2DemeritEvaluate: comparisonOverview.way2DemeritEvaluate,
+                ),
                 const SizedBox(
                   height: 16,
                 ),
@@ -338,6 +339,11 @@ class CompareScreen extends StatelessWidget {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.setConclusion(newConclusion);
 
+  }
+
+  Future<void>_setWay1Merit(BuildContext context, int newValue) async{
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.setWay1MeritNewValue(newValue);
   }
 
 

@@ -93,7 +93,6 @@ class CompareViewModel extends ChangeNotifier {
   //todo favorite,way3追加
   Future<void> saveComparisonItem(ComparisonOverview updateOverview) async{
 
-
     final saveOverview = ComparisonOverview(
       comparisonItemId: updateOverview.comparisonItemId,
       itemTitle: _itemTitle,

@@ -15,6 +15,7 @@ class TablePart extends StatefulWidget {
      this.way2Title,
      this.way2MeritEvaluate,
      this.way2DemeritEvaluate,
+     this.way1MeritChanged,
   });
 
     final String way1Title;
@@ -26,7 +27,7 @@ class TablePart extends StatefulWidget {
 
 
   /// CompareScreenへ値を渡して保存
-//   final Function(int) way1MeritChanged;
+   final Function(int) way1MeritChanged;
 //   final Function(int) way1DemeritChanged;
 //   final Function(int) way2MeritChanged;
 //   final Function(int) way2DemeritChanged;
@@ -131,10 +132,11 @@ class _TablePartState extends State<TablePart> {
                             widget.way1MeritEvaluate,
                         onSelected: (newValue) {
                           print('newValueをsetState:$newValue');
+                          widget.way1MeritChanged(newValue);
                           setState(() {
                             way1MeritDisplay = evaluates[newValue];
-                            ///CompareScreenへ渡さずにviewModel側に保存
-                            viewModel.setWay1MeritNewValue(newValue);
+//todo CompareScreenへ渡さずに直接viewModel側に保存でも可？？
+//                            viewModel.setWay1MeritNewValue(newValue);
                           });
                         },
                       )),
