@@ -19,14 +19,14 @@ class CompareScreenStateful extends StatelessWidget {
   final ComparisonOverview comparisonOverview;
   final ItemEditMode itemEditMode;
 
-
-  static const IconData hand_thumbsup_fill = IconData(0xf6b8,
-      fontFamily: CupertinoIcons.iconFont,
-      fontPackage: CupertinoIcons.iconFontPackage);
-
-  static const IconData hand_thumbsdown_fill = IconData(0xf6b6,
-      fontFamily: CupertinoIcons.iconFont,
-      fontPackage: CupertinoIcons.iconFontPackage);
+//
+//  static const IconData hand_thumbsup_fill = IconData(0xf6b8,
+//      fontFamily: CupertinoIcons.iconFont,
+//      fontPackage: CupertinoIcons.iconFontPackage);
+//
+//  static const IconData hand_thumbsdown_fill = IconData(0xf6b6,
+//      fontFamily: CupertinoIcons.iconFont,
+//      fontPackage: CupertinoIcons.iconFontPackage);
 
   //todo itemsはList<Merit>に変更
   static List<String> items = [

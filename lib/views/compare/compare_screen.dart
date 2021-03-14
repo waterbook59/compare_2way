@@ -6,8 +6,10 @@ import 'package:compare_2way/views/compare/components/conclusion_input_part.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
 
+import 'components/icon_title.dart';
 import 'components/table_part.dart';
 
 ///Table=>conclusionの順で編集すると結局Tableリセットされる問題を解決
@@ -16,6 +18,17 @@ class CompareScreen extends StatelessWidget {
 
   final ComparisonOverview comparisonOverview;
   final ItemEditMode itemEditMode;
+
+  //todo itemsはList<Merit>に変更
+  static List<String> items = [
+    'Content 1',
+    'Content 2',
+    'Content 3',
+  ];
+
+  static final List<TextEditingController> _controllers =
+  List.generate(items.length, (i) => TextEditingController(text: items[i]));
+
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +71,6 @@ class CompareScreen extends StatelessWidget {
               color: Colors.white,
             ),
             onTap: () {
-//    conclusionFormKey.currentState.save();
               return _saveItem(context,comparisonOverview);
             },
           ),
@@ -76,10 +88,9 @@ class CompareScreen extends StatelessWidget {
       ),
       child: Scaffold(
         body: GestureDetector(
-
-          ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
           onTap: () {
             print('GestureDetectorをonTap!');
+            ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
             FocusScope.of(context).unfocus();
           },
           child: SingleChildScrollView(
@@ -102,31 +113,55 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(height: 8),
 
                 ///メリットアイコン
-//                IconTitle(
-//                  title: 'メリット',
-//                  iconData: Icons.thumb_up,
-//                  iconColor: accentColor,
-//                ),
+                IconTitle(
+                  title: 'メリット',
+                  iconData: Icons.thumb_up,
+                  iconColor: accentColor,
+                ),
                 ///way1 メリット
-//                GFAccordion(
-//                  title: way1Title,
-//                  titleBorderRadius: accordionTopBorderRadius,
-//                  contentBorderRadius: accordionBottomBorderRadius,
-//                  showAccordion: false,
-//                  collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
-//                  contentChild: ListView.builder(
-//                      shrinkWrap: true,
-//                      physics: const NeverScrollableScrollPhysics(),
-//                      itemCount: _controllers.length,
-//                      itemBuilder: (context, index) {
+                Selector<CompareViewModel,String>(
+                  selector: (context,viewModel)=>viewModel.way1Title,
+                  builder: (context,way1Title,child){
+                    return GFAccordion(
+                      title: way1Title,
+                      titleBorderRadius: accordionTopBorderRadius,
+                      contentBorderRadius: accordionBottomBorderRadius,
+                      showAccordion: false,
+                      collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
+                      contentChild: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _controllers.length,
+                          itemBuilder: (context, index) {
+                            return CupertinoTextField(
+                              placeholder: 'メリットを入力してください',
+                              controller: _controllers[index],
+                              style: const TextStyle(color: Colors.black),
+                            );
+                          }),
+                    );
+                  },
+//                  child:
+//                  GFAccordion(
+//                    title: way1Title,
+//                    titleBorderRadius: accordionTopBorderRadius,
+//                    contentBorderRadius: accordionBottomBorderRadius,
+//                    showAccordion: false,
+//                    collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
+//                    contentChild: ListView.builder(
+//                        shrinkWrap: true,
+//                        physics: const NeverScrollableScrollPhysics(),
+//                        itemCount: _controllers.length,
+//                        itemBuilder: (context, index) {
 ////              textItems.add(new TextEditingController());
-//                        return CupertinoTextField(
-//                          placeholder: 'メリットを入力してください',
-//                          controller: _controllers[index],
-//                          style: const TextStyle(color: Colors.black),
-//                        );
-//                      }),
-//                ),
+//                          return CupertinoTextField(
+//                            placeholder: 'メリットを入力してください',
+//                            controller: _controllers[index],
+//                            style: const TextStyle(color: Colors.black),
+//                          );
+//                        }),
+//                  ),
+                ),
                 ///way2 メリット
 //                GFAccordion(
 //                  title: way2Title,
@@ -152,11 +187,11 @@ class CompareScreen extends StatelessWidget {
                 ),
 
                 ///デメリットアイコン
-//                IconTitle(
-//                  title: 'デメリット',
-//                  iconData: Icons.thumb_down,
-//                  iconColor: accentColor,
-//                ),
+                IconTitle(
+                  title: 'デメリット',
+                  iconData: Icons.thumb_down,
+                  iconColor: accentColor,
+                ),
                 ///way1 デメリット
 //                GFAccordion(
 //                  title: way1Title,
@@ -248,9 +283,6 @@ class CompareScreen extends StatelessWidget {
                   ///非同期でviewModelへ設定しにいかないと値保存できない
                   inputChanged: (newConclusion) =>
                       _conclusionInputChanged(context, newConclusion),
-//                      (newConclusion) {
-//                    viewModel.conclusion = newConclusion;
-//                  },
                 ),
                 const SizedBox(
                   height: 16,
@@ -279,7 +311,6 @@ class CompareScreen extends StatelessWidget {
                       color: accentColor,
                       //表示されている値をComparisonOverviewに変換して保存
                       onPressed: () {
-//                        conclusionFormKey.currentState.save();
                         return _saveItem(
                           context,
                           comparisonOverview,
@@ -326,7 +357,6 @@ class CompareScreen extends StatelessWidget {
     FocusScope.of(context).unfocus();
 
     ///表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
-    //notifyListenersはなし
     await viewModel.saveComparisonItem(comparisonOverview);
     await Fluttertoast.showToast(
       msg: '保存完了',
@@ -341,6 +371,7 @@ class CompareScreen extends StatelessWidget {
 
   }
 
+  //way1Merit変更されたらset
   Future<void>_setWay1Merit(BuildContext context, int newValue) async{
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.setWay1MeritNewValue(newValue);
