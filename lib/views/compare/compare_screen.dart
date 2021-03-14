@@ -163,25 +163,30 @@ class CompareScreen extends StatelessWidget {
 //                  ),
                 ),
                 ///way2 メリット
-//                GFAccordion(
-//                  title: way2Title,
-//                  titleBorderRadius: accordionTopBorderRadius,
-//                  contentBorderRadius: accordionBottomBorderRadius,
-//                  collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
-//                  showAccordion: false,
-//                  contentChild: ListView.builder(
-//                      shrinkWrap: true,
-//                      physics: const NeverScrollableScrollPhysics(),
-//                      itemCount: _controllers.length,
-//                      itemBuilder: (context, index) {
-////              textItems.add(new TextEditingController());
-//                        return CupertinoTextField(
-//                          placeholder: 'メリットを入力してください',
-//                          controller: _controllers[index],
-//                          style: const TextStyle(color: Colors.black),
-//                        );
-//                      }),
-//                ),
+                Selector<CompareViewModel,String>(
+                  selector: (context,viewModel)=>viewModel.way2Title,
+                  builder: (context,way2Title,child){
+                    return GFAccordion(
+                      title: way2Title,
+                      titleBorderRadius: accordionTopBorderRadius,
+                      contentBorderRadius: accordionBottomBorderRadius,
+                      collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
+                      showAccordion: false,
+                      contentChild: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _controllers.length,
+                          itemBuilder: (context, index) {
+//              textItems.add(new TextEditingController());
+                            return CupertinoTextField(
+                              placeholder: 'メリットを入力してください',
+                              controller: _controllers[index],
+                              style: const TextStyle(color: Colors.black),
+                            );
+                          }),
+                    );
+                  },
+                ),
                 const SizedBox(
                   height: 8,
                 ),
@@ -193,45 +198,74 @@ class CompareScreen extends StatelessWidget {
                   iconColor: accentColor,
                 ),
                 ///way1 デメリット
-//                GFAccordion(
-//                  title: way1Title,
-//                  titleBorderRadius: accordionTopBorderRadius,
-//                  contentBorderRadius: accordionBottomBorderRadius,
-//                  collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
-//                  showAccordion: false,
-//                  contentChild: ListView.builder(
-//                      shrinkWrap: true,
-//                      physics: const NeverScrollableScrollPhysics(),
-//                      itemCount: _controllers.length,
-//                      itemBuilder: (context, index) {
-//                        //textItems.add(new TextEditingController());
-//                        return CupertinoTextField(
-//                          placeholder: 'メリットを入力してください',
-//                          controller: _controllers[index],
-//                          style: const TextStyle(color: Colors.black),
-//                        );
-//                      }),
-//                ),
-                ///way2 デメリット
-//                GFAccordion(
-//                  title: way2Title,
-//                  collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
-//                  titleBorderRadius: accordionTopBorderRadius,
-//                  contentBorderRadius: accordionBottomBorderRadius,
-//                  showAccordion: false,
-//                  contentChild: ListView.builder(
-//                      shrinkWrap: true,
-//                      physics: const NeverScrollableScrollPhysics(),
-//                      itemCount: _controllers.length,
-//                      itemBuilder: (context, index) {
+                Selector<CompareViewModel,String>(
+                  selector: (context,viewModel)=>viewModel.way1Title,
+                  builder: (context,way1Title,child){
+                    return GFAccordion(
+                      title: way1Title,
+                      titleBorderRadius: accordionTopBorderRadius,
+                      contentBorderRadius: accordionBottomBorderRadius,
+                      showAccordion: false,
+                      collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
+                      contentChild: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _controllers.length,
+                          itemBuilder: (context, index) {
+                            return CupertinoTextField(
+                              placeholder: 'メリットを入力してください',
+                              controller: _controllers[index],
+                              style: const TextStyle(color: Colors.black),
+                            );
+                          }),
+                    );
+                  },
+//                  child:
+//                  GFAccordion(
+//                    title: way1Title,
+//                    titleBorderRadius: accordionTopBorderRadius,
+//                    contentBorderRadius: accordionBottomBorderRadius,
+//                    showAccordion: false,
+//                    collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
+//                    contentChild: ListView.builder(
+//                        shrinkWrap: true,
+//                        physics: const NeverScrollableScrollPhysics(),
+//                        itemCount: _controllers.length,
+//                        itemBuilder: (context, index) {
 ////              textItems.add(new TextEditingController());
-//                        return CupertinoTextField(
-//                          placeholder: 'メリットを入力してください',
-//                          controller: _controllers[index],
-//                          style: const TextStyle(color: Colors.black),
-//                        );
-//                      }),
-//                ),
+//                          return CupertinoTextField(
+//                            placeholder: 'メリットを入力してください',
+//                            controller: _controllers[index],
+//                            style: const TextStyle(color: Colors.black),
+//                          );
+//                        }),
+//                  ),
+                ),
+                ///way2 デメリット
+                Selector<CompareViewModel,String>(
+                  selector: (context,viewModel)=>viewModel.way2Title,
+                  builder: (context,way2Title,child){
+                    return GFAccordion(
+                      title: way2Title,
+                      titleBorderRadius: accordionTopBorderRadius,
+                      contentBorderRadius: accordionBottomBorderRadius,
+                      collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
+                      showAccordion: false,
+                      contentChild: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _controllers.length,
+                          itemBuilder: (context, index) {
+//              textItems.add(new TextEditingController());
+                            return CupertinoTextField(
+                              placeholder: 'メリットを入力してください',
+                              controller: _controllers[index],
+                              style: const TextStyle(color: Colors.black),
+                            );
+                          }),
+                    );
+                  },
+                ),
                 const SizedBox(
                   height: 4,
                 ),
@@ -272,12 +306,7 @@ class CompareScreen extends StatelessWidget {
                 ),
 
                 ///結論TextArea:MaterialForm
-                ///Statelessの場合はFormのkeyはGlobalObjectKey
-                ///GlobalKeyはキーボードが開いてすぐ閉じる
                 //todo Formだけを修正して次開くとTabelが別の表示が現れる
-                //=>TextFormFieldを押すとaddListenersでcompareScreenが再ビルドされるので、
-                //そのときにtablePartに渡ってきた初期値がまた設定されてしまう
-                //todo focusしたらstatusをset=>updateに
                 ConclusionInputPart(
                   conclusion: comparisonOverview.conclusion,
                   ///非同期でviewModelへ設定しにいかないと値保存できない

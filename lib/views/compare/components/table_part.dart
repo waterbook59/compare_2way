@@ -124,7 +124,8 @@ class _TablePartState extends State<TablePart> {
                         style: const TextStyle(fontSize: 40),
                         textAlign: TextAlign.right,
                       )),
-                  //todo EvaluateDropdownで選択したときもフォーカス外す(キーボード下げる)
+ //todo EvaluateDropdownで選択したときもフォーカス外す(キーボード下げる)
+                  //todo initialValueの位置が初期値から変わらない
                   Expanded(
                       flex: 1,
                       child: EvaluateDropdown(
