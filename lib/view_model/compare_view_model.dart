@@ -12,6 +12,7 @@ class CompareViewModel extends ChangeNotifier {
   List<ComparisonOverview> _comparisonOverviews = <ComparisonOverview>[];
   List<ComparisonOverview> get comparisonOverviews => _comparisonOverviews;
   CompareScreenStatus compareScreenStatus;
+  ComparisonOverview overviewDB;
 
   String _itemTitle ='';
   String get itemTitle => _itemTitle;
@@ -68,6 +69,21 @@ class CompareViewModel extends ChangeNotifier {
 //    print('FutureBuilderのway2のタイトル:$_way2Title');
     return _comparisonOverviews;
   }
+
+  ///ComparisonOverview=>ComparisonOverviewRecordでDB登録
+  Future<void> createComparisonOverview(
+      ComparisonOverview comparisonOverview) async {
+    await _compareRepository.createComparisonOverview(comparisonOverview);
+//    notifyListeners();
+  }
+
+  ///List<ComparisonOverview>ではなく、comparisonItemIdからComparisonOverview１行だけ取ってくる
+  Future<void> getComparisonOverview(String comparisonItemId) async {
+    overviewDB =
+    await _compareRepository.getComparisonOverview(comparisonItemId);
+  }
+
+
 
   Future<void> setWay1MeritNewValue(int newValue) async{
     _way1MeritEvaluate = newValue;
