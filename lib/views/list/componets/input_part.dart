@@ -3,6 +3,7 @@ import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/add_view_model.dart';
+import 'package:compare_2way/views/compare/compare_screen.dart';
 import 'package:compare_2way/views/compare/compare_screen_stateful.dart';
 import 'package:compare_2way/views/list/componets/text_field_part.dart';
 import 'package:flutter/cupertino.dart';
@@ -112,6 +113,8 @@ class _InputPartState extends State<InputPart> {
   ///textEditingControllerをview側で設定=>viewModelに設定するメソッド
   Future<void> _createComparisonItems(BuildContext context) async {
     final viewModel = Provider.of<AddViewModel>(context, listen: false);
+    //todo CompareScreenに統一したら初期表示は読み込みさせる
+//    viewModel.compareScreenStatus =CompareScreenStatus.set;
 
     // モデルクラス(compare)に比較項目を登録(idを次の画面に渡したいのでview側で設定)
     //todo ComparisonItemではなく、ComparisonOverviewに変更

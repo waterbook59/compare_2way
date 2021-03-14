@@ -2,6 +2,7 @@ import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
+import 'package:compare_2way/views/compare/compare_screen.dart';
 import 'package:compare_2way/views/compare/compare_screen_stateful.dart';
 import 'package:compare_2way/views/list/add_screen.dart';
 import 'package:compare_2way/views/list/componets/overview_list.dart';
@@ -205,6 +206,9 @@ class SingleListPage extends StatelessWidget {
   }
 
   void _updateList(BuildContext context, ComparisonOverview updateOverview) {
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    ///初期表示は読み込みさせる
+    viewModel.compareScreenStatus =CompareScreenStatus.set;
     Navigator.push(
         context,
         MaterialPageRoute<void>(

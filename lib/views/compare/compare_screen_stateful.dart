@@ -10,8 +10,8 @@ import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
 import 'components/table_part.dart';
 
-class CompareScreen extends StatelessWidget {
-  const CompareScreen(
+class CompareScreenStateful extends StatelessWidget {
+  const CompareScreenStateful(
       {
       this.itemEditMode,
       this.comparisonOverview});
