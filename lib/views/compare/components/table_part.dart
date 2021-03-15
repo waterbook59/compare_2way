@@ -124,7 +124,6 @@ class _TablePartState extends State<TablePart> {
                         textAlign: TextAlign.right,
                       )),
  //todo EvaluateDropdownで選択したときもフォーカス外す(キーボード下げる)
-                  //todo initialValueの位置が初期値から変わらない
                   Expanded(
                       flex: 1,
                       child: EvaluateDropdown(
@@ -135,7 +134,7 @@ class _TablePartState extends State<TablePart> {
                           widget.way1MeritChanged(newValue);
                           setState(() {
                             way1MeritDisplay = evaluates[newValue];
-//todo CompareScreenへ渡さずに直接viewModel側に保存でも可？？
+                        // CompareScreenへ渡さずに直接viewModel側に保存でも可
 //                            viewModel.setWay1MeritNewValue(newValue);
                           });
                         },

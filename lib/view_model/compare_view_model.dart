@@ -167,7 +167,6 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   Future<void>setOverview(ComparisonOverview comparisonOverview) async{
-    //todo 必要ならcreateAtやcomparisonIdもセット
     _itemTitle = comparisonOverview.itemTitle;
     _way1Title = comparisonOverview.way1Title;
     _way1MeritEvaluate =comparisonOverview.way1MeritEvaluate;

@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'components/icon_title.dart';
 import 'components/table_part.dart';
 
-///Table=>conclusionの順で編集すると結局Tableリセットされる問題を解決
+///Table=>conclusionの順で編集するとTableリセットされる問題を解決
 class CompareScreen extends StatelessWidget {
   const CompareScreen({this.itemEditMode, this.comparisonOverview});
 
@@ -45,10 +45,6 @@ class CompareScreen extends StatelessWidget {
       print('compareScreenのFuture通過');
       Future(() => viewModel.setOverview(comparisonOverview));
       viewModel.compareScreenStatus = CompareScreenStatus.update;
-//      print('compareScreenでのupdateOverview.conclusion:${comparisonOverview
-//          .conclusion}');
-//      print('compareScreenでのviewModel.conclusion:${viewModel.conclusion}');
-//      print('compareScreen.status:${viewModel.compareScreenStatus}');
     }
 
 
@@ -281,7 +277,6 @@ class CompareScreen extends StatelessWidget {
                 ),
 
                 ///テーブル
-                //todo onChangedだと、テーブル=>結論入力=>保存にすると保存できない
                 TablePart(
                   way1Title: comparisonOverview.way1Title,
                   way1MeritChanged: (newValue)=>_setWay1Merit(context,newValue),
@@ -306,10 +301,9 @@ class CompareScreen extends StatelessWidget {
                 ),
 
                 ///結論TextArea:MaterialForm
-                //todo Formだけを修正して次開くとTabelが別の表示が現れる
                 ConclusionInputPart(
                   conclusion: comparisonOverview.conclusion,
-                  ///非同期でviewModelへ設定しにいかないと値保存できない
+                  //非同期でviewModelへ設定しにいかないと値保存できない
                   inputChanged: (newConclusion) =>
                       _conclusionInputChanged(context, newConclusion),
                 ),
@@ -338,7 +332,6 @@ class CompareScreen extends StatelessWidget {
                   child: RaisedButton(
                       child: const Text('保存'),
                       color: accentColor,
-                      //表示されている値をComparisonOverviewに変換して保存
                       onPressed: () {
                         return _saveItem(
                           context,
@@ -366,25 +359,10 @@ class CompareScreen extends StatelessWidget {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     viewModel.compareScreenStatus = CompareScreenStatus.update;
 
-    //ComparisonOverviewをviewModel側から保存
-//    final updateComparisonOverview = ComparisonOverview(
-//      dataId: comparisonOverview.dataId,
-//      comparisonItemId: comparisonOverview.comparisonItemId,
-//      itemTitle: viewModel.itemTitle,
-//      way1Title: viewModel.way1Title,
-//      way1MeritEvaluate: viewModel.way1MeritEvaluate,
-//      way1DemeritEvaluate: viewModel.way1DemeritEvaluate,
-//      way2Title: viewModel.way2Title,
-//      way2MeritEvaluate: viewModel.way2MeritEvaluate,
-//      way2DemeritEvaluate: viewModel.way2DemeritEvaluate,
-//      conclusion: viewModel.conclusion,
-//      favorite: comparisonOverview.favorite,
-//      createdAt: DateTime.now(),
-//    );
-//    print('保存ボタン押した時のconclusion:${updateComparisonOverview.conclusion}');
 
     FocusScope.of(context).unfocus();
 
+    //ComparisonOverviewをviewModel側から保存に変更
     ///表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
     await viewModel.saveComparisonItem(comparisonOverview);
     await Fluttertoast.showToast(
