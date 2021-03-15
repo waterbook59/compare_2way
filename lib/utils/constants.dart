@@ -9,3 +9,8 @@ enum ItemEditMode{
   add,
   edit
 }
+
+enum CompareScreenStatus {
+  set,
+  update,
+}

@@ -11,6 +11,9 @@ class CompareViewModel extends ChangeNotifier {
   final CompareRepository _compareRepository;
   List<ComparisonOverview> _comparisonOverviews = <ComparisonOverview>[];
   List<ComparisonOverview> get comparisonOverviews => _comparisonOverviews;
+  CompareScreenStatus compareScreenStatus;
+  ComparisonOverview overviewDB;
+
   String _itemTitle ='';
   String get itemTitle => _itemTitle;
   String _way1Title ='';
@@ -67,6 +70,21 @@ class CompareViewModel extends ChangeNotifier {
     return _comparisonOverviews;
   }
 
+  ///ComparisonOverview=>ComparisonOverviewRecordでDB登録
+  Future<void> createComparisonOverview(
+      ComparisonOverview comparisonOverview) async {
+    await _compareRepository.createComparisonOverview(comparisonOverview);
+//    notifyListeners();
+  }
+
+  ///List<ComparisonOverview>ではなく、comparisonItemIdからComparisonOverview１行だけ取ってくる
+  Future<void> getComparisonOverview(String comparisonItemId) async {
+    overviewDB =
+    await _compareRepository.getComparisonOverview(comparisonItemId);
+  }
+
+
+
   Future<void> setWay1MeritNewValue(int newValue) async{
     _way1MeritEvaluate = newValue;
   }
@@ -83,26 +101,28 @@ class CompareViewModel extends ChangeNotifier {
     _way2DemeritEvaluate = newValue;
   }
 
+  Future<void> setConclusion(String newConclusion) async{
+    conclusion = newConclusion;
+  }
 
   ///CompareScreenで表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
   //todo favorite,way3追加
   Future<void> saveComparisonItem(ComparisonOverview updateOverview) async{
 
-
-//    final updateOverview = ComparisonOverview(
-//      comparisonItemId: comparisonItemId,
-//      itemTitle: _itemTitle,
-//      way1Title: _way1Title,
-//      way2Title: _way2Title,
-//      way1MeritEvaluate: _way1MeritEvaluate,
-//      way1DemeritEvaluate: _way1DemeritEvaluate,
-//      way2MeritEvaluate: _way2MeritEvaluate,
-//      way2DemeritEvaluate: _way2DemeritEvaluate,
-//      conclusion: conclusion,
-//      createdAt: DateTime.now(),
-//    );
-    await _compareRepository.saveComparisonItem(updateOverview);
-//    notifyListeners();
+    final saveOverview = ComparisonOverview(
+      comparisonItemId: updateOverview.comparisonItemId,
+      itemTitle: _itemTitle,
+      way1Title: _way1Title,
+      way2Title: _way2Title,
+      way1MeritEvaluate: _way1MeritEvaluate,
+      way1DemeritEvaluate: _way1DemeritEvaluate,
+      way2MeritEvaluate: _way2MeritEvaluate,
+      way2DemeritEvaluate: _way2DemeritEvaluate,
+      conclusion: conclusion,
+      createdAt: DateTime.now(),
+    );
+    await _compareRepository.saveComparisonItem(saveOverview);
+    notifyListeners();
   }
 
   ///データ保存後に再取得
@@ -145,6 +165,23 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> backListPage() {
     notifyListeners();
   }
+
+  Future<void>setOverview(ComparisonOverview comparisonOverview) async{
+    _itemTitle = comparisonOverview.itemTitle;
+    _way1Title = comparisonOverview.way1Title;
+    _way1MeritEvaluate =comparisonOverview.way1MeritEvaluate;
+    _way1DemeritEvaluate =comparisonOverview.way1DemeritEvaluate;
+    _way2Title = comparisonOverview.way2Title;
+    _way2MeritEvaluate =comparisonOverview.way2MeritEvaluate;
+    _way2DemeritEvaluate =comparisonOverview.way2DemeritEvaluate;
+    conclusion = comparisonOverview.conclusion;
+
+
+
+    notifyListeners();
+  }
+
+
 
 
 

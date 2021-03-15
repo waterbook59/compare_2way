@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class EvaluateDropdown extends StatefulWidget {
-  EvaluateDropdown({this.initialValue,this.onSelected});
+   const EvaluateDropdown({this.initialValue,this.onSelected});
 
-  int initialValue ;
-  Function(int) onSelected;
+  final int initialValue ;
+  final Function(int) onSelected;
 
 
   @override
@@ -13,6 +13,13 @@ class EvaluateDropdown extends StatefulWidget {
 }
 
 class _EvaluateDropdownState extends State<EvaluateDropdown> {
+  int displayValue =0;
+
+  @override
+  void initState() {
+    displayValue = widget.initialValue;
+    super.initState();
+  }
 
 
   @override
@@ -20,7 +27,7 @@ class _EvaluateDropdownState extends State<EvaluateDropdown> {
     return Scaffold(
       body: Center(
         child: PopupMenuButton<int>(
-          initialValue: widget.initialValue,
+          initialValue: displayValue,
           elevation: 0,
           icon: const Icon(Icons.arrow_drop_down),
 //          iconSize: 30,
@@ -48,7 +55,7 @@ class _EvaluateDropdownState extends State<EvaluateDropdown> {
           ],
           onSelected: (newValue){
             setState(() {
-              widget.initialValue =newValue;
+              displayValue =newValue;
               widget.onSelected(newValue);
             });
           },

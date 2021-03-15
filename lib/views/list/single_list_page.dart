@@ -3,11 +3,13 @@ import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/compare_screen.dart';
+import 'package:compare_2way/views/compare/compare_screen_stateful.dart';
 import 'package:compare_2way/views/list/add_screen.dart';
 import 'package:compare_2way/views/list/componets/overview_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import "package:intl/intl.dart";
 
 class SingleListPage extends StatelessWidget {
   final bool _isSelected = false;
@@ -85,8 +87,7 @@ class SingleListPage extends StatelessWidget {
                           print('snapshotがnull');
                           return Container();
                         }
-
-                        ///viewModel.comparisonOverviews.isEmptyだとEmptyView通ってしまう
+                      ///viewModel.comparisonOverviews.isEmptyだとEmptyView通ってしまう
                         ///あくまでFutureBuilderで待った結果（snapshot.data）で条件分けすべき
                         if (snapshot.hasData && snapshot.data.isEmpty) {
                           print('EmptyView側通って描画');
@@ -103,14 +104,21 @@ class SingleListPage extends StatelessWidget {
                             itemCount: snapshot.data.length,
                             itemBuilder: (BuildContext context, int index) {
                               final overview = snapshot.data[index];
-                              return OverViewList(
-                                title: overview.itemTitle,
-                                conclusion: overview.conclusion,
-                                onDelete: () => _deleteList(
-                                    context, overview.comparisonItemId),
-                                onTap: () => _updateList(context, overview),
-                                listDecoration: listDecoration,
-                              );
+                              //DateTime=>String変換
+                            final formatter =
+                                  DateFormat('yyyy/MM/dd(E) HH:mm:ss', 'ja_JP');
+                              final formatted =
+                                  formatter.format(overview.createdAt);
+                            return OverViewList(
+                              title: overview.itemTitle,
+                              conclusion: overview.conclusion,
+                              createdAt: formatted,
+                              onDelete: () => _deleteList(
+                                  context, overview.comparisonItemId),
+                              onTap: () => _updateList(context, overview),
+                              listDecoration: listDecoration,
+                            );
+
                             },
                           );
 //                              }//ConnectionState.done
@@ -198,6 +206,9 @@ class SingleListPage extends StatelessWidget {
   }
 
   void _updateList(BuildContext context, ComparisonOverview updateOverview) {
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    ///初期表示は読み込みさせる
+    viewModel.compareScreenStatus =CompareScreenStatus.set;
     Navigator.push(
         context,
         MaterialPageRoute<void>(
