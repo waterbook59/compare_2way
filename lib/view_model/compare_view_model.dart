@@ -1,4 +1,5 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/models/repository/compare_repository.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,10 @@ class CompareViewModel extends ChangeNotifier {
   List<ComparisonOverview> get comparisonOverviews => _comparisonOverviews;
   CompareScreenStatus compareScreenStatus;
   ComparisonOverview overviewDB;
+  List<Way1Merit> _way1MeritItems = <Way1Merit>[];
+  List<Way1Merit> get way1MeritItems => _way1MeritItems;
+
+
 
   String _itemTitle ='';
   String get itemTitle => _itemTitle;
@@ -77,6 +82,15 @@ class CompareViewModel extends ChangeNotifier {
 //    notifyListeners();
   }
 
+  //way1Meritのリストを作って保存
+  Future<void> createDesc(Way1Merit initWay1Merit) async{
+    _way1MeritItems.add(initWay1Merit);
+    await _compareRepository.createDescList(_way1MeritItems);
+
+  }
+
+
+
   ///List<ComparisonOverview>ではなく、comparisonItemIdからComparisonOverview１行だけ取ってくる
   Future<void> getComparisonOverview(String comparisonItemId) async {
     overviewDB =
@@ -88,19 +102,15 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> setWay1MeritNewValue(int newValue) async{
     _way1MeritEvaluate = newValue;
   }
-
   Future<void> setWay1DemeritNewValue(int newValue) async{
     _way1DemeritEvaluate = newValue;
   }
-
   Future<void> setWay2MeritNewValue(int newValue) async{
     _way2MeritEvaluate = newValue;
   }
-
   Future<void> setWay2DemeritNewValue(int newValue) async{
     _way2DemeritEvaluate = newValue;
   }
-
   Future<void> setConclusion(String newConclusion) async{
     conclusion = newConclusion;
   }
@@ -176,10 +186,10 @@ class CompareViewModel extends ChangeNotifier {
     _way2DemeritEvaluate =comparisonOverview.way2DemeritEvaluate;
     conclusion = comparisonOverview.conclusion;
 
-
-
     notifyListeners();
   }
+
+
 
 
 

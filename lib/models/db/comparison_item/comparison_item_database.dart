@@ -12,27 +12,22 @@ class ComparisonOverviewRecords extends Table {
   IntColumn get dataId => integer().autoIncrement()();
   TextColumn get comparisonItemId => text()(); //UuIdで他のテーブルとの結合に使用の可能性
   TextColumn get itemTitle => text()();
-
+  ///way1
   TextColumn get way1Title => text()();
   IntColumn get way1MeritEvaluate =>
       integer().withDefault(const Constant(0))(); // 評価、初期ゼロ
   IntColumn get way1DemeritEvaluate =>
       integer().withDefault(const Constant(0))(); // 評価、初期ゼロ
-
-  //todo way2テーブルはあとで追加
+  ///way2
   TextColumn get way2Title => text()();
   IntColumn get way2MeritEvaluate => integer().withDefault(const Constant(0))();
   IntColumn get way2DemeritEvaluate =>
       integer().withDefault(const Constant(0))();
 
-//  TextColumn get way2Merit => text().nullable()();
-//  TextColumn get way2Demerit => text().nullable()();
-
-//  TextColumn get way3Title => text().nullable()();
-//  TextColumn get way3Merit => text().nullable()();
-//  TextColumn get way3Demerit => text().nullable()();
-//  IntColumn get way3MeritEvaluate
-//  =>integer().withDefault(const Constant(0))();
+  //todo way3はあとで追加
+//  TextColumn get way3Title => text()();
+//  IntColumn get way3MeritEvaluate =>
+//      integer().withDefault(const Constant(0))(); // 評価、初期ゼロ
 //  IntColumn get way3DemeritEvaluate =>
 //      integer().withDefault(const Constant(0))();
 
@@ -43,7 +38,6 @@ class ComparisonOverviewRecords extends Table {
 
   @override
   Set<Column> get primaryKey => {dataId};
-
 
 }
 

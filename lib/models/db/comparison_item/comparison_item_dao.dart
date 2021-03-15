@@ -23,10 +23,10 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       into(comparisonOverviewRecords).insert(comparisonOverviewRecord);
 
   Future<void> insertWay1MeritRecordDB(
-      List<Way1MeritRecord> way1MeritDescs) async {
+      List<Way1MeritRecord> way1MeritItemRecords) async {
     //2行以上の可能性あり
     await batch((batch) {
-      batch.insertAll(way1MeritRecords, way1MeritDescs);
+      batch.insertAll(way1MeritRecords, way1MeritItemRecords);
     });
   }
 

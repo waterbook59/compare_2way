@@ -1,5 +1,6 @@
 import 'package:compare_2way/data_models/comparison_item.dart';
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_dao.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_database.dart';
 import 'package:compare_2way/utils/extensions.dart';
@@ -14,29 +15,6 @@ class CompareRepository {
   List<ComparisonOverview> _overviewResults = <ComparisonOverview>[];
   ComparisonOverview _overviewResult;
 
-  Future<void> createComparisonItems(ComparisonItem comparisonItem) async {
-    try {
-      ///ComparisonItem=>ComparisonOverviewRecord
-      final comparisonOverviewRecord =
-          comparisonItem.toOverviewRecord(comparisonItem);
-      //  comparisonItem.way1MeritとcomparisonItem.way1Demeritがnullなのでextensions内の
-      //forEachでエラー：The method 'forEach' was called on null.
-      // final way1MeritDescs = comparisonItem.toWay1MeritRecord(comparisonItem);
-      // final way1DemeritDescs =
-      //    comparisonItem.toWay1DemeritRecord(comparisonItem);
-
-//      await _comparisonItemDao.insertDB(
-//          comparisonOverviewRecord, way1MeritDescs,way1DemeritDescs);
-
-      await _comparisonItemDao
-          .insertComparisonOverviewDB(comparisonOverviewRecord);
-      print('way1とway2のタイトル登録完了');
-    } on SqliteException catch (e) {
-      //ここでエラーを返さずにviewとviewModelのvalidationの条件に同じタイトルを弾くようにしてみる
-      print('repositoryエラー:この問題はすでに登録${e.toString()}');
-    }
-  }
-
   ///comparisonOverview=>ComparisonOverviewRecordへ変換保存
   Future<void> createComparisonOverview(
       ComparisonOverview comparisonOverview) async {
@@ -50,6 +28,24 @@ class CompareRepository {
       print('repositoryエラー:${e.toString()}');
     }
   }
+
+  //todo createComparisonOverviewと結合
+  Future<void> createDescList(List<Way1Merit> way1MeritItems) async{
+    try{
+///way1Merit 1行の場合
+//      final way1MeritRecord = way1Merit.toWay1MeritRecord(way1Merit);
+// final way1MeritDescs = comparisonItem.toWay1MeritRecord(comparisonItem);
+///List<way1Merit>の場合
+       final way1MeritItemRecords =
+          way1MeritItems.toWay1MeritRecordList(way1MeritItems);
+      await _comparisonItemDao.insertWay1MeritRecordDB(way1MeritItemRecords);
+       print('List<Way1Merit>を新規登録');
+    }on SqliteException catch(e){
+      print('repositoryエラー:${e.toString()}');
+    }
+  }
+
+
 
   Future<List<ComparisonOverview>> getOverview(String comparisonItemId) async {
     ///resultComparisonOverviewRecordsはList<ComparisonOverviewRecord>
@@ -128,4 +124,35 @@ class CompareRepository {
     return _overviewResult =
         comparisonOverviewRecord.toComparisonOverview(comparisonOverviewRecord);
   }
+
+
+
+
+
+
+  ///ComparisonItem=>ComparisonOverviewRecord,List<Way1Merit>に分解登録
+  Future<void> createComparisonItems(ComparisonItem comparisonItem) async {
+    try {
+      ///ComparisonItem=>ComparisonOverviewRecord
+      final comparisonOverviewRecord =
+      comparisonItem.toOverviewRecord(comparisonItem);
+      //  comparisonItem.way1MeritとcomparisonItem.way1Demeritがnullなのでextensions内の
+      //forEachでエラー：The method 'forEach' was called on null.
+      // final way1MeritDescs = comparisonItem.toWay1MeritRecord(comparisonItem);
+      // final way1DemeritDescs =
+      //    comparisonItem.toWay1DemeritRecord(comparisonItem);
+
+//      await _comparisonItemDao.insertDB(
+//          comparisonOverviewRecord, way1MeritDescs,way1DemeritDescs);
+
+      await _comparisonItemDao
+          .insertComparisonOverviewDB(comparisonOverviewRecord);
+      print('way1とway2のタイトル登録完了');
+    } on SqliteException catch (e) {
+      //ここでエラーを返さずにviewとviewModelのvalidationの条件に同じタイトルを弾くようにしてみる
+      print('repositoryエラー:この問題はすでに登録${e.toString()}');
+    }
+  }
+
+
 }
