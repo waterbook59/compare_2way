@@ -63,7 +63,7 @@ extension ConvertToComparisonOverview on ComparisonOverview {
   }
 }
 
-///DB:ComparisonOverviewRecordの１行=>ComparisonOverview
+///読込時 DB:ComparisonOverviewRecordの１行=>ComparisonOverview
 extension ConvertToComparisonOverviewRecord on ComparisonOverviewRecord {
   ComparisonOverview toComparisonOverview(
       ComparisonOverviewRecord overviewRecord) {
@@ -89,7 +89,7 @@ extension ConvertToComparisonOverviewRecord on ComparisonOverviewRecord {
   }
 }
 
-///モデルクラス:way1Merit=>DB:way1MeritRecord
+///保存時 モデルクラス:way1Merit=>DB:way1MeritRecord
 extension ConvertToWay1MeritRecord on Way1Merit{
   Way1MeritRecord toWay1MeritRecord (Way1Merit initWay1Merit){
     final way1MeritRecord= Way1MeritRecord(
@@ -99,11 +99,10 @@ extension ConvertToWay1MeritRecord on Way1Merit{
     return way1MeritRecord;
   }
 }
-//todo
-///モデルクラス:Lis<Way1Merit>=>DB:List<Way1MeritRecord>
+
+///保存時 モデルクラス:Lis<Way1Merit>=>DB:List<Way1MeritRecord>
 extension ConvertToWay1MeritRecordList on List<Way1Merit>{
   List<Way1MeritRecord> toWay1MeritRecordList(List<Way1Merit> way1MeritItems) {
-
 //    way1MeritId:autoIncrementにしてるのでそのまま
     //List<メリット詳細>=>1つずつのメリットへ分解
     final way1MeritItemRecords = <Way1MeritRecord>[];
@@ -121,7 +120,20 @@ extension ConvertToWay1MeritRecordList on List<Way1Merit>{
   }
 }
 
-
+///読込時 DB:List<Way1MeritRecord>=>モデルクラス:Lis<Way1Merit>
+extension ConvertToWay1MeritList on List<Way1MeritRecord>{
+  List<Way1Merit> toWay1MeritList(List<Way1MeritRecord> way1MeritRecordList){
+    final way1MeritList = <Way1Merit>[];
+    way1MeritRecordList.forEach((way1MeritRecordSingle) {
+      way1MeritList.add(Way1Merit(
+        way1MeritId: way1MeritRecordSingle.way1MeritId,
+        comparisonItemId: way1MeritRecordSingle.comparisonItemId,
+        way1MeritDesc: way1MeritRecordSingle.way1MeritDesc,
+      ));
+    });
+    return way1MeritList;
+  }
+}
 
 
 

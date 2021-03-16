@@ -66,6 +66,7 @@ class SingleListPage extends StatelessWidget {
 //                    );
 //                  })),
 //        ),
+        //todo リスト長くなったときにスライドできない
         body: Consumer<CompareViewModel>(
             builder: (context, compareViewModel, child) {
           return (viewModel.editStatus == ListEditMode.display)

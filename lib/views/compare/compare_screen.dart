@@ -43,7 +43,13 @@ class CompareScreen extends StatelessWidget {
     //initState的に他の画面から写ってきた時のみ読み込み
     if (viewModel.compareScreenStatus == CompareScreenStatus.set) {
       print('compareScreenのFuture通過');
-      Future(() => viewModel.setOverview(comparisonOverview));
+      Future(() {
+        viewModel.getDesc(comparisonOverview.comparisonItemId);
+        print('DB=>veiwのway1List：'
+            '${(viewModel.way1MeritItems).map((way1MeritSingle)
+        => way1MeritSingle.comparisonItemId).toList()}');
+        return viewModel.setOverview(comparisonOverview);
+      });
       viewModel.compareScreenStatus = CompareScreenStatus.update;
     }
 

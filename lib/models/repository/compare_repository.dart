@@ -13,12 +13,14 @@ class CompareRepository {
 
   final ComparisonItemDao _comparisonItemDao;
   List<ComparisonOverview> _overviewResults = <ComparisonOverview>[];
+  List<Way1Merit> _way1MeritList = <Way1Merit>[];
   ComparisonOverview _overviewResult;
 
-  ///comparisonOverview=>ComparisonOverviewRecordへ変換保存
+  ///新規作成 comparisonOverview
   Future<void> createComparisonOverview(
       ComparisonOverview comparisonOverview) async {
     try {
+      //comparisonOverview=>ComparisonOverviewRecordへ変換保存
       final comparisonOverviewRecord =
           comparisonOverview.toComparisonOverviewRecord(comparisonOverview);
       await _comparisonItemDao
@@ -30,22 +32,21 @@ class CompareRepository {
   }
 
   //todo createComparisonOverviewと結合
-  Future<void> createDescList(List<Way1Merit> way1MeritItems) async{
-    try{
-///way1Merit 1行の場合
+  ///新規作成 way1MeritList
+  Future<void> createDescList(List<Way1Merit> way1MeritItems) async {
+    try {
+      ///way1Merit 1行の場合
 //      final way1MeritRecord = way1Merit.toWay1MeritRecord(way1Merit);
 // final way1MeritDescs = comparisonItem.toWay1MeritRecord(comparisonItem);
-///List<way1Merit>の場合
-       final way1MeritItemRecords =
+      ///List<way1Merit>の場合
+      final way1MeritItemRecords =
           way1MeritItems.toWay1MeritRecordList(way1MeritItems);
       await _comparisonItemDao.insertWay1MeritRecordDB(way1MeritItemRecords);
-       print('List<Way1Merit>を新規登録');
-    }on SqliteException catch(e){
+      print('List<Way1Merit>を新規登録');
+    } on SqliteException catch (e) {
       print('repositoryエラー:${e.toString()}');
     }
   }
-
-
 
   Future<List<ComparisonOverview>> getOverview(String comparisonItemId) async {
     ///resultComparisonOverviewRecordsはList<ComparisonOverviewRecord>
@@ -57,10 +58,9 @@ class CompareRepository {
         .toComparisonOverviews(resultComparisonOverviewRecords);
   }
 
-  ///保存
+  ///保存 comparisonOverview
   Future<void> saveComparisonItem(ComparisonOverview updateOverview) async {
     try {
-
       ///ComparisonOverview=>ComparisonOverviewRecord
       final comparisonOverviewRecord =
           updateOverview.toComparisonOverviewRecord(updateOverview);
@@ -93,7 +93,7 @@ class CompareRepository {
     }
   }
 
-  ///Read
+  ///Read comparisonOverview
   Future<List<ComparisonOverview>> getOverviewList() async {
     final comparisonOverviewRecords = await _comparisonItemDao.allOverviews;
     return _overviewResults = comparisonOverviewRecords
@@ -125,17 +125,12 @@ class CompareRepository {
         comparisonOverviewRecord.toComparisonOverview(comparisonOverviewRecord);
   }
 
-
-
-
-
-
-  ///ComparisonItem=>ComparisonOverviewRecord,List<Way1Merit>に分解登録
+///ComparisonItem=>ComparisonOverviewRecord,List<Way1Merit>に分解登録
   Future<void> createComparisonItems(ComparisonItem comparisonItem) async {
     try {
       ///ComparisonItem=>ComparisonOverviewRecord
       final comparisonOverviewRecord =
-      comparisonItem.toOverviewRecord(comparisonItem);
+          comparisonItem.toOverviewRecord(comparisonItem);
       //  comparisonItem.way1MeritとcomparisonItem.way1Demeritがnullなのでextensions内の
       //forEachでエラー：The method 'forEach' was called on null.
       // final way1MeritDescs = comparisonItem.toWay1MeritRecord(comparisonItem);
@@ -154,5 +149,12 @@ class CompareRepository {
     }
   }
 
-
+  ///Read way1MeritList
+  Future<List<Way1Merit>> getWay1MeritList(String comparisonItemId) async {
+    //comparisonItemIdを元に得られたList<Way1MeritRecord>をList<Way1Merit>へ変換する
+    final way1MeritRecordList =
+     await _comparisonItemDao.getWay1MeritList(comparisonItemId);
+    return _way1MeritList = way1MeritRecordList
+        .toWay1MeritList(way1MeritRecordList);
+  }
 }
