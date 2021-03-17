@@ -15,9 +15,10 @@ class CompareViewModel extends ChangeNotifier {
   List<ComparisonOverview> get comparisonOverviews => _comparisonOverviews;
   CompareScreenStatus compareScreenStatus;
   ComparisonOverview overviewDB;
-  List<Way1Merit> _way1MeritItems = <Way1Merit>[];
-
-  List<Way1Merit> get way1MeritItems => _way1MeritItems;
+  List<Way1Merit> _way1MeritList = <Way1Merit>[];
+  List<Way1Merit> get way1MeritList => _way1MeritList;
+  List<TextEditingController> _way1MeritControllers;
+  List<TextEditingController> get way1MeritControllers => _way1MeritControllers;
 
   String _itemTitle = '';
 
@@ -60,7 +61,7 @@ class CompareViewModel extends ChangeNotifier {
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
   Future<void> getOverview(String comparisonItemId) async {
     _comparisonOverviews =
-        await _compareRepository.getOverview(comparisonItemId);
+    await _compareRepository.getOverview(comparisonItemId);
     _way1Title = comparisonOverviews[0].way1Title;
     _way2Title = comparisonOverviews[0].way2Title;
     notifyListeners();
@@ -71,7 +72,7 @@ class CompareViewModel extends ChangeNotifier {
   Future<List<ComparisonOverview>> getWaitOverview(
       String comparisonItemId) async {
     _comparisonOverviews =
-        await _compareRepository.getOverview(comparisonItemId);
+    await _compareRepository.getOverview(comparisonItemId);
     _itemTitle = comparisonOverviews[0].itemTitle;
     _way1Title = comparisonOverviews[0].way1Title;
     _way2Title = comparisonOverviews[0].way2Title;
@@ -96,16 +97,16 @@ class CompareViewModel extends ChangeNotifier {
   //way1Meritのリストを作って保存
   Future<void> createDesc(Way1Merit initWay1Merit) async {
     //ここでaddしていくと古いものがだぶるのでは
-    _way1MeritItems.add(initWay1Merit);
-    print('viewModel.way1MeritItems:$_way1MeritItems');
-    await _compareRepository.createDescList(_way1MeritItems);
-    _way1MeritItems = <Way1Merit>[];
+    _way1MeritList.add(initWay1Merit);
+    print('viewModel.way1MeritList:$_way1MeritList');
+    await _compareRepository.createDescList(_way1MeritList);
+    _way1MeritList = <Way1Merit>[];
   }
 
   ///List<ComparisonOverview>ではなく、comparisonItemIdからComparisonOverview１行だけ取ってくる
   Future<void> getComparisonOverview(String comparisonItemId) async {
     overviewDB =
-        await _compareRepository.getComparisonOverview(comparisonItemId);
+    await _compareRepository.getComparisonOverview(comparisonItemId);
   }
 
   Future<void> setWay1MeritNewValue(int newValue) async {
@@ -202,10 +203,13 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   ///List<Way1Merit>取得
-  Future<void> getDesc(String comparisonItemId) async {
-    _way1MeritItems =
-        await _compareRepository.getWay1MeritList(comparisonItemId);
-    notifyListeners();
+  Future<List<Way1Merit>> getDesc(String comparisonItemId) async {
+    _way1MeritList =
+    await _compareRepository.getWay1MeritList(comparisonItemId);
+     _way1MeritControllers =
+    List.generate(_way1MeritList.length, (i) =>
+        TextEditingController(text: _way1MeritList[i].way1MeritDesc));
+    return _way1MeritList;
   }
 
 //todo textControllerを破棄

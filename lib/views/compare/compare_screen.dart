@@ -1,8 +1,10 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/conclusion_input_part.dart';
+import 'package:compare_2way/views/compare/components/desc_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -44,10 +46,12 @@ class CompareScreen extends StatelessWidget {
     if (viewModel.compareScreenStatus == CompareScreenStatus.set) {
       print('compareScreenのFuture通過');
       Future(() {
-        viewModel.getDesc(comparisonOverview.comparisonItemId);
-        print('DB=>veiwのway1List：'
-            '${(viewModel.way1MeritItems).map((way1MeritSingle)
-        => way1MeritSingle.comparisonItemId).toList()}');
+
+//        viewModel.getDesc(comparisonOverview.comparisonItemId);
+//        print('DB=>veiwのway1List：'
+//            '${(viewModel.way1MeritList).map((way1MeritSingle)
+//        => way1MeritSingle.comparisonItemId).toList()}');
+//        print('viewModel.controllers.length:${viewModel.way1MeritList.length}');
         return viewModel.setOverview(comparisonOverview);
       });
       viewModel.compareScreenStatus = CompareScreenStatus.update;
@@ -113,7 +117,6 @@ class CompareScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 8),
-
                 ///メリットアイコン
                 IconTitle(
                   title: 'メリット',
@@ -124,45 +127,43 @@ class CompareScreen extends StatelessWidget {
                 Selector<CompareViewModel,String>(
                   selector: (context,viewModel)=>viewModel.way1Title,
                   builder: (context,way1Title,child){
-                    return GFAccordion(
-                      title: way1Title,
-                      titleBorderRadius: accordionTopBorderRadius,
-                      contentBorderRadius: accordionBottomBorderRadius,
-                      showAccordion: false,
-                      collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
-                      contentChild: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _controllers.length,
-                          itemBuilder: (context, index) {
-                            return CupertinoTextField(
-                              placeholder: 'メリットを入力してください',
-                              controller: _controllers[index],
-                              style: const TextStyle(color: Colors.black),
-                            );
-                          }),
+                    //todo よみこみエラーFutureBuilder？
+                    return FutureBuilder(//material
+                      future: viewModel.getDesc(comparisonOverview.comparisonItemId),
+                      builder: (context, AsyncSnapshot <List<Way1Merit>> snapshot){
+//                        if (snapshot.data == null) {
+//                          print('snapshotがnull');
+//                          return Container();
+//                        }
+    if (snapshot.hasData && snapshot.data.isNotEmpty) {
+     return GFAccordion(
+        title: way1Title,
+        titleBorderRadius: accordionTopBorderRadius,
+        contentBorderRadius: accordionBottomBorderRadius,
+        showAccordion: true,
+        collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
+        contentChild:
+        DescForm(items: snapshot.data,)
+//        ListView.builder(
+//            shrinkWrap: true,
+//            physics: const NeverScrollableScrollPhysics(),
+//            itemCount: snapshot.data.length,
+//            itemBuilder: (context, index) {
+////               List<TextEditingController> _way1MeritControllers;
+////              _way1MeritControllers =
+////                  List.generate(snapshot.data.length, (i) =>
+////                 TextEditingController(text: snapshot.data[i].way1MeritDesc));
+//              return DescForm(items: snapshot.data,);
+//            }),
+      );
+    }else{
+      print('GFAccordion以外：${snapshot.hasData}');
+      return Container();
+    }
+                      },
+
                     );
                   },
-//                  child:
-//                  GFAccordion(
-//                    title: way1Title,
-//                    titleBorderRadius: accordionTopBorderRadius,
-//                    contentBorderRadius: accordionBottomBorderRadius,
-//                    showAccordion: false,
-//                    collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
-//                    contentChild: ListView.builder(
-//                        shrinkWrap: true,
-//                        physics: const NeverScrollableScrollPhysics(),
-//                        itemCount: _controllers.length,
-//                        itemBuilder: (context, index) {
-////              textItems.add(new TextEditingController());
-//                          return CupertinoTextField(
-//                            placeholder: 'メリットを入力してください',
-//                            controller: _controllers[index],
-//                            style: const TextStyle(color: Colors.black),
-//                          );
-//                        }),
-//                  ),
                 ),
                 ///way2 メリット
                 Selector<CompareViewModel,String>(
