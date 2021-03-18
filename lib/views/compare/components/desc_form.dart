@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class DescForm extends StatefulWidget {
-  const DescForm({this.items});
+  const DescForm({this.items,this.inputChanged,});
 
   final List<Way1Merit> items;
+  final Function(String,int) inputChanged;
 
   @override
   _DescFormState createState() => _DescFormState();
@@ -33,16 +34,31 @@ class _DescFormState extends State<DescForm> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      //Vertical viewport was given unbounded height.のエラーはshrinkWrap:trueで
-      shrinkWrap: true,
-      children:controllers.map((controller) {
-       return CupertinoTextField(
-         placeholder: 'メリットを入力してください',
-         controller: controller,
-         style: const TextStyle(color: Colors.black),
-       );
-      }).toList(),
-    );
+    return
+    ///ListView.builder
+      ListView.builder(
+          shrinkWrap:true,
+          itemCount: controllers.length,
+          itemBuilder: (context,index){
+            return CupertinoTextField(
+              placeholder: 'メリットを入力してください',
+              controller: controllers[index],
+              onSubmitted: (newDesc)=>widget.inputChanged(newDesc,index),
+              style: const TextStyle(color: Colors.black),
+            );
+          });
+    ///ListView
+//      ListView(
+//      //Vertical viewport was given unbounded height.のエラーはshrinkWrap:trueで
+//      shrinkWrap: true,
+//      children:controllers.map((controller) {
+//       return CupertinoTextField(
+//         placeholder: 'メリットを入力してください',
+//         controller: controller,
+//         onChanged: widget.inputChanged,
+//         style: const TextStyle(color: Colors.black),
+//       );
+//      }).toList(),
+//    );
   }
 }

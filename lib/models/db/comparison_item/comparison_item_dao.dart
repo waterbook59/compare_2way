@@ -22,13 +22,25 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
           ComparisonOverviewRecord comparisonOverviewRecord) =>
       into(comparisonOverviewRecords).insert(comparisonOverviewRecord);
 
+  // 新規作成:List<Way1Merit>
   Future<void> insertWay1MeritRecordDB(
       List<Way1MeritRecord> way1MeritItemRecords) async {
     //2行以上の可能性あり
     await batch((batch) {
       batch.insertAll(way1MeritRecords, way1MeritItemRecords);
     });
+    print('daoに新規作成');
   }
+
+  //更新:Way1Merit
+  Future<void>updateWay1MeritRecordDB(
+      Way1MeritRecord way1meritItemRecord) async{
+    print('リスト更新:${way1meritItemRecord.way1MeritId}/'
+        '${way1meritItemRecord.way1MeritDesc}');
+    return update(way1MeritRecords).replace(way1meritItemRecord);
+
+  }
+
 
   Future<void> insertWay1DemeritRecordDB(
       List<Way1DemeritRecord> way1DemeritDescs) async {
@@ -116,4 +128,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       (select(way1MeritRecords)
         ..where((t) => t.comparisonItemId.equals(comparisonItemId)))
           .get();
+
+
+
 }

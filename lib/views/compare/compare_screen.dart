@@ -29,24 +29,18 @@ class CompareScreen extends StatelessWidget {
   ];
 
   static final List<TextEditingController> _controllers =
-  List.generate(items.length, (i) => TextEditingController(text: items[i]));
-
+      List.generate(items.length, (i) => TextEditingController(text: items[i]));
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme
-        .of(context)
-        .primaryColor;
-    final accentColor = Theme
-        .of(context)
-        .accentColor;
+    final primaryColor = Theme.of(context).primaryColor;
+    final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     //initState的に他の画面から写ってきた時のみ読み込み
     if (viewModel.compareScreenStatus == CompareScreenStatus.set) {
       print('compareScreenのFuture通過');
       Future(() {
-
 //        viewModel.getDesc(comparisonOverview.comparisonItemId);
 //        print('DB=>veiwのway1List：'
 //            '${(viewModel.way1MeritList).map((way1MeritSingle)
@@ -56,7 +50,6 @@ class CompareScreen extends StatelessWidget {
       });
       viewModel.compareScreenStatus = CompareScreenStatus.update;
     }
-
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -69,7 +62,6 @@ class CompareScreen extends StatelessWidget {
           style: middleTextStyle,
         ),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-
           ///保存完了ボタン
           GestureDetector(
             child: const Icon(
@@ -77,7 +69,7 @@ class CompareScreen extends StatelessWidget {
               color: Colors.white,
             ),
             onTap: () {
-              return _saveItem(context,comparisonOverview);
+              return _saveItem(context, comparisonOverview);
             },
           ),
           const SizedBox(
@@ -96,6 +88,7 @@ class CompareScreen extends StatelessWidget {
         body: GestureDetector(
           onTap: () {
             print('GestureDetectorをonTap!');
+
             ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
             FocusScope.of(context).unfocus();
           },
@@ -111,9 +104,9 @@ class CompareScreen extends StatelessWidget {
                   builder: (context, itemTitle, child) {
                     return Center(
                         child: Text(
-                          itemTitle,
-                          style: itemTitleTextStyle,
-                        ));
+                      itemTitle,
+                      style: itemTitleTextStyle,
+                    ));
                   },
                 ),
                 const SizedBox(height: 8),
@@ -124,26 +117,33 @@ class CompareScreen extends StatelessWidget {
                   iconColor: accentColor,
                 ),
                 ///way1 メリット
-                Selector<CompareViewModel,String>(
-                  selector: (context,viewModel)=>viewModel.way1Title,
-                  builder: (context,way1Title,child){
-                    //todo よみこみエラーFutureBuilder？
-                    return FutureBuilder(//material
-                      future: viewModel.getDesc(comparisonOverview.comparisonItemId),
-                      builder: (context, AsyncSnapshot <List<Way1Merit>> snapshot){
-//                        if (snapshot.data == null) {
-//                          print('snapshotがnull');
-//                          return Container();
-//                        }
-    if (snapshot.hasData && snapshot.data.isNotEmpty) {
-     return GFAccordion(
-        title: way1Title,
-        titleBorderRadius: accordionTopBorderRadius,
-        contentBorderRadius: accordionBottomBorderRadius,
-        showAccordion: true,
-        collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
-        contentChild:
-        DescForm(items: snapshot.data,)
+                Selector<CompareViewModel, String>(
+                    selector: (context, viewModel) => viewModel.way1Title,
+                    builder: (context, way1Title, child) {
+                      return FutureBuilder(
+                        //material
+                        future: viewModel
+                            .getDesc(comparisonOverview.comparisonItemId),
+                        builder:
+                            (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
+                          if (snapshot.hasData && snapshot.data.isNotEmpty) {
+                            return GFAccordion(
+                                title: way1Title,
+                                titleBorderRadius: accordionTopBorderRadius,
+                                contentBorderRadius:
+                                    accordionBottomBorderRadius,
+                                showAccordion: true,
+                                collapsedTitleBackgroundColor:
+                                    const Color(0xFFE0E0E0),
+                                //todo DescFormを変更してもAccordion閉じると入力消える
+                      /// DescFromの完了ボタンを押すとFutureBuilderが回ってDBからデータ取ってしまう
+                      /// 入力後viewModelへのsetでは不十分でDB保存まで必要
+                                contentChild: DescForm(
+                                  items: viewModel.way1MeritList,
+                                  inputChanged: (newDesc, index) =>
+                                      _way1MeritInputChange(
+                                          context, newDesc, index),
+                                )
 //        ListView.builder(
 //            shrinkWrap: true,
 //            physics: const NeverScrollableScrollPhysics(),
@@ -155,20 +155,18 @@ class CompareScreen extends StatelessWidget {
 ////                 TextEditingController(text: snapshot.data[i].way1MeritDesc));
 //              return DescForm(items: snapshot.data,);
 //            }),
-      );
-    }else{
-      print('GFAccordion以外：${snapshot.hasData}');
-      return Container();
-    }
-                      },
+                                );
+                          } else {
+                            return Container();
+                          }
+                        },
+                      );
+                    }),
 
-                    );
-                  },
-                ),
                 ///way2 メリット
-                Selector<CompareViewModel,String>(
-                  selector: (context,viewModel)=>viewModel.way2Title,
-                  builder: (context,way2Title,child){
+                Selector<CompareViewModel, String>(
+                  selector: (context, viewModel) => viewModel.way2Title,
+                  builder: (context, way2Title, child) {
                     return GFAccordion(
                       title: way2Title,
                       titleBorderRadius: accordionTopBorderRadius,
@@ -200,10 +198,11 @@ class CompareScreen extends StatelessWidget {
                   iconData: Icons.thumb_down,
                   iconColor: accentColor,
                 ),
+
                 ///way1 デメリット
-                Selector<CompareViewModel,String>(
-                  selector: (context,viewModel)=>viewModel.way1Title,
-                  builder: (context,way1Title,child){
+                Selector<CompareViewModel, String>(
+                  selector: (context, viewModel) => viewModel.way1Title,
+                  builder: (context, way1Title, child) {
                     return GFAccordion(
                       title: way1Title,
                       titleBorderRadius: accordionTopBorderRadius,
@@ -223,31 +222,12 @@ class CompareScreen extends StatelessWidget {
                           }),
                     );
                   },
-//                  child:
-//                  GFAccordion(
-//                    title: way1Title,
-//                    titleBorderRadius: accordionTopBorderRadius,
-//                    contentBorderRadius: accordionBottomBorderRadius,
-//                    showAccordion: false,
-//                    collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
-//                    contentChild: ListView.builder(
-//                        shrinkWrap: true,
-//                        physics: const NeverScrollableScrollPhysics(),
-//                        itemCount: _controllers.length,
-//                        itemBuilder: (context, index) {
-////              textItems.add(new TextEditingController());
-//                          return CupertinoTextField(
-//                            placeholder: 'メリットを入力してください',
-//                            controller: _controllers[index],
-//                            style: const TextStyle(color: Colors.black),
-//                          );
-//                        }),
-//                  ),
                 ),
+
                 ///way2 デメリット
-                Selector<CompareViewModel,String>(
-                  selector: (context,viewModel)=>viewModel.way2Title,
-                  builder: (context,way2Title,child){
+                Selector<CompareViewModel, String>(
+                  selector: (context, viewModel) => viewModel.way2Title,
+                  builder: (context, way2Title, child) {
                     return GFAccordion(
                       title: way2Title,
                       titleBorderRadius: accordionTopBorderRadius,
@@ -286,10 +266,11 @@ class CompareScreen extends StatelessWidget {
                 ///テーブル
                 TablePart(
                   way1Title: comparisonOverview.way1Title,
-                  way1MeritChanged: (newValue)=>_setWay1Merit(context,newValue),
+                  way1MeritChanged: (newValue) =>
+                      _setWay1Merit(context, newValue),
                   way1MeritEvaluate: comparisonOverview.way1MeritEvaluate,
-                  way1DemeritEvaluate:comparisonOverview.way1DemeritEvaluate,
-                  way2Title:comparisonOverview.way2Title,
+                  way1DemeritEvaluate: comparisonOverview.way1DemeritEvaluate,
+                  way2Title: comparisonOverview.way2Title,
                   way2MeritEvaluate: comparisonOverview.way2MeritEvaluate,
                   way2DemeritEvaluate: comparisonOverview.way2DemeritEvaluate,
                 ),
@@ -361,11 +342,10 @@ class CompareScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _saveItem(BuildContext context,
-      ComparisonOverview comparisonOverview) async {
+  Future<void> _saveItem(
+      BuildContext context, ComparisonOverview comparisonOverview) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     viewModel.compareScreenStatus = CompareScreenStatus.update;
-
 
     FocusScope.of(context).unfocus();
 
@@ -378,18 +358,22 @@ class CompareScreen extends StatelessWidget {
   }
 
   //conclusion変更されたらset
-  Future<void> _conclusionInputChanged(BuildContext context,
-      String newConclusion) async {
+  Future<void> _conclusionInputChanged(
+      BuildContext context, String newConclusion) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.setConclusion(newConclusion);
-
   }
 
   //way1Merit変更されたらset
-  Future<void>_setWay1Merit(BuildContext context, int newValue) async{
+  Future<void> _setWay1Merit(BuildContext context, int newValue) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.setWay1MeritNewValue(newValue);
   }
 
-
+  //way1Meritの詳細が変更されたらset
+  Future<void> _way1MeritInputChange
+      (BuildContext context, String newDesc, int index) async{
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.setWay1MeritDesc(newDesc,index);
+  }
 }

@@ -93,6 +93,7 @@ extension ConvertToComparisonOverviewRecord on ComparisonOverviewRecord {
 extension ConvertToWay1MeritRecord on Way1Merit{
   Way1MeritRecord toWay1MeritRecord (Way1Merit initWay1Merit){
     final way1MeritRecord= Way1MeritRecord(
+
       comparisonItemId: initWay1Merit.comparisonItemId,
       way1MeritDesc: initWay1Merit.way1MeritDesc ?? '',
     );
@@ -109,11 +110,12 @@ extension ConvertToWay1MeritRecordList on List<Way1Merit>{
     //todo 単にforEachをmapに変換してもダメ
     way1MeritItems.forEach((way1MeritSingle) {
       way1MeritItemRecords.add(Way1MeritRecord(
+        way1MeritId: way1MeritSingle.way1MeritId,
         comparisonItemId: way1MeritSingle.comparisonItemId,
         way1MeritDesc: way1MeritSingle.way1MeritDesc,
       ));
     });
-    print('way1MeritRecordにcomparisonItemId保存できているか');
+    print('extensions:way1MeritRecordにcomparisonItemId保存できているか');
     print(way1MeritItemRecords.map((way1MeritSingle)
  => way1MeritSingle.comparisonItemId).toList());
     return way1MeritItemRecords;

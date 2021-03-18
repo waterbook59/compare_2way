@@ -129,6 +129,29 @@ class CompareViewModel extends ChangeNotifier {
     conclusion = newConclusion;
   }
 
+  Future<void> setWay1MeritDesc(String newDesc, int index) async{
+    print('setWay1MeritNewDesc!:$newDesc');
+    //todo Listの中の[index]の番号のway1MeritDescのプロパティだけnewDescに変えたい
+    _way1MeritList = List.generate(_way1MeritList.length, (i) {
+      if(i == index){
+        return Way1Merit(
+          way1MeritId: _way1MeritList[i].way1MeritId,
+          comparisonItemId: _way1MeritList[i].comparisonItemId,
+          way1MeritDesc: newDesc,
+        );
+      }else{
+        return Way1Merit(
+          way1MeritId: _way1MeritList[i].way1MeritId,
+          comparisonItemId: _way1MeritList[i].comparisonItemId,
+          way1MeritDesc: _way1MeritList[i].way1MeritDesc,
+        );
+      }
+    });
+    await _compareRepository.setWay1MeritDesc(_way1MeritList,index);
+
+  }
+
+
   ///CompareScreenで表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
   //todo favorite,way3追加
   Future<void> saveComparisonItem(ComparisonOverview updateOverview) async {
@@ -211,6 +234,8 @@ class CompareViewModel extends ChangeNotifier {
         TextEditingController(text: _way1MeritList[i].way1MeritDesc));
     return _way1MeritList;
   }
+
+
 
 //todo textControllerを破棄
 }
