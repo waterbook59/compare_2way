@@ -43,7 +43,7 @@ class _DescFormState extends State<DescForm> {
             return CupertinoTextField(
               placeholder: 'メリットを入力してください',
               controller: controllers[index],
-              onSubmitted: (newDesc)=>widget.inputChanged(newDesc,index),
+              onChanged: (newDesc)=>widget.inputChanged(newDesc,index),
               style: const TextStyle(color: Colors.black),
             );
           });

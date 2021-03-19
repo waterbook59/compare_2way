@@ -136,16 +136,14 @@ class CompareRepository {
 
   //todo createComparisonOverviewと結合
   ///新規作成 way1MeritList
-  //todo way1MeritListにかきかえ
-  Future<void> createDescList(List<Way1Merit> way1MeritItems) async {
+  Future<void> createDescList(List<Way1Merit> way1MeritList) async {
     try {
       ///way1Merit 1行の場合
 //      final way1MeritRecord = way1Merit.toWay1MeritRecord(way1Merit);
 // final way1MeritDescs = comparisonItem.toWay1MeritRecord(comparisonItem);
       ///List<way1Merit>の場合
-      //todo way1MeritListにかきかえ
       final way1MeritItemRecords =
-      way1MeritItems.toWay1MeritRecordList(way1MeritItems);
+      way1MeritList.toWay1InitMeritRecordList(way1MeritList);
       await _comparisonItemDao.insertWay1MeritRecordDB(way1MeritItemRecords);
       print('List<Way1Merit>を新規登録');
     } on SqliteException catch (e) {
@@ -162,13 +160,13 @@ class CompareRepository {
         .toWay1MeritList(way1MeritRecordList);
   }
 
-  ///保存 List<Way1Merit>...本当は変更したところだけを保存するほうがリーズナブル
+  ///保存 List<Way1Merit>=>変更したWay1Meritだけ更新
   Future<void> setWay1MeritDesc(
-      List<Way1Merit> way1meritList, int index) async {
+      List<Way1Merit> way1MeritList, int index) async {
     try {
       ///List<way1Merit>の場合
-      final way1MeritItemRecords = way1meritList.toWay1MeritRecordList(
-          way1meritList);
+      final way1MeritItemRecords = way1MeritList.toWay1MeritRecordList(
+          way1MeritList);
       await _comparisonItemDao.updateWay1MeritRecordDB(
           way1MeritItemRecords[index]);
     } on SqliteException catch (e) {

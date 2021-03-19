@@ -101,6 +101,22 @@ extension ConvertToWay1MeritRecord on Way1Merit{
   }
 }
 
+///初回登録時 デルクラス:Lis<Way1Merit>=>DB:List<Way1MeritRecord>
+extension ConvertToWay1InitMeritRecordList on List<Way1Merit>{
+  List<Way1MeritRecord> toWay1InitMeritRecordList(
+      List<Way1Merit> way1MeritItems) {
+    final way1MeritItemRecords = <Way1MeritRecord>[];
+    //todo 単にforEachをmapに変換してもダメ
+    way1MeritItems.forEach((way1MeritSingle) {
+      way1MeritItemRecords.add(Way1MeritRecord(
+        comparisonItemId: way1MeritSingle.comparisonItemId,
+        way1MeritDesc: way1MeritSingle.way1MeritDesc,
+      ));
+    });
+    return way1MeritItemRecords;
+  }
+}
+
 ///保存時 モデルクラス:Lis<Way1Merit>=>DB:List<Way1MeritRecord>
 extension ConvertToWay1MeritRecordList on List<Way1Merit>{
   List<Way1MeritRecord> toWay1MeritRecordList(List<Way1Merit> way1MeritItems) {
