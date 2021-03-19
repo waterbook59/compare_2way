@@ -93,8 +93,8 @@ class CompareRepository {
   ///Delete
   Future<void> deleteList(String comparisonItemId) async {
 //    final comparisonOverviewRecord =
-    //todo Merit/Dmerit、Tagのリストも同時に削除必要
-    await _comparisonItemDao.deleteList(comparisonItemId);
+    //todo Merit/Dmerit、Tagのリストも同時に削除必要(transaction)
+    await _comparisonItemDao.deleteListAll(comparisonItemId);
     print('データ削除完了');
   }
 

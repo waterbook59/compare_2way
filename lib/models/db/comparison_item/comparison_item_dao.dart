@@ -17,12 +17,12 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   Future<List<ComparisonOverviewRecord>> get allOverviews =>
       select(comparisonOverviewRecords).get();
 
-  //id,タイトル,評価等１行ですむもの
+  ///新規作成:ComparisonOverview
   Future<void> insertComparisonOverviewDB(
           ComparisonOverviewRecord comparisonOverviewRecord) =>
       into(comparisonOverviewRecords).insert(comparisonOverviewRecord);
 
-  // 新規作成:List<Way1Merit>
+  ///新規作成:List<Way1Merit>
   Future<void> insertWay1MeritRecordDB(
       List<Way1MeritRecord> way1MeritItemRecords) async {
     //2行以上の可能性あり
@@ -32,7 +32,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     print('daoに新規作成');
   }
 
-  //更新:Way1Merit
+  ///更新:Way1Merit
   Future<void>updateWay1MeritRecordDB(
       Way1MeritRecord way1meritItemRecord) async{
     print('リスト更新:${way1meritItemRecord.way1MeritId}/'
@@ -99,7 +99,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
             ..where((t) => t.comparisonItemId.equals(comparisonItemId)))
           .get();
 
-  ///comparisonOverviewの保存
+  ///保存:comparisonOverview
   Future<void> saveComparisonOverviewDB(String comparisonItemId,
       ComparisonOverviewRecordsCompanion overviewCompanion) {
     return (update(comparisonOverviewRecords)
@@ -107,7 +107,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
         .write(overviewCompanion);
   }
 
-  ///comparisonOverviewの削除
+  ///削除：comparisonOverview
   Future<void> deleteList(String comparisonItemId) =>
       //comparisonOverviewRecordsテーブルのcomparisonItemIdと
       // view側から持ってきたcomparisonItemIdが同じものを削除
@@ -115,7 +115,13 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
             ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
           .go();
 
-  ///List<ComparisonOverview>ではなく、comparisonItemIdからComparisonOverview１行だけ取ってくる
+  ///削除：List<Way1Merit>
+  Future<void> deleteWay1MeritList(String comparisonItemId)=>
+      (delete(way1MeritRecords)
+        ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
+          .go();
+
+  ///読込：comparisonItemIdからComparisonOverview１行だけ取ってくる
   Future<ComparisonOverviewRecord> getComparisonOverview(
           String comparisonItemId) =>
       (select(comparisonOverviewRecords)
@@ -123,12 +129,18 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
           .getSingle();
 
   //todo way1,2 Merit/Demeritをtransactionでまとめてすっきり書く
-  ///idをもとにList<Way1MeritRecord>をとってくる
+  ///読込：idをもとにList<Way1MeritRecord>をとってくる
   Future<List<Way1MeritRecord>> getWay1MeritList(String comparisonItemId) =>
       (select(way1MeritRecords)
         ..where((t) => t.comparisonItemId.equals(comparisonItemId)))
           .get();
 
+  ///comparisonOverview,List<Way1Merit>をまとめて削除
+  Future<void> deleteListAll(String comparisonItemId)=>
+      transaction(() async{
+      await deleteList(comparisonItemId);
+      await deleteWay1MeritList(comparisonItemId);
+    });
 
 
 }
