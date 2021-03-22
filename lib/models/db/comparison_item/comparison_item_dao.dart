@@ -34,10 +34,11 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   ///更新:Way1Merit
   Future<void>updateWay1MeritRecordDB(
-      Way1MeritRecord way1meritItemRecord) async{
-    print('リスト更新:${way1meritItemRecord.way1MeritId}/'
-        '${way1meritItemRecord.way1MeritDesc}');
-    return update(way1MeritRecords).replace(way1meritItemRecord);
+      Way1MeritRecord way1MeritItemRecord) async{
+    //todo 追加したもののway1MeritIdがnull
+    print('リスト更新:${way1MeritItemRecord.way1MeritId}/'
+        '${way1MeritItemRecord.way1MeritDesc}');
+    return update(way1MeritRecords).replace(way1MeritItemRecord);
 
   }
 
@@ -141,6 +142,10 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       await deleteList(comparisonItemId);
       await deleteWay1MeritList(comparisonItemId);
     });
+
+  ///リスト１行追加：Way1Merit
+  Future<void> insertWay1MeritRecordSingle(Way1MeritRecord way1MeritRecord)
+  =>into(way1MeritRecords).insert(way1MeritRecord);
 
 
 }

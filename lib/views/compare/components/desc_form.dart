@@ -41,9 +41,10 @@ class _DescFormState extends State<DescForm> {
           itemCount: controllers.length,
           itemBuilder: (context,index){
             return CupertinoTextField(
+              //todo InputDecorationでsuffixIconプロパティでリスト削除できるかも
               placeholder: 'メリットを入力してください',
               controller: controllers[index],
-              onChanged: (newDesc)=>widget.inputChanged(newDesc,index),
+              onChanged: (newDesc)=> widget.inputChanged(newDesc,index),
               style: const TextStyle(color: Colors.black),
             );
           });

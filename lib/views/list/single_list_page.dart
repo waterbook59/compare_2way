@@ -95,7 +95,7 @@ class SingleListPage extends StatelessWidget {
                           return Container(
                               child: const Center(child: Text('リスト追加してください')));
                         } else {
-                          print('ListView側通って描画');
+//print('ListView側通って描画');
                           return
 //print(compareViewModel.comparisonOverviews.map((overview)
 // => overview.conclusion).toList());

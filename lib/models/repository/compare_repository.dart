@@ -140,7 +140,6 @@ class CompareRepository {
     try {
       ///way1Merit 1行の場合
 //      final way1MeritRecord = way1Merit.toWay1MeritRecord(way1Merit);
-// final way1MeritDescs = comparisonItem.toWay1MeritRecord(comparisonItem);
       ///List<way1Merit>の場合
       final way1MeritItemRecords =
       way1MeritList.toWay1InitMeritRecordList(way1MeritList);
@@ -171,6 +170,18 @@ class CompareRepository {
           way1MeritItemRecords[index]);
     } on SqliteException catch (e) {
       print('repositoryエラー:${e.toString()}');
+    }
+  }
+  ///リスト１行追加：Way1Merit
+  Future<void> addWay1Merit(Way1Merit initWay1Merit) async{
+
+    //1行だけ差し込めるか
+    try{
+      final way1MeritRecord = initWay1Merit.toWay1MeritRecord(initWay1Merit);
+      await _comparisonItemDao.insertWay1MeritRecordSingle(way1MeritRecord);
+      print('repository:リスト１行追加');
+    }on SqliteException catch (e) {
+      print('Way1Merit追加エラー:${e.toString()}');
     }
   }
 

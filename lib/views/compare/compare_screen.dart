@@ -3,6 +3,7 @@ import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
+import 'package:compare_2way/views/compare/components/accordion_part.dart';
 import 'package:compare_2way/views/compare/components/conclusion_input_part.dart';
 import 'package:compare_2way/views/compare/components/desc_form.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,6 @@ class CompareScreen extends StatelessWidget {
     'Content 2',
     'Content 3',
   ];
-
   static final List<TextEditingController> _controllers =
       List.generate(items.length, (i) => TextEditingController(text: items[i]));
 
@@ -40,13 +40,10 @@ class CompareScreen extends StatelessWidget {
     //initState的に他の画面から写ってきた時のみ読み込み
     if (viewModel.compareScreenStatus == CompareScreenStatus.set) {
       print('compareScreenのFuture通過');
-      Future(() {
-//        viewModel.getDesc(comparisonOverview.comparisonItemId);
-//        print('DB=>veiwのway1List：'
-//            '${(viewModel.way1MeritList).map((way1MeritSingle)
-//        => way1MeritSingle.comparisonItemId).toList()}');
-//        print('viewModel.controllers.length:${viewModel.way1MeritList.length}');
-        return viewModel.setOverview(comparisonOverview);
+      Future(() async {
+        await viewModel.setOverview(comparisonOverview);
+        await viewModel.getWay1MeritList(comparisonOverview.comparisonItemId);
+//        return viewModel.getWay1MeritList(comparisonOverview.comparisonItemId);
       });
       viewModel.compareScreenStatus = CompareScreenStatus.update;
     }
@@ -110,81 +107,94 @@ class CompareScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 8),
+
                 ///メリットアイコン
                 IconTitle(
                   title: 'メリット',
                   iconData: Icons.thumb_up,
                   iconColor: accentColor,
                 ),
-                ///way1 メリット
+
+                ///way1 メリット way1Titleこの画面で変えないのでSelectorいらんかも
                 Selector<CompareViewModel, String>(
                     selector: (context, viewModel) => viewModel.way1Title,
                     builder: (context, way1Title, child) {
+                      print('compareScreen/way1Merit/Selector');
                       return FutureBuilder(
                         //material
                         future: viewModel
                             .getDesc(comparisonOverview.comparisonItemId),
                         builder:
                             (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
+//                          print('Way1MeritListのFutureBuilderビルド');
                           if (snapshot.hasData && snapshot.data.isNotEmpty) {
-                            return GFAccordion(
-                                title: way1Title,
-                                titleBorderRadius: accordionTopBorderRadius,
-                                contentBorderRadius:
-                                    accordionBottomBorderRadius,
-                                showAccordion: true,
-                                collapsedTitleBackgroundColor:
-                                    const Color(0xFFE0E0E0),
-                                //todo DescFormを変更してもAccordion閉じると入力消える
-                      /// DescFromの完了ボタンを押すとFutureBuilderが回ってDBからデータ取ってしまう
-                      /// 入力後viewModelへのsetでは不十分でDB保存まで必要
-                                contentChild: DescForm(
-                                  items: viewModel.way1MeritList,
-                                  inputChanged: (newDesc, index) =>
-                                      _way1MeritInputChange(
-                                          context, newDesc, index),
-                                )
-//        ListView.builder(
-//            shrinkWrap: true,
-//            physics: const NeverScrollableScrollPhysics(),
-//            itemCount: snapshot.data.length,
-//            itemBuilder: (context, index) {
-////               List<TextEditingController> _way1MeritControllers;
-////              _way1MeritControllers =
-////                  List.generate(snapshot.data.length, (i) =>
-////                 TextEditingController(text: snapshot.data[i].way1MeritDesc));
-//              return DescForm(items: snapshot.data,);
-//            }),
-                                );
+//                            print('AccordionPart描画');
+                            ///リスト追加ボタン押しても描画されないのはGFAccordionでの再描画が必要
+                            return AccordionPart(
+                              title: way1Title,
+                              inputChanged: (newDesc, index) =>
+                                  _way1MeritInputChange(
+                                      context, newDesc, index),
+                              way1MeritList: snapshot.data,
+                              addList: () =>
+                                  addListTest(context, comparisonOverview),
+                            );
+
                           } else {
                             return Container();
                           }
                         },
                       );
                     }),
+//                    }),
 
                 ///way2 メリット
                 Selector<CompareViewModel, String>(
                   selector: (context, viewModel) => viewModel.way2Title,
                   builder: (context, way2Title, child) {
-                    return GFAccordion(
-                      title: way2Title,
-                      titleBorderRadius: accordionTopBorderRadius,
-                      contentBorderRadius: accordionBottomBorderRadius,
-                      collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
-                      showAccordion: false,
-                      contentChild: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _controllers.length,
-                          itemBuilder: (context, index) {
-//              textItems.add(new TextEditingController());
-                            return CupertinoTextField(
-                              placeholder: 'メリットを入力してください',
-                              controller: _controllers[index],
-                              style: const TextStyle(color: Colors.black),
-                            );
-                          }),
+                    return FutureBuilder(
+                      //material
+                      future: viewModel
+                          .getDesc(comparisonOverview.comparisonItemId),
+                      builder:
+                          //todo way2Meritへ変更
+                          (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
+//                          print('Way1MeritListのFutureBuilderビルド');
+                        if (snapshot.hasData && snapshot.data.isNotEmpty) {
+//                            print('AccordionPart描画');
+                          ///リスト追加ボタン押しても描画されないのはGFAccordionでの再描画が必要
+                          return AccordionPart(
+                            title: way2Title,
+                            inputChanged: (newDesc, index) =>
+                                _way1MeritInputChange(context, newDesc, index),
+                            way1MeritList: snapshot.data,
+                            addList: () =>
+                                addListTest(context, comparisonOverview),
+                          );
+
+                          ///GFAccordion
+//                              GFAccordion(
+//                                title: way1Title,
+//                                titleBorderRadius: accordionTopBorderRadius,
+//                                contentBorderRadius:
+//                                    accordionBottomBorderRadius,
+//                                showAccordion: true,
+//                                collapsedTitleBackgroundColor:
+//                                    const Color(0xFFE0E0E0),
+//                      /// DescFromの完了ボタンを押すとFutureBuilderが回ってDBからデータ取ってしまう
+//                      /// 入力後viewModelへのsetでは不十分でDB保存まで必要
+//                                contentChild: DescForm(
+//                                  items: snapshot.data,
+////                                  viewModel.way1MeritList,
+//                                  inputChanged: (newDesc, index) =>
+//                                      _way1MeritInputChange(
+//                                          context, newDesc, index),
+//                                )
+//                                );
+                        } else {
+                          return Container();
+                        }
+                      },
                     );
                   },
                 ),
@@ -335,7 +345,8 @@ class CompareScreen extends StatelessWidget {
           ),
         ),
 //        floatingActionButton: FloatingActionButton(
-//          onPressed: () => addList(context),
+//          child: const Icon(Icons.add),
+//          onPressed: () => addListTest(context, comparisonOverview),
 //        ),
       ),
       //TablePartでは変更が会った瞬間にDB保存が必要かも
@@ -371,9 +382,15 @@ class CompareScreen extends StatelessWidget {
   }
 
   //way1Meritの詳細が変更されたらset
-  Future<void> _way1MeritInputChange
-      (BuildContext context, String newDesc, int index) async{
+  Future<void> _way1MeritInputChange(
+      BuildContext context, String newDesc, int index) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.setWay1MeritDesc(newDesc,index);
+    await viewModel.setWay1MeritDesc(newDesc, index);
+  }
+
+  Future<void> addListTest(
+      BuildContext context, ComparisonOverview comparisonOverview) async {
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.addWay1Merit(comparisonOverview);
   }
 }

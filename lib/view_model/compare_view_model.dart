@@ -17,8 +17,7 @@ class CompareViewModel extends ChangeNotifier {
   ComparisonOverview overviewDB;
   List<Way1Merit> _way1MeritList = <Way1Merit>[];
   List<Way1Merit> get way1MeritList => _way1MeritList;
-  List<TextEditingController> _way1MeritControllers;
-  List<TextEditingController> get way1MeritControllers => _way1MeritControllers;
+
 
   String _itemTitle = '';
 
@@ -54,7 +53,6 @@ class CompareViewModel extends ChangeNotifier {
   TextEditingController get conclusionController => _conclusionController;
   String conclusion = '';
 
-  //todo conclusion用のcontrollerの設定必要？
 
   ListEditMode editStatus = ListEditMode.display;
 
@@ -98,7 +96,6 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> createDesc(Way1Merit initWay1Merit) async {
     //ここでaddしていくと古いものがだぶるのでは
     _way1MeritList.add(initWay1Merit);
-    print('viewModel.way1MeritList:$_way1MeritList');
     await _compareRepository.createDescList(_way1MeritList);
     _way1MeritList = <Way1Merit>[];
   }
@@ -181,9 +178,9 @@ class CompareViewModel extends ChangeNotifier {
 
   ///ListPageのFutureBuilder用
   Future<List<ComparisonOverview>> getList() async {
-    print('getList発動');
+//    print('getList発動');
     _comparisonOverviews = await _compareRepository.getList();
-    print('getList非同期終了');
+//    print('getList非同期終了');
     return _comparisonOverviews;
   }
 
@@ -221,19 +218,48 @@ class CompareViewModel extends ChangeNotifier {
     _way2MeritEvaluate = comparisonOverview.way2MeritEvaluate;
     _way2DemeritEvaluate = comparisonOverview.way2DemeritEvaluate;
     conclusion = comparisonOverview.conclusion;
+    print('文頭のsetOverview/notifyListeners');
+//    notifyListeners();
+  }
 
+  ///List<Way1Merit>取得(FutureBuilder用)
+  Future<List<Way1Merit>> getDesc(String comparisonItemId) async {
+//    print('FutureBuilderでDBからList<Way1Merit> _way1MeritList取得');
+   return _way1MeritList =
+    await _compareRepository.getWay1MeritList(comparisonItemId);
+  }
+  ///List<Way1Merit>取得(文頭取得用)
+  Future<void> getWay1MeritList(String comparisonItemId) async {
+     _way1MeritList =
+    await _compareRepository.getWay1MeritList(comparisonItemId);
+     print('getWay1MeritList/notifyListeners');
     notifyListeners();
   }
 
-  ///List<Way1Merit>取得
-  Future<List<Way1Merit>> getDesc(String comparisonItemId) async {
-    _way1MeritList =
-    await _compareRepository.getWay1MeritList(comparisonItemId);
-     _way1MeritControllers =
-    List.generate(_way1MeritList.length, (i) =>
-        TextEditingController(text: _way1MeritList[i].way1MeritDesc));
-    return _way1MeritList;
+
+
+  Future<void>addWay1Merit(ComparisonOverview comparisonOverview) async{
+    print('ComparisonIdを渡してway1Meritのリスト追加');
+    final initWay1Merit = Way1Merit(
+      comparisonItemId:comparisonOverview.comparisonItemId,
+      way1MeritDesc: '',
+    );
+    //todo やっぱり_way1MeritList.add必要?
+     _way1MeritList.add(initWay1Merit);
+//       await getDesc(comparisonOverview.comparisonItemId);
+    await _compareRepository.addWay1Merit(initWay1Merit);
+//    _way1MeritList = await  _compareRepository.getWay1MeritList(
+//        comparisonOverview.comparisonItemId);
+    //selectorビルドさせたところで、GFAccordion表示に変化がない...
+//    _way1Title = '変更！';
+//    compareScreenStatus = CompareScreenStatus.set;
+    notifyListeners();
+
   }
+
+
+
+
 
 
 
