@@ -123,7 +123,7 @@ extension ConvertToWay1MeritRecordList on List<Way1Merit>{
 //    way1MeritId:autoIncrementにしてるのでそのまま
     //List<メリット詳細>=>1つずつのメリットへ分解
     final way1MeritItemRecords = <Way1MeritRecord>[];
-    //todo 単にforEachをmapに変換してもダメ
+    //todo 単にforEachをmapに変換してもダメ,map&toList()
     way1MeritItems.forEach((way1MeritSingle) {
       way1MeritItemRecords.add(Way1MeritRecord(
         way1MeritId: way1MeritSingle.way1MeritId,

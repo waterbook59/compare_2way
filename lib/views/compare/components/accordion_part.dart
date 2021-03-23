@@ -39,9 +39,6 @@ class _AccordionPartState extends State<AccordionPart> {
             showAccordion: true,
             collapsedTitleBackgroundColor:
             const Color(0xFFE0E0E0),
-
-            ///DescFormのway1MeritListの数の変更が通知されればGFAccordionはリスト表示している箱にすぎない(かも)
-            ///DescFormを再描画させる(Comsumerとか？)
             contentChild:
 //                          DescForm(
 //                items: widget.way1MeritList,

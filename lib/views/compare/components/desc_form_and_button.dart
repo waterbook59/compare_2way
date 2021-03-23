@@ -24,6 +24,9 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
       controllers = widget.items.map((item){
         return TextEditingController(text: item.way1MeritDesc);
       }).toList();
+
+      print('descFormAndButton/initState/items${widget.items.map((item)=>item.way1MeritDesc).toList()}');
+
     }else{
       controllers = [];
     }
@@ -52,8 +55,9 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
         onPressed: () {
           setState(() {
             print('押したらリストが増える');
-            controllers.add(TextEditingController());
             widget.addList();
+            controllers.add(TextEditingController());
+            print('descFormAndButton/RaisedButton/controllers${controllers.map((controller) => controller.text).toList()}');
           });
 
         },),

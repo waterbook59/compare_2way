@@ -107,7 +107,6 @@ class CompareScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 8),
-
                 ///メリットアイコン
                 IconTitle(
                   title: 'メリット',
@@ -119,17 +118,17 @@ class CompareScreen extends StatelessWidget {
                 Selector<CompareViewModel, String>(
                     selector: (context, viewModel) => viewModel.way1Title,
                     builder: (context, way1Title, child) {
-                      print('compareScreen/way1Merit/Selector');
                       return FutureBuilder(
                         //material
                         future: viewModel
                             .getDesc(comparisonOverview.comparisonItemId),
                         builder:
                             (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
-//                          print('Way1MeritListのFutureBuilderビルド');
                           if (snapshot.hasData && snapshot.data.isNotEmpty) {
-//                            print('AccordionPart描画');
-                            ///リスト追加ボタン押しても描画されないのはGFAccordionでの再描画が必要
+                            //todo 初期表示のときListが繰り返して表示される
+                          // todo 入力してる時にアコーディオン閉じると入力消える
+                            // =>collapsedの時にデータ取得するようにしないと入力が消える
+                          print('CompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画');
                             return AccordionPart(
                               title: way1Title,
                               inputChanged: (newDesc, index) =>
@@ -146,7 +145,6 @@ class CompareScreen extends StatelessWidget {
                         },
                       );
                     }),
-//                    }),
 
                 ///way2 メリット
                 Selector<CompareViewModel, String>(
@@ -375,7 +373,7 @@ class CompareScreen extends StatelessWidget {
     await viewModel.setConclusion(newConclusion);
   }
 
-  //way1Merit変更されたらset
+  //テーブルのway1Merit変更されたらset
   Future<void> _setWay1Merit(BuildContext context, int newValue) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.setWay1MeritNewValue(newValue);

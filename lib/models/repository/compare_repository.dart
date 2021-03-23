@@ -179,7 +179,7 @@ class CompareRepository {
     try{
       final way1MeritRecord = initWay1Merit.toWay1MeritRecord(initWay1Merit);
       await _comparisonItemDao.insertWay1MeritRecordSingle(way1MeritRecord);
-      print('repository:リスト１行追加');
+      print('repository:リスト１行新規追加');
     }on SqliteException catch (e) {
       print('Way1Merit追加エラー:${e.toString()}');
     }
