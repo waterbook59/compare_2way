@@ -127,27 +127,39 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   ///DescFormAndButtonでList<Way1Merit>の入力変更があったとき
-  Future<void> setWay1MeritDesc(String newDesc, int index) async{
+  Future<void> setWay1MeritDesc(ComparisonOverview comparisonOverview,
+      String newDesc, int index) async{
     print('setWay1MeritNewDesc!:$newDesc');
+    ///List.generate=>DB更新は変更した行のみ
     // Listの中の[index]の番号のway1MeritDescのプロパティだけnewDescに変えたい
-    _way1MeritList = List.generate(_way1MeritList.length, (i) {
-      if(i == index){
-        return Way1Merit(
-          way1MeritId: _way1MeritList[i].way1MeritId,
-          comparisonItemId: _way1MeritList[i].comparisonItemId,
-          way1MeritDesc: newDesc,
-        );
-      }else{
-        return Way1Merit(
-          way1MeritId: _way1MeritList[i].way1MeritId,
-          comparisonItemId: _way1MeritList[i].comparisonItemId,
-          way1MeritDesc: _way1MeritList[i].way1MeritDesc,
-        );
-      }
-    });
-    await _compareRepository.setWay1MeritDesc(_way1MeritList,index);
-
+//    _way1MeritList = List.generate(_way1MeritList.length, (i) {
+//      if(i == index){
+//        return Way1Merit(
+//          way1MeritId: _way1MeritList[i].way1MeritId,
+//          comparisonItemId: _way1MeritList[i].comparisonItemId,
+//          way1MeritDesc: newDesc,
+//        );
+//      }else{
+//        return Way1Merit(
+//          way1MeritId: _way1MeritList[i].way1MeritId,
+//          comparisonItemId: _way1MeritList[i].comparisonItemId,
+//          way1MeritDesc: _way1MeritList[i].way1MeritDesc,
+//        );
+//      }
+//    });
+    //    await _compareRepository.setWay1MeritDesc(_way1MeritList,index);
+    ///変更行作成=>DB更新は変更した行のみ
+    final changeWay1Merit = Way1Merit(
+      way1MeritId: _way1MeritList[index].way1MeritId,
+      comparisonItemId: _way1MeritList[index].comparisonItemId,
+      way1MeritDesc: newDesc,
+    );
+    await _compareRepository.setWay1MeritDesc(changeWay1Merit,index);
+    _way1MeritList = await  _compareRepository.getWay1MeritList(
+        comparisonOverview.comparisonItemId);
+    notifyListeners();
   }
+
   ///DescFormAndButtonでList<Way1Merit>のリスト追加を行ったとき
   Future<void>addWay1Merit(ComparisonOverview comparisonOverview) async{
 //    print('ComparisonIdを渡してway1Meritのリスト追加');

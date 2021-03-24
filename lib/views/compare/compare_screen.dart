@@ -11,7 +11,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
-
 import 'components/icon_title.dart';
 import 'components/table_part.dart';
 
@@ -85,7 +84,6 @@ class CompareScreen extends StatelessWidget {
         body: GestureDetector(
           onTap: () {
             print('GestureDetectorをonTap!');
-
             ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
             FocusScope.of(context).unfocus();
           },
@@ -113,7 +111,6 @@ class CompareScreen extends StatelessWidget {
                   iconData: Icons.thumb_up,
                   iconColor: accentColor,
                 ),
-
                 ///way1 メリット way1Titleこの画面で変えないのでSelectorいらんかも
                 Selector<CompareViewModel, String>(
                     selector: (context, viewModel) => viewModel.way1Title,
@@ -125,15 +122,15 @@ class CompareScreen extends StatelessWidget {
                         builder:
                             (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
                           if (snapshot.hasData && snapshot.data.isNotEmpty) {
-                            //todo 初期表示のときListが繰り返して表示される
                           // todo 入力してる時にアコーディオン閉じると入力消える
+                            //todo 変更時、createdAtを更新
                             // =>collapsedの時にデータ取得するようにしないと入力が消える
                           print('CompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画');
                             return AccordionPart(
                               title: way1Title,
                               inputChanged: (newDesc, index) =>
                                   _way1MeritInputChange(
-                                      context, newDesc, index),
+                                  context, newDesc, index,comparisonOverview),
                               way1MeritList: snapshot.data,
                               addList: () =>
                                   addListTest(context, comparisonOverview),
@@ -164,7 +161,8 @@ class CompareScreen extends StatelessWidget {
                           return AccordionPart(
                             title: way2Title,
                             inputChanged: (newDesc, index) =>
-                                _way1MeritInputChange(context, newDesc, index),
+                                _way1MeritInputChange(context,
+                                    newDesc, index,comparisonOverview),
                             way1MeritList: snapshot.data,
                             addList: () =>
                                 addListTest(context, comparisonOverview),
@@ -381,9 +379,10 @@ class CompareScreen extends StatelessWidget {
 
   //way1Meritの詳細が変更されたらset
   Future<void> _way1MeritInputChange(
-      BuildContext context, String newDesc, int index) async {
+      BuildContext context, String newDesc, int index,
+      ComparisonOverview comparisonOverview) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.setWay1MeritDesc(newDesc, index);
+    await viewModel.setWay1MeritDesc(comparisonOverview,newDesc, index);
   }
 
   Future<void> addListTest(

@@ -89,13 +89,25 @@ extension ConvertToComparisonOverviewRecord on ComparisonOverviewRecord {
   }
 }
 
-///保存時 モデルクラス:way1Merit=>DB:way1MeritRecord
+///新規挿入時 モデルクラス:way1Merit=>DB:way1MeritRecord
 extension ConvertToWay1MeritRecord on Way1Merit{
-  Way1MeritRecord toWay1MeritRecord (Way1Merit initWay1Merit){
+  Way1MeritRecord toCreateWay1MeritRecord (Way1Merit initWay1Merit){
     final way1MeritRecord= Way1MeritRecord(
 
       comparisonItemId: initWay1Merit.comparisonItemId,
       way1MeritDesc: initWay1Merit.way1MeritDesc ?? '',
+    );
+    return way1MeritRecord;
+  }
+}
+
+///更新時 モデルクラス:way1Merit=>DB:way1MeritRecord
+extension ConvertToUpdateWay1MeritRecord on Way1Merit{
+  Way1MeritRecord toUpdateWay1MeritRecord (Way1Merit updateWay1Merit){
+    final way1MeritRecord= Way1MeritRecord(
+      way1MeritId: updateWay1Merit.way1MeritId,
+      comparisonItemId: updateWay1Merit.comparisonItemId,
+      way1MeritDesc: updateWay1Merit.way1MeritDesc ?? '',
     );
     return way1MeritRecord;
   }

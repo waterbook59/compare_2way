@@ -159,15 +159,20 @@ class CompareRepository {
         .toWay1MeritList(way1MeritRecordList);
   }
 
-  ///保存 List<Way1Merit>=>変更したWay1Meritだけ更新
+  ///保存 変更したWay1Merit=>変更したWay1Meritだけ更新
+  ///変更前：List<Way1Merit>=>変更したWay1Meritだけ更新
   Future<void> setWay1MeritDesc(
-      List<Way1Merit> way1MeritList, int index) async {
+      Way1Merit updateWay1Merit, int index) async {
     try {
-      ///List<way1Merit>の場合
-      final way1MeritItemRecords = way1MeritList.toWay1MeritRecordList(
-          way1MeritList);
+      ///List<way1Merit>=>List<Way1MeritRecord>の場合
+//      final way1MeritItemRecords = way1MeritList.toWay1MeritRecordList(
+//          way1MeritList);
+      ///Way1Merit=>Way1MeritRecordの場合
+    final way1MeritRecord =
+    updateWay1Merit.toUpdateWay1MeritRecord(updateWay1Merit);
       await _comparisonItemDao.updateWay1MeritRecordDB(
-          way1MeritItemRecords[index]);
+//          way1MeritItemRecords[index]);
+      way1MeritRecord);
     } on SqliteException catch (e) {
       print('repositoryエラー:${e.toString()}');
     }
@@ -177,7 +182,8 @@ class CompareRepository {
 
     //1行だけ差し込めるか
     try{
-      final way1MeritRecord = initWay1Merit.toWay1MeritRecord(initWay1Merit);
+      final way1MeritRecord =
+      initWay1Merit.toCreateWay1MeritRecord(initWay1Merit);
       await _comparisonItemDao.insertWay1MeritRecordSingle(way1MeritRecord);
       print('repository:リスト１行新規追加');
     }on SqliteException catch (e) {
