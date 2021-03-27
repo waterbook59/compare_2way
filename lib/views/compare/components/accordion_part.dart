@@ -10,13 +10,15 @@ import 'package:provider/provider.dart';
 
 class AccordionPart extends StatefulWidget {
 
-  const AccordionPart(
-      {this.title, this.way1MeritList, this.inputChanged, this.addList});
+  const AccordionPart({
+    this.title, this.way1MeritList,
+    this.inputChanged, this.addList,this.deleteList});
 
   final String title;
   final List<Way1Merit> way1MeritList;
   final Function(String, int) inputChanged;
   final Function() addList;
+  final Function(int) deleteList;
 
   @override
   _AccordionPartState createState() => _AccordionPartState();
@@ -44,10 +46,16 @@ class _AccordionPartState extends State<AccordionPart> {
 //                items: widget.way1MeritList,
 //                inputChanged: widget.inputChanged,
 //              ),
+          //todo リストが増えていくとDescFormButtonがタイトル部分にはみ出している
             DescFormAndButton(
               items: widget.way1MeritList,
               inputChanged: widget.inputChanged,
-              addList: widget.addList,
+              addList: (){
+                widget.addList();
+//               setState(() {
+//               });
+              },
+              deleteList: widget.deleteList,
             ),
 
         ),

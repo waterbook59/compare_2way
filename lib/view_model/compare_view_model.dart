@@ -175,11 +175,22 @@ class CompareViewModel extends ChangeNotifier {
     _way1MeritList = await  _compareRepository.getWay1MeritList(
         comparisonOverview.comparisonItemId);
     print('CompareViewModel/addWay1Merit/新規リスト追加後${_way1MeritList.map((way1Merit) => way1Merit.way1MeritDesc).toList()}');
+
     //selectorビルドさせたところで、GFAccordion表示に変化がない...
 //    _way1Title = '変更！';
 //    compareScreenStatus = CompareScreenStatus.set;
     notifyListeners();
+  }
 
+  ///DescFormAndButtonでList<Way1Merit>のリスト削除を行ったとき
+  Future<void> deleteWay1Merit(
+      int way1MeritIdIndex,ComparisonOverview comparisonOverview) async{
+    final deleteQay1MeritId= _way1MeritList[way1MeritIdIndex].way1MeritId;
+    await _compareRepository.deleteWay1Merit(deleteQay1MeritId);
+    //再取得しないとDescFormAndButtonでのListViewの認識している長さと削除するindexが異なりエラー
+    _way1MeritList = await  _compareRepository.getWay1MeritList(
+        comparisonOverview.comparisonItemId);
+//    notifyListeners();
   }
 
 
@@ -270,6 +281,8 @@ class CompareViewModel extends ChangeNotifier {
      print('getWay1MeritList/notifyListeners');
     notifyListeners();
   }
+
+
 
 
 

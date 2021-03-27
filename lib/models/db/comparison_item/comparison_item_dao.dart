@@ -22,82 +22,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
           ComparisonOverviewRecord comparisonOverviewRecord) =>
       into(comparisonOverviewRecords).insert(comparisonOverviewRecord);
 
-  ///新規作成:List<Way1Merit>
-  Future<void> insertWay1MeritRecordDB(
-      List<Way1MeritRecord> way1MeritItemRecords) async {
-    //2行以上の可能性あり
-    await batch((batch) {
-      batch.insertAll(way1MeritRecords, way1MeritItemRecords);
-    });
-    print('daoに新規作成');
-  }
-
-  ///更新:Way1Merit
-  Future<void>updateWay1MeritRecordDB(
-      Way1MeritRecord way1MeritItemRecord) async{
-    print('リスト更新:${way1MeritItemRecord.way1MeritId}/'
-        '${way1MeritItemRecord.way1MeritDesc}');
-    return update(way1MeritRecords).replace(way1MeritItemRecord);
-
-  }
-
-  ///リスト１行新規追加：Way1Merit
-  Future<void> insertWay1MeritRecordSingle(Way1MeritRecord way1MeritRecord)
-  =>into(way1MeritRecords).insert(way1MeritRecord);
-
-
-  Future<void> insertWay1DemeritRecordDB(
-      List<Way1DemeritRecord> way1DemeritDescs) async {
-    //2行以上の可能性あり
-    await batch((batch) {
-      batch.insertAll(way1DemeritRecords, way1DemeritDescs);
-    });
-  }
-
-  ///3つのテーブルにデータ格納
-  Future<void> insertDB(
-          ComparisonOverviewRecord comparisonOverviewRecord,
-          List<Way1MeritRecord> way1MeritDescs,
-          List<Way1DemeritRecord> way1DemeritDescs) =>
-      transaction(() async {
-        await insertComparisonOverviewDB(comparisonOverviewRecord);
-        await insertWay1MeritRecordDB(way1MeritDescs);
-        await insertWay1DemeritRecordDB(way1DemeritDescs);
-      });
-
-  //todo データ取得はあとで
-  ///overviewとway1Meritを内部結合?(2個以上の複数テーブル結合の場合queryの中でinnerJoin繰り返す)
-  Future<ComparisonItemRecord> getJoinedItemList() async {
-    final query = select(comparisonOverviewRecords).join([
-      innerJoin(
-          way1MeritRecords,
-          way1MeritRecords.comparisonItemId
-              .equalsExp(comparisonOverviewRecords.comparisonItemId)),
-      innerJoin(
-          way1DemeritRecords,
-          way1DemeritRecords.comparisonItemId
-              .equalsExp(comparisonOverviewRecords.comparisonItemId)),
-    ]);
-    //print('query:${query.toString()}'); //queryはJoinedSelectStatement
-    final rows = await query.get();
-    final data = rows.map((resultRow) {
-      return ComparisonItemRecord(
-        comparisonOverviewRecord:
-            resultRow.readTable(comparisonOverviewRecords),
-
-        //行で入っているway1MeritRecordをList<Way1MeritRecord>にする必要あり
-//        way1MeritRecord: resultRow.readTable(List<way1MeritRecords> as TableInfo),
-//        way1DemeritRecord: resultRow.readTable(way1DemeritRecords),
-      );
-    });
-//        .toList();
-//    return data;
-  }
-
-  ///idをもとにway1タイトル、way2タイトルをとってくる
-  /// 2.暗記済がfalse(暗記してないもの)だけを取ってくるクエリ
-  //  Future<List<WordRecord>> get memorizedExcludeWords
-  //  => (select(wordRecords)..where((t)=>t.isMemorized.equals(false))).get();
+  ///読込:ComparisonOverview(comparisonItemIdをもとにway1タイトル、way2タイトルをとってくる)
   Future<List<ComparisonOverviewRecord>> getOverview(String comparisonItemId) =>
       (select(comparisonOverviewRecords)
             ..where((t) => t.comparisonItemId.equals(comparisonItemId)))
@@ -145,6 +70,48 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       await deleteList(comparisonItemId);
       await deleteWay1MeritList(comparisonItemId);
     });
+
+  ///新規作成:List<Way1Merit>
+  Future<void> insertWay1MeritRecordDB(
+      List<Way1MeritRecord> way1MeritItemRecords) async {
+    //2行以上の可能性あり
+    await batch((batch) {
+      batch.insertAll(way1MeritRecords, way1MeritItemRecords);
+    });
+    print('daoに新規作成');
+  }
+
+  ///更新:Way1Merit
+  Future<void>updateWay1MeritRecordDB(
+      Way1MeritRecord way1MeritItemRecord) async{
+    print('リスト更新:${way1MeritItemRecord.way1MeritId}/'
+        '${way1MeritItemRecord.way1MeritDesc}');
+    return update(way1MeritRecords).replace(way1MeritItemRecord);
+
+  }
+
+  ///リスト１行新規追加：Way1Merit
+  Future<void> insertWay1MeritRecordSingle(Way1MeritRecord way1MeritRecord)
+  =>into(way1MeritRecords).insert(way1MeritRecord);
+
+  ///リスト１行削除(DescFormAndButton)：Way1Merit
+  Future<void> deleteWay1Merit(int way1MeritId) async{
+    print('リスト削除:$way1MeritId');
+    return (delete(way1MeritRecords)
+    ..where((tbl) => tbl.way1MeritId.equals(way1MeritId)))
+      .go();
+  }
+
+
+  Future<void> insertWay1DemeritRecordDB(
+      List<Way1DemeritRecord> way1DemeritDescs) async {
+    //2行以上の可能性あり
+    await batch((batch) {
+      batch.insertAll(way1DemeritRecords, way1DemeritDescs);
+    });
+  }
+
+
 
 
 

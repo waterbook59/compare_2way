@@ -160,7 +160,7 @@ class CompareRepository {
   }
 
   ///保存 変更したWay1Merit=>変更したWay1Meritだけ更新
-  ///変更前：List<Way1Merit>=>変更したWay1Meritだけ更新
+  //変更前：List<Way1Merit>=>変更したWay1Meritだけ更新
   Future<void> setWay1MeritDesc(
       Way1Merit updateWay1Merit, int index) async {
     try {
@@ -179,7 +179,6 @@ class CompareRepository {
   }
   ///リスト１行追加：Way1Merit
   Future<void> addWay1Merit(Way1Merit initWay1Merit) async{
-
     //1行だけ差し込めるか
     try{
       final way1MeritRecord =
@@ -189,6 +188,11 @@ class CompareRepository {
     }on SqliteException catch (e) {
       print('Way1Merit追加エラー:${e.toString()}');
     }
+  }
+
+  ///リスト1行削除:Way1Merit
+  Future<void> deleteWay1Merit(int way1MeritId) async{
+    await _comparisonItemDao.deleteWay1Merit(way1MeritId);
   }
 
 

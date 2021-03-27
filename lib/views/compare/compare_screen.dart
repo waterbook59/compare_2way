@@ -93,7 +93,7 @@ class CompareScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: 16),
                 // FutureBuilderいらない(compareOverviewをそのまま表示)
-                ///タイトル:itemTitleに変更があったときだけrebuildされるはず
+              ///タイトル:itemTitleに変更があったときだけrebuildされるはず
                 Selector<CompareViewModel, String>(
                   selector: (context, viewModel) => viewModel.itemTitle,
                   builder: (context, itemTitle, child) {
@@ -105,26 +105,26 @@ class CompareScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 8),
-                ///メリットアイコン
+              ///メリットアイコン
                 IconTitle(
                   title: 'メリット',
                   iconData: Icons.thumb_up,
                   iconColor: accentColor,
                 ),
-                ///way1 メリット way1Titleこの画面で変えないのでSelectorいらんかも
+              ///way1 メリット way1Titleこの画面で変えないのでSelectorいらんかも
                 Selector<CompareViewModel, String>(
                     selector: (context, viewModel) => viewModel.way1Title,
                     builder: (context, way1Title, child) {
-                      return FutureBuilder(
-                        //material
+                      return FutureBuilder( //material
                         future: viewModel
                             .getDesc(comparisonOverview.comparisonItemId),
                         builder:
                             (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
                           if (snapshot.hasData && snapshot.data.isNotEmpty) {
-                          // todo 入力してる時にアコーディオン閉じると入力消える
-                            //todo 変更時、createdAtを更新
+                          //todo 入力してる時にアコーディオン閉じると入力消える
                             // =>collapsedの時にデータ取得するようにしないと入力が消える
+                            //todo 変更時、createdAtを更新
+
                           print('CompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画');
                             return AccordionPart(
                               title: way1Title,
@@ -133,7 +133,10 @@ class CompareScreen extends StatelessWidget {
                                   context, newDesc, index,comparisonOverview),
                               way1MeritList: snapshot.data,
                               addList: () =>
-                                  addListTest(context, comparisonOverview),
+                                  addWay1MeritList(context, comparisonOverview),
+                              deleteList: (way1MeritIdIndex)=>
+                                    deleteWay1MeritList(context,
+                                        way1MeritIdIndex,comparisonOverview),
                             );
 
                           } else {
@@ -143,7 +146,7 @@ class CompareScreen extends StatelessWidget {
                       );
                     }),
 
-                ///way2 メリット
+              ///way2 メリット
                 Selector<CompareViewModel, String>(
                   selector: (context, viewModel) => viewModel.way2Title,
                   builder: (context, way2Title, child) {
@@ -165,7 +168,7 @@ class CompareScreen extends StatelessWidget {
                                     newDesc, index,comparisonOverview),
                             way1MeritList: snapshot.data,
                             addList: () =>
-                                addListTest(context, comparisonOverview),
+                                addWay1MeritList(context, comparisonOverview),
                           );
 
                           ///GFAccordion
@@ -197,15 +200,13 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-
-                ///デメリットアイコン
+              ///デメリットアイコン
                 IconTitle(
                   title: 'デメリット',
                   iconData: Icons.thumb_down,
                   iconColor: accentColor,
                 ),
-
-                ///way1 デメリット
+              ///way1 デメリット
                 Selector<CompareViewModel, String>(
                   selector: (context, viewModel) => viewModel.way1Title,
                   builder: (context, way1Title, child) {
@@ -229,8 +230,7 @@ class CompareScreen extends StatelessWidget {
                     );
                   },
                 ),
-
-                ///way2 デメリット
+              ///way2 デメリット
                 Selector<CompareViewModel, String>(
                   selector: (context, viewModel) => viewModel.way2Title,
                   builder: (context, way2Title, child) {
@@ -268,8 +268,7 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(
                   height: 4,
                 ),
-
-                ///テーブル
+              ///テーブル
                 TablePart(
                   way1Title: comparisonOverview.way1Title,
                   way1MeritChanged: (newValue) =>
@@ -293,8 +292,7 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(
                   height: 4,
                 ),
-
-                ///結論TextArea:MaterialForm
+              ///結論TextArea:MaterialForm
                 ConclusionInputPart(
                   conclusion: comparisonOverview.conclusion,
                   //非同期でviewModelへ設定しにいかないと値保存できない
@@ -304,8 +302,7 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(
                   height: 16,
                 ),
-
-                ///タグエリア
+              ///タグエリア
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
@@ -320,8 +317,7 @@ class CompareScreen extends StatelessWidget {
                   icon: Icon(Icons.add),
                   onPressed: null,
                 ),
-
-                ///保存ボタン
+              ///保存ボタン
                 Center(
                   child: RaisedButton(
                       child: const Text('保存'),
@@ -385,9 +381,15 @@ class CompareScreen extends StatelessWidget {
     await viewModel.setWay1MeritDesc(comparisonOverview,newDesc, index);
   }
 
-  Future<void> addListTest(
+  Future<void> addWay1MeritList(
       BuildContext context, ComparisonOverview comparisonOverview) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.addWay1Merit(comparisonOverview);
+  }
+
+  Future<void> deleteWay1MeritList(BuildContext context, int way1MeritIdIndex,
+      ComparisonOverview comparisonOverview) async{
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.deleteWay1Merit(way1MeritIdIndex,comparisonOverview);
   }
 }
