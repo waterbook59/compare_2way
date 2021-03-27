@@ -1,5 +1,6 @@
 import 'package:compare_2way/data_models/comparison_item.dart';
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/add_view_model.dart';
@@ -92,11 +93,11 @@ class _InputPartState extends State<InputPart> {
 
   ///ここでAddViewModelのisCreateItemEnabledをセットする
   void _onInputChanged() {
-    final viewModel = Provider.of<AddViewModel>(context, listen: false);
+    final viewModel = Provider.of<AddViewModel>(context, listen: false)
+    ..title =_titleController.text
+    ..way1Title = _way1Controller.text
+    ..way2Title = _way2Controller.text;
 
-    viewModel.title = _titleController.text;
-    viewModel.way1Title = _way1Controller.text;
-    viewModel.way2Title = _way2Controller.text;
     setState(() {
       if (
           _titleController.text.isNotEmpty &&
@@ -113,22 +114,11 @@ class _InputPartState extends State<InputPart> {
   // 押せる・押せないはinsta_cloneのcomment_input_part参照
   ///textEditingControllerをview側で設定=>viewModelに設定するメソッド
   Future<void> _createComparisonItems(BuildContext context) async {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    //todo CompareScreenに統一したら初期表示は読み込みさせる
-    viewModel.compareScreenStatus =CompareScreenStatus.set;
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+    //初期表示は読み込みさせる
+    ..compareScreenStatus =CompareScreenStatus.set;
 
-    // モデルクラス(compare)に比較項目を登録(idを次の画面に渡したいのでview側で設定)
-    //todo ComparisonItemではなく、ComparisonOverviewに変更
-    //ComparisonOverviewにしてCompareScreenへ値渡し
-//    final comparisonItem = ComparisonItem(
-//      //comparisonItemIdをuuidで生成
-//      comparisonItemId: Uuid().v1(),
-//      itemTitle: viewModel.title,
-//      way1Title: viewModel.way1Title,
-//      way2Title: viewModel.way2Title,
-//    );
-//    await viewModel.createComparisonItems(comparisonItem);
-
+    // ComparisonItemではなく、ComparisonOverviewに変更,CompareScreenへ値渡し
     final comparisonOverview = ComparisonOverview(
       comparisonItemId: Uuid().v1(),
       itemTitle: _titleController.text,
@@ -137,8 +127,17 @@ class _InputPartState extends State<InputPart> {
       createdAt: DateTime.now(),
     );
 
+    //最初は1つだけComparisonIdが入ったWay1Meritを入れたい
+    final initWay1Merit = Way1Merit(
+      comparisonItemId: comparisonOverview.comparisonItemId,
+      way1MeritDesc: '',
+    );
+
     //登録
     await viewModel.createComparisonOverview(comparisonOverview);
+    //Merit/DemeritのListをComparisonIdを入れて登録する
+    await viewModel.createDesc(initWay1Merit);
+
     //読み込み=>compareScreenへ渡す
     await viewModel.getComparisonOverview(comparisonOverview.comparisonItemId);
 
