@@ -19,6 +19,7 @@ class DescFormAndButton extends StatefulWidget {
 class _DescFormAndButtonState extends State<DescFormAndButton> {
 
   List<TextEditingController> controllers =<TextEditingController>[];
+//  ScrollController _scrollController = ScrollController();//mate
 
   @override
   void initState() {
@@ -38,21 +39,32 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-        ListView.builder(
-        shrinkWrap:true,
-        itemCount: controllers.length,
-        itemBuilder: (context,index){
-          return TextFormField(
-          decoration: _getInputDecoration(context,index),
-            controller: controllers[index],
-            onChanged: (newDesc)=> widget.inputChanged(newDesc,index),
-            style: const TextStyle(color: Colors.black),
-          );
-            CupertinoTextField(//cupertiono
-            //todo InputDecorationでsuffixIconプロパティでリスト削除できるかも
-            //todo ある程度入力したら改行させたい
-            //todo リスト追加後入力でsuffixの削除が先に働く
+    return Column(
+      //Center=>Column=>MainAxisSize.minにすると画面中央になる
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        //高さ制限がない親の中にいるColumnはchildrenをshrink-wrapしようとする
+        //でも子供がflex設定(Expandedとか)すると、親はshrink-wrapしつつ、子は親に合うように同時に拡張できない
+        //MainAxisSize.minとFlexFit.looseを使って設定(ExpandedではなくFlexibleを使用)
+        Flexible(
+          fit: FlexFit.loose,//子のウィジェットを最大限可能な大きさにできる
+          child: SingleChildScrollView(
+            child: ListView.builder(
+                shrinkWrap:true,
+            physics: const NeverScrollableScrollPhysics(),
+//            controller: _scrollController,
+            itemCount: controllers.length,
+            itemBuilder: (context,index){
+              return TextFormField(
+              decoration: _getInputDecoration(context,index),
+                controller: controllers[index],
+                onChanged: (newDesc)=> widget.inputChanged(newDesc,index),
+                style: const TextStyle(color: Colors.black),
+              );
+                CupertinoTextField(//cupertiono
+                //todo InputDecorationでsuffixIconプロパティでリスト削除できるかも
+                //todo ある程度入力したら改行させたい
+                //todo リスト追加後入力でsuffixの削除が先に働く
 //            suffix:
 ////            Container(),
 //            const IconButton(icon: Icon(Icons.remove_circle_outline),),
@@ -70,14 +82,16 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
 //              });
 //
 //          },
-          //CupertinoTextFieldはdecorationはBoxDecoration
+              //CupertinoTextFieldはdecorationはBoxDecoration
 //          decoration: _getInputDecoration(context,index),
-            placeholder: 'メリットを入力してください',
-            controller: controllers[index],
-            onChanged: (newDesc)=> widget.inputChanged(newDesc,index),
-            style: const TextStyle(color: Colors.black),
-          );
-        }),
+                placeholder: 'メリットを入力してください',
+                controller: controllers[index],
+                onChanged: (newDesc)=> widget.inputChanged(newDesc,index),
+                style: const TextStyle(color: Colors.black),
+              );
+            }),
+          ),
+        ),
 
       RaisedButton(
         child: const Icon(Icons.add),

@@ -42,10 +42,6 @@ class _AccordionPartState extends State<AccordionPart> {
             collapsedTitleBackgroundColor:
             const Color(0xFFE0E0E0),
             contentChild:
-//                          DescForm(
-//                items: widget.way1MeritList,
-//                inputChanged: widget.inputChanged,
-//              ),
           //todo リストが増えていくとDescFormButtonがタイトル部分にはみ出している
             DescFormAndButton(
               items: widget.way1MeritList,

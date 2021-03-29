@@ -133,7 +133,7 @@ class CompareScreen extends StatelessWidget {
                                   context, newDesc, index,comparisonOverview),
                               way1MeritList: snapshot.data,
                               addList: () =>
-                                  addWay1MeritList(context, comparisonOverview),
+                                addWay1MeritList(context, comparisonOverview),
                               deleteList: (way1MeritIdIndex)=>
                                     deleteWay1MeritList(context,
                                         way1MeritIdIndex,comparisonOverview),
