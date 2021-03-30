@@ -40,15 +40,7 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      //Center=>Column=>MainAxisSize.minにすると画面中央になる
-//      mainAxisSize: MainAxisSize.min,
       children: [
-        //高さ制限がない親の中にいるColumnはchildrenをshrink-wrapしようとする
-        //でも子供がflex設定(Expandedとか)すると、親はshrink-wrapしつつ、子は親に合うように同時に拡張できない
-        //MainAxisSize.minとFlexFit.looseを使って設定(ExpandedではなくFlexibleを使用)
-//        Flexible(
-//          fit: FlexFit.loose,//子のウィジェットを最大限可能な大きさにできる
-//          child:
           ListView.builder(
               shrinkWrap:true,
           physics: const NeverScrollableScrollPhysics(),
@@ -57,34 +49,6 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
           itemBuilder: (context,index){
             return TextFormField(
             decoration: _getInputDecoration(context,index),
-              controller: controllers[index],
-              onChanged: (newDesc)=> widget.inputChanged(newDesc,index),
-              style: const TextStyle(color: Colors.black),
-            );
-              CupertinoTextField(//cupertiono
-              //todo InputDecorationでsuffixIconプロパティでリスト削除できるかも
-              //todo ある程度入力したら改行させたい
-              //todo リスト追加後入力でsuffixの削除が先に働く
-//            suffix:
-////            Container(),
-//            const IconButton(icon: Icon(Icons.remove_circle_outline),),
-//            //削除するWay1MeritListのWay1ItemIdをcompareScreenへ渡す
-//
-//            onTap: (){
-//              print('DescFormAndButton/removeOnTapした瞬間のcontrollers.length:${controllers.length}'
-//                  '/onTapしたindex$index');
-//              print('DescFormAndButton/DeleteButton/way1MeritId:${widget.items[index].way1MeritId}');
-////              widget.deleteList(widget.items[index].way1MeritId);
-//              controllers.removeAt(index);
-//              print('DescFormAndButton/setState時のcontrollers.length:${controllers.length}');
-//              setState(() {
-//                //todo 追加=>すぐ削除でInvalid value: Not in inclusive range 0..1: 2エラー
-//              });
-//
-//          },
-            //CupertinoTextFieldはdecorationはBoxDecoration
-//          decoration: _getInputDecoration(context,index),
-              placeholder: 'メリットを入力してください',
               controller: controllers[index],
               onChanged: (newDesc)=> widget.inputChanged(newDesc,index),
               style: const TextStyle(color: Colors.black),
@@ -99,7 +63,7 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
             //非同期(widget.addList)を待ってる間に先にcontrollersが増える
             // =>非同期終了したらviewModelでの_way1MeritListにリスト増えた形で格納
             print('押したらリストが増える');
-            //追加直後にCompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画させるには？？？
+            //追加直後にCompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画しない
             widget.addList();
             controllers.add(TextEditingController());
             print('descFormAndButton/RaisedButton:controllers${controllers.map((controller) => controller.text).toList()}');
@@ -121,15 +85,18 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
             FocusScope.of(context).unfocus();
      print('DescFormAndButton/removeOnTapした瞬間のcontrollers.length:${controllers.length}'
                   '/onTapしたindex$index');
-            setState(() {
-              controllers.removeAt(index);
-              //widget.items[index]は追加された直後は
-              // CompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画がなく、
-              // initState通ってないので、存在しない=>エラー
-              // (indexだけわたしてviewModel側でway1MeritId設定
-              widget.deleteList(index);
-              print('DescFormAndButton/削除setState時のcontrollers.length:${controllers.length}');
-            });
+     //リストを0にしない
+    if( controllers.length>1){
+      setState(() {
+        controllers.removeAt(index);
+        //widget.items[index]は追加された直後は
+        // CompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画がなく、
+        // initState通ってないので、存在しない=>エラー
+        // indexだけわたしてviewModel側でway1MeritId設定
+        widget.deleteList(index);
+        print('DescFormAndButton/削除setState時のcontrollers.length:${controllers.length}');
+      });
+    }
           },
         ),
       ),

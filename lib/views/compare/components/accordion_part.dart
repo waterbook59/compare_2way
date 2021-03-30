@@ -34,7 +34,7 @@ class _AccordionPartState extends State<AccordionPart> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ///課題はGFAccordionの中身を動的に変更できるか(継承とかでGFAccordionを再描画させられる？)
+        //todo collapsed時にDB再読み込み
         custom.GFAccordion(
             title: widget.title,
             titleBorderRadius: accordionTopBorderRadius,
@@ -46,28 +46,16 @@ class _AccordionPartState extends State<AccordionPart> {
             contentChild:
           //リストが増えていくとDescFormButtonがタイトル部分にはみ出している
             ///=>custom.GFAccordion設定で初期位置修正
-//初期y方向-0.06=>0なのでTweenのbeginをOffset.zeroにしてendをOffset(0,0.06)とかプラスにもっていく
             DescFormAndButton(
               items: widget.way1MeritList,
               inputChanged: widget.inputChanged,
               addList: (){
                 widget.addList();
-//               setState(() {
-//               });
               },
               deleteList: widget.deleteList,
             ),
           contentPadding: const EdgeInsets.only(top: 1,left: 8,right: 8),
-
         ),
-//        RaisedButton(
-//          child: const Icon(Icons.add),
-//          onPressed: () {
-//            ///GFAccordionの中の状態を変更しないと意味がない(FutureBuilderまわるだけ)
-//            setState(() {
-//              widget.addList();
-//            });
-//          },),
       ],
     );
   }
