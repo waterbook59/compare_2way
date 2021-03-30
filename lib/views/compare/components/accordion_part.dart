@@ -5,8 +5,10 @@ import 'package:compare_2way/views/compare/components/desc_form.dart';
 import 'package:compare_2way/views/compare/components/desc_form_and_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:getwidget/components/accordian/gf_accordian.dart';
+//import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
+
+import 'gf_accordian.dart' as custom;
 
 class AccordionPart extends StatefulWidget {
 
@@ -33,7 +35,7 @@ class _AccordionPartState extends State<AccordionPart> {
     return Column(
       children: [
         ///課題はGFAccordionの中身を動的に変更できるか(継承とかでGFAccordionを再描画させられる？)
-        GFAccordion(
+        custom.GFAccordion(
             title: widget.title,
             titleBorderRadius: accordionTopBorderRadius,
             contentBorderRadius:
@@ -42,7 +44,9 @@ class _AccordionPartState extends State<AccordionPart> {
             collapsedTitleBackgroundColor:
             const Color(0xFFE0E0E0),
             contentChild:
-          //todo リストが増えていくとDescFormButtonがタイトル部分にはみ出している
+          //リストが増えていくとDescFormButtonがタイトル部分にはみ出している
+            ///=>custom.GFAccordion設定で初期位置修正
+//初期y方向-0.06=>0なのでTweenのbeginをOffset.zeroにしてendをOffset(0,0.06)とかプラスにもっていく
             DescFormAndButton(
               items: widget.way1MeritList,
               inputChanged: widget.inputChanged,
@@ -53,6 +57,7 @@ class _AccordionPartState extends State<AccordionPart> {
               },
               deleteList: widget.deleteList,
             ),
+          contentPadding: const EdgeInsets.only(top: 1,left: 8,right: 8),
 
         ),
 //        RaisedButton(
