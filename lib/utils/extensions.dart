@@ -169,14 +169,27 @@ extension ConvertToWay1MeritList on List<Way1MeritRecord>{
 extension ConvertToWay2InitMeritRecordList on List<Way2Merit>{
   List<Way2MeritRecord> toWay2InitMeritRecordList(
       List<Way2Merit> way2MeritItems) {
-    final way2MeritItemRecords = <Way2MeritRecord>[];
-    //todo 単にforEachをmapに変換してもダメ
-    way2MeritItems.forEach((way2MeritSingle) {
-      way2MeritItemRecords.add(Way2MeritRecord(
+    //forEach=>map.toListへ変更
+    final way2MeritItemRecords =
+    way2MeritItems.map((way2MeritSingle) {
+      return Way2MeritRecord(
         comparisonItemId: way2MeritSingle.comparisonItemId,
         way2MeritDesc: way2MeritSingle.way2MeritDesc,
+      );}).toList();
+    return way2MeritItemRecords;
+  }
+}
+///読込時(DB=>model) List<Way2MeritRecord>=>Lis<Way2Merit>
+extension ConvertToWay2MeritList on List<Way2MeritRecord>{
+  List<Way2Merit> toWay2MeritList(List<Way2MeritRecord> way2MeritRecordList){
+    final way2MeritList = <Way2Merit>[];
+    way2MeritRecordList.forEach((way2MeritRecordSingle) {
+      way2MeritList.add(Way2Merit(
+        way2MeritId: way2MeritRecordSingle.way2MeritId,
+        comparisonItemId: way2MeritRecordSingle.comparisonItemId,
+        way2MeritDesc: way2MeritRecordSingle.way2MeritDesc,
       ));
     });
-    return way2MeritItemRecords;
+    return way2MeritList;
   }
 }

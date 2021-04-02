@@ -42,7 +42,7 @@ class CompareScreen extends StatelessWidget {
       Future(() async {
         await viewModel.setOverview(comparisonOverview);
         await viewModel.getWay1MeritList(comparisonOverview.comparisonItemId);
-//        await viewModel.getWay2MeritList(comparisonOverview.comparisonItemId);
+        await viewModel.getWay2MeritList(comparisonOverview.comparisonItemId);
       });
       viewModel.compareScreenStatus = CompareScreenStatus.update;
     }
@@ -143,56 +143,34 @@ class CompareScreen extends StatelessWidget {
                     }),
 
               ///way2 メリット
-                Selector<CompareViewModel, String>(
-                  selector: (context, viewModel) => viewModel.way2Title,
-                  builder: (context, way2Title, child) {
-                    return FutureBuilder(
-                      //material
-                      future: viewModel
-                          .getDesc(comparisonOverview.comparisonItemId),
-                      builder:
-                          //todo way2Meritへ変更
-                          (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
-//                          print('Way1MeritListのFutureBuilderビルド');
-                        if (snapshot.hasData && snapshot.data.isNotEmpty) {
-//                            print('AccordionPart描画');
-                          ///リスト追加ボタン押しても描画されないのはGFAccordionでの再描画が必要
-                          return AccordionPart(
-                            title: way2Title,
-                            inputChanged: (newDesc, index) =>
-                                _way1MeritInputChange(context,
-                                    newDesc, index,comparisonOverview),
-                            way1MeritList: snapshot.data,
-                            addList: () =>
-                                addWay1MeritList(context, comparisonOverview),
-                          );
-
-                          ///GFAccordion
-//                              GFAccordion(
-//                                title: way1Title,
-//                                titleBorderRadius: accordionTopBorderRadius,
-//                                contentBorderRadius:
-//                                    accordionBottomBorderRadius,
-//                                showAccordion: true,
-//                                collapsedTitleBackgroundColor:
-//                                    const Color(0xFFE0E0E0),
-//                      /// DescFromの完了ボタンを押すとFutureBuilderが回ってDBからデータ取ってしまう
-//                      /// 入力後viewModelへのsetでは不十分でDB保存まで必要
-//                                contentChild: DescForm(
-//                                  items: snapshot.data,
-////                                  viewModel.way1MeritList,
-//                                  inputChanged: (newDesc, index) =>
-//                                      _way1MeritInputChange(
-//                                          context, newDesc, index),
-//                                )
-//                                );
-                        } else {
-                          return Container();
-                        }
-                      },
-                    );
-                  },
-                ),
+//                Selector<CompareViewModel, String>(
+//                  selector: (context, viewModel) => viewModel.way2Title,
+//                  builder: (context, way2Title, child) {
+//                    return FutureBuilder(
+//                      future: viewModel
+//                          .getWay2Desc(comparisonOverview.comparisonItemId),
+//                      builder:
+//                          //todo way2Meritへ変更
+//                          (context, AsyncSnapshot<List<Way2Merit>> snapshot) {
+//                        if (snapshot.hasData && snapshot.data.isNotEmpty) {
+//                          ///リスト追加ボタン押しても描画されないのはGFAccordionでの再描画が必要
+//                          //todo AccordionPart以下をWay2Meritでも入力可能な設定変更
+//                          return AccordionPart(
+//                            title: way2Title,
+//                            inputChanged: (newDesc, index) =>
+//                                _way1MeritInputChange(context,
+//                                    newDesc, index,comparisonOverview),
+//                            way1MeritList: snapshot.data,
+//                            addList: () =>
+//                                addWay1MeritList(context, comparisonOverview),
+//                          );
+//                        } else {
+//                          return Container();
+//                        }
+//                      },
+//                    );
+//                  },
+//                ),
                 const SizedBox(
                   height: 8,
                 ),

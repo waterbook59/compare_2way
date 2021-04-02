@@ -295,17 +295,17 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   ///List<Way2Merit>取得(文頭取得用)
-//  Future<void> getWay2MeritList(String comparisonItemId) async {
-//    _way2MeritList =
-//    await _compareRepository.getWay2MeritList(comparisonItemId);
-//    notifyListeners();
-//  }
+  Future<void> getWay2MeritList(String comparisonItemId) async {
+    _way2MeritList =
+    await _compareRepository.getWay2MeritList(comparisonItemId);
+    notifyListeners();
+  }
 
   ///List<Way1Mer2t>取得(FutureBuilder用)
-//  Future<List<Way1Merit>> getWay2Desc(String comparisonItemId) async {
-//    return _way2MeritList =
-//    await _compareRepository.getWay2eritList(comparisonItemId);
-//  }
+  Future<List<Way2Merit>> getWay2Desc(String comparisonItemId) async {
+    return _way2MeritList =
+    await _compareRepository.getWay2MeritList(comparisonItemId);
+  }
 
 
 //todo textControllerを破棄

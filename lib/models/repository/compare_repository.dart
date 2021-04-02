@@ -13,8 +13,10 @@ class CompareRepository {
 
   final ComparisonItemDao _comparisonItemDao;
   List<ComparisonOverview> _overviewResults = <ComparisonOverview>[];
-  List<Way1Merit> _way1MeritList = <Way1Merit>[];
   ComparisonOverview _overviewResult;
+  List<Way1Merit> _way1MeritList = <Way1Merit>[];
+  List<Way2Merit> _way2MeritList = <Way2Merit>[];
+
 
   ///新規作成 comparisonOverview
   Future<void> createComparisonOverview(
@@ -138,6 +140,13 @@ class CompareRepository {
         await _comparisonItemDao.getWay1MeritList(comparisonItemId);
     return _way1MeritList =
         way1MeritRecordList.toWay1MeritList(way1MeritRecordList);
+  }
+  ///Read List<Way2Merit>
+  Future<List<Way2Merit>> getWay2MeritList(String comparisonItemId) async {
+    final way2MeritRecordList =
+    await _comparisonItemDao.getWay2MeritList(comparisonItemId);
+    return _way2MeritList =
+        way2MeritRecordList.toWay2MeritList(way2MeritRecordList);
   }
 
   ///保存 変更したWay1Merit=>変更したWay1Meritだけ更新

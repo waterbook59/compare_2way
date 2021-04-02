@@ -30,6 +30,13 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
         ..where((t) => t.comparisonItemId.equals(comparisonItemId)))
           .get();
 
+  ///読込：comparisonItemIdからComparisonOverview１行だけ取ってくる
+  Future<ComparisonOverviewRecord> getComparisonOverview(
+      String comparisonItemId) =>
+      (select(comparisonOverviewRecords)
+        ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
+          .getSingle();
+
   ///保存:comparisonOverview
   Future<void> saveComparisonOverviewDB(String comparisonItemId,
       ComparisonOverviewRecordsCompanion overviewCompanion) {
@@ -46,33 +53,6 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
       .go();
 
-  ///削除：List<Way1Merit>
-  Future<void> deleteWay1MeritList(String comparisonItemId) =>
-      (delete(way1MeritRecords)
-        ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
-          .go();
-
-  ///読込：comparisonItemIdからComparisonOverview１行だけ取ってくる
-  Future<ComparisonOverviewRecord> getComparisonOverview(
-      String comparisonItemId) =>
-      (select(comparisonOverviewRecords)
-        ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
-          .getSingle();
-
-  //todo way1,2 Merit/Demeritをtransactionでまとめてすっきり書く
-  ///読込：idをもとにList<Way1MeritRecord>をとってくる
-  Future<List<Way1MeritRecord>> getWay1MeritList(String comparisonItemId) =>
-      (select(way1MeritRecords)
-        ..where((t) => t.comparisonItemId.equals(comparisonItemId)))
-          .get();
-
-  ///comparisonOverview,List<Way1Merit>をまとめて削除
-  Future<void> deleteListAll(String comparisonItemId) =>
-      transaction(() async {
-        await deleteList(comparisonItemId);
-        await deleteWay1MeritList(comparisonItemId);
-      });
-
   ///新規作成:List<Way1Merit>
   Future<void> insertWay1MeritRecordDB(
       List<Way1MeritRecord> way1MeritItemRecords) async {
@@ -82,6 +62,28 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     });
     print('daoに新規作成List<Way1Merit>');
   }
+  ///新規作成:List<Way2Merit>
+  Future<void> insertWay2MeritRecordDB(
+      List<Way2MeritRecord> way2MeritItemRecords) async {
+    //2行以上の可能性あり
+    await batch((batch) {
+      batch.insertAll(way2MeritRecords, way2MeritItemRecords);
+    });
+    print('daoに新規作成List<Way2Merit>');
+  }
+
+  //todo way1,2 Merit/Demeritをtransactionでまとめてすっきり書く
+  ///読込：comparisonItemIdからList<Way1MeritRecord>をとってくる
+  Future<List<Way1MeritRecord>> getWay1MeritList(String comparisonItemId) =>
+      (select(way1MeritRecords)
+        ..where((t) => t.comparisonItemId.equals(comparisonItemId)))
+          .get();
+  ///読込：comparisonItemIdからList<Way2MeritRecord>をとってくる
+  Future<List<Way2MeritRecord>> getWay2MeritList(String comparisonItemId) =>
+      (select(way2MeritRecords)
+        ..where((t) => t.comparisonItemId.equals(comparisonItemId)))
+          .get();
+
 
   ///更新:Way1Merit
   Future<void> updateWay1MeritRecordDB(
@@ -103,6 +105,19 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
         .go();
   }
 
+  ///削除：List<Way1Merit>
+  Future<void> deleteWay1MeritList(String comparisonItemId) =>
+      (delete(way1MeritRecords)
+        ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
+          .go();
+
+
+  ///comparisonOverview,List<Way1Merit>をまとめて削除
+  Future<void> deleteListAll(String comparisonItemId) =>
+      transaction(() async {
+        await deleteList(comparisonItemId);
+        await deleteWay1MeritList(comparisonItemId);
+      });
 
   Future<void> insertWay1DemeritRecordDB(
       List<Way1DemeritRecord> way1DemeritDescs) async {
@@ -112,15 +127,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     });
   }
 
-  ///新規作成:List<Way2Merit>
-  Future<void> insertWay2MeritRecordDB(
-      List<Way2MeritRecord> way2MeritItemRecords) async {
-    //2行以上の可能性あり
-    await batch((batch) {
-      batch.insertAll(way2MeritRecords, way2MeritItemRecords);
-    });
-    print('daoに新規作成List<Way2Merit>');
-  }
+
 
 
 }
