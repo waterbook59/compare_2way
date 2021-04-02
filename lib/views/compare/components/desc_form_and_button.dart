@@ -52,6 +52,7 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
           itemBuilder: (context,index){
             return
             //deleteするときのキーボード立ち上がりをふせぐにはStackでボタン独立
+            //todo TextFieldを長く入力するとボタンが重なる
               DescForm(
                 inputChanged: (newDesc)=> widget.inputChanged(newDesc,index),
                 controllers: controllers,
@@ -87,35 +88,6 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
     ],);
   }
 
-  //deleteするときのキーボード立ち上がりをふせぐ
-  InputDecoration _getInputDecoration(BuildContext context, int index) {
-    return InputDecoration(
-      hintText: 'メリットを入力してください',
-      suffixIcon:Padding(
-        padding:const EdgeInsetsDirectional.only(end: 12) ,
-        child: GestureDetector(
-          child: const Icon(Icons.remove_circle_outline),
-          onTap: () {
-            AlwaysDisabledFocusNode();
-     print('DescFormAndButton/removeOnTapした瞬間のcontrollers.length:${controllers.length}'
-                  '/onTapしたindex$index');
-     //リストを0にしない
-    if( controllers.length>1){
-      setState(() {
-        controllers.removeAt(index);
-        //widget.items[index]は追加された直後は
-        // CompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画がなく、
-        // initState通ってないので、存在しない=>エラー
-        // indexだけわたしてviewModel側でway1MeritId設定
-        widget.deleteList(index);
-        print('DescFormAndButton/削除setState時のcontrollers.length:${controllers.length}');
-      });
-    }
-          },
-        ),
-      ),
-    );
-  }
 
   //deleteするときのキーボード立ち上がりをふせぐ
   void _deleteList(BuildContext context, int deleteIndex) {

@@ -22,7 +22,6 @@ class DescForm extends StatefulWidget {
 }
 
 class _DescFormState extends State<DescForm> {
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -30,18 +29,23 @@ class _DescFormState extends State<DescForm> {
       alignment: Alignment.centerRight,
       children: [
         TextFormField(
-        decoration: const InputDecoration(hintText: 'メリットを入力してください',),
+          decoration: const InputDecoration(
+            hintText: 'メリットを入力してください',
+          ),
           controller: widget.controllers[widget.index],
           onChanged: (newDesc) => widget.inputChanged(newDesc),
           style: const TextStyle(color: Colors.black),
         ),
         IconButton(
-          icon: const Icon(Icons.remove_circle_outline),
+          icon: const Icon(
+            Icons.remove_circle_outline,
+            color: Colors.grey,
+            size: 24,
+          ),
           //ここではvoidCallbackでindexのみ渡して具体的なロジックはDescFormAndButtonで
-          onPressed: () =>widget.deleteList(widget.index),
+          onPressed: () => widget.deleteList(widget.index),
         )
       ],
     );
   }
-
 }

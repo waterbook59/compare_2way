@@ -14,8 +14,3 @@ enum CompareScreenStatus {
   set,
   update,
 }
-
-class AlwaysDisabledFocusNode extends FocusNode{
-  @override
-  bool get hasFocus => false;
-}
