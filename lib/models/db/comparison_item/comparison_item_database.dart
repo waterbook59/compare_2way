@@ -59,7 +59,21 @@ class Way1DemeritRecords extends Table {
   Set<Column> get primaryKey => {way1DemeritId};
 }
 //テーブルway2Merit
+class Way2MeritRecords extends Table {
+  IntColumn get way2MeritId => integer().autoIncrement()();
+  TextColumn get comparisonItemId => text()();
+  TextColumn get way2MeritDesc => text().nullable()();
+  @override
+  Set<Column> get primaryKey => {way2MeritId};
+}
 //テーブルway2Demerit
+class Way2DemeritRecords extends Table {
+  IntColumn get way2DemeritId => integer().autoIncrement()();
+  TextColumn get comparisonItemId => text()();
+  TextColumn get way2DemeritDesc => text().nullable()();
+  @override
+  Set<Column> get primaryKey => {way2DemeritId};
+}
 //テーブルtags
 //class TagTitleRecords extends Table{
 //  TextColumn get comparisonItemId => text()();
@@ -107,6 +121,8 @@ class ComparisonItemRecord {
   ComparisonOverviewRecords,
   Way1MeritRecords,
   Way1DemeritRecords,
+  Way2MeritRecords,
+  Way2DemeritRecords,
   TagOverviewRecords,
   ComparisonItemIdRecords
 ],daos: [ComparisonItemDao])

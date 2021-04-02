@@ -36,13 +36,13 @@ class CompareScreen extends StatelessWidget {
     final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
-    //initState的に他の画面から写ってきた時のみ読み込み
+    //initState的に他の画面から写ってきた時のみ読込
     if (viewModel.compareScreenStatus == CompareScreenStatus.set) {
       print('compareScreenのFuture通過');
       Future(() async {
         await viewModel.setOverview(comparisonOverview);
         await viewModel.getWay1MeritList(comparisonOverview.comparisonItemId);
-//        return viewModel.getWay1MeritList(comparisonOverview.comparisonItemId);
+//        await viewModel.getWay2MeritList(comparisonOverview.comparisonItemId);
       });
       viewModel.compareScreenStatus = CompareScreenStatus.update;
     }
@@ -135,7 +135,6 @@ class CompareScreen extends StatelessWidget {
                                     deleteWay1MeritList(context,
                                         way1MeritIdIndex,comparisonOverview),
                             );
-
                           } else {
                             return Container();
                           }
@@ -333,10 +332,6 @@ class CompareScreen extends StatelessWidget {
             ),
           ),
         ),
-//        floatingActionButton: FloatingActionButton(
-//          child: const Icon(Icons.add),
-//          onPressed: () => addListTest(context, comparisonOverview),
-//        ),
       ),
       //TablePartでは変更が会った瞬間にDB保存が必要かも
     );

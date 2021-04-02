@@ -28,12 +28,6 @@ class AddViewModel extends ChangeNotifier {
 
   ComparisonOverview overviewDB;
 
-  Future<void> createComparisonItems(ComparisonItem comparisonItem) async {
-    await _compareRepository.createComparisonItems(comparisonItem);
-    print('DBへ登録');
-    notifyListeners();
-  }
-
   ///ComparisonOverview=>ComparisonOverviewRecordでDB登録
   Future<void> createComparisonOverview(
       ComparisonOverview comparisonOverview) async {

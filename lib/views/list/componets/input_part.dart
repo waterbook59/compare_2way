@@ -127,16 +127,20 @@ class _InputPartState extends State<InputPart> {
       createdAt: DateTime.now(),
     );
 
-    //最初は1つだけComparisonIdが入ったWay1Meritを入れたい
+    //最初は1つだけComparisonIdが入ったWay1Merit,Way2Meritを入れたい
     final initWay1Merit = Way1Merit(
       comparisonItemId: comparisonOverview.comparisonItemId,
       way1MeritDesc: '',
+    );
+    final initWay2Merit = Way2Merit(
+      comparisonItemId: comparisonOverview.comparisonItemId,
+      way2MeritDesc: '',
     );
 
     //登録
     await viewModel.createComparisonOverview(comparisonOverview);
     //Merit/DemeritのListをComparisonIdを入れて登録する
-    await viewModel.createDesc(initWay1Merit);
+    await viewModel.createDesc(initWay1Merit,initWay2Merit);
 
     //読み込み=>compareScreenへ渡す
     await viewModel.getComparisonOverview(comparisonOverview.comparisonItemId);

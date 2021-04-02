@@ -1219,6 +1219,525 @@ class $Way1DemeritRecordsTable extends Way1DemeritRecords
   }
 }
 
+class Way2MeritRecord extends DataClass implements Insertable<Way2MeritRecord> {
+  final int way2MeritId;
+  final String comparisonItemId;
+  final String way2MeritDesc;
+  Way2MeritRecord(
+      {@required this.way2MeritId,
+      @required this.comparisonItemId,
+      this.way2MeritDesc});
+  factory Way2MeritRecord.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return Way2MeritRecord(
+      way2MeritId: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}way2_merit_id']),
+      comparisonItemId: stringType.mapFromDatabaseResponse(
+          data['${effectivePrefix}comparison_item_id']),
+      way2MeritDesc: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}way2_merit_desc']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || way2MeritId != null) {
+      map['way2_merit_id'] = Variable<int>(way2MeritId);
+    }
+    if (!nullToAbsent || comparisonItemId != null) {
+      map['comparison_item_id'] = Variable<String>(comparisonItemId);
+    }
+    if (!nullToAbsent || way2MeritDesc != null) {
+      map['way2_merit_desc'] = Variable<String>(way2MeritDesc);
+    }
+    return map;
+  }
+
+  Way2MeritRecordsCompanion toCompanion(bool nullToAbsent) {
+    return Way2MeritRecordsCompanion(
+      way2MeritId: way2MeritId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(way2MeritId),
+      comparisonItemId: comparisonItemId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(comparisonItemId),
+      way2MeritDesc: way2MeritDesc == null && nullToAbsent
+          ? const Value.absent()
+          : Value(way2MeritDesc),
+    );
+  }
+
+  factory Way2MeritRecord.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return Way2MeritRecord(
+      way2MeritId: serializer.fromJson<int>(json['way2MeritId']),
+      comparisonItemId: serializer.fromJson<String>(json['comparisonItemId']),
+      way2MeritDesc: serializer.fromJson<String>(json['way2MeritDesc']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'way2MeritId': serializer.toJson<int>(way2MeritId),
+      'comparisonItemId': serializer.toJson<String>(comparisonItemId),
+      'way2MeritDesc': serializer.toJson<String>(way2MeritDesc),
+    };
+  }
+
+  Way2MeritRecord copyWith(
+          {int way2MeritId, String comparisonItemId, String way2MeritDesc}) =>
+      Way2MeritRecord(
+        way2MeritId: way2MeritId ?? this.way2MeritId,
+        comparisonItemId: comparisonItemId ?? this.comparisonItemId,
+        way2MeritDesc: way2MeritDesc ?? this.way2MeritDesc,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Way2MeritRecord(')
+          ..write('way2MeritId: $way2MeritId, ')
+          ..write('comparisonItemId: $comparisonItemId, ')
+          ..write('way2MeritDesc: $way2MeritDesc')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(way2MeritId.hashCode,
+      $mrjc(comparisonItemId.hashCode, way2MeritDesc.hashCode)));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is Way2MeritRecord &&
+          other.way2MeritId == this.way2MeritId &&
+          other.comparisonItemId == this.comparisonItemId &&
+          other.way2MeritDesc == this.way2MeritDesc);
+}
+
+class Way2MeritRecordsCompanion extends UpdateCompanion<Way2MeritRecord> {
+  final Value<int> way2MeritId;
+  final Value<String> comparisonItemId;
+  final Value<String> way2MeritDesc;
+  const Way2MeritRecordsCompanion({
+    this.way2MeritId = const Value.absent(),
+    this.comparisonItemId = const Value.absent(),
+    this.way2MeritDesc = const Value.absent(),
+  });
+  Way2MeritRecordsCompanion.insert({
+    this.way2MeritId = const Value.absent(),
+    @required String comparisonItemId,
+    this.way2MeritDesc = const Value.absent(),
+  }) : comparisonItemId = Value(comparisonItemId);
+  static Insertable<Way2MeritRecord> custom({
+    Expression<int> way2MeritId,
+    Expression<String> comparisonItemId,
+    Expression<String> way2MeritDesc,
+  }) {
+    return RawValuesInsertable({
+      if (way2MeritId != null) 'way2_merit_id': way2MeritId,
+      if (comparisonItemId != null) 'comparison_item_id': comparisonItemId,
+      if (way2MeritDesc != null) 'way2_merit_desc': way2MeritDesc,
+    });
+  }
+
+  Way2MeritRecordsCompanion copyWith(
+      {Value<int> way2MeritId,
+      Value<String> comparisonItemId,
+      Value<String> way2MeritDesc}) {
+    return Way2MeritRecordsCompanion(
+      way2MeritId: way2MeritId ?? this.way2MeritId,
+      comparisonItemId: comparisonItemId ?? this.comparisonItemId,
+      way2MeritDesc: way2MeritDesc ?? this.way2MeritDesc,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (way2MeritId.present) {
+      map['way2_merit_id'] = Variable<int>(way2MeritId.value);
+    }
+    if (comparisonItemId.present) {
+      map['comparison_item_id'] = Variable<String>(comparisonItemId.value);
+    }
+    if (way2MeritDesc.present) {
+      map['way2_merit_desc'] = Variable<String>(way2MeritDesc.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Way2MeritRecordsCompanion(')
+          ..write('way2MeritId: $way2MeritId, ')
+          ..write('comparisonItemId: $comparisonItemId, ')
+          ..write('way2MeritDesc: $way2MeritDesc')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $Way2MeritRecordsTable extends Way2MeritRecords
+    with TableInfo<$Way2MeritRecordsTable, Way2MeritRecord> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $Way2MeritRecordsTable(this._db, [this._alias]);
+  final VerificationMeta _way2MeritIdMeta =
+      const VerificationMeta('way2MeritId');
+  GeneratedIntColumn _way2MeritId;
+  @override
+  GeneratedIntColumn get way2MeritId =>
+      _way2MeritId ??= _constructWay2MeritId();
+  GeneratedIntColumn _constructWay2MeritId() {
+    return GeneratedIntColumn('way2_merit_id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _comparisonItemIdMeta =
+      const VerificationMeta('comparisonItemId');
+  GeneratedTextColumn _comparisonItemId;
+  @override
+  GeneratedTextColumn get comparisonItemId =>
+      _comparisonItemId ??= _constructComparisonItemId();
+  GeneratedTextColumn _constructComparisonItemId() {
+    return GeneratedTextColumn(
+      'comparison_item_id',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _way2MeritDescMeta =
+      const VerificationMeta('way2MeritDesc');
+  GeneratedTextColumn _way2MeritDesc;
+  @override
+  GeneratedTextColumn get way2MeritDesc =>
+      _way2MeritDesc ??= _constructWay2MeritDesc();
+  GeneratedTextColumn _constructWay2MeritDesc() {
+    return GeneratedTextColumn(
+      'way2_merit_desc',
+      $tableName,
+      true,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns =>
+      [way2MeritId, comparisonItemId, way2MeritDesc];
+  @override
+  $Way2MeritRecordsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'way2_merit_records';
+  @override
+  final String actualTableName = 'way2_merit_records';
+  @override
+  VerificationContext validateIntegrity(Insertable<Way2MeritRecord> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('way2_merit_id')) {
+      context.handle(
+          _way2MeritIdMeta,
+          way2MeritId.isAcceptableOrUnknown(
+              data['way2_merit_id'], _way2MeritIdMeta));
+    }
+    if (data.containsKey('comparison_item_id')) {
+      context.handle(
+          _comparisonItemIdMeta,
+          comparisonItemId.isAcceptableOrUnknown(
+              data['comparison_item_id'], _comparisonItemIdMeta));
+    } else if (isInserting) {
+      context.missing(_comparisonItemIdMeta);
+    }
+    if (data.containsKey('way2_merit_desc')) {
+      context.handle(
+          _way2MeritDescMeta,
+          way2MeritDesc.isAcceptableOrUnknown(
+              data['way2_merit_desc'], _way2MeritDescMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {way2MeritId};
+  @override
+  Way2MeritRecord map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return Way2MeritRecord.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $Way2MeritRecordsTable createAlias(String alias) {
+    return $Way2MeritRecordsTable(_db, alias);
+  }
+}
+
+class Way2DemeritRecord extends DataClass
+    implements Insertable<Way2DemeritRecord> {
+  final int way2DemeritId;
+  final String comparisonItemId;
+  final String way2DemeritDesc;
+  Way2DemeritRecord(
+      {@required this.way2DemeritId,
+      @required this.comparisonItemId,
+      this.way2DemeritDesc});
+  factory Way2DemeritRecord.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return Way2DemeritRecord(
+      way2DemeritId: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}way2_demerit_id']),
+      comparisonItemId: stringType.mapFromDatabaseResponse(
+          data['${effectivePrefix}comparison_item_id']),
+      way2DemeritDesc: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}way2_demerit_desc']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || way2DemeritId != null) {
+      map['way2_demerit_id'] = Variable<int>(way2DemeritId);
+    }
+    if (!nullToAbsent || comparisonItemId != null) {
+      map['comparison_item_id'] = Variable<String>(comparisonItemId);
+    }
+    if (!nullToAbsent || way2DemeritDesc != null) {
+      map['way2_demerit_desc'] = Variable<String>(way2DemeritDesc);
+    }
+    return map;
+  }
+
+  Way2DemeritRecordsCompanion toCompanion(bool nullToAbsent) {
+    return Way2DemeritRecordsCompanion(
+      way2DemeritId: way2DemeritId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(way2DemeritId),
+      comparisonItemId: comparisonItemId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(comparisonItemId),
+      way2DemeritDesc: way2DemeritDesc == null && nullToAbsent
+          ? const Value.absent()
+          : Value(way2DemeritDesc),
+    );
+  }
+
+  factory Way2DemeritRecord.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return Way2DemeritRecord(
+      way2DemeritId: serializer.fromJson<int>(json['way2DemeritId']),
+      comparisonItemId: serializer.fromJson<String>(json['comparisonItemId']),
+      way2DemeritDesc: serializer.fromJson<String>(json['way2DemeritDesc']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'way2DemeritId': serializer.toJson<int>(way2DemeritId),
+      'comparisonItemId': serializer.toJson<String>(comparisonItemId),
+      'way2DemeritDesc': serializer.toJson<String>(way2DemeritDesc),
+    };
+  }
+
+  Way2DemeritRecord copyWith(
+          {int way2DemeritId,
+          String comparisonItemId,
+          String way2DemeritDesc}) =>
+      Way2DemeritRecord(
+        way2DemeritId: way2DemeritId ?? this.way2DemeritId,
+        comparisonItemId: comparisonItemId ?? this.comparisonItemId,
+        way2DemeritDesc: way2DemeritDesc ?? this.way2DemeritDesc,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Way2DemeritRecord(')
+          ..write('way2DemeritId: $way2DemeritId, ')
+          ..write('comparisonItemId: $comparisonItemId, ')
+          ..write('way2DemeritDesc: $way2DemeritDesc')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(way2DemeritId.hashCode,
+      $mrjc(comparisonItemId.hashCode, way2DemeritDesc.hashCode)));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is Way2DemeritRecord &&
+          other.way2DemeritId == this.way2DemeritId &&
+          other.comparisonItemId == this.comparisonItemId &&
+          other.way2DemeritDesc == this.way2DemeritDesc);
+}
+
+class Way2DemeritRecordsCompanion extends UpdateCompanion<Way2DemeritRecord> {
+  final Value<int> way2DemeritId;
+  final Value<String> comparisonItemId;
+  final Value<String> way2DemeritDesc;
+  const Way2DemeritRecordsCompanion({
+    this.way2DemeritId = const Value.absent(),
+    this.comparisonItemId = const Value.absent(),
+    this.way2DemeritDesc = const Value.absent(),
+  });
+  Way2DemeritRecordsCompanion.insert({
+    this.way2DemeritId = const Value.absent(),
+    @required String comparisonItemId,
+    this.way2DemeritDesc = const Value.absent(),
+  }) : comparisonItemId = Value(comparisonItemId);
+  static Insertable<Way2DemeritRecord> custom({
+    Expression<int> way2DemeritId,
+    Expression<String> comparisonItemId,
+    Expression<String> way2DemeritDesc,
+  }) {
+    return RawValuesInsertable({
+      if (way2DemeritId != null) 'way2_demerit_id': way2DemeritId,
+      if (comparisonItemId != null) 'comparison_item_id': comparisonItemId,
+      if (way2DemeritDesc != null) 'way2_demerit_desc': way2DemeritDesc,
+    });
+  }
+
+  Way2DemeritRecordsCompanion copyWith(
+      {Value<int> way2DemeritId,
+      Value<String> comparisonItemId,
+      Value<String> way2DemeritDesc}) {
+    return Way2DemeritRecordsCompanion(
+      way2DemeritId: way2DemeritId ?? this.way2DemeritId,
+      comparisonItemId: comparisonItemId ?? this.comparisonItemId,
+      way2DemeritDesc: way2DemeritDesc ?? this.way2DemeritDesc,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (way2DemeritId.present) {
+      map['way2_demerit_id'] = Variable<int>(way2DemeritId.value);
+    }
+    if (comparisonItemId.present) {
+      map['comparison_item_id'] = Variable<String>(comparisonItemId.value);
+    }
+    if (way2DemeritDesc.present) {
+      map['way2_demerit_desc'] = Variable<String>(way2DemeritDesc.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Way2DemeritRecordsCompanion(')
+          ..write('way2DemeritId: $way2DemeritId, ')
+          ..write('comparisonItemId: $comparisonItemId, ')
+          ..write('way2DemeritDesc: $way2DemeritDesc')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $Way2DemeritRecordsTable extends Way2DemeritRecords
+    with TableInfo<$Way2DemeritRecordsTable, Way2DemeritRecord> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $Way2DemeritRecordsTable(this._db, [this._alias]);
+  final VerificationMeta _way2DemeritIdMeta =
+      const VerificationMeta('way2DemeritId');
+  GeneratedIntColumn _way2DemeritId;
+  @override
+  GeneratedIntColumn get way2DemeritId =>
+      _way2DemeritId ??= _constructWay2DemeritId();
+  GeneratedIntColumn _constructWay2DemeritId() {
+    return GeneratedIntColumn('way2_demerit_id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _comparisonItemIdMeta =
+      const VerificationMeta('comparisonItemId');
+  GeneratedTextColumn _comparisonItemId;
+  @override
+  GeneratedTextColumn get comparisonItemId =>
+      _comparisonItemId ??= _constructComparisonItemId();
+  GeneratedTextColumn _constructComparisonItemId() {
+    return GeneratedTextColumn(
+      'comparison_item_id',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _way2DemeritDescMeta =
+      const VerificationMeta('way2DemeritDesc');
+  GeneratedTextColumn _way2DemeritDesc;
+  @override
+  GeneratedTextColumn get way2DemeritDesc =>
+      _way2DemeritDesc ??= _constructWay2DemeritDesc();
+  GeneratedTextColumn _constructWay2DemeritDesc() {
+    return GeneratedTextColumn(
+      'way2_demerit_desc',
+      $tableName,
+      true,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns =>
+      [way2DemeritId, comparisonItemId, way2DemeritDesc];
+  @override
+  $Way2DemeritRecordsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'way2_demerit_records';
+  @override
+  final String actualTableName = 'way2_demerit_records';
+  @override
+  VerificationContext validateIntegrity(Insertable<Way2DemeritRecord> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('way2_demerit_id')) {
+      context.handle(
+          _way2DemeritIdMeta,
+          way2DemeritId.isAcceptableOrUnknown(
+              data['way2_demerit_id'], _way2DemeritIdMeta));
+    }
+    if (data.containsKey('comparison_item_id')) {
+      context.handle(
+          _comparisonItemIdMeta,
+          comparisonItemId.isAcceptableOrUnknown(
+              data['comparison_item_id'], _comparisonItemIdMeta));
+    } else if (isInserting) {
+      context.missing(_comparisonItemIdMeta);
+    }
+    if (data.containsKey('way2_demerit_desc')) {
+      context.handle(
+          _way2DemeritDescMeta,
+          way2DemeritDesc.isAcceptableOrUnknown(
+              data['way2_demerit_desc'], _way2DemeritDescMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {way2DemeritId};
+  @override
+  Way2DemeritRecord map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return Way2DemeritRecord.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $Way2DemeritRecordsTable createAlias(String alias) {
+    return $Way2DemeritRecordsTable(_db, alias);
+  }
+}
+
 class TagOverviewRecord extends DataClass
     implements Insertable<TagOverviewRecord> {
   final String tagId;
@@ -1643,6 +2162,12 @@ abstract class _$ComparisonItemDB extends GeneratedDatabase {
   $Way1DemeritRecordsTable _way1DemeritRecords;
   $Way1DemeritRecordsTable get way1DemeritRecords =>
       _way1DemeritRecords ??= $Way1DemeritRecordsTable(this);
+  $Way2MeritRecordsTable _way2MeritRecords;
+  $Way2MeritRecordsTable get way2MeritRecords =>
+      _way2MeritRecords ??= $Way2MeritRecordsTable(this);
+  $Way2DemeritRecordsTable _way2DemeritRecords;
+  $Way2DemeritRecordsTable get way2DemeritRecords =>
+      _way2DemeritRecords ??= $Way2DemeritRecordsTable(this);
   $TagOverviewRecordsTable _tagOverviewRecords;
   $TagOverviewRecordsTable get tagOverviewRecords =>
       _tagOverviewRecords ??= $TagOverviewRecordsTable(this);
@@ -1659,6 +2184,8 @@ abstract class _$ComparisonItemDB extends GeneratedDatabase {
         comparisonOverviewRecords,
         way1MeritRecords,
         way1DemeritRecords,
+        way2MeritRecords,
+        way2DemeritRecords,
         tagOverviewRecords,
         comparisonItemIdRecords
       ];

@@ -7,6 +7,8 @@ part 'comparison_item_dao.g.dart';
   ComparisonOverviewRecords,
   Way1MeritRecords,
   Way1DemeritRecords,
+  Way2MeritRecords,
+  Way2DemeritRecords,
   TagOverviewRecords,
   ComparisonItemIdRecords
 ])
@@ -19,42 +21,42 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   ///新規作成:ComparisonOverview
   Future<void> insertComparisonOverviewDB(
-          ComparisonOverviewRecord comparisonOverviewRecord) =>
+      ComparisonOverviewRecord comparisonOverviewRecord) =>
       into(comparisonOverviewRecords).insert(comparisonOverviewRecord);
 
   ///読込:ComparisonOverview(comparisonItemIdをもとにway1タイトル、way2タイトルをとってくる)
   Future<List<ComparisonOverviewRecord>> getOverview(String comparisonItemId) =>
       (select(comparisonOverviewRecords)
-            ..where((t) => t.comparisonItemId.equals(comparisonItemId)))
+        ..where((t) => t.comparisonItemId.equals(comparisonItemId)))
           .get();
 
   ///保存:comparisonOverview
   Future<void> saveComparisonOverviewDB(String comparisonItemId,
       ComparisonOverviewRecordsCompanion overviewCompanion) {
     return (update(comparisonOverviewRecords)
-          ..where((it) => it.comparisonItemId.equals(comparisonItemId)))
+      ..where((it) => it.comparisonItemId.equals(comparisonItemId)))
         .write(overviewCompanion);
   }
 
   ///削除：comparisonOverview
   Future<void> deleteList(String comparisonItemId) =>
       //comparisonOverviewRecordsテーブルのcomparisonItemIdと
-      // view側から持ってきたcomparisonItemIdが同じものを削除
-      (delete(comparisonOverviewRecords)
-            ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
-          .go();
+  // view側から持ってきたcomparisonItemIdが同じものを削除
+  (delete(comparisonOverviewRecords)
+    ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
+      .go();
 
   ///削除：List<Way1Merit>
-  Future<void> deleteWay1MeritList(String comparisonItemId)=>
+  Future<void> deleteWay1MeritList(String comparisonItemId) =>
       (delete(way1MeritRecords)
         ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
           .go();
 
   ///読込：comparisonItemIdからComparisonOverview１行だけ取ってくる
   Future<ComparisonOverviewRecord> getComparisonOverview(
-          String comparisonItemId) =>
+      String comparisonItemId) =>
       (select(comparisonOverviewRecords)
-            ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
+        ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
           .getSingle();
 
   //todo way1,2 Merit/Demeritをtransactionでまとめてすっきり書く
@@ -65,11 +67,11 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
           .get();
 
   ///comparisonOverview,List<Way1Merit>をまとめて削除
-  Future<void> deleteListAll(String comparisonItemId)=>
-      transaction(() async{
-      await deleteList(comparisonItemId);
-      await deleteWay1MeritList(comparisonItemId);
-    });
+  Future<void> deleteListAll(String comparisonItemId) =>
+      transaction(() async {
+        await deleteList(comparisonItemId);
+        await deleteWay1MeritList(comparisonItemId);
+      });
 
   ///新規作成:List<Way1Merit>
   Future<void> insertWay1MeritRecordDB(
@@ -78,28 +80,27 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     await batch((batch) {
       batch.insertAll(way1MeritRecords, way1MeritItemRecords);
     });
-    print('daoに新規作成');
+    print('daoに新規作成List<Way1Merit>');
   }
 
   ///更新:Way1Merit
-  Future<void>updateWay1MeritRecordDB(
-      Way1MeritRecord way1MeritItemRecord) async{
+  Future<void> updateWay1MeritRecordDB(
+      Way1MeritRecord way1MeritItemRecord) async {
     print('リスト更新:${way1MeritItemRecord.way1MeritId}/'
         '${way1MeritItemRecord.way1MeritDesc}');
     return update(way1MeritRecords).replace(way1MeritItemRecord);
-
   }
 
   ///リスト１行新規追加：Way1Merit
-  Future<void> insertWay1MeritRecordSingle(Way1MeritRecord way1MeritRecord)
-  =>into(way1MeritRecords).insert(way1MeritRecord);
+  Future<void> insertWay1MeritRecordSingle(Way1MeritRecord way1MeritRecord) =>
+      into(way1MeritRecords).insert(way1MeritRecord);
 
   ///リスト１行削除(DescFormAndButton)：Way1Merit
-  Future<void> deleteWay1Merit(int way1MeritId) async{
+  Future<void> deleteWay1Merit(int way1MeritId) async {
     print('リスト削除:$way1MeritId');
     return (delete(way1MeritRecords)
-    ..where((tbl) => tbl.way1MeritId.equals(way1MeritId)))
-      .go();
+      ..where((tbl) => tbl.way1MeritId.equals(way1MeritId)))
+        .go();
   }
 
 
@@ -111,9 +112,15 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     });
   }
 
-
-
-
+  ///新規作成:List<Way2Merit>
+  Future<void> insertWay2MeritRecordDB(
+      List<Way2MeritRecord> way2MeritItemRecords) async {
+    //2行以上の可能性あり
+    await batch((batch) {
+      batch.insertAll(way2MeritRecords, way2MeritItemRecords);
+    });
+    print('daoに新規作成List<Way2Merit>');
+  }
 
 
 }
