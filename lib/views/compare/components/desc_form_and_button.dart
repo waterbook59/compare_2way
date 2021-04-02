@@ -1,6 +1,9 @@
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:compare_2way/utils/constants.dart';
+
+import 'desc_form.dart';
 
 class DescFormAndButton extends StatefulWidget {
 
@@ -47,12 +50,23 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
 //            controller: _scrollController,
           itemCount: controllers.length,
           itemBuilder: (context,index){
-            return TextFormField(
-            decoration: _getInputDecoration(context,index),
-              controller: controllers[index],
-              onChanged: (newDesc)=> widget.inputChanged(newDesc,index),
-              style: const TextStyle(color: Colors.black),
-            );
+            return
+            //deleteするときのキーボード立ち上がりをふせぐにはStackでボタン独立
+              DescForm(
+                inputChanged: (newDesc)=> widget.inputChanged(newDesc,index),
+                controllers: controllers,
+                index: index,
+                deleteList: (deleteIndex)=>_deleteList(context, deleteIndex),
+//                widget.deleteList,
+              );
+//              TextFormField(
+////              focusNode: AlwaysDisabledFocusNode(),
+//              decoration: _getInputDecoration(context,index),
+//              controller: controllers[index],
+//              onChanged: (newDesc)=> widget.inputChanged(newDesc,index),
+//              style: const TextStyle(color: Colors.black),
+//            );
+
           }),
 //        ),
 
@@ -73,7 +87,7 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
     ],);
   }
 
-  //todo deleteするときのキーボード立ち上がりをふせぐ
+  //deleteするときのキーボード立ち上がりをふせぐ
   InputDecoration _getInputDecoration(BuildContext context, int index) {
     return InputDecoration(
       hintText: 'メリットを入力してください',
@@ -82,7 +96,7 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
         child: GestureDetector(
           child: const Icon(Icons.remove_circle_outline),
           onTap: () {
-            FocusScope.of(context).unfocus();
+            AlwaysDisabledFocusNode();
      print('DescFormAndButton/removeOnTapした瞬間のcontrollers.length:${controllers.length}'
                   '/onTapしたindex$index');
      //リストを0にしない
@@ -102,4 +116,25 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
       ),
     );
   }
+
+  //deleteするときのキーボード立ち上がりをふせぐ
+  void _deleteList(BuildContext context, int deleteIndex) {
+    print(
+        'DescFormAndButton/removeOnTapした瞬間のcontrollers.length:${controllers.length}'
+            '/onTapしたindex$deleteIndex');
+
+    //リストを0にしない
+    if (controllers.length > 1) {
+      setState(() {
+        controllers.removeAt(deleteIndex);
+        widget.deleteList(deleteIndex);
+        print('DescForm削除setState時のcontrollers.length:'
+            '${controllers.length}');
+      });
+    }
+
+  }
+
+  //deleteList
+
 }
