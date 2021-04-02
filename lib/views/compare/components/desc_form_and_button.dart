@@ -1,7 +1,6 @@
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:compare_2way/utils/constants.dart';
 
 import 'desc_form.dart';
 
@@ -22,7 +21,6 @@ class DescFormAndButton extends StatefulWidget {
 class _DescFormAndButtonState extends State<DescFormAndButton> {
 
   List<TextEditingController> controllers =<TextEditingController>[];
-//  ScrollController _scrollController = ScrollController();//mate
 
   @override
   void initState() {
@@ -47,29 +45,18 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
           ListView.builder(
               shrinkWrap:true,
           physics: const NeverScrollableScrollPhysics(),
-//            controller: _scrollController,
           itemCount: controllers.length,
           itemBuilder: (context,index){
             return
             //deleteするときのキーボード立ち上がりをふせぐにはStackでボタン独立
-            //todo TextFieldを長く入力するとボタンが重なる
               DescForm(
                 inputChanged: (newDesc)=> widget.inputChanged(newDesc,index),
                 controllers: controllers,
                 index: index,
                 deleteList: (deleteIndex)=>_deleteList(context, deleteIndex),
-//                widget.deleteList,
               );
-//              TextFormField(
-////              focusNode: AlwaysDisabledFocusNode(),
-//              decoration: _getInputDecoration(context,index),
-//              controller: controllers[index],
-//              onChanged: (newDesc)=> widget.inputChanged(newDesc,index),
-//              style: const TextStyle(color: Colors.black),
-//            );
 
           }),
-//        ),
 
       RaisedButton(
         child: const Icon(Icons.add),
@@ -83,7 +70,6 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
             controllers.add(TextEditingController());
             print('descFormAndButton/RaisedButton:controllers${controllers.map((controller) => controller.text).toList()}');
             });
-
         },),
     ],);
   }
@@ -106,7 +92,5 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
     }
 
   }
-
-  //deleteList
 
 }

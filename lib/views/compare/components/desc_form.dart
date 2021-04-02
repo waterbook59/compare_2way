@@ -5,13 +5,11 @@ import 'package:flutter/cupertino.dart';
 class DescForm extends StatefulWidget {
   const DescForm(
       {
-//        this.items,
       this.inputChanged,
       this.index,
       this.controllers,
       this.deleteList});
 
-//  final List<Way1Merit> items;
   final Function(String) inputChanged;
   final Function(int) deleteList;
   final int index;
@@ -31,10 +29,14 @@ class _DescFormState extends State<DescForm> {
         TextFormField(
           decoration: const InputDecoration(
             hintText: 'メリットを入力してください',
+            ///TextFieldを長く入力するとボタンが重なるのを回避
+            contentPadding: EdgeInsets.fromLTRB(6, 6, 48, 0),
           ),
           controller: widget.controllers[widget.index],
           onChanged: (newDesc) => widget.inputChanged(newDesc),
           style: const TextStyle(color: Colors.black),
+          ///TextFieldを長く入力すると折り返し
+          maxLines: null,
         ),
         IconButton(
           icon: const Icon(
