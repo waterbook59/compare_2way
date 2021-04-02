@@ -5,8 +5,10 @@ import 'package:compare_2way/views/compare/components/desc_form.dart';
 import 'package:compare_2way/views/compare/components/desc_form_and_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:getwidget/components/accordian/gf_accordian.dart';
+//import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
+
+import 'gf_accordian.dart' as custom;
 
 class AccordionPart extends StatefulWidget {
 
@@ -32,8 +34,8 @@ class _AccordionPartState extends State<AccordionPart> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ///課題はGFAccordionの中身を動的に変更できるか(継承とかでGFAccordionを再描画させられる？)
-        GFAccordion(
+        //todo collapsed時にDB再読み込み
+        custom.GFAccordion(
             title: widget.title,
             titleBorderRadius: accordionTopBorderRadius,
             contentBorderRadius:
@@ -42,31 +44,18 @@ class _AccordionPartState extends State<AccordionPart> {
             collapsedTitleBackgroundColor:
             const Color(0xFFE0E0E0),
             contentChild:
-//                          DescForm(
-//                items: widget.way1MeritList,
-//                inputChanged: widget.inputChanged,
-//              ),
-          //todo リストが増えていくとDescFormButtonがタイトル部分にはみ出している
+          //リストが増えていくとDescFormButtonがタイトル部分にはみ出している
+            ///=>custom.GFAccordion設定で初期位置修正
             DescFormAndButton(
               items: widget.way1MeritList,
               inputChanged: widget.inputChanged,
               addList: (){
                 widget.addList();
-//               setState(() {
-//               });
               },
               deleteList: widget.deleteList,
             ),
-
+          contentPadding: const EdgeInsets.only(top: 1,left: 8,right: 8),
         ),
-//        RaisedButton(
-//          child: const Icon(Icons.add),
-//          onPressed: () {
-//            ///GFAccordionの中の状態を変更しないと意味がない(FutureBuilderまわるだけ)
-//            setState(() {
-//              widget.addList();
-//            });
-//          },),
       ],
     );
   }

@@ -121,10 +121,7 @@ class CompareScreen extends StatelessWidget {
                         builder:
                             (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
                           if (snapshot.hasData && snapshot.data.isNotEmpty) {
-                          //todo 入力してる時にアコーディオン閉じると入力消える
-                            // =>collapsedの時にデータ取得するようにしないと入力が消える
                             //todo 変更時、createdAtを更新
-
                           print('CompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画');
                             return AccordionPart(
                               title: way1Title,
@@ -133,7 +130,7 @@ class CompareScreen extends StatelessWidget {
                                   context, newDesc, index,comparisonOverview),
                               way1MeritList: snapshot.data,
                               addList: () =>
-                                  addWay1MeritList(context, comparisonOverview),
+                                addWay1MeritList(context, comparisonOverview),
                               deleteList: (way1MeritIdIndex)=>
                                     deleteWay1MeritList(context,
                                         way1MeritIdIndex,comparisonOverview),
