@@ -13,6 +13,10 @@ mixin _$ComparisonItemDaoMixin on DatabaseAccessor<ComparisonItemDB> {
       attachedDatabase.way1MeritRecords;
   $Way1DemeritRecordsTable get way1DemeritRecords =>
       attachedDatabase.way1DemeritRecords;
+  $Way2MeritRecordsTable get way2MeritRecords =>
+      attachedDatabase.way2MeritRecords;
+  $Way2DemeritRecordsTable get way2DemeritRecords =>
+      attachedDatabase.way2DemeritRecords;
   $TagOverviewRecordsTable get tagOverviewRecords =>
       attachedDatabase.tagOverviewRecords;
   $ComparisonItemIdRecordsTable get comparisonItemIdRecords =>

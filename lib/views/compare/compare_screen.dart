@@ -36,13 +36,13 @@ class CompareScreen extends StatelessWidget {
     final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
-    //initState的に他の画面から写ってきた時のみ読み込み
+    //initState的に他の画面から写ってきた時のみ読込
     if (viewModel.compareScreenStatus == CompareScreenStatus.set) {
       print('compareScreenのFuture通過');
       Future(() async {
         await viewModel.setOverview(comparisonOverview);
-        await viewModel.getWay1MeritList(comparisonOverview.comparisonItemId);
-//        return viewModel.getWay1MeritList(comparisonOverview.comparisonItemId);
+        //viewModelで全てのAccordion中のリストとる
+        await viewModel.getAccordionList(comparisonOverview.comparisonItemId);
       });
       viewModel.compareScreenStatus = CompareScreenStatus.update;
     }
@@ -58,7 +58,7 @@ class CompareScreen extends StatelessWidget {
           style: middleTextStyle,
         ),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-          ///保存完了ボタン
+          ///保存完了ボタン //todo 保存完了ボタンWidget分割
           GestureDetector(
             child: const Icon(
               CupertinoIcons.check_mark_circled,
@@ -117,7 +117,7 @@ class CompareScreen extends StatelessWidget {
                     builder: (context, way1Title, child) {
                       return FutureBuilder( //material
                         future: viewModel
-                            .getDesc(comparisonOverview.comparisonItemId),
+                        .getWay1MeritDesc(comparisonOverview.comparisonItemId),
                         builder:
                             (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
                           if (snapshot.hasData && snapshot.data.isNotEmpty) {
@@ -125,71 +125,54 @@ class CompareScreen extends StatelessWidget {
                           print('CompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画');
                             return AccordionPart(
                               title: way1Title,
+                              displayList: DisplayList.way1Merit,
                               inputChanged: (newDesc, index) =>
-                                  _way1MeritInputChange(
-                                  context, newDesc, index,comparisonOverview),
+                                  _accordionInputChange(
+                                  context,DisplayList.way1Merit,
+                                      newDesc, index,comparisonOverview),
                               way1MeritList: snapshot.data,
                               addList: () =>
-                                addWay1MeritList(context, comparisonOverview),
+                                  _accordionAddList(context,
+                                    DisplayList.way1Merit, comparisonOverview),
                               deleteList: (way1MeritIdIndex)=>
-                                    deleteWay1MeritList(context,
+                                  _accordionDeleteList(context,
+                                        DisplayList.way1Merit,
                                         way1MeritIdIndex,comparisonOverview),
                             );
-
                           } else {
                             return Container();
                           }
                         },
                       );
                     }),
-
               ///way2 メリット
                 Selector<CompareViewModel, String>(
                   selector: (context, viewModel) => viewModel.way2Title,
                   builder: (context, way2Title, child) {
                     return FutureBuilder(
-                      //material
                       future: viewModel
-                          .getDesc(comparisonOverview.comparisonItemId),
+                        .getWay2MeritDesc(comparisonOverview.comparisonItemId),
                       builder:
-                          //todo way2Meritへ変更
-                          (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
-//                          print('Way1MeritListのFutureBuilderビルド');
-                        if (snapshot.hasData && snapshot.data.isNotEmpty) {
-//                            print('AccordionPart描画');
-                          ///リスト追加ボタン押しても描画されないのはGFAccordionでの再描画が必要
-                          return AccordionPart(
+                          (context, AsyncSnapshot<List<Way2Merit>> snapshot) {
+                        return snapshot.hasData && snapshot.data.isNotEmpty
+                        ?
+                          AccordionPart(
                             title: way2Title,
+                            displayList: DisplayList.way2Merit,
                             inputChanged: (newDesc, index) =>
-                                _way1MeritInputChange(context,
+                                _accordionInputChange(
+                                    context,DisplayList.way2Merit,
                                     newDesc, index,comparisonOverview),
-                            way1MeritList: snapshot.data,
+                            way2MeritList: snapshot.data,
                             addList: () =>
-                                addWay1MeritList(context, comparisonOverview),
-                          );
-
-                          ///GFAccordion
-//                              GFAccordion(
-//                                title: way1Title,
-//                                titleBorderRadius: accordionTopBorderRadius,
-//                                contentBorderRadius:
-//                                    accordionBottomBorderRadius,
-//                                showAccordion: true,
-//                                collapsedTitleBackgroundColor:
-//                                    const Color(0xFFE0E0E0),
-//                      /// DescFromの完了ボタンを押すとFutureBuilderが回ってDBからデータ取ってしまう
-//                      /// 入力後viewModelへのsetでは不十分でDB保存まで必要
-//                                contentChild: DescForm(
-//                                  items: snapshot.data,
-////                                  viewModel.way1MeritList,
-//                                  inputChanged: (newDesc, index) =>
-//                                      _way1MeritInputChange(
-//                                          context, newDesc, index),
-//                                )
-//                                );
-                        } else {
-                          return Container();
-                        }
+                                _accordionAddList(context,
+                                    DisplayList.way2Merit,comparisonOverview),
+                            deleteList: (way2MeritIdIndex)=>
+                                _accordionDeleteList(context,
+                                    DisplayList.way2Merit,
+                                    way2MeritIdIndex,comparisonOverview),
+                          )
+                          : Container();
                       },
                     );
                   },
@@ -252,6 +235,7 @@ class CompareScreen extends StatelessWidget {
                     );
                   },
                 ),
+                //todo 自己評価&TablePart widget分割
                 const SizedBox(
                   height: 4,
                 ),
@@ -276,6 +260,7 @@ class CompareScreen extends StatelessWidget {
                   way2MeritEvaluate: comparisonOverview.way2MeritEvaluate,
                   way2DemeritEvaluate: comparisonOverview.way2DemeritEvaluate,
                 ),
+                //todo 結論&ConclusionInputPart widget分割
                 const SizedBox(
                   height: 16,
                 ),
@@ -333,10 +318,6 @@ class CompareScreen extends StatelessWidget {
             ),
           ),
         ),
-//        floatingActionButton: FloatingActionButton(
-//          child: const Icon(Icons.add),
-//          onPressed: () => addListTest(context, comparisonOverview),
-//        ),
       ),
       //TablePartでは変更が会った瞬間にDB保存が必要かも
     );
@@ -364,29 +345,46 @@ class CompareScreen extends StatelessWidget {
     await viewModel.setConclusion(newConclusion);
   }
 
-  //テーブルのway1Merit変更されたらset
+  //TablePartのway1Merit変更されたらset
   Future<void> _setWay1Merit(BuildContext context, int newValue) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.setWay1MeritNewValue(newValue);
   }
 
-  //way1Meritの詳細が変更されたらset
-  Future<void> _way1MeritInputChange(
-      BuildContext context, String newDesc, int index,
+  ///Accordion中の選択したリストの詳細が変更されたらset
+  Future<void> _accordionInputChange(
+      BuildContext context,
+      DisplayList displayList,
+      String newDesc, int index,
       ComparisonOverview comparisonOverview) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.setWay1MeritDesc(comparisonOverview,newDesc, index);
-  }
+      await viewModel.setChangeListDesc(
+          comparisonOverview,displayList,newDesc, index);
+    }
 
-  Future<void> addWay1MeritList(
-      BuildContext context, ComparisonOverview comparisonOverview) async {
+
+  ///Accordion中の選択したリスト追加
+  Future<void> _accordionAddList(
+      BuildContext context,
+      DisplayList displayList,
+      ComparisonOverview comparisonOverview) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.addWay1Merit(comparisonOverview);
-  }
+    await viewModel.accordionAddList(comparisonOverview,displayList);
+    }
 
-  Future<void> deleteWay1MeritList(BuildContext context, int way1MeritIdIndex,
+  ///Accordion中の選択したリスト削除
+  Future<void> _accordionDeleteList(
+      BuildContext context,
+      DisplayList displayList,
+      int accordionIdIndex,
       ComparisonOverview comparisonOverview) async{
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.deleteWay1Merit(way1MeritIdIndex,comparisonOverview);
+    await viewModel.accordionDeleteList(
+        displayList,accordionIdIndex,comparisonOverview);
   }
-}
+
+
+  }
+
+
+

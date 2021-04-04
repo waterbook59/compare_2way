@@ -16,7 +16,11 @@ class CompareViewModel extends ChangeNotifier {
   CompareScreenStatus compareScreenStatus;
   ComparisonOverview overviewDB;
   List<Way1Merit> _way1MeritList = <Way1Merit>[];
+
   List<Way1Merit> get way1MeritList => _way1MeritList;
+  List<Way2Merit> _way2MeritList = <Way2Merit>[];
+
+  List<Way2Merit> get way2MeritList => _way2MeritList;
 
 
   String _itemTitle = '';
@@ -92,12 +96,16 @@ class CompareViewModel extends ChangeNotifier {
 //    notifyListeners();
   }
 
-  ///way1Meritのリストを作って保存
-  Future<void> createDesc(Way1Merit initWay1Merit) async {
+  ///way1Merit,way2Meritのリストを作って保存
+  //todo list.add=>DB登録=>list空にせずに、initWay1MeritをリストにしてcreateDescListに渡す
+  Future<void> createDesc(Way1Merit initWay1Merit,
+      Way2Merit initWay2Merit,) async {
     //ここでaddしていくと古いものがだぶるのでは
     _way1MeritList.add(initWay1Merit);
-    await _compareRepository.createDescList(_way1MeritList);
+    _way2MeritList.add(initWay2Merit);
+    await _compareRepository.createDescList(_way1MeritList,_way2MeritList);
     _way1MeritList = <Way1Merit>[];
+    _way2MeritList = <Way2Merit>[];
   }
 
   ///List<ComparisonOverview>ではなく、comparisonItemIdからComparisonOverview１行だけ取ってくる
@@ -127,9 +135,12 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   ///DescFormAndButtonでList<Way1Merit>の入力変更があったとき
-  Future<void> setWay1MeritDesc(ComparisonOverview comparisonOverview,
-      String newDesc, int index) async{
-    print('setWay1MeritNewDesc!:$newDesc');
+  Future<void> setChangeListDesc(
+      ComparisonOverview comparisonOverview,
+      DisplayList displayList,
+      String newDesc, int index) async {
+    print('setNewDesc!:$newDesc');
+
     ///List.generate=>DB更新は変更した行のみ
     // Listの中の[index]の番号のway1MeritDescのプロパティだけnewDescに変えたい
 //    _way1MeritList = List.generate(_way1MeritList.length, (i) {
@@ -148,51 +159,89 @@ class CompareViewModel extends ChangeNotifier {
 //      }
 //    });
     //    await _compareRepository.setWay1MeritDesc(_way1MeritList,index);
-    ///変更行作成=>DB更新は変更した行のみ
-    final changeWay1Merit = Way1Merit(
-      way1MeritId: _way1MeritList[index].way1MeritId,
-      comparisonItemId: _way1MeritList[index].comparisonItemId,
-      way1MeritDesc: newDesc,
-    );
-    await _compareRepository.setWay1MeritDesc(changeWay1Merit,index);
-    _way1MeritList = await  _compareRepository.getWay1MeritList(
-        comparisonOverview.comparisonItemId);
+    switch(displayList){
+      case DisplayList.way1Merit:
+          ///変更行作成=>DB更新は変更した行のみ
+          final changeWay1Merit = Way1Merit(
+            way1MeritId: _way1MeritList[index].way1MeritId,
+            comparisonItemId: _way1MeritList[index].comparisonItemId,
+            way1MeritDesc: newDesc,
+          );
+          await _compareRepository.setWay1MeritDesc(changeWay1Merit, index);
+          _way1MeritList = await _compareRepository.getWay1MeritList(
+              comparisonOverview.comparisonItemId);
+          break;
+      case DisplayList.way2Merit:
+          final changeWay2Merit = Way2Merit(
+            way2MeritId: _way2MeritList[index].way2MeritId,
+            comparisonItemId: _way2MeritList[index].comparisonItemId,
+            way2MeritDesc: newDesc,
+          );
+          await _compareRepository.setWay2MeritDesc(changeWay2Merit, index);
+          _way2MeritList = await _compareRepository.getWay2MeritList(
+              comparisonOverview.comparisonItemId);
+          break;
+    }
+
     notifyListeners();
   }
 
-  ///DescFormAndButtonでList<Way1Merit>のリスト追加を行ったとき
-  Future<void>addWay1Merit(ComparisonOverview comparisonOverview) async{
-//    print('ComparisonIdを渡してway1Meritのリスト追加');
-    final initWay1Merit = Way1Merit(
-      comparisonItemId:comparisonOverview.comparisonItemId,
-      way1MeritDesc: '',
-    );
-
-    print('CompareViewModel/addWay1Merit/新規リスト追加前${_way1MeritList.map((way1Merit) => way1Merit.way1MeritDesc).toList()}');
-    await _compareRepository.addWay1Merit(initWay1Merit);
-    //1行DBへ追加した後、追加したもの含めて_way1MeritListに取得リスト格納してみる
-
-    _way1MeritList = await  _compareRepository.getWay1MeritList(
-        comparisonOverview.comparisonItemId);
-    print('CompareViewModel/addWay1Merit/新規リスト追加後${_way1MeritList.map((way1Merit) => way1Merit.way1MeritDesc).toList()}');
-
-    //selectorビルドさせたところで、GFAccordion表示に変化がない...
-//    _way1Title = '変更！';
-//    compareScreenStatus = CompareScreenStatus.set;
+  ///DescFormAndButtonでリスト行追加
+  Future<void> accordionAddList(ComparisonOverview comparisonOverview,
+      DisplayList displayList) async {
+    switch(displayList){
+      case DisplayList.way1Merit:
+            final initWay1Merit = Way1Merit(
+              comparisonItemId: comparisonOverview.comparisonItemId,
+              way1MeritDesc: '',
+            );
+            print('CompareViewModel/addWay1Merit/新規リスト追加前'
+                '${_way1MeritList.map((
+                way1Merit) => way1Merit.way1MeritDesc).toList()}');
+            await _compareRepository.addWay1Merit(initWay1Merit);
+            //1行DBへ追加した後、追加したもの含めて_way1MeritListに取得リスト格納してみる
+            _way1MeritList = await _compareRepository.getWay1MeritList(
+                comparisonOverview.comparisonItemId);
+            print('CompareViewModel/addWay1Merit/新規リスト追加後'
+                '${_way1MeritList.map((
+                way1Merit) => way1Merit.way1MeritDesc).toList()}');
+            break;
+      case DisplayList.way2Merit:
+            final initWay2Merit = Way2Merit(
+              comparisonItemId: comparisonOverview.comparisonItemId,
+              way2MeritDesc: '',
+            );
+            await _compareRepository.addWay2Merit(initWay2Merit);
+            _way2MeritList = await _compareRepository.getWay2MeritList(
+                comparisonOverview.comparisonItemId);
+            break;
+    }
     notifyListeners();
   }
 
-  ///DescFormAndButtonでList<Way1Merit>のリスト削除を行ったとき
-  Future<void> deleteWay1Merit(
-      int way1MeritIdIndex,ComparisonOverview comparisonOverview) async{
-    final deleteQay1MeritId= _way1MeritList[way1MeritIdIndex].way1MeritId;
-    await _compareRepository.deleteWay1Merit(deleteQay1MeritId);
-    //再取得しないとDescFormAndButtonでのListViewの認識している長さと削除するindexが異なりエラー
-    _way1MeritList = await  _compareRepository.getWay1MeritList(
-        comparisonOverview.comparisonItemId);
+  ///DescFormAndButtonでリスト削除
+  Future<void> accordionDeleteList(
+      DisplayList displayList,
+      int accordionIdIndex,
+      ComparisonOverview comparisonOverview) async {
+    switch(displayList){
+      case DisplayList.way1Merit:
+        final deleteWay1MeritId = _way1MeritList[accordionIdIndex].way1MeritId;
+        await _compareRepository.deleteWay1Merit(deleteWay1MeritId);
+        //再取得しないとDescFormAndButtonでのListViewの認識している長さと削除するindexが異なりエラー
+        _way1MeritList = await _compareRepository.getWay1MeritList(
+            comparisonOverview.comparisonItemId);
+        break;
+      case DisplayList.way2Merit:
+        final deleteWay2MeritId = _way2MeritList[accordionIdIndex].way2MeritId;
+        await _compareRepository.deleteWay2Merit(deleteWay2MeritId);
+        _way2MeritList = await _compareRepository.getWay2MeritList(
+            comparisonOverview.comparisonItemId);
+        break;
+    }
+
 //    notifyListeners();
   }
-
 
 
   ///CompareScreenで表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
@@ -268,30 +317,41 @@ class CompareViewModel extends ChangeNotifier {
 //    notifyListeners();
   }
 
-  ///List<Way1Merit>取得(FutureBuilder用)
-  Future<List<Way1Merit>> getDesc(String comparisonItemId) async {
-//    print('FutureBuilderでDBからList<Way1Merit> _way1MeritList取得');
-   return _way1MeritList =
+
+  ///List<Way1Merit>,List<Way2Merit>取得(文頭取得用)
+  Future<void> getAccordionList(String comparisonItemId) async {
+    _way1MeritList =
     await _compareRepository.getWay1MeritList(comparisonItemId);
-  }
-  ///List<Way1Merit>取得(文頭取得用)
-  Future<void> getWay1MeritList(String comparisonItemId) async {
-     _way1MeritList =
-    await _compareRepository.getWay1MeritList(comparisonItemId);
-     print('getWay1MeritList/notifyListeners');
+    _way2MeritList =
+    await _compareRepository.getWay2MeritList(comparisonItemId);
+    print('getWay1/Way2MeritList/notifyListeners');
     notifyListeners();
   }
 
+  ///List<Way1Merit>取得(FutureBuilder用)
+  Future<List<Way1Merit>> getWay1MeritDesc(String comparisonItemId) async {
+//    print('FutureBuilderでDBからList<Way1Merit> _way1MeritList取得');
+      return _way1MeritList =
+      await _compareRepository.getWay1MeritList(comparisonItemId);
+  }
 
 
+  ///List<Way1Mer2t>取得(FutureBuilder用)
+  Future<List<Way2Merit>> getWay2MeritDesc(String comparisonItemId) async {
+    return _way2MeritList =
+    await _compareRepository.getWay2MeritList(comparisonItemId);
+  }
 
-
-
-
-
-
-
-
+  Future<void> deleteWay2Merit(int way2MeritIdIndex,
+      ComparisonOverview comparisonOverview) async{
+    print('Way2Meritの選択したものを削除');
+//    final deleteWay2MeritId = _way2MeritList[way2MeritIdIndex].way2MeritId;
+//    await _compareRepository.deleteWay1Merit(deleteWay2MeritId);
+//    //再取得しないとDescFormAndButtonでのListViewの認識している長さと削除するindexが異なりエラー
+//    _way1MeritList = await _compareRepository.getWay2MeritList(
+//        comparisonOverview.comparisonItemId);
+//    notifyListeners();
+  }
 
 
 //todo textControllerを破棄

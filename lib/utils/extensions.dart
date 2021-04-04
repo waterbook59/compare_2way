@@ -6,14 +6,13 @@ import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_database.dart';
 
-///DBのList<ComparisonOverviewRecord>=>モデルクラスList<ComparisonOverview>
+///(DB=>model):List<ComparisonOverviewRecord>=>List<ComparisonOverview>
 extension ConvertToComparisonOverviewRecords on List<ComparisonOverviewRecord> {
   List<ComparisonOverview> toComparisonOverviews(
       List<ComparisonOverviewRecord> comparisonOverviewRecords) {
-    var comparisonOverviews = <ComparisonOverview>[];
-
-    comparisonOverviewRecords.forEach((comparisonOverviewRecord) {
-      comparisonOverviews.add(ComparisonOverview(
+    final comparisonOverviews =
+    comparisonOverviewRecords.map((comparisonOverviewRecord) {
+        return  ComparisonOverview(
         dataId: comparisonOverviewRecord.dataId ?? 0,
         comparisonItemId: comparisonOverviewRecord.comparisonItemId ?? '',
         itemTitle: comparisonOverviewRecord.itemTitle ?? '',
@@ -30,14 +29,14 @@ extension ConvertToComparisonOverviewRecords on List<ComparisonOverviewRecord> {
         conclusion: comparisonOverviewRecord.conclusion ?? '',
         ///取得時のcreatedAt追加
         createdAt: comparisonOverviewRecord.createdAt ,
-      ));
-    });
+      );
+    }).toList();
     return comparisonOverviews;
   }
 }
 
 ///保存・単独読込の場合はリスト型でやりとり必要ない
-///モデルクラス:ComparisonOverview=>DB:ComparisonOverviewRecordCompanion
+///(model=>DB):ComparisonOverview=>ComparisonOverviewRecordCompanion
 extension ConvertToComparisonOverview on ComparisonOverview {
   ComparisonOverviewRecord toComparisonOverviewRecord(
       ComparisonOverview updateOverview) {
@@ -63,7 +62,7 @@ extension ConvertToComparisonOverview on ComparisonOverview {
   }
 }
 
-///読込時 DB:ComparisonOverviewRecordの１行=>ComparisonOverview
+///読込時(DB=>model):ComparisonOverviewRecordの１行=>ComparisonOverview
 extension ConvertToComparisonOverviewRecord on ComparisonOverviewRecord {
   ComparisonOverview toComparisonOverview(
       ComparisonOverviewRecord overviewRecord) {
@@ -89,7 +88,7 @@ extension ConvertToComparisonOverviewRecord on ComparisonOverviewRecord {
   }
 }
 
-///新規挿入時 モデルクラス:way1Merit=>DB:way1MeritRecord
+///新規挿入時(model=>DB):way1Merit=>way1MeritRecord
 extension ConvertToWay1MeritRecord on Way1Merit{
   Way1MeritRecord toCreateWay1MeritRecord (Way1Merit initWay1Merit){
     final way1MeritRecord= Way1MeritRecord(
@@ -101,7 +100,7 @@ extension ConvertToWay1MeritRecord on Way1Merit{
   }
 }
 
-///更新時 モデルクラス:way1Merit=>DB:way1MeritRecord
+///更新時(model=>DB):way1Merit=>way1MeritRecord
 extension ConvertToUpdateWay1MeritRecord on Way1Merit{
   Way1MeritRecord toUpdateWay1MeritRecord (Way1Merit updateWay1Merit){
     final way1MeritRecord= Way1MeritRecord(
@@ -113,119 +112,101 @@ extension ConvertToUpdateWay1MeritRecord on Way1Merit{
   }
 }
 
-///初回登録時 デルクラス:Lis<Way1Merit>=>DB:List<Way1MeritRecord>
+///新規登録(model=>DB):List<Way1Merit>=>List<Way1MeritRecord>
 extension ConvertToWay1InitMeritRecordList on List<Way1Merit>{
   List<Way1MeritRecord> toWay1InitMeritRecordList(
       List<Way1Merit> way1MeritItems) {
-    final way1MeritItemRecords = <Way1MeritRecord>[];
-    //todo 単にforEachをmapに変換してもダメ
-    way1MeritItems.forEach((way1MeritSingle) {
-      way1MeritItemRecords.add(Way1MeritRecord(
+    final way1MeritItemRecords =
+    way1MeritItems.map((way1MeritSingle) {
+      return Way1MeritRecord(
         comparisonItemId: way1MeritSingle.comparisonItemId,
         way1MeritDesc: way1MeritSingle.way1MeritDesc,
-      ));
-    });
+      );
+    }).toList();
     return way1MeritItemRecords;
   }
 }
 
-///保存時 モデルクラス:Lis<Way1Merit>=>DB:List<Way1MeritRecord>
+///保存時(model=>DB):Lis<Way1Merit>=>List<Way1MeritRecord>
 extension ConvertToWay1MeritRecordList on List<Way1Merit>{
   List<Way1MeritRecord> toWay1MeritRecordList(List<Way1Merit> way1MeritItems) {
 //    way1MeritId:autoIncrementにしてるのでそのまま
     //List<メリット詳細>=>1つずつのメリットへ分解
-    final way1MeritItemRecords = <Way1MeritRecord>[];
-    //todo 単にforEachをmapに変換してもダメ,map&toList()
-    way1MeritItems.forEach((way1MeritSingle) {
-      way1MeritItemRecords.add(Way1MeritRecord(
+    final way1MeritItemRecords =
+    way1MeritItems.map((way1MeritSingle) {
+      return Way1MeritRecord(
         way1MeritId: way1MeritSingle.way1MeritId,
         comparisonItemId: way1MeritSingle.comparisonItemId,
         way1MeritDesc: way1MeritSingle.way1MeritDesc,
-      ));
-    });
-    print('extensions:way1MeritRecordにcomparisonItemId保存できているか');
-    print(way1MeritItemRecords.map((way1MeritSingle)
- => way1MeritSingle.comparisonItemId).toList());
+      );
+    }).toList();
     return way1MeritItemRecords;
   }
 }
 
-///読込時 DB:List<Way1MeritRecord>=>モデルクラス:Lis<Way1Merit>
+///読込時(DB=>model):List<Way1MeritRecord>=>Lis<Way1Merit>
 extension ConvertToWay1MeritList on List<Way1MeritRecord>{
   List<Way1Merit> toWay1MeritList(List<Way1MeritRecord> way1MeritRecordList){
-    final way1MeritList = <Way1Merit>[];
-    way1MeritRecordList.forEach((way1MeritRecordSingle) {
-      way1MeritList.add(Way1Merit(
+    final way1MeritList =
+    way1MeritRecordList.map((way1MeritRecordSingle) {
+      return Way1Merit(
         way1MeritId: way1MeritRecordSingle.way1MeritId,
         comparisonItemId: way1MeritRecordSingle.comparisonItemId,
         way1MeritDesc: way1MeritRecordSingle.way1MeritDesc,
-      ));
-    });
+      );
+    }).toList();
     return way1MeritList;
   }
 }
 
-
-
-///ComparisonItem=>ComparisonOverviewRecord,List<way1Merit>,List<way1Demerit>に変換
-extension ConvertToComparisonItemRecord on ComparisonItem {
-  //モデルクラス(ComparisonItem)をDBのテーブルクラス(ComparisonOverviewRecord)に変換
-  ComparisonOverviewRecord toOverviewRecord(ComparisonItem comparisonItem) {
-    // var wordRecord = WordRecord();のインスタンスは作らず直接代入
-    //varではなくfinalでも良い
-    ///comparisonItemをまず４つのテーブルに格納できるよう変換
-
-    final comparisonOverviewRecord = ComparisonOverviewRecord(
-      dataId: comparisonItem.dataId,
-      comparisonItemId: comparisonItem.comparisonItemId,
-      itemTitle: comparisonItem.itemTitle ?? '',
-      way1Title: comparisonItem.way1Title ?? '',
-      way1MeritEvaluate: comparisonItem.way1MeritEvaluate ?? 0,
-      way1DemeritEvaluate: comparisonItem.way1DemeritEvaluate ?? 0,
-      way2Title: comparisonItem.way2Title ?? '',
-      way2MeritEvaluate: comparisonItem.way2MeritEvaluate ?? 0,
-      way2DemeritEvaluate: comparisonItem.way2DemeritEvaluate ?? 0,
-      //      way3Title:comparisonItem.way3Title ?? '',
-//      way3MeritEvaluate: comparisonItem.way3MeritEvaluate ?? 0,
-//      way3DemeritEvaluate: comparisonItem.way3DemeritEvaluate ?? 0,
-      //      tags:comparisonItem.tags??'',
-      favorite: comparisonItem.favorite ?? false,
-      conclusion: comparisonItem.conclusion ?? '',
-      createdAt: comparisonItem.createdAt,
-    );
-    return comparisonOverviewRecord;
+///新規登録(model=>DB):List<Way2Merit>=>List<Way2MeritRecord>
+extension ConvertToWay2InitMeritRecordList on List<Way2Merit>{
+  List<Way2MeritRecord> toWay2InitMeritRecordList(
+      List<Way2Merit> way2MeritItems) {
+    ///forEach=>map().toList()へ変更
+    final way2MeritItemRecords =
+    way2MeritItems.map((way2MeritSingle) {
+      return Way2MeritRecord(
+        comparisonItemId: way2MeritSingle.comparisonItemId,
+        way2MeritDesc: way2MeritSingle.way2MeritDesc,
+      );}).toList();
+    return way2MeritItemRecords;
   }
+}
+///読込時(DB=>model) List<Way2MeritRecord>=>Lis<Way2Merit>
+extension ConvertToWay2MeritList on List<Way2MeritRecord>{
+  List<Way2Merit> toWay2MeritList(List<Way2MeritRecord> way2MeritRecordList){
+    final way2MeritList =
+    way2MeritRecordList.map((way2MeritRecordSingle) {
+      return Way2Merit(
+        way2MeritId: way2MeritRecordSingle.way2MeritId,
+        comparisonItemId: way2MeritRecordSingle.comparisonItemId,
+        way2MeritDesc: way2MeritRecordSingle.way2MeritDesc,
+      );
+    }).toList();
+    return way2MeritList;
+  }
+}
 
-  ///ComparisonItem=>List<way1Merit>
-//  List<Way1MeritRecord> toWay1MeritRecordList(ComparisonItem comparisonItem) {
-//    //todo
-////    way1MeritId:autoIncrementにしてるので、そのままにしてみる
-//    //List<メリット詳細>=>1つずつのメリットへ分解
-//    ///way1MeritDescsはway1MeritRecordと同義だた、daoでinsertするときややこしいので名前変更
-//    final way1MeritDescs = <Way1MeritRecord>[];
-//    comparisonItem.way1Merit.forEach((way1MeritSingle) {
-//      way1MeritDescs.add(Way1MeritRecord(
-//        comparisonItemId: way1MeritSingle.comparisonItemId,
-//        way1MeritDesc: way1MeritSingle.way1MeritDesc,
-//      ));
-//    });
-//    return way1MeritDescs;
-//  }
+///更新時(model=>DB):way2Merit=>way2MeritRecord
+extension ConvertToUpdateWay2MeritRecord on Way2Merit{
+  Way2MeritRecord toUpdateWay2MeritRecord (Way2Merit updateWay2Merit){
+    final way2MeritRecord= Way2MeritRecord(
+      way2MeritId: updateWay2Merit.way2MeritId,
+      comparisonItemId: updateWay2Merit.comparisonItemId,
+      way2MeritDesc: updateWay2Merit.way2MeritDesc ?? '',
+    );
+    return way2MeritRecord;
+  }
+}
 
-  ///ComparisonItem=>List<way1Demerit>
-  List<Way1DemeritRecord> toWay1DemeritRecordList(ComparisonItem comparisonItem) {
-//    way1MeritId:autoIncrementにしてるので、そのままにしてみる
-    //List<メリット詳細>=>1つずつのメリットへ分解
-    ///way1MeritDescsはway1MeritRecordと同義だた、daoでinsertするときややこしいので名前変更
-    final way1DemeritDescs = <Way1DemeritRecord>[];
-
-    comparisonItem.way1Demerit.forEach((way1DemeritSingle) {
-      way1DemeritDescs.add(Way1DemeritRecord(
-        comparisonItemId: way1DemeritSingle.comparisonItemId,
-//        comparisonItemId: way1DemeritSingle.comparisonItemId,
-        way1DemeritDesc: way1DemeritSingle.way1DemeritDesc,
-      ));
-    });
-    return way1DemeritDescs;
+///新規挿入時(model=>DB):way2Merit=>way2MeritRecord
+extension ConvertToWay2MeritRecord on Way2Merit{
+  Way2MeritRecord toCreateWay2MeritRecord (Way2Merit initWay2Merit){
+    final way2MeritRecord= Way2MeritRecord(
+      comparisonItemId: initWay2Merit.comparisonItemId,
+      way2MeritDesc: initWay2Merit.way2MeritDesc ?? '',
+    );
+    return way2MeritRecord;
   }
 }
