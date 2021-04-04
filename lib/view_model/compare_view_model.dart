@@ -135,9 +135,11 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   ///DescFormAndButtonでList<Way1Merit>の入力変更があったとき
-  Future<void> setWay1MeritDesc(ComparisonOverview comparisonOverview,
+  Future<void> setChangeListDesc(
+      ComparisonOverview comparisonOverview,
+      DisplayList displayList,
       String newDesc, int index) async {
-    print('setWay1MeritNewDesc!:$newDesc');
+    print('setNewDesc!:$newDesc');
 
     ///List.generate=>DB更新は変更した行のみ
     // Listの中の[index]の番号のway1MeritDescのプロパティだけnewDescに変えたい
@@ -157,15 +159,30 @@ class CompareViewModel extends ChangeNotifier {
 //      }
 //    });
     //    await _compareRepository.setWay1MeritDesc(_way1MeritList,index);
-    ///変更行作成=>DB更新は変更した行のみ
-    final changeWay1Merit = Way1Merit(
-      way1MeritId: _way1MeritList[index].way1MeritId,
-      comparisonItemId: _way1MeritList[index].comparisonItemId,
-      way1MeritDesc: newDesc,
-    );
-    await _compareRepository.setWay1MeritDesc(changeWay1Merit, index);
-    _way1MeritList = await _compareRepository.getWay1MeritList(
-        comparisonOverview.comparisonItemId);
+    switch(displayList){
+      case DisplayList.way1Merit:
+          ///変更行作成=>DB更新は変更した行のみ
+          final changeWay1Merit = Way1Merit(
+            way1MeritId: _way1MeritList[index].way1MeritId,
+            comparisonItemId: _way1MeritList[index].comparisonItemId,
+            way1MeritDesc: newDesc,
+          );
+          await _compareRepository.setWay1MeritDesc(changeWay1Merit, index);
+          _way1MeritList = await _compareRepository.getWay1MeritList(
+              comparisonOverview.comparisonItemId);
+          break;
+      case DisplayList.way2Merit:
+          final changeWay2Merit = Way2Merit(
+            way2MeritId: _way2MeritList[index].way2MeritId,
+            comparisonItemId: _way2MeritList[index].comparisonItemId,
+            way2MeritDesc: newDesc,
+          );
+          await _compareRepository.setWay2MeritDesc(changeWay2Merit, index);
+          _way2MeritList = await _compareRepository.getWay2MeritList(
+              comparisonOverview.comparisonItemId);
+          break;
+    }
+
     notifyListeners();
   }
 

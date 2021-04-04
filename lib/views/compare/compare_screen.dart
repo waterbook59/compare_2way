@@ -349,26 +349,23 @@ class CompareScreen extends StatelessWidget {
     await viewModel.setConclusion(newConclusion);
   }
 
-  //テーブルのway1Merit変更されたらset
+  //TablePartのway1Merit変更されたらset
   Future<void> _setWay1Merit(BuildContext context, int newValue) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.setWay1MeritNewValue(newValue);
   }
 
-  //way1Meritの詳細が変更されたらset
+  //way1,2MeritListの詳細が変更されたらset
   Future<void> _accordionInputChange(
       BuildContext context,
       DisplayList displayList,
       String newDesc, int index,
       ComparisonOverview comparisonOverview) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    switch(displayList){
-      case DisplayList.way1Merit:
-      await viewModel.setWay1MeritDesc(comparisonOverview,newDesc, index);
-      break;
+      await viewModel.setChangeListDesc(
+          comparisonOverview,displayList,newDesc, index);
     }
 
-  }
 
   Future<void> _accordionAddList(
       BuildContext context,

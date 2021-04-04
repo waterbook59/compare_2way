@@ -187,3 +187,15 @@ extension ConvertToWay2MeritList on List<Way2MeritRecord>{
     return way2MeritList;
   }
 }
+
+///更新時(model=>DB):way2Merit=>way2MeritRecord
+extension ConvertToUpdateWay2MeritRecord on Way2Merit{
+  Way2MeritRecord toUpdateWay2MeritRecord (Way2Merit updateWay2Merit){
+    final way2MeritRecord= Way2MeritRecord(
+      way2MeritId: updateWay2Merit.way2MeritId,
+      comparisonItemId: updateWay2Merit.comparisonItemId,
+      way2MeritDesc: updateWay2Merit.way2MeritDesc ?? '',
+    );
+    return way2MeritRecord;
+  }
+}

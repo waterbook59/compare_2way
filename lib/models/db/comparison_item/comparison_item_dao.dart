@@ -92,6 +92,13 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
         '${way1MeritItemRecord.way1MeritDesc}');
     return update(way1MeritRecords).replace(way1MeritItemRecord);
   }
+  ///更新:Way2Merit
+  Future<void> updateWay2MeritRecordDB(
+      Way2MeritRecord way2MeritItemRecord) async {
+    print('リスト更新:${way2MeritItemRecord.way2MeritId}/'
+        '${way2MeritItemRecord.way2MeritDesc}');
+    return update(way2MeritRecords).replace(way2MeritItemRecord);
+  }
 
   ///リスト１行新規追加：Way1Merit
   Future<void> insertWay1MeritRecordSingle(Way1MeritRecord way1MeritRecord) =>
