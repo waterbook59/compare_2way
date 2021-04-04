@@ -1,10 +1,15 @@
 import 'package:compare_2way/style.dart';
+import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/views/list/componets/input_part.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
 class AddScreen extends StatelessWidget {
+
+  const AddScreen(this.displayMode);
+  final AddScreenMode displayMode;
+
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme

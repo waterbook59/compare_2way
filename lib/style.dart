@@ -18,6 +18,12 @@ const middleJaTextStyle =
 const trailingTextStyle =
     TextStyle(fontFamily: regularFontJa, fontSize: 14, color: Colors.white);
 
+//CupertinoActionSheetの文字
+const actionSheetTextStyle =
+TextStyle(fontFamily: regularFontJa, fontSize: 18, color: Colors.blue);
+const actionSheetCationTextStyle =
+TextStyle(fontFamily: regularFontJa, fontSize: 18, color: Colors.red);
+
 //CompareScreenタイトル
 const itemTitleTextStyle = TextStyle(
   fontFamily: regularFontJa,

@@ -23,3 +23,14 @@ enum DisplayList {
   way3Merit,
   way3Demerit,
 }
+//CompareScreenのHeaderの編集ボタン
+enum CompareEditMenu{
+  titleEdit,
+  allListDelete,
+}
+
+//AddScreenの表示モード
+enum AddScreenMode{
+  add,
+  edit,
+}

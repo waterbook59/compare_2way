@@ -6,11 +6,13 @@ import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/accordion_part.dart';
 import 'package:compare_2way/views/compare/components/conclusion_input_part.dart';
 import 'package:compare_2way/views/compare/components/desc_form.dart';
+import 'package:compare_2way/views/compare/components/edit_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
+import 'components/edit_bottom_action.dart';
 import 'components/icon_title.dart';
 import 'components/table_part.dart';
 
@@ -69,15 +71,11 @@ class CompareScreen extends StatelessWidget {
             },
           ),
           const SizedBox(
-            width: 16,
+            width: 8,
           ),
-
           ///編集ボタン
-          //todo タイトル、比較項目編集
-          const Text(
-            '編集',
-            style: trailingTextStyle,
-          ),
+          EditBottomAction(comparisonItemId:
+          comparisonOverview.comparisonItemId,),
         ]),
       ),
       child: Scaffold(

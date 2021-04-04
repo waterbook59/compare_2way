@@ -46,16 +46,6 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
             :controllers = [];
         break;
     }
-//    if (widget.items.isNotEmpty) {
-//      controllers = widget.items.map((item) {
-//        return TextEditingController(text: item.way1MeritDesc);
-//      }).toList();
-//
-//      print(
-//          'descFormAndButton/initState/items${widget.items.map((item) => item.way1MeritDesc).toList()}');
-//    } else {
-//      controllers = [];
-//    }
     super.initState();
   }
 
