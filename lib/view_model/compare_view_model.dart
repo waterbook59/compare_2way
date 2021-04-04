@@ -186,27 +186,42 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  ///DescFormAndButtonでList<Way1Merit>のリスト追加を行ったとき
-  Future<void> addWay1Merit(ComparisonOverview comparisonOverview) async {
-//    print('ComparisonIdを渡してway1Meritのリスト追加');
-    final initWay1Merit = Way1Merit(
-      comparisonItemId: comparisonOverview.comparisonItemId,
-      way1MeritDesc: '',
-    );
+  ///DescFormAndButtonでリスト行追加
+  Future<void> accordionAddList(ComparisonOverview comparisonOverview,
+      DisplayList displayList) async {
+    switch(displayList){
+      case DisplayList.way1Merit:
+            final initWay1Merit = Way1Merit(
+              comparisonItemId: comparisonOverview.comparisonItemId,
+              way1MeritDesc: '',
+            );
+            print('CompareViewModel/addWay1Merit/新規リスト追加前'
+                '${_way1MeritList.map((
+                way1Merit) => way1Merit.way1MeritDesc).toList()}');
+            await _compareRepository.addWay1Merit(initWay1Merit);
+            //1行DBへ追加した後、追加したもの含めて_way1MeritListに取得リスト格納してみる
+            _way1MeritList = await _compareRepository.getWay1MeritList(
+                comparisonOverview.comparisonItemId);
+            print('CompareViewModel/addWay1Merit/新規リスト追加後'
+                '${_way1MeritList.map((
+                way1Merit) => way1Merit.way1MeritDesc).toList()}');
+            break;
+      case DisplayList.way2Merit:
+            final initWay2Merit = Way2Merit(
+              comparisonItemId: comparisonOverview.comparisonItemId,
+              way2MeritDesc: '',
+            );
+            await _compareRepository.addWay2Merit(initWay2Merit);
+            _way2MeritList = await _compareRepository.getWay2MeritList(
+                comparisonOverview.comparisonItemId);
+            break;
+    }
 
-    print('CompareViewModel/addWay1Merit/新規リスト追加前${_way1MeritList.map((
-        way1Merit) => way1Merit.way1MeritDesc).toList()}');
-    await _compareRepository.addWay1Merit(initWay1Merit);
-    //1行DBへ追加した後、追加したもの含めて_way1MeritListに取得リスト格納してみる
 
-    _way1MeritList = await _compareRepository.getWay1MeritList(
-        comparisonOverview.comparisonItemId);
-    print('CompareViewModel/addWay1Merit/新規リスト追加後${_way1MeritList.map((
-        way1Merit) => way1Merit.way1MeritDesc).toList()}');
 
-    //selectorビルドさせたところで、GFAccordion表示に変化がない...
-//    _way1Title = '変更！';
-//    compareScreenStatus = CompareScreenStatus.set;
+
+
+
     notifyListeners();
   }
 

@@ -199,3 +199,14 @@ extension ConvertToUpdateWay2MeritRecord on Way2Merit{
     return way2MeritRecord;
   }
 }
+
+///新規挿入時(model=>DB):way2Merit=>way2MeritRecord
+extension ConvertToWay2MeritRecord on Way2Merit{
+  Way2MeritRecord toCreateWay2MeritRecord (Way2Merit initWay2Merit){
+    final way2MeritRecord= Way2MeritRecord(
+      comparisonItemId: initWay2Merit.comparisonItemId,
+      way2MeritDesc: initWay2Merit.way2MeritDesc ?? '',
+    );
+    return way2MeritRecord;
+  }
+}

@@ -103,6 +103,9 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   ///リスト１行新規追加：Way1Merit
   Future<void> insertWay1MeritRecordSingle(Way1MeritRecord way1MeritRecord) =>
       into(way1MeritRecords).insert(way1MeritRecord);
+  ///リスト１行新規追加：Way2Merit
+  Future<void> insertWay2MeritRecordSingle(Way2MeritRecord way2MeritRecord) =>
+      into(way2MeritRecords).insert(way2MeritRecord);
 
   ///リスト１行削除(DescFormAndButton)：Way1Merit
   Future<void> deleteWay1Merit(int way1MeritId) async {
@@ -133,6 +136,8 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       batch.insertAll(way1DemeritRecords, way1DemeritDescs);
     });
   }
+
+
 
 
 

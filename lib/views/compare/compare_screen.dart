@@ -372,10 +372,12 @@ class CompareScreen extends StatelessWidget {
       DisplayList displayList,
       ComparisonOverview comparisonOverview) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    switch(displayList){
-      case DisplayList.way1Merit:
-        await viewModel.addWay1Merit(comparisonOverview);
-        break;
+    await viewModel.accordionAddList(comparisonOverview,displayList);
+
+//    switch(displayList){
+//      case DisplayList.way1Merit:
+//        await viewModel.addWay1Merit(comparisonOverview);
+//        break;
     }
 
 
@@ -395,7 +397,5 @@ class CompareScreen extends StatelessWidget {
         await viewModel.deleteWay2Merit(accordionIdIndex,comparisonOverview);
         break;
     }
-
-
   }
-}
+

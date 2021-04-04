@@ -191,6 +191,17 @@ class CompareRepository {
       print('Way1Merit追加エラー:${e.toString()}');
     }
   }
+  ///リスト１行追加：Way2Merit
+  Future<void> addWay2Merit(Way2Merit initWay2Merit) async {
+    try {
+      final way2MeritRecord =
+      initWay2Merit.toCreateWay2MeritRecord(initWay2Merit);
+      await _comparisonItemDao.insertWay2MeritRecordSingle(way2MeritRecord);
+      print('repository:リストWay2Merit１行新規追加');
+    } on SqliteException catch (e) {
+      print('Way2Merit追加エラー:${e.toString()}');
+    }
+  }
 
   ///リスト1行削除:Way1Merit
   Future<void> deleteWay1Merit(int way1MeritId) async {
