@@ -1,5 +1,6 @@
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/style.dart';
+import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/desc_form.dart';
 import 'package:compare_2way/views/compare/components/desc_form_and_button.dart';
@@ -13,11 +14,15 @@ import 'gf_accordian.dart' as custom;
 class AccordionPart extends StatefulWidget {
 
   const AccordionPart({
-    this.title, this.way1MeritList,
+    this.title,this.displayList,
+    this.way1MeritList,
+    this.way2MeritList,
     this.inputChanged, this.addList,this.deleteList});
 
   final String title;
+  final DisplayList displayList;
   final List<Way1Merit> way1MeritList;
+  final List<Way2Merit> way2MeritList;
   final Function(String, int) inputChanged;
   final Function() addList;
   final Function(int) deleteList;
@@ -47,7 +52,9 @@ class _AccordionPartState extends State<AccordionPart> {
           //リストが増えていくとDescFormButtonがタイトル部分にはみ出している
             ///=>custom.GFAccordion設定で初期位置修正
             DescFormAndButton(
-              items: widget.way1MeritList,
+              displayList: widget.displayList,
+              way1MeritList: widget.way1MeritList,
+              way2MeritList: widget.way2MeritList,
               inputChanged: widget.inputChanged,
               addList: (){
                 widget.addList();

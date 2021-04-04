@@ -279,32 +279,39 @@ class CompareViewModel extends ChangeNotifier {
   }
 
 
-  ///List<Way1Merit>取得(文頭取得用)
-  Future<void> getWay1MeritList(String comparisonItemId) async {
+  ///List<Way1Merit>,List<Way2Merit>取得(文頭取得用)
+  Future<void> getAccordionList(String comparisonItemId) async {
     _way1MeritList =
     await _compareRepository.getWay1MeritList(comparisonItemId);
-    print('getWay1MeritList/notifyListeners');
+    _way2MeritList =
+    await _compareRepository.getWay2MeritList(comparisonItemId);
+    print('getWay1/Way2MeritList/notifyListeners');
     notifyListeners();
   }
 
   ///List<Way1Merit>取得(FutureBuilder用)
-  Future<List<Way1Merit>> getDesc(String comparisonItemId) async {
+  Future<List<Way1Merit>> getWay1MeritDesc(String comparisonItemId) async {
 //    print('FutureBuilderでDBからList<Way1Merit> _way1MeritList取得');
-    return _way1MeritList =
-    await _compareRepository.getWay1MeritList(comparisonItemId);
+      return _way1MeritList =
+      await _compareRepository.getWay1MeritList(comparisonItemId);
   }
 
-  ///List<Way2Merit>取得(文頭取得用)
-  Future<void> getWay2MeritList(String comparisonItemId) async {
-    _way2MeritList =
-    await _compareRepository.getWay2MeritList(comparisonItemId);
-    notifyListeners();
-  }
 
   ///List<Way1Mer2t>取得(FutureBuilder用)
-  Future<List<Way2Merit>> getWay2Desc(String comparisonItemId) async {
+  Future<List<Way2Merit>> getWay2MeritDesc(String comparisonItemId) async {
     return _way2MeritList =
     await _compareRepository.getWay2MeritList(comparisonItemId);
+  }
+
+  Future<void> deleteWay2Merit(int way2MeritIdIndex,
+      ComparisonOverview comparisonOverview) async{
+    print('Way2Meritの選択したものを削除');
+//    final deleteWay2MeritId = _way2MeritList[way2MeritIdIndex].way2MeritId;
+//    await _compareRepository.deleteWay1Merit(deleteWay2MeritId);
+//    //再取得しないとDescFormAndButtonでのListViewの認識している長さと削除するindexが異なりエラー
+//    _way1MeritList = await _compareRepository.getWay2MeritList(
+//        comparisonOverview.comparisonItemId);
+//    notifyListeners();
   }
 
 

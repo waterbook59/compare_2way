@@ -48,7 +48,7 @@ class _SettingPageState extends State<SettingPage> {
             contentChild:
                 //todo contentChildの中でボタン押す=>DescFormAndButtonへ変更
             DescFormAndButton(
-                    items: testItems,
+                    way1MeritList: testItems,
                   ),
           ),
 
