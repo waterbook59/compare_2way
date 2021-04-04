@@ -58,7 +58,7 @@ class CompareScreen extends StatelessWidget {
           style: middleTextStyle,
         ),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-          ///保存完了ボタン
+          ///保存完了ボタン //todo 保存完了ボタンWidget分割
           GestureDetector(
             child: const Icon(
               CupertinoIcons.check_mark_circled,
@@ -235,6 +235,7 @@ class CompareScreen extends StatelessWidget {
                     );
                   },
                 ),
+                //todo 自己評価&TablePart widget分割
                 const SizedBox(
                   height: 4,
                 ),
@@ -259,6 +260,7 @@ class CompareScreen extends StatelessWidget {
                   way2MeritEvaluate: comparisonOverview.way2MeritEvaluate,
                   way2DemeritEvaluate: comparisonOverview.way2DemeritEvaluate,
                 ),
+                //todo 結論&ConclusionInputPart widget分割
                 const SizedBox(
                   height: 16,
                 ),
