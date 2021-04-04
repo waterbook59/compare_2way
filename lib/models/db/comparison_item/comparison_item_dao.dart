@@ -109,9 +109,17 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   ///リスト１行削除(DescFormAndButton)：Way1Merit
   Future<void> deleteWay1Merit(int way1MeritId) async {
-    print('リスト削除:$way1MeritId');
+    print('dao/way1Meritリスト削除:$way1MeritId');
     return (delete(way1MeritRecords)
       ..where((tbl) => tbl.way1MeritId.equals(way1MeritId)))
+        .go();
+  }
+
+  ///リスト１行削除(DescFormAndButton)：Way2Merit
+  Future<void> deleteWay2Merit(int way2MeritId) async {
+    print('dao/way2Merit:$way2MeritId');
+    return (delete(way2MeritRecords)
+      ..where((tbl) => tbl.way2MeritId.equals(way2MeritId)))
         .go();
   }
 

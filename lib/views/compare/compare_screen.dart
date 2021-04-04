@@ -145,21 +145,17 @@ class CompareScreen extends StatelessWidget {
                         },
                       );
                     }),
-
               ///way2 メリット
                 Selector<CompareViewModel, String>(
                   selector: (context, viewModel) => viewModel.way2Title,
                   builder: (context, way2Title, child) {
                     return FutureBuilder(
-                      //todo getDesc一つでviewModelでenum分け
                       future: viewModel
                         .getWay2MeritDesc(comparisonOverview.comparisonItemId),
                       builder:
-                          //todo way2Meritへ変更
                           (context, AsyncSnapshot<List<Way2Merit>> snapshot) {
                         return snapshot.hasData && snapshot.data.isNotEmpty
                         ?
-                          //todo AccordionPart以下をWay2Meritでも入力可能な設定変更
                           AccordionPart(
                             title: way2Title,
                             displayList: DisplayList.way2Merit,
@@ -176,9 +172,7 @@ class CompareScreen extends StatelessWidget {
                                     DisplayList.way2Merit,
                                     way2MeritIdIndex,comparisonOverview),
                           )
-
                           : Container();
-
                       },
                     );
                   },
@@ -355,7 +349,7 @@ class CompareScreen extends StatelessWidget {
     await viewModel.setWay1MeritNewValue(newValue);
   }
 
-  //way1,2MeritListの詳細が変更されたらset
+  ///Accordion中の選択したリストの詳細が変更されたらset
   Future<void> _accordionInputChange(
       BuildContext context,
       DisplayList displayList,
@@ -367,35 +361,28 @@ class CompareScreen extends StatelessWidget {
     }
 
 
+  ///Accordion中の選択したリスト追加
   Future<void> _accordionAddList(
       BuildContext context,
       DisplayList displayList,
       ComparisonOverview comparisonOverview) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.accordionAddList(comparisonOverview,displayList);
-
-//    switch(displayList){
-//      case DisplayList.way1Merit:
-//        await viewModel.addWay1Merit(comparisonOverview);
-//        break;
     }
 
-
-  }
-
+  ///Accordion中の選択したリスト削除
   Future<void> _accordionDeleteList(
       BuildContext context,
       DisplayList displayList,
       int accordionIdIndex,
       ComparisonOverview comparisonOverview) async{
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    switch(displayList){
-      case DisplayList.way1Merit:
-        await viewModel.deleteWay1Merit(accordionIdIndex,comparisonOverview);
-        break;
-      case DisplayList.way2Merit:
-        await viewModel.deleteWay2Merit(accordionIdIndex,comparisonOverview);
-        break;
-    }
+    await viewModel.accordionDeleteList(
+        displayList,accordionIdIndex,comparisonOverview);
   }
+
+
+  }
+
+
 

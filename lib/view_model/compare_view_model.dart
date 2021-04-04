@@ -216,23 +216,30 @@ class CompareViewModel extends ChangeNotifier {
                 comparisonOverview.comparisonItemId);
             break;
     }
-
-
-
-
-
-
     notifyListeners();
   }
 
-  ///DescFormAndButtonでList<Way1Merit>のリスト削除を行ったとき
-  Future<void> deleteWay1Merit(int way1MeritIdIndex,
+  ///DescFormAndButtonでリスト削除
+  Future<void> accordionDeleteList(
+      DisplayList displayList,
+      int accordionIdIndex,
       ComparisonOverview comparisonOverview) async {
-    final deleteQay1MeritId = _way1MeritList[way1MeritIdIndex].way1MeritId;
-    await _compareRepository.deleteWay1Merit(deleteQay1MeritId);
-    //再取得しないとDescFormAndButtonでのListViewの認識している長さと削除するindexが異なりエラー
-    _way1MeritList = await _compareRepository.getWay1MeritList(
-        comparisonOverview.comparisonItemId);
+    switch(displayList){
+      case DisplayList.way1Merit:
+        final deleteWay1MeritId = _way1MeritList[accordionIdIndex].way1MeritId;
+        await _compareRepository.deleteWay1Merit(deleteWay1MeritId);
+        //再取得しないとDescFormAndButtonでのListViewの認識している長さと削除するindexが異なりエラー
+        _way1MeritList = await _compareRepository.getWay1MeritList(
+            comparisonOverview.comparisonItemId);
+        break;
+      case DisplayList.way2Merit:
+        final deleteWay2MeritId = _way2MeritList[accordionIdIndex].way2MeritId;
+        await _compareRepository.deleteWay2Merit(deleteWay2MeritId);
+        _way2MeritList = await _compareRepository.getWay2MeritList(
+            comparisonOverview.comparisonItemId);
+        break;
+    }
+
 //    notifyListeners();
   }
 

@@ -207,6 +207,10 @@ class CompareRepository {
   Future<void> deleteWay1Merit(int way1MeritId) async {
     await _comparisonItemDao.deleteWay1Merit(way1MeritId);
   }
+  ///リスト1行削除:Way2Merit
+  Future<void> deleteWay2Merit(int way2MeritId) async {
+    await _comparisonItemDao.deleteWay2Merit(way2MeritId);
+  }
 
 
 }
