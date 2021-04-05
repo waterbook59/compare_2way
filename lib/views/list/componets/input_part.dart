@@ -16,6 +16,17 @@ import 'package:uuid/uuid.dart';
 ///Screenへの通知を行い、登録ボタンを押せるか判断するためstatefulへ変更
 ///Changenoitfierのbuilder内で実行しないとエラー？？？(instacloneのcommentscreenの場所確認)
 class InputPart extends StatefulWidget {
+  const InputPart({
+    this.displayMode,
+    this.itemTitle,
+    this.way1Title,
+    this.way2Title,
+  });
+
+  final AddScreenMode displayMode;
+  final String itemTitle;
+  final String way1Title;
+  final String way2Title;
 
   @override
   _InputPartState createState() => _InputPartState();
@@ -23,18 +34,23 @@ class InputPart extends StatefulWidget {
 
 class _InputPartState extends State<InputPart> {
   final _titleController = TextEditingController();
-  final _way1Controller =TextEditingController();
+  final _way1Controller = TextEditingController();
   final _way2Controller = TextEditingController();
-  bool  isCreateItemEnabled = false;
-
+  bool isCreateItemEnabled = false;
 
   //todo ListPageの更新が必要ないならaddListenerいらないかも（無駄に何度もConsumerが反応してしまうので。）
   @override
   void initState() {
-  _titleController.addListener(_onInputChanged);
-  _way1Controller.addListener(_onInputChanged);
-  _way2Controller.addListener(_onInputChanged);
-  super.initState();
+    _titleController.addListener(()=>_onCaptionUpdated(
+     widget.itemTitle,widget.way1Title, widget.way2Title,widget.displayMode,));
+    _way1Controller.addListener(()=>_onCaptionUpdated(
+      widget.itemTitle,widget.way1Title, widget.way2Title,widget.displayMode,));
+    _way2Controller.addListener(()=>_onCaptionUpdated(
+      widget.itemTitle,widget.way1Title, widget.way2Title,widget.displayMode,));
+//    _titleController.addListener(_onInputChanged);
+//    _way1Controller.addListener(_onInputChanged);
+//    _way2Controller.addListener(_onInputChanged);
+    super.initState();
   }
 
   @override
@@ -48,62 +64,62 @@ class _InputPartState extends State<InputPart> {
   @override
   Widget build(BuildContext context) {
     final accentColor = Theme.of(context).accentColor;
-    return
-        Column(children: [
-          ///タイトル
-          TextFieldPart(
-            label: 'タイトル',
-            placeholder: 'タイトルを入力',
-            autofocus: true,
-            textEditingController: _titleController,
-          ),
-          const SizedBox(height: 24),
-          ///way1
-          TextFieldPart(
-            label: 'way1',
-            placeholder: '比較項目を入力',
-            autofocus: false,
-            textEditingController: _way1Controller,
-          ),
-          const SizedBox(height: 8),
-          const Text('と', style: TextStyle(color: Colors.black)),
-          const SizedBox(height: 8),
-          ///way2
-          TextFieldPart(
-            label: 'way2',
-            placeholder: '比較項目を入力',
-            autofocus: false,
-            textEditingController: _way2Controller,
-          ),
-          const SizedBox(height: 40),
-          ///button
-          RaisedButton(
-            child: const Text('比較'),
-            color: accentColor,
-            shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)),
-            onPressed:isCreateItemEnabled
-            ? () => _createComparisonItems(context)
-            : null,
+    return Column(
+      children: [
+        ///タイトル
+        TextFieldPart(
+          label: 'タイトル',
+          placeholder: 'タイトルを入力',
+          autofocus: true,
+          textEditingController: _titleController,
         ),
-        ],);
+        const SizedBox(height: 24),
 
+        ///way1
+        TextFieldPart(
+          label: 'way1',
+          placeholder: '比較項目を入力',
+          autofocus: false,
+          textEditingController: _way1Controller,
+        ),
+        const SizedBox(height: 8),
+        const Text('と', style: TextStyle(color: Colors.black)),
+        const SizedBox(height: 8),
 
+        ///way2
+        TextFieldPart(
+          label: 'way2',
+          placeholder: '比較項目を入力',
+          autofocus: false,
+          textEditingController: _way2Controller,
+        ),
+        const SizedBox(height: 40),
+
+        ///button
+        RaisedButton(
+          child: const Text('比較'),
+          color: accentColor,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          onPressed: isCreateItemEnabled
+              ? () => _createComparisonItems(context)
+              : null,
+        ),
+      ],
+    );
   }
 
   ///ここでAddViewModelのisCreateItemEnabledをセットする
   void _onInputChanged() {
     final viewModel = Provider.of<AddViewModel>(context, listen: false)
-    ..title =_titleController.text
-    ..way1Title = _way1Controller.text
-    ..way2Title = _way2Controller.text;
+      ..title = _titleController.text
+      ..way1Title = _way1Controller.text
+      ..way2Title = _way2Controller.text;
 
     setState(() {
-      if (
-          _titleController.text.isNotEmpty &&
+      if (_titleController.text.isNotEmpty &&
           _way1Controller.text.isNotEmpty &&
-          _way2Controller.text.isNotEmpty
-      ) {
+          _way2Controller.text.isNotEmpty) {
         isCreateItemEnabled = true;
       } else {
         isCreateItemEnabled = false;
@@ -111,12 +127,48 @@ class _InputPartState extends State<InputPart> {
     });
   }
 
+  void _onCaptionUpdated(String itemTitle, String way1Title, String way2Title,
+      AddScreenMode displayMode) {
+    final viewModel = Provider.of<AddViewModel>(context, listen: false);
+    print('inputPart/onCaptionUpdated/itemTitle:$itemTitle');
+    switch (displayMode) {
+      case AddScreenMode.add:
+        viewModel.title = _titleController.text;
+        viewModel.way1Title = _way1Controller.text;
+        viewModel.way2Title = _way2Controller.text;
+        setState(() {
+          if (_titleController.text.isNotEmpty &&
+              _way1Controller.text.isNotEmpty &&
+              _way2Controller.text.isNotEmpty) {
+            isCreateItemEnabled = true;
+          } else {
+            isCreateItemEnabled = false;
+          }
+        });
+        break;
+      case AddScreenMode.edit:
+        _titleController.text = itemTitle;
+        _way1Controller.text = way1Title;
+        _way2Controller.text = way2Title;
+        setState(() {
+          if (_titleController.text.isNotEmpty &&
+              _way1Controller.text.isNotEmpty &&
+              _way2Controller.text.isNotEmpty) {
+            isCreateItemEnabled = true;
+          } else {
+            isCreateItemEnabled = false;
+          }
+        });
+        break;
+    }
+  }
+
   // 押せる・押せないはinsta_cloneのcomment_input_part参照
   ///textEditingControllerをview側で設定=>viewModelに設定するメソッド
   Future<void> _createComparisonItems(BuildContext context) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-    //初期表示は読み込みさせる
-    ..compareScreenStatus =CompareScreenStatus.set;
+      //初期表示は読み込みさせる
+      ..compareScreenStatus = CompareScreenStatus.set;
 
     // ComparisonItemではなく、ComparisonOverviewに変更,CompareScreenへ値渡し
     final comparisonOverview = ComparisonOverview(
@@ -140,7 +192,7 @@ class _InputPartState extends State<InputPart> {
     //登録
     await viewModel.createComparisonOverview(comparisonOverview);
     //Merit/DemeritのListをComparisonIdを入れて登録する
-    await viewModel.createDesc(initWay1Merit,initWay2Merit);
+    await viewModel.createDesc(initWay1Merit, initWay2Merit);
 
     //読み込み=>compareScreenへ渡す
     await viewModel.getComparisonOverview(comparisonOverview.comparisonItemId);
@@ -149,15 +201,12 @@ class _InputPartState extends State<InputPart> {
     await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-            builder: (context) =>
-                CompareScreen(
+            builder: (context) => CompareScreen(
                   itemEditMode: ItemEditMode.add,
 //                  comparisonOverview: comparisonOverview,
                   comparisonOverview: viewModel.overviewDB,
-
                 )));
-            //この時点でcontrollerが破棄されるので、CompareScreenから戻るときにclearメソッドがあると、
-            //Once you have called dispose() on a TextEditingController,のエラー出る
+    //この時点でcontrollerが破棄されるので、CompareScreenから戻るときにclearメソッドがあると、
+    //Once you have called dispose() on a TextEditingController,のエラー出る
   }
-
 }

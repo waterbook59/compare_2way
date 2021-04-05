@@ -34,7 +34,8 @@ class EditPopUpMenu extends StatelessWidget {
     switch (selectedMenu) {
       case CompareEditMenu.titleEdit:
         Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
-          builder: (context) => const AddScreen(AddScreenMode.edit),
+          builder: (context) =>
+          const AddScreen(displayMode: AddScreenMode.edit),
         ));
         break;
       case CompareEditMenu.allListDelete:

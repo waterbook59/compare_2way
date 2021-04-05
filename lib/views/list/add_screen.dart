@@ -7,8 +7,15 @@ import 'package:flutter/material.dart';
 
 class AddScreen extends StatelessWidget {
 
-  const AddScreen(this.displayMode);
+  const AddScreen({
+    this.displayMode,
+    this.itemTitle,
+    this.way1Title,
+    this.way2Title});
   final AddScreenMode displayMode;
+  final String itemTitle;
+  final String way1Title;
+  final String way2Title;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +32,6 @@ class AddScreen extends StatelessWidget {
           '新規作成',
           style: middleTextStyle,
         ),
-
         /// 下から出てくる場合は右上に比較ボタンでもいいかも
         trailing:
         //todo  onPressedでDBに項目登録して比較画面に遷移
@@ -45,7 +51,10 @@ class AddScreen extends StatelessWidget {
                 height: 48,
               ),
 ///InputPart
-              InputPart(),
+              InputPart(displayMode: displayMode,
+                itemTitle: itemTitle,
+              way1Title: way1Title,
+              way2Title: way2Title,),
             ],
           ),
         ),

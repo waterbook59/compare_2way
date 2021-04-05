@@ -190,7 +190,8 @@ class SingleListPage extends StatelessWidget {
   void _saveComparisonItems(BuildContext context) {
     ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
     Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
-      builder: (context) => const AddScreen(AddScreenMode.add),
+      builder: (context) =>
+      const AddScreen(displayMode: AddScreenMode.edit),
     ));
   }
 

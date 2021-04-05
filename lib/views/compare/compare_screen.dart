@@ -54,7 +54,6 @@ class CompareScreen extends StatelessWidget {
         backgroundColor: primaryColor,
 //        leading: GestureDetector(child: const Icon(Icons.arrow_back_ios),
 //    onTap: ()=> _backListPage(context)),
-
         middle: const Text(
           'Compare List',
           style: middleTextStyle,
@@ -74,8 +73,9 @@ class CompareScreen extends StatelessWidget {
             width: 8,
           ),
           ///編集ボタン
-          EditBottomAction(comparisonItemId:
-          comparisonOverview.comparisonItemId,),
+          EditBottomAction(
+            comparisonOverview: comparisonOverview,
+          ),
         ]),
       ),
       child: Scaffold(

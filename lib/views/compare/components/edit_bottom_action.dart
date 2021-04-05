@@ -1,3 +1,4 @@
+import 'package:compare_2way/data_models/comparison_overview.dart';
 ///CupertinoNavigationBar内ではCupertinoActionSheetAction
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
@@ -7,9 +8,11 @@ import 'package:flutter/material.dart';
 
 class EditBottomAction extends StatelessWidget {
 
-  const EditBottomAction({this.comparisonItemId});
+  const EditBottomAction({
+    this.comparisonOverview
+  });
 
-  final String comparisonItemId;
+  final ComparisonOverview comparisonOverview;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +49,12 @@ class EditBottomAction extends StatelessWidget {
                           CompareEditMenu.allListDelete,
                         ),
                   ),
-
                 ],
+                cancelButton: CupertinoActionSheetAction(
+                  child:  const Text('キャンセル'),
+                  onPressed: ()=>Navigator.pop(context),
+
+                ),
               );
             });
       },
@@ -55,15 +62,21 @@ class EditBottomAction extends StatelessWidget {
   }
 
   void _onPopupMenuSelected(BuildContext context,
-      CompareEditMenu selectedMenu) {
+      CompareEditMenu selectedMenu,) {
     switch (selectedMenu) {
       case CompareEditMenu.titleEdit:
         Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
-          builder: (context) => const AddScreen(AddScreenMode.edit),
+          builder: (context) =>
+          //todo comparisonOverview渡しですっきり書く
+          AddScreen(displayMode: AddScreenMode.edit,
+            itemTitle: comparisonOverview.itemTitle,
+            way1Title: comparisonOverview.way1Title,
+            way2Title: comparisonOverview.way2Title,
+          ),
         ));
         break;
       case CompareEditMenu.allListDelete:
-        print('comparisonItemIdを元に全削除$comparisonItemId');
+        print('comparisonItemIdを元に全削除${comparisonOverview.comparisonItemId}');
         break;
     }
   }
