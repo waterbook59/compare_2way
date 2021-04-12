@@ -72,7 +72,6 @@ class EditBottomAction extends StatelessWidget {
           ..way1Title = comparisonOverview.way1Title
           ..way2Title = comparisonOverview.way2Title;
 
-
         Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
           builder: (context) => AddScreen(displayMode: AddScreenMode.edit,
             itemTitle: comparisonOverview.itemTitle,

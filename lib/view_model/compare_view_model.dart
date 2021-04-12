@@ -22,16 +22,11 @@ class CompareViewModel extends ChangeNotifier {
 
   List<Way2Merit> get way2MeritList => _way2MeritList;
 
-
+//textFieldからviewModelへの変更値登録があるのでカプセル化しない
   String itemTitle = '';
-
-//  String get itemTitle => _itemTitle;
   String way1Title = '';
-
-//  String get way1Title => _way1Title;
   String way2Title = '';
 
-//  String get way2Title => _way2Title;
   int _way1MeritEvaluate = 0;
 
   int get way1MeritEvaluate => _way1MeritEvaluate;

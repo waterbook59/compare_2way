@@ -3,7 +3,6 @@ import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
-import 'package:compare_2way/view_model/add_view_model.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/compare_screen.dart';
 import 'package:compare_2way/views/compare/compare_screen_stateful.dart';
@@ -41,13 +40,12 @@ class _InputPartState extends State<InputPart> {
   //addListenerはcontrollerの入力値とviewModelの値とのやりとりをするのに必須
   @override
   void initState() {
-
+    ///controllerとviewModelをaddListerで結びつける
     _titleController.addListener(_onInputChanged);
     _way1Controller.addListener(_onInputChanged);
     _way2Controller.addListener(_onInputChanged);
-
-    //add画面で入力しても''の状態のまま
-        switch(widget.displayMode){
+    ///controllerの初期値を代入
+    switch(widget.displayMode){
       case AddScreenMode.add:
         _titleController.text = '';
         _way1Controller.text = '';
@@ -59,26 +57,6 @@ class _InputPartState extends State<InputPart> {
         _way1Controller.text = widget.way1Title;
         _way2Controller.text = widget.way2Title;
     }
-
-//    switch(widget.displayMode){
-//      case AddScreenMode.add:
-//        _titleController.addListener(onCaptionAdd);
-//        _way1Controller.addListener(onCaptionAdd);
-//        _way2Controller.addListener(onCaptionAdd);
-//        break;
-//      case AddScreenMode.edit:
-//        onCationEdit();
-//        break;
-//    }
-
-
-//    _titleController.addListener(()=>_onCaptionUpdated(
-//    widget.itemTitle,widget.way1Title, widget.way2Title,widget.displayMode,));
-//    _way1Controller.addListener(()=>_onCaptionUpdated(
-//    widget.itemTitle,widget.way1Title, widget.way2Title,widget.displayMode,));
-//    _way2Controller.addListener(()=>_onCaptionUpdated(
-//    widget.itemTitle,widget.way1Title, widget.way2Title,widget.displayMode,));
-
     super.initState();
   }
 
@@ -143,23 +121,9 @@ class _InputPartState extends State<InputPart> {
     );
   }
 
-  ///ここでAddViewModelのisCreateItemEnabledをセットする
-  //todo AddViewModel=>CompareViewModelで統一
+  ///ここでviewModelのisCreateItemEnabledをセットする
+  // AddViewModel=>CompareViewModelで統一
   void _onInputChanged() {
-    //add画面で入力しても''の状態のまま
-//        switch(widget.displayMode){
-//      case AddScreenMode.add:
-//        _titleController.text = '';
-//        _way1Controller.text = '';
-//        _way2Controller.text = '';
-//        break;
-        //edit画面では入力値の状態のまま
-//      case AddScreenMode.edit:
-//        _titleController.text = widget.itemTitle;
-//        _way1Controller.text = widget.way1Title;
-//        _way2Controller.text = widget.way2Title;
-//    }
-
     final viewModel = Provider.of<CompareViewModel>(context, listen: false)
       ..itemTitle = _titleController.text
       ..way1Title = _way1Controller.text
@@ -174,43 +138,6 @@ class _InputPartState extends State<InputPart> {
         isCreateItemEnabled = false;
       }
     });
-  }
-
-  void _onCaptionUpdated(String itemTitle, String way1Title, String way2Title,
-      AddScreenMode displayMode) {
-    final viewModel = Provider.of<AddViewModel>(context, listen: false);
-    print('inputPart/onCaptionUpdated/itemTitle:$itemTitle');
-    switch (displayMode) {
-      case AddScreenMode.add:
-        viewModel.title = _titleController.text;
-        viewModel.way1Title = _way1Controller.text;
-        viewModel.way2Title = _way2Controller.text;
-        setState(() {
-          if (_titleController.text.isNotEmpty &&
-              _way1Controller.text.isNotEmpty &&
-              _way2Controller.text.isNotEmpty) {
-            isCreateItemEnabled = true;
-          } else {
-            isCreateItemEnabled = false;
-          }
-        });
-        break;
-        //todo 入力文字がタップしないと出てこない＆テキスト入力できない
-      case AddScreenMode.edit:
-        _titleController.text = itemTitle;
-        _way1Controller.text = way1Title;
-        _way2Controller.text = way2Title;
-        setState(() {
-          if (_titleController.text.isNotEmpty &&
-              _way1Controller.text.isNotEmpty &&
-              _way2Controller.text.isNotEmpty) {
-            isCreateItemEnabled = true;
-          } else {
-            isCreateItemEnabled = false;
-          }
-        });
-        break;
-    }
   }
 
   // 押せる・押せないはinsta_cloneのcomment_input_part参照
@@ -260,37 +187,7 @@ class _InputPartState extends State<InputPart> {
     //Once you have called dispose() on a TextEditingController,のエラー出る
   }
 
+//todo 更新メソッド
 
-  void onCaptionAdd() {
-    _titleController.text = '';
-    _way1Controller.text = '';
-    _way2Controller.text = '';
-    //todo 入力変更を通知しないと入力してもボタン押せない=>textControllerのaddListener登録
-    //=>このままaddListener登録しても入力できない(viewModelのプロパティへの代入が必要)
-    setState(() {
-      if (_titleController.text.isNotEmpty &&
-          _way1Controller.text.isNotEmpty &&
-          _way2Controller.text.isNotEmpty) {
-        isCreateItemEnabled = true;
-      } else {
-        isCreateItemEnabled = false;
-      }
-    });
-  }
 
-  void onCationEdit() {
-    _titleController.text = widget.itemTitle;
-    _way1Controller.text = widget.way1Title;
-    _way2Controller.text = widget.way2Title;
-    //入力変更を通知しないとテキストがnullでもボタン押せてしまう
-    setState(() {
-      if (_titleController.text.isNotEmpty &&
-          _way1Controller.text.isNotEmpty &&
-          _way2Controller.text.isNotEmpty) {
-        isCreateItemEnabled = true;
-      } else {
-        isCreateItemEnabled = false;
-      }
-    });
-  }
 }
