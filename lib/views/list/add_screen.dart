@@ -26,19 +26,20 @@ class AddScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
-        //todo キャンセル表示で入力破棄するかalertDialogで聞く&textcontrollerクリア
-//        leading:const Text('キャンセル'),
-        middle: const Text(
+        middle:displayMode == AddScreenMode.add
+        ? const Text(
           '新規作成',
           style: middleTextStyle,
-        ),
+        )
+        :const Text('名称編集',style: middleTextStyle,),
         /// 下から出てくる場合は右上に比較ボタンでもいいかも
-        trailing:
+        trailing:displayMode == AddScreenMode.add
         //todo  onPressedでDBに項目登録して比較画面に遷移
-        const Text(
-          '比較',
+        ? const Text(
+          '作成',
           style: trailingTextStyle,
-        ),
+        )
+      :const Text('更新',style: middleTextStyle,),
       ),
       child: Scaffold(
         backgroundColor: CupertinoTheme
