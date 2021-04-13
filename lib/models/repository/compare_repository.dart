@@ -33,6 +33,28 @@ class CompareRepository {
     }
   }
 
+  ///更新 comparisonOverview
+  Future<void> updateComparisonOverView(ComparisonOverview updateOverview)async{
+  try{
+    //更新プロパティ以外のdataIdとかは値入ってないのでnull
+    final comparisonOverviewRecord =
+    updateOverview.toComparisonOverviewRecord(updateOverview);
+    final overviewCompanion = ComparisonOverviewRecordsCompanion(
+      //アップデート要素がないものを入れるとnullでエラー(Companionに入れるのは値が更新できるものだけ)
+      comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
+      itemTitle: Value(comparisonOverviewRecord.itemTitle),
+      way1Title: Value(comparisonOverviewRecord.way1Title),
+      way2Title: Value(comparisonOverviewRecord.way2Title),
+      createdAt: Value(comparisonOverviewRecord.createdAt),
+    );
+    await _comparisonItemDao.saveComparisonOverviewDB(
+        comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+
+  }on SqliteException catch (e) {
+    print('repository更新エラー:${e.toString()}');
+  }
+  }
+
   Future<List<ComparisonOverview>> getOverview(String comparisonItemId) async {
     ///resultComparisonOverviewRecordsはList<ComparisonOverviewRecord>
     final resultComparisonOverviewRecords =
@@ -211,6 +233,8 @@ class CompareRepository {
   Future<void> deleteWay2Merit(int way2MeritId) async {
     await _comparisonItemDao.deleteWay2Merit(way2MeritId);
   }
+
+
 
 
 }

@@ -93,9 +93,17 @@ class CompareViewModel extends ChangeNotifier {
   ///AddScreen/InputPartでComparisonOverview更新：itemTitle,way1Title,way2Titleのみ変更
   Future<void> updateComparisonOverView(
       ComparisonOverview comparisonOverview) async {
-//    await _compareRepository.updateComparisonOverView(comparisonOverview);
+    //更新するプロパティだけ入れてrepositoryでCompanion作成=>更新
+    final updateOverview = ComparisonOverview(
+      comparisonItemId: comparisonOverview.comparisonItemId,
+      itemTitle: itemTitle,
+      way1Title: way1Title,
+      way2Title: way2Title,
+      createdAt: DateTime.now(),
+    );
+    await _compareRepository.updateComparisonOverView(updateOverview);
   print('comparisonOverviewのタイトル類を更新');
-//    notifyListeners();
+    notifyListeners();
   }
 
   ///AddScreen/InputPartでWay1Merit,Way2Meritリストを新規登録
