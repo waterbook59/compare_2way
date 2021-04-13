@@ -1,3 +1,4 @@
+import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/views/list/componets/input_part.dart';
@@ -9,13 +10,16 @@ class AddScreen extends StatelessWidget {
 
   const AddScreen({
     this.displayMode,
-    this.itemTitle,
-    this.way1Title,
-    this.way2Title});
+    this.comparisonOverview,
+//    this.itemTitle,
+//    this.way1Title,
+//    this.way2Title
+  });
   final AddScreenMode displayMode;
-  final String itemTitle;
-  final String way1Title;
-  final String way2Title;
+  final ComparisonOverview comparisonOverview;
+//  final String itemTitle;
+//  final String way1Title;
+//  final String way2Title;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +29,8 @@ class AddScreen extends StatelessWidget {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        //todo Androidでの端末下の戻るボタン無効:WillPopScopeのonWillPopをfalse
+        automaticallyImplyLeading: false,
         backgroundColor: primaryColor,
         middle:displayMode == AddScreenMode.add
         ? const Text(
@@ -53,9 +59,11 @@ class AddScreen extends StatelessWidget {
               ),
 ///InputPart
               InputPart(displayMode: displayMode,
-                itemTitle: itemTitle,
-              way1Title: way1Title,
-              way2Title: way2Title,),
+                comparisonOverview: comparisonOverview,
+//                itemTitle: itemTitle,
+//              way1Title: way1Title,
+//              way2Title: way2Title,
+              ),
             ],
           ),
         ),

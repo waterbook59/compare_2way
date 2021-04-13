@@ -17,15 +17,17 @@ import 'package:uuid/uuid.dart';
 class InputPart extends StatefulWidget {
   const InputPart({
     this.displayMode,
-    this.itemTitle,
-    this.way1Title,
-    this.way2Title,
+    this.comparisonOverview,
+//    this.itemTitle,
+//    this.way1Title,
+//    this.way2Title,
   });
 
   final AddScreenMode displayMode;
-  final String itemTitle;
-  final String way1Title;
-  final String way2Title;
+  final ComparisonOverview comparisonOverview;
+//  final String itemTitle;
+//  final String way1Title;
+//  final String way2Title;
 
   @override
   _InputPartState createState() => _InputPartState();
@@ -53,9 +55,9 @@ class _InputPartState extends State<InputPart> {
         break;
     //todo キャンセルして戻った場合、仮でも変更値がviewModelを経由してして画面に反映されてしまう
       case AddScreenMode.edit:
-        _titleController.text = widget.itemTitle;
-        _way1Controller.text = widget.way1Title;
-        _way2Controller.text = widget.way2Title;
+        _titleController.text = widget.comparisonOverview.itemTitle;
+        _way1Controller.text = widget.comparisonOverview.way1Title;
+        _way2Controller.text = widget.comparisonOverview.way2Title;
     }
     super.initState();
   }
@@ -114,7 +116,9 @@ class _InputPartState extends State<InputPart> {
           onPressed: isCreateItemEnabled
           //todo AddScreenMode.addならcreateメソッド、
           // AddScreenMode.editならupdateメソッド
-              ? () => _createComparisonItems(context)
+              ? widget.displayMode == AddScreenMode.add
+                ?() => _createComparisonItems(context)
+                :()=>_updateComparisonItems(context)
               : null,
         ),
       ],
@@ -187,7 +191,16 @@ class _InputPartState extends State<InputPart> {
     //Once you have called dispose() on a TextEditingController,のエラー出る
   }
 
-//todo 更新メソッド
+  //更新メソッド
+  Future<void>_updateComparisonItems(BuildContext context) async{
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+  //登録
+    await viewModel.updateComparisonOverView(widget.comparisonOverview);
+    //CompareScreenへ
+    Navigator.pop(context);
+  }
+
+
 
 
 }

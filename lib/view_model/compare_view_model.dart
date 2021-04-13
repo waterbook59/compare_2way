@@ -84,15 +84,24 @@ class CompareViewModel extends ChangeNotifier {
     return _comparisonOverviews;
   }
 
-  ///ComparisonOverview=>ComparisonOverviewRecordでDB登録
+  ///AddScreen/InputPartでComparisonOverview新規登録：ComparisonOverview=>ComparisonOverviewRecordでDB登録
   Future<void> createComparisonOverview(
       ComparisonOverview comparisonOverview) async {
     await _compareRepository.createComparisonOverview(comparisonOverview);
 //    notifyListeners();
   }
+  ///AddScreen/InputPartでComparisonOverview更新：itemTitle,way1Title,way2Titleのみ変更
+  Future<void> updateComparisonOverView(
+      ComparisonOverview comparisonOverview) async {
+//    await _compareRepository.updateComparisonOverView(comparisonOverview);
+  print('comparisonOverviewのタイトル類を更新');
+//    notifyListeners();
+  }
 
-  ///way1Merit,way2Meritのリストを作って保存
-  //todo list.add=>DB登録=>list空にせずに、initWay1MeritをリストにしてcreateDescListに渡す
+  ///AddScreen/InputPartでWay1Merit,Way2Meritリストを新規登録
+  //way1Merit,way2Meritのリストを作って保存
+  //todo list.add=>DB登録=>list空の流れではなく、
+  // initWay1MeritをリストにしてcreateDescListに渡す方がすっきり書ける
   Future<void> createDesc(Way1Merit initWay1Merit,
       Way2Merit initWay2Merit,) async {
     //ここでaddしていくと古いものがだぶるのでは

@@ -72,14 +72,14 @@ class EditBottomAction extends StatelessWidget {
           ..way1Title = comparisonOverview.way1Title
           ..way2Title = comparisonOverview.way2Title;
 
+        //画面移行する前にCupertinoActionSheetを閉じる(戻ると表示されたままになってしまう)
+        Navigator.pop(context);
         Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
           builder: (context) => AddScreen(displayMode: AddScreenMode.edit,
-            itemTitle: comparisonOverview.itemTitle,
-            way1Title: comparisonOverview.way1Title,
-            way2Title: comparisonOverview.way2Title,
+            comparisonOverview: comparisonOverview,
           ),
-
         ));
+
         break;
       case CompareEditMenu.allListDelete:
         print('comparisonItemIdを元に全削除${comparisonOverview.comparisonItemId}');
