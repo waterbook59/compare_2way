@@ -144,6 +144,7 @@ class _InputPartState extends State<InputPart> {
     });
   }
 
+  //todo 新規作成を追加すると、過去のWay1,2Meritリストの項目が重複して作成されるエラー発生
   // 押せる・押せないはinsta_cloneのcomment_input_part参照
   ///textEditingControllerをview側で設定=>viewModelに設定するメソッド
   Future<void> _createComparisonItems(BuildContext context) async {
@@ -170,20 +171,23 @@ class _InputPartState extends State<InputPart> {
       way2MeritDesc: '',
     );
 
-    //登録
+    //DB登録
     await viewModel.createComparisonOverview(comparisonOverview);
-    //Merit/DemeritのListをComparisonIdを入れて登録する
+    //DB登録 Merit/Demeritの1行だけをUuidでつけたComparisonIdを入れて登録する
     await viewModel.createDesc(initWay1Merit, initWay2Merit);
 
-    //読み込み=>compareScreenへ渡す
-    await viewModel.getComparisonOverview(comparisonOverview.comparisonItemId);
+    //DBからUuidでつけたComparisonIdを元に1行だけ読込(overviewDBへ格納)=>compareScreenへ渡す
+    ///Merit/DemeritのリストはCompareScreenでFutureBuilderから読込のでviewModel側への格納はなし
+  await viewModel.getComparisonOverview(comparisonOverview.comparisonItemId);
+
+//    viewModel.compareScreenStatus =CompareScreenStatus.set;
 
     ///DBに登録されたcomparisonOverviewをCompareScreenへ渡したい
     await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
             builder: (context) => CompareScreen(
-                  itemEditMode: ItemEditMode.add,
+//                  itemEditMode: ItemEditMode.add,
 //                  comparisonOverview: comparisonOverview,
                   comparisonOverview: viewModel.overviewDB,
                 )));

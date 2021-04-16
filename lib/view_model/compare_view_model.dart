@@ -112,9 +112,13 @@ class CompareViewModel extends ChangeNotifier {
   // initWay1MeritをリストにしてcreateDescListに渡す方がすっきり書ける
   Future<void> createDesc(Way1Merit initWay1Merit,
       Way2Merit initWay2Merit,) async {
-    //ここでaddしていくと古いものがだぶるのでは
-    _way1MeritList.add(initWay1Merit);
-    _way2MeritList.add(initWay2Merit);
+    _way1MeritList = [initWay1Merit];
+    _way2MeritList = [initWay2Merit];
+    //ここでaddしていくと古いものがだぶる
+///既存のoverviewでway1リスト追加=>新規でoverview,way1リスト作成,DB登録=>既存のoverviewが重複して登録されてしまう
+//    _way1MeritList.add(initWay1Merit);
+//    print('compareViewModel/createDesc/way1MeritList.add$_way1MeritList');
+//    _way2MeritList.add(initWay2Merit);
     await _compareRepository.createDescList(_way1MeritList,_way2MeritList);
     _way1MeritList = <Way1Merit>[];
     _way2MeritList = <Way2Merit>[];

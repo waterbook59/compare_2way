@@ -21,6 +21,7 @@ class CompareScreen extends StatelessWidget {
   const CompareScreen({this.itemEditMode, this.comparisonOverview});
 
   final ComparisonOverview comparisonOverview;
+  //todo CompareScreenStatusで設定してるので、削除
   final ItemEditMode itemEditMode;
 
   //todo itemsはList<Merit>に変更
