@@ -33,6 +33,28 @@ class CompareRepository {
     }
   }
 
+  ///更新 comparisonOverview
+  Future<void> updateComparisonOverView(ComparisonOverview updateOverview)async{
+  try{
+    //更新プロパティ以外のdataIdとかは値入ってないのでnull
+    final comparisonOverviewRecord =
+    updateOverview.toComparisonOverviewRecord(updateOverview);
+    final overviewCompanion = ComparisonOverviewRecordsCompanion(
+      //アップデート要素がないものを入れるとnullでエラー(Companionに入れるのは値が更新できるものだけ)
+      comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
+      itemTitle: Value(comparisonOverviewRecord.itemTitle),
+      way1Title: Value(comparisonOverviewRecord.way1Title),
+      way2Title: Value(comparisonOverviewRecord.way2Title),
+      createdAt: Value(comparisonOverviewRecord.createdAt),
+    );
+    await _comparisonItemDao.saveComparisonOverviewDB(
+        comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+
+  }on SqliteException catch (e) {
+    print('repository更新エラー:${e.toString()}');
+  }
+  }
+
   Future<List<ComparisonOverview>> getOverview(String comparisonItemId) async {
     ///resultComparisonOverviewRecordsはList<ComparisonOverviewRecord>
     final resultComparisonOverviewRecords =
@@ -93,9 +115,12 @@ class CompareRepository {
 
   ///Delete
   Future<void> deleteList(String comparisonItemId) async {
-//    final comparisonOverviewRecord =
-    //todo Merit/Dmerit、Tagのリストも同時に削除必要(transaction)
-    await _comparisonItemDao.deleteListAll(comparisonItemId);
+
+//    //todo Merit/Dmerit、Tagのリストも同時に削除必要(transaction)
+//    await _comparisonItemDao.deleteListAll(comparisonItemId);
+    await _comparisonItemDao.deleteList(comparisonItemId);
+    await _comparisonItemDao.deleteWay1MeritList(comparisonItemId);
+    await _comparisonItemDao.deleteWay2MeritList(comparisonItemId);
     print('データ削除完了');
   }
 
@@ -211,6 +236,8 @@ class CompareRepository {
   Future<void> deleteWay2Merit(int way2MeritId) async {
     await _comparisonItemDao.deleteWay2Merit(way2MeritId);
   }
+
+
 
 
 }

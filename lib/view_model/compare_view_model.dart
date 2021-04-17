@@ -22,16 +22,11 @@ class CompareViewModel extends ChangeNotifier {
 
   List<Way2Merit> get way2MeritList => _way2MeritList;
 
+//textFieldからviewModelへの変更値登録があるのでカプセル化しない
+  String itemTitle = '';
+  String way1Title = '';
+  String way2Title = '';
 
-  String _itemTitle = '';
-
-  String get itemTitle => _itemTitle;
-  String _way1Title = '';
-
-  String get way1Title => _way1Title;
-  String _way2Title = '';
-
-  String get way2Title => _way2Title;
   int _way1MeritEvaluate = 0;
 
   int get way1MeritEvaluate => _way1MeritEvaluate;
@@ -64,8 +59,8 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> getOverview(String comparisonItemId) async {
     _comparisonOverviews =
     await _compareRepository.getOverview(comparisonItemId);
-    _way1Title = comparisonOverviews[0].way1Title;
-    _way2Title = comparisonOverviews[0].way2Title;
+    way1Title = comparisonOverviews[0].way1Title;
+    way2Title = comparisonOverviews[0].way2Title;
     notifyListeners();
   }
 
@@ -75,9 +70,9 @@ class CompareViewModel extends ChangeNotifier {
       String comparisonItemId) async {
     _comparisonOverviews =
     await _compareRepository.getOverview(comparisonItemId);
-    _itemTitle = comparisonOverviews[0].itemTitle;
-    _way1Title = comparisonOverviews[0].way1Title;
-    _way2Title = comparisonOverviews[0].way2Title;
+    itemTitle = comparisonOverviews[0].itemTitle;
+    way1Title = comparisonOverviews[0].way1Title;
+    way2Title = comparisonOverviews[0].way2Title;
     _way1MeritEvaluate = comparisonOverviews[0].way1MeritEvaluate;
     _way1DemeritEvaluate = comparisonOverviews[0].way1DemeritEvaluate;
     _way2MeritEvaluate = comparisonOverviews[0].way2MeritEvaluate;
@@ -89,20 +84,41 @@ class CompareViewModel extends ChangeNotifier {
     return _comparisonOverviews;
   }
 
-  ///ComparisonOverview=>ComparisonOverviewRecordでDB登録
+  ///AddScreen/InputPartでComparisonOverview新規登録：ComparisonOverview=>ComparisonOverviewRecordでDB登録
   Future<void> createComparisonOverview(
       ComparisonOverview comparisonOverview) async {
     await _compareRepository.createComparisonOverview(comparisonOverview);
 //    notifyListeners();
   }
+  ///AddScreen/InputPartでComparisonOverview更新：itemTitle,way1Title,way2Titleのみ変更
+  Future<void> updateComparisonOverView(
+      ComparisonOverview comparisonOverview) async {
+    //更新するプロパティだけ入れてrepositoryでCompanion作成=>更新
+    final updateOverview = ComparisonOverview(
+      comparisonItemId: comparisonOverview.comparisonItemId,
+      itemTitle: itemTitle,
+      way1Title: way1Title,
+      way2Title: way2Title,
+      createdAt: DateTime.now(),
+    );
+    await _compareRepository.updateComparisonOverView(updateOverview);
+  print('comparisonOverviewのタイトル類を更新');
+    notifyListeners();
+  }
 
-  ///way1Merit,way2Meritのリストを作って保存
-  //todo list.add=>DB登録=>list空にせずに、initWay1MeritをリストにしてcreateDescListに渡す
+  ///AddScreen/InputPartでWay1Merit,Way2Meritリストを新規登録
+  //way1Merit,way2Meritのリストを作って保存
+  //todo list.add=>DB登録=>list空の流れではなく、
+  // initWay1MeritをリストにしてcreateDescListに渡す方がすっきり書ける
   Future<void> createDesc(Way1Merit initWay1Merit,
       Way2Merit initWay2Merit,) async {
-    //ここでaddしていくと古いものがだぶるのでは
-    _way1MeritList.add(initWay1Merit);
-    _way2MeritList.add(initWay2Merit);
+    _way1MeritList = [initWay1Merit];
+    _way2MeritList = [initWay2Merit];
+    //ここでaddしていくと古いものがだぶる
+///既存のoverviewでway1リスト追加=>新規でoverview,way1リスト作成,DB登録=>既存のoverviewが重複して登録されてしまう
+//    _way1MeritList.add(initWay1Merit);
+//    print('compareViewModel/createDesc/way1MeritList.add$_way1MeritList');
+//    _way2MeritList.add(initWay2Merit);
     await _compareRepository.createDescList(_way1MeritList,_way2MeritList);
     _way1MeritList = <Way1Merit>[];
     _way2MeritList = <Way2Merit>[];
@@ -249,9 +265,9 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> saveComparisonItem(ComparisonOverview updateOverview) async {
     final saveOverview = ComparisonOverview(
       comparisonItemId: updateOverview.comparisonItemId,
-      itemTitle: _itemTitle,
-      way1Title: _way1Title,
-      way2Title: _way2Title,
+      itemTitle: itemTitle,
+      way1Title: way1Title,
+      way2Title: way2Title,
       way1MeritEvaluate: _way1MeritEvaluate,
       way1DemeritEvaluate: _way1DemeritEvaluate,
       way2MeritEvaluate: _way2MeritEvaluate,
@@ -305,11 +321,11 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   Future<void> setOverview(ComparisonOverview comparisonOverview) async {
-    _itemTitle = comparisonOverview.itemTitle;
-    _way1Title = comparisonOverview.way1Title;
+    itemTitle = comparisonOverview.itemTitle;
+    way1Title = comparisonOverview.way1Title;
     _way1MeritEvaluate = comparisonOverview.way1MeritEvaluate;
     _way1DemeritEvaluate = comparisonOverview.way1DemeritEvaluate;
-    _way2Title = comparisonOverview.way2Title;
+    way2Title = comparisonOverview.way2Title;
     _way2MeritEvaluate = comparisonOverview.way2MeritEvaluate;
     _way2DemeritEvaluate = comparisonOverview.way2DemeritEvaluate;
     conclusion = comparisonOverview.conclusion;

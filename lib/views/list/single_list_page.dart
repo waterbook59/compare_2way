@@ -177,7 +177,7 @@ class SingleListPage extends StatelessWidget {
                     heroTag: 'hero1',
                     backgroundColor: accentColor,
                     child: const Icon(Icons.add, color: Colors.black, size: 40),
-                    onPressed: () => _saveComparisonItems(context),
+                    onPressed: () => _createComparisonItems(context),
                   ),
                 )
               : Container();
@@ -187,10 +187,11 @@ class SingleListPage extends StatelessWidget {
   } //buildはここまで
 
   // DB登録とComparePageへ移動
-  void _saveComparisonItems(BuildContext context) {
+  void _createComparisonItems(BuildContext context) {
     ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
     Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
-      builder: (context) => AddScreen(),
+      builder: (context) =>
+      const AddScreen(displayMode: AddScreenMode.add),
     ));
   }
 

@@ -1,10 +1,26 @@
+import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/style.dart';
+import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/views/list/componets/input_part.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
 class AddScreen extends StatelessWidget {
+
+  const AddScreen({
+    this.displayMode,
+    this.comparisonOverview,
+//    this.itemTitle,
+//    this.way1Title,
+//    this.way2Title
+  });
+  final AddScreenMode displayMode;
+  final ComparisonOverview comparisonOverview;
+//  final String itemTitle;
+//  final String way1Title;
+//  final String way2Title;
+
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme
@@ -13,21 +29,23 @@ class AddScreen extends StatelessWidget {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        //todo Androidでの端末下の戻るボタン無効:WillPopScopeのonWillPopをfalse
+        automaticallyImplyLeading: false,
         backgroundColor: primaryColor,
-        //todo キャンセル表示で入力破棄するかalertDialogで聞く&textcontrollerクリア
-//        leading:const Text('キャンセル'),
-        middle: const Text(
+        middle:displayMode == AddScreenMode.add
+        ? const Text(
           '新規作成',
           style: middleTextStyle,
-        ),
-
+        )
+        :const Text('名称編集',style: middleTextStyle,),
         /// 下から出てくる場合は右上に比較ボタンでもいいかも
-        trailing:
+        trailing:displayMode == AddScreenMode.add
         //todo  onPressedでDBに項目登録して比較画面に遷移
-        const Text(
-          '比較',
+        ? const Text(
+          '作成',
           style: trailingTextStyle,
-        ),
+        )
+      :const Text('更新',style: middleTextStyle,),
       ),
       child: Scaffold(
         backgroundColor: CupertinoTheme
@@ -40,7 +58,12 @@ class AddScreen extends StatelessWidget {
                 height: 48,
               ),
 ///InputPart
-              InputPart(),
+              InputPart(displayMode: displayMode,
+                comparisonOverview: comparisonOverview,
+//                itemTitle: itemTitle,
+//              way1Title: way1Title,
+//              way2Title: way2Title,
+              ),
             ],
           ),
         ),

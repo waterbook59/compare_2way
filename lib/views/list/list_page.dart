@@ -1,5 +1,6 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/style.dart';
+import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/list/add_screen.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +87,8 @@ class ListPage extends StatelessWidget {
   void _saveComparisonItems(BuildContext context) {
     ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
     Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
-      builder: (context) => AddScreen(),
+      builder: (context) =>
+      const AddScreen(displayMode: AddScreenMode.edit),
     ));
   }
 }

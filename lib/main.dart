@@ -1,5 +1,4 @@
 import 'package:compare_2way/di/providers.dart';
-import 'package:compare_2way/view_model/add_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

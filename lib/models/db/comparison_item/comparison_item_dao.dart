@@ -128,13 +128,19 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       (delete(way1MeritRecords)
         ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
           .go();
+  Future<void> deleteWay2MeritList(String comparisonItemId) =>
+      (delete(way2MeritRecords)
+        ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
+          .go();
 
 
   ///comparisonOverview,List<Way1Merit>をまとめて削除
+  //todo Way1MeritList,Way2MeritListが削除できていない
   Future<void> deleteListAll(String comparisonItemId) =>
       transaction(() async {
         await deleteList(comparisonItemId);
         await deleteWay1MeritList(comparisonItemId);
+        await deleteWay2MeritList(comparisonItemId);
       });
 
   Future<void> insertWay1DemeritRecordDB(
