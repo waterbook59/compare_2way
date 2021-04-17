@@ -324,8 +324,8 @@ class CompareScreen extends StatelessWidget {
 
   Future<void> _saveItem(
       BuildContext context, ComparisonOverview comparisonOverview) async {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    viewModel.compareScreenStatus = CompareScreenStatus.update;
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+    ..compareScreenStatus = CompareScreenStatus.update;
 
     FocusScope.of(context).unfocus();
 

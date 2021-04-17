@@ -7,6 +7,7 @@ import 'package:compare_2way/views/list/add_screen.dart';
 import 'package:compare_2way/views/list/single_list_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class EditBottomAction extends StatelessWidget {
@@ -46,11 +47,12 @@ class EditBottomAction extends StatelessWidget {
                       '削除',
                       style: actionSheetCationTextStyle,
                     ),
-                    onPressed: () =>
-                        _onPopupMenuSelected(
+                    onPressed: () {
+                      _onPopupMenuSelected(
                           context,
                           CompareEditMenu.allListDelete,
-                        ),
+                        );
+                    },
                   ),
                 ],
                 cancelButton: CupertinoActionSheetAction(
@@ -80,23 +82,48 @@ class EditBottomAction extends StatelessWidget {
             comparisonOverview: comparisonOverview,
           ),
         ));
-
         break;
       case CompareEditMenu.allListDelete:
-        //todo Fluttertoastで確認
-        print('comparisonItemIdを元に全削除${comparisonOverview.comparisonItemId}');
-        final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-        //comparisonOverviewは削除できているが、Way1Merit,Way2Meritは削除できていない
-         viewModel.deleteList(comparisonOverview.comparisonItemId);
+        //todo 必要なら非同期に変更
         Navigator.pop(context);
-        // Navigator.popで画面おちる場合あり、pushReplacement変更
+        showDialog<Widget>(
+            context: context,
+        builder: (context){
+              return CupertinoAlertDialog(
+                title: Text('「${comparisonOverview.itemTitle}」の削除'),
+                content:const Text('削除してもいいですか？'),
+                actions: [
+                  CupertinoDialogAction(
+                    child: const Text('Delete'),
+                    isDestructiveAction: true,
+                    onPressed: (){
+        final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+                      //comparisonOverviewは削除できているが、Way1Merit,Way2Meritは削除できていない
+                        ..deleteList(comparisonOverview.comparisonItemId);
+                      Navigator.pop(context);
+                      Fluttertoast.showToast(
+                        msg: '削除完了',
+                      );
+                      // Navigator.popで画面おちる場合あり、pushReplacement変更
 //        Navigator.pop(context);
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute<void>(
-                builder: (context) => SingleListPage(
-                )));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute<void>(
+                              builder: (context) => SingleListPage(
+                              )));
+                    },
+                  ),
+                  CupertinoDialogAction(
+                    child: const Text('キャンセル'),
+                    onPressed: ()=>Navigator.pop(context),
+                  ),
+                ],
+              );
+        });
         break;
     }
   }
+
+
+
 }
