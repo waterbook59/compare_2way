@@ -4,9 +4,8 @@ import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/accordion_part.dart';
+import 'package:compare_2way/views/compare/components/add_chip.dart';
 import 'package:compare_2way/views/compare/components/conclusion_input_part.dart';
-import 'package:compare_2way/views/compare/components/desc_form.dart';
-import 'package:compare_2way/views/compare/components/edit_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -79,6 +78,7 @@ class CompareScreen extends StatelessWidget {
           ),
         ]),
       ),
+      ///Fab使わないけどScaffold必須
       child: Scaffold(
         body: GestureDetector(
           onTap: () {
@@ -294,10 +294,7 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(
                   height: 4,
                 ),
-                const IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: null,
-                ),
+                 AddChip(),
               ///保存ボタン
                 Center(
                   child: RaisedButton(

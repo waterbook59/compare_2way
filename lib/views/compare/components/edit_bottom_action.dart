@@ -106,6 +106,7 @@ class EditBottomAction extends StatelessWidget {
                       );
                       // Navigator.popで画面おちる場合あり、pushReplacement変更
 //        Navigator.pop(context);
+//todo そのまま戻るとBottomNavigationBar消える(HomeScreen=>SingleListPage?)
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute<void>(
