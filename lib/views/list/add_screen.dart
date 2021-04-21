@@ -30,7 +30,8 @@ class AddScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         //todo Androidでの端末下の戻るボタン無効:WillPopScopeのonWillPopをfalse
-        automaticallyImplyLeading: false,
+        //todo leading新規作成時はキャンセルボタン、編集時はleadingの表示なし
+//        automaticallyImplyLeading: false,
         backgroundColor: primaryColor,
         middle:displayMode == AddScreenMode.add
         ? const Text(

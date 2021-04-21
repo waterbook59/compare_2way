@@ -1,13 +1,13 @@
-import 'package:compare_2way/views/compare/add_tag_dialog_page.dart';
+import 'package:compare_2way/views/compare/dialog_page/tag_dialog_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class AddChip extends StatefulWidget {
+class TagChipPart extends StatefulWidget {
   @override
-  _AddChipState createState() => _AddChipState();
+  _TagChipPartState createState() => _TagChipPartState();
 }
 
-class _AddChipState extends State<AddChip>{
+class _TagChipPartState extends State<TagChipPart>{
 
 
   final _testChipList =<Chip>[];
@@ -48,13 +48,11 @@ class _AddChipState extends State<AddChip>{
 
   void _addChip() {
   Navigator.of(context).push(
-    PageRouteBuilder<void>(
-      opaque: false,
-      pageBuilder: (context,_, __){
-        return AddTagDialogPage();
-      }
+    MaterialPageRoute<void>(
+      builder: (context) =>TagDialogPage(),
+      fullscreenDialog: true,//下から
     )
-  );
+    );
 
     setState(() {
       _testChipList.add(

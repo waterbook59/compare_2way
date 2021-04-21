@@ -4,14 +4,14 @@ import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/accordion_part.dart';
-import 'package:compare_2way/views/compare/components/add_chip.dart';
+import 'package:compare_2way/views/compare/components/tag_chip_part.dart';
 import 'package:compare_2way/views/compare/components/conclusion_input_part.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
-import 'components/edit_bottom_action.dart';
+import 'components/sub/edit_bottom_action.dart';
 import 'components/icon_title.dart';
 import 'components/table_part.dart';
 
@@ -294,7 +294,7 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(
                   height: 4,
                 ),
-                 AddChip(),
+                 TagChipPart(),
               ///保存ボタン
                 Center(
                   child: RaisedButton(

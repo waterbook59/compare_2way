@@ -1,4 +1,4 @@
-///AppBarの中でないとPopupMenuButtonはNG
+///AppBarの中でないとPopupMenuButtonはNGなので、EditBottomActionを採用
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/views/list/add_screen.dart';
