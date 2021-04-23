@@ -296,6 +296,7 @@ class CompareScreen extends StatelessWidget {
                 ),
                  TagChipPart(),
               ///保存ボタン
+                //todo ConstrainedBoxでボタンサイズ可変
                 Center(
                   child: RaisedButton(
                       child: const Text('保存'),

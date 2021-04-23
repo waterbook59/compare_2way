@@ -1,3 +1,4 @@
+import 'package:compare_2way/views/compare/components/sub/tag_input_part.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -27,43 +28,52 @@ class TagDialogPage extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
-                'タグ',
-                textAlign: TextAlign.left,
+        body: SingleChildScrollView(//cupertino
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Text(
+                  'タグ',
+                  textAlign: TextAlign.left,
+                ),
               ),
-            ),
-            InputChip(
-              avatar: const Icon(Icons.add_circle_outline),
-              backgroundColor: Colors.red,
-              label:
-//              Theme(
-//                data:
-//                Theme.of(context).copyWith(splashColor: Colors.transparent),
+              const Text('InputChip'),
+//            InputChip(
+//              avatar: const Icon(Icons.add_circle_outline),
+//              backgroundColor: Colors.red,
+//              label:
+//
+//              //todo textFieldをwidget分割してstateful&addListener登録
+//               TagInputPart(),
+//            ),
+              const Text('Chip'),
+//              ConstrainedBox(
+//                constraints: BoxConstraints(
+//                  maxHeight: 30
+//                ),
 //                child:
-                TextField(
-                  autofocus: true,
-                  controller: _tagTitleController,
-                    decoration:InputDecoration(
-                      hintText: 'タグを追加',
-                      border: InputBorder.none
-                    )
-//                  :
+                Wrap(
+                  children: [
+                    Chip(
+                        avatar: const Icon(Icons.add_circle_outline),
+                        backgroundColor: Colors.blue,
+                        label: TagInputPart()
+                    ),
+                  ],
                 ),
 //              ),
-            ),
-            Chip(
-              label: Text('普通のchip'),
-            ),
+              const Text('この下にタグの候補表示'),
+              Chip(
+                label: Text('普通のchip'),
+              ),
 
 
 
-          ],
+            ],
+          ),
         ),
       ),
 

@@ -52,6 +52,8 @@ class CompareViewModel extends ChangeNotifier {
   TextEditingController get conclusionController => _conclusionController;
   String conclusion = '';
 
+  //textFieldからviewModelへの変更値登録があるのでカプセル化しない
+  String tagTitle= '';
 
   ListEditMode editStatus = ListEditMode.display;
 
