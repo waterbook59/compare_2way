@@ -1,8 +1,14 @@
+import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/views/compare/dialog_page/tag_dialog_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+//todo ここでのchipは表示だけなのでstatelessでいい
 class TagChipPart extends StatefulWidget {
+
+  const TagChipPart({this.comparisonOverview});
+  final ComparisonOverview comparisonOverview;
+
   @override
   _TagChipPartState createState() => _TagChipPartState();
 }
@@ -39,17 +45,17 @@ class _TagChipPartState extends State<TagChipPart>{
           ActionChip(
             avatar: const Icon(Icons.add_circle_outline),
             label: const Text('タグを追加'),
-            onPressed: _addChip,
+            onPressed: ()=>_addChip(context,widget.comparisonOverview),
           ),
         ],
       ),
     );
   }
 
-  void _addChip() {
+  void _addChip(BuildContext context, ComparisonOverview comparisonOverview) {
   Navigator.of(context).push(
     MaterialPageRoute<void>(
-      builder: (context) =>TagDialogPage(),
+    builder: (context) =>TagDialogPage(comparisonOverview: comparisonOverview,),
       fullscreenDialog: true,//下から
     )
     );

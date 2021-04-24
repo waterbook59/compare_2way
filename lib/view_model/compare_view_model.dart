@@ -371,6 +371,11 @@ class CompareViewModel extends ChangeNotifier {
 //    notifyListeners();
   }
 
+  Future<void> createTag(String input,
+      ComparisonOverview comparisonOverview) async{
+    print('createTag:$input&${comparisonOverview.comparisonItemId}');
+  }
+
 
 //todo textControllerを破棄
 }

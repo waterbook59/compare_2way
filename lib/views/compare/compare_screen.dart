@@ -294,7 +294,8 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(
                   height: 4,
                 ),
-                 TagChipPart(),
+                 //todo SelectorでDBからtagList取って来て渡す
+                 TagChipPart(comparisonOverview: comparisonOverview,),
               ///保存ボタン
                 //todo ConstrainedBoxでボタンサイズ可変
                 Center(

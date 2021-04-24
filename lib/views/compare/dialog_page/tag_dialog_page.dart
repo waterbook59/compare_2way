@@ -1,12 +1,19 @@
-import 'package:compare_2way/views/compare/components/sub/tag_input_part.dart';
+import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/views/compare/components/sub/tag_chips.dart';
+import 'package:compare_2way/views/compare/components/sub/tag_input_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class TagDialogPage extends StatelessWidget {
-  final _tagTitleController = TextEditingController();
+
+  const TagDialogPage({this.comparisonOverview});
+  final ComparisonOverview comparisonOverview;
 
   @override
   Widget build(BuildContext context) {
+
+    var _tagNameList = <String>[];
+
     return  CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
           backgroundColor: const Color(0xFF363A44),
@@ -21,7 +28,8 @@ class TagDialogPage extends StatelessWidget {
           trailing: CupertinoButton(
             child:const Text('完了'),
             onPressed: (){
-              print('タグ編集完了してCompareScreenに戻る');
+              //todo 完了を押したらinput内容(List<String>)とcomparisonIdを基にtagクラスをDB登録
+              print('タグ編集完了してCompareScreenに戻る:$_tagNameList');
               Navigator.of(context).pop();
             },
           )
@@ -40,28 +48,13 @@ class TagDialogPage extends StatelessWidget {
                   textAlign: TextAlign.left,
                 ),
               ),
-              const Text('InputChip'),
-//            InputChip(
-//              avatar: const Icon(Icons.add_circle_outline),
-//              backgroundColor: Colors.red,
-//              label:
-//
-//              //todo textFieldをwidget分割してstateful&addListener登録
-//               TagInputPart(),
-//            ),
+
               const Text('Chip'),
-//              ConstrainedBox(
-//                constraints: BoxConstraints(
-//                  maxHeight: 30
-//                ),
-//                child:
                 Wrap(
                   children: [
-                    Chip(
-                        avatar: const Icon(Icons.add_circle_outline),
-                        backgroundColor: Colors.blue,
-                        label: TagInputPart()
-                    ),
+                    TagChips(onSubmitted: (tagNameList){
+                      _tagNameList = tagNameList;
+                    },),
                   ],
                 ),
 //              ),
