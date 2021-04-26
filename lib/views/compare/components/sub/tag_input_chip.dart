@@ -85,6 +85,7 @@ class _TagInputChipState extends State<TagInputChip> {
     BuildContext context, String input,){
 //    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
 //    ..createTag(input,comparisonOverview);
+    print('tagInputChip/_onSubmitted:$input');
   widget.onSubmitted(input);
   _tagTitleController.text ='';
   //controller破棄してリフレッシュ

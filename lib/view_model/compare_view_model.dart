@@ -28,32 +28,27 @@ class CompareViewModel extends ChangeNotifier {
   String way2Title = '';
 
   int _way1MeritEvaluate = 0;
-
   int get way1MeritEvaluate => _way1MeritEvaluate;
   int _way1DemeritEvaluate = 0;
-
   int get way1DemeritEvaluate => _way1DemeritEvaluate;
   int _way2MeritEvaluate = 0;
-
   int get way2MeritEvaluate => _way2MeritEvaluate;
   int _way2DemeritEvaluate = 0;
-
   int get way2DemeritEvaluate => _way2DemeritEvaluate;
   int _way3MeritEvaluate = 0;
-
   int get way3MeritEvaluate => _way3MeritEvaluate;
   int _way3DemeritEvaluate = 0;
-
   int get way3DemeritEvaluate => _way3DemeritEvaluate;
 
   //いらんかも
   TextEditingController _conclusionController = TextEditingController();
-
   TextEditingController get conclusionController => _conclusionController;
   String conclusion = '';
 
   //textFieldからviewModelへの変更値登録があるのでカプセル化しない
   String tagTitle= '';
+  List<String> _tagNameList = <String>[];
+
 
   ListEditMode editStatus = ListEditMode.display;
 
@@ -371,9 +366,17 @@ class CompareViewModel extends ChangeNotifier {
 //    notifyListeners();
   }
 
+
   Future<void> createTag(String input,
       ComparisonOverview comparisonOverview) async{
     print('createTag:$input&${comparisonOverview.comparisonItemId}');
+  }
+
+  Future<void> setTagNameList(List<String> tagNameList)async{
+    _tagNameList = tagNameList;
+//    print('compareViewModelへtagNameListをset:'
+//        '${_tagNameList.map((tagName) => print('$tagName')).toList()}');
+    print('compareViewModelへtagNameListをset:$_tagNameList');
   }
 
 

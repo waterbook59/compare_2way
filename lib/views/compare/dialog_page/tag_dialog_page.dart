@@ -1,8 +1,10 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/sub/tag_chips.dart';
 import 'package:compare_2way/views/compare/components/sub/tag_input_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 class TagDialogPage extends StatelessWidget {
 
@@ -12,7 +14,6 @@ class TagDialogPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    var _tagNameList = <String>[];
 
     return  CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -29,7 +30,7 @@ class TagDialogPage extends StatelessWidget {
             child:const Text('完了'),
             onPressed: (){
               //todo 完了を押したらinput内容(List<String>)とcomparisonIdを基にtagクラスをDB登録
-              print('タグ編集完了してCompareScreenに戻る:$_tagNameList');
+              print('タグ編集完了してCompareScreenに戻る:');
               Navigator.of(context).pop();
             },
           )
@@ -53,7 +54,10 @@ class TagDialogPage extends StatelessWidget {
                 Wrap(
                   children: [
                     TagChips(onSubmitted: (tagNameList){
-                      _tagNameList = tagNameList;
+//print('TagInputChip=>TagDialogへのtagNameList:${tagNameList.map((tagName) => print).toList()}');
+print('TagInputChip=>TagDialogへのtagNameList:$tagNameList');
+        final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+                          ..setTagNameList(tagNameList);
                     },),
                   ],
                 ),
