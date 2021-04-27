@@ -81,41 +81,6 @@ class TagRecords extends Table{
   TextColumn get tagTitle => text()();
 }
 
-//タグ結合(TagRecords=TagOverviewRecords+ComparisonItemIdRecords)
-    //:テーブルごとに値を取得すれば結合クラス必要ないので削除
-//class TagOverviewRecords extends Table {
-//  //autoIncrementのidあった方がいいかも
-//  TextColumn get tagId => text()(); //タグを結合するためにComparisonItemIdとは別のUuid
-//  TextColumn get tagTitle => text()();
-//}
-
-//class ComparisonItemIdRecords extends Table {
-//  TextColumn get tagId => text()();
-//  TextColumn get comparisonItemId => text()();
-//}
-
-//タグ結合クラス:テーブルごとに値を取得すれば結合クラス必要ないので削除
-//class TagRecords {
-//  TagRecords({this.tagOverviewRecords, this.comparisonItemIds,});
-//  final TagOverviewRecords tagOverviewRecords;
-//  final ComparisonItemIdRecords comparisonItemIds;
-//
-//}
-
-//comparison_item結合クラス:テーブルごとに値を取得すれば結合クラス必要ないので削除
-//class ComparisonItemRecord {
-//  ComparisonItemRecord({
-//    this.comparisonOverviewRecord,
-//    this.way1MeritRecord,
-//    this.way1DemeritRecord,
-////    this.tagRecord
-//  });
-//  final ComparisonOverviewRecord comparisonOverviewRecord;
-//  final List<Way1MeritRecord> way1MeritRecord;
-//  final List<Way1DemeritRecord> way1DemeritRecord;
-////  final TagRecord tagRecord;
-//}
-
 
 @UseMoor(tables: [
   ComparisonOverviewRecords,

@@ -1,7 +1,6 @@
 //リスト形式ではなくて１行単位
 //Dartのモデルクラス(Task)=>DBのテーブルクラス(TaskRecord)へ変換
 
-import 'package:compare_2way/data_models/comparison_item.dart';
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';

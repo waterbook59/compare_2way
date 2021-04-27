@@ -10,8 +10,6 @@ part 'comparison_item_dao.g.dart';
   Way2MeritRecords,
   Way2DemeritRecords,
   TagRecords,
-//  TagOverviewRecords,
-//  ComparisonItemIdRecords
 ])
 class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     with _$ComparisonItemDaoMixin {

@@ -1,4 +1,3 @@
-import 'package:compare_2way/data_models/comparison_item.dart';
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
@@ -240,7 +239,7 @@ class CompareRepository {
 
   Future<void> createTag(List<Tag> tagList) async{
     try {
-      //comparisonOverview=>ComparisonOverviewRecordへ変換保存
+      //List<Tag>=>List<TagRecord>へ変換保存
       final tagRecordList =
       tagList.toTagRecordList(tagList);
       await _comparisonItemDao
