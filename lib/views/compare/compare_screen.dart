@@ -45,9 +45,11 @@ class CompareScreen extends StatelessWidget {
         await viewModel.setOverview(comparisonOverview);
         //viewModelで全てのAccordion中のリストとる
         await viewModel.getAccordionList(comparisonOverview.comparisonItemId);
+        //todo viewModelにcomparisonIdを元に取って来たtagListを格納
       });
       viewModel.compareScreenStatus = CompareScreenStatus.update;
     }
+///リストの中身を見るのにtoSet使うと良いかも（map((e)=>print).toListが確実）
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -121,7 +123,7 @@ class CompareScreen extends StatelessWidget {
                             (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
                           if (snapshot.hasData && snapshot.data.isNotEmpty) {
                             //todo 変更時、createdAtを更新
-                          print('CompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画');
+//                          print('CompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画');
                             return AccordionPart(
                               title: way1Title,
                               displayList: DisplayList.way1Merit,
@@ -295,7 +297,7 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(
                   height: 4,
                 ),
-                 //todo SelectorでDBからtagList取って来て渡す
+                 //todo SelectorでDBから取って来たtagList渡す
                  TagChipPart(comparisonOverview: comparisonOverview,),
               ///保存ボタン
                 //todo ConstrainedBoxでボタンサイズ可変

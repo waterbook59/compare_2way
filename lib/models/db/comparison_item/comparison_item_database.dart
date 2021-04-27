@@ -74,47 +74,47 @@ class Way2DemeritRecords extends Table {
   @override
   Set<Column> get primaryKey => {way2DemeritId};
 }
-//テーブルtags
-//class TagTitleRecords extends Table{
-//  TextColumn get comparisonItemId => text()();
-//}
-
-///タグ結合(TagRecords=TagOverviewRecords+ComparisonItemIdRecords)
-class TagOverviewRecords extends Table {
-  //autoIncrementのidあった方がいいかも
-  TextColumn get tagId => text()(); //タグを結合するためにComparisonItemIdとは別のUuid
+//テーブルtag
+class TagRecords extends Table{
+  IntColumn get tagId => integer().autoIncrement()();
+  TextColumn get comparisonItemId => text()();
   TextColumn get tagTitle => text()();
 }
 
-class ComparisonItemIdRecords extends Table {
-  TextColumn get tagId => text()();
-  TextColumn get comparisonItemId => text()();
-}
+//タグ結合(TagRecords=TagOverviewRecords+ComparisonItemIdRecords)
+    //:テーブルごとに値を取得すれば結合クラス必要ないので削除
+//class TagOverviewRecords extends Table {
+//  //autoIncrementのidあった方がいいかも
+//  TextColumn get tagId => text()(); //タグを結合するためにComparisonItemIdとは別のUuid
+//  TextColumn get tagTitle => text()();
+//}
 
-//タグ結合クラス
-class TagRecords {
-  TagRecords({this.tagOverviewRecords, this.comparisonItemIds,});
-  final TagOverviewRecords tagOverviewRecords;
-  final ComparisonItemIdRecords comparisonItemIds;
+//class ComparisonItemIdRecords extends Table {
+//  TextColumn get tagId => text()();
+//  TextColumn get comparisonItemId => text()();
+//}
 
-}
+//タグ結合クラス:テーブルごとに値を取得すれば結合クラス必要ないので削除
+//class TagRecords {
+//  TagRecords({this.tagOverviewRecords, this.comparisonItemIds,});
+//  final TagOverviewRecords tagOverviewRecords;
+//  final ComparisonItemIdRecords comparisonItemIds;
+//
+//}
 
-///comparison_item結合クラス
-class ComparisonItemRecord {
-  ComparisonItemRecord({
-    this.comparisonOverviewRecord,
-    this.way1MeritRecord,
-    this.way1DemeritRecord,
-//    this.tagRecord
-  });
-
-  final ComparisonOverviewRecord comparisonOverviewRecord;
-  final List<Way1MeritRecord> way1MeritRecord;
-  final List<Way1DemeritRecord> way1DemeritRecord;
-//  final TagRecord tagRecord;
-
-
-}
+//comparison_item結合クラス:テーブルごとに値を取得すれば結合クラス必要ないので削除
+//class ComparisonItemRecord {
+//  ComparisonItemRecord({
+//    this.comparisonOverviewRecord,
+//    this.way1MeritRecord,
+//    this.way1DemeritRecord,
+////    this.tagRecord
+//  });
+//  final ComparisonOverviewRecord comparisonOverviewRecord;
+//  final List<Way1MeritRecord> way1MeritRecord;
+//  final List<Way1DemeritRecord> way1DemeritRecord;
+////  final TagRecord tagRecord;
+//}
 
 
 @UseMoor(tables: [
@@ -123,8 +123,7 @@ class ComparisonItemRecord {
   Way1DemeritRecords,
   Way2MeritRecords,
   Way2DemeritRecords,
-  TagOverviewRecords,
-  ComparisonItemIdRecords
+  TagRecords,
 ],daos: [ComparisonItemDao])
 class ComparisonItemDB  extends _$ComparisonItemDB{
   ComparisonItemDB() : super(_openConnection());

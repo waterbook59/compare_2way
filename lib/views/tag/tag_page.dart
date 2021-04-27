@@ -2,6 +2,9 @@ import 'package:compare_2way/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+///List<Tag>で一覧のデータ取得しつつ、tagTitleで重複するものを削除するのにtoSet()を使う
+///削除したlistをタグ一覧として表示する（tagChips参照）
+
 class TagPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

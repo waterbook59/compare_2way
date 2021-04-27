@@ -1738,19 +1738,23 @@ class $Way2DemeritRecordsTable extends Way2DemeritRecords
   }
 }
 
-class TagOverviewRecord extends DataClass
-    implements Insertable<TagOverviewRecord> {
-  final String tagId;
+class TagRecord extends DataClass implements Insertable<TagRecord> {
+  final int tagId;
+  final String comparisonItemId;
   final String tagTitle;
-  TagOverviewRecord({@required this.tagId, @required this.tagTitle});
-  factory TagOverviewRecord.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
+  TagRecord(
+      {@required this.tagId,
+      @required this.comparisonItemId,
+      @required this.tagTitle});
+  factory TagRecord.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
-    return TagOverviewRecord(
-      tagId:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}tag_id']),
+    return TagRecord(
+      tagId: intType.mapFromDatabaseResponse(data['${effectivePrefix}tag_id']),
+      comparisonItemId: stringType.mapFromDatabaseResponse(
+          data['${effectivePrefix}comparison_item_id']),
       tagTitle: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}tag_title']),
     );
@@ -1759,7 +1763,10 @@ class TagOverviewRecord extends DataClass
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (!nullToAbsent || tagId != null) {
-      map['tag_id'] = Variable<String>(tagId);
+      map['tag_id'] = Variable<int>(tagId);
+    }
+    if (!nullToAbsent || comparisonItemId != null) {
+      map['comparison_item_id'] = Variable<String>(comparisonItemId);
     }
     if (!nullToAbsent || tagTitle != null) {
       map['tag_title'] = Variable<String>(tagTitle);
@@ -1767,21 +1774,25 @@ class TagOverviewRecord extends DataClass
     return map;
   }
 
-  TagOverviewRecordsCompanion toCompanion(bool nullToAbsent) {
-    return TagOverviewRecordsCompanion(
+  TagRecordsCompanion toCompanion(bool nullToAbsent) {
+    return TagRecordsCompanion(
       tagId:
           tagId == null && nullToAbsent ? const Value.absent() : Value(tagId),
+      comparisonItemId: comparisonItemId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(comparisonItemId),
       tagTitle: tagTitle == null && nullToAbsent
           ? const Value.absent()
           : Value(tagTitle),
     );
   }
 
-  factory TagOverviewRecord.fromJson(Map<String, dynamic> json,
+  factory TagRecord.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return TagOverviewRecord(
-      tagId: serializer.fromJson<String>(json['tagId']),
+    return TagRecord(
+      tagId: serializer.fromJson<int>(json['tagId']),
+      comparisonItemId: serializer.fromJson<String>(json['comparisonItemId']),
       tagTitle: serializer.fromJson<String>(json['tagTitle']),
     );
   }
@@ -1789,61 +1800,74 @@ class TagOverviewRecord extends DataClass
   Map<String, dynamic> toJson({ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'tagId': serializer.toJson<String>(tagId),
+      'tagId': serializer.toJson<int>(tagId),
+      'comparisonItemId': serializer.toJson<String>(comparisonItemId),
       'tagTitle': serializer.toJson<String>(tagTitle),
     };
   }
 
-  TagOverviewRecord copyWith({String tagId, String tagTitle}) =>
-      TagOverviewRecord(
+  TagRecord copyWith({int tagId, String comparisonItemId, String tagTitle}) =>
+      TagRecord(
         tagId: tagId ?? this.tagId,
+        comparisonItemId: comparisonItemId ?? this.comparisonItemId,
         tagTitle: tagTitle ?? this.tagTitle,
       );
   @override
   String toString() {
-    return (StringBuffer('TagOverviewRecord(')
+    return (StringBuffer('TagRecord(')
           ..write('tagId: $tagId, ')
+          ..write('comparisonItemId: $comparisonItemId, ')
           ..write('tagTitle: $tagTitle')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => $mrjf($mrjc(tagId.hashCode, tagTitle.hashCode));
+  int get hashCode => $mrjf($mrjc(
+      tagId.hashCode, $mrjc(comparisonItemId.hashCode, tagTitle.hashCode)));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
-      (other is TagOverviewRecord &&
+      (other is TagRecord &&
           other.tagId == this.tagId &&
+          other.comparisonItemId == this.comparisonItemId &&
           other.tagTitle == this.tagTitle);
 }
 
-class TagOverviewRecordsCompanion extends UpdateCompanion<TagOverviewRecord> {
-  final Value<String> tagId;
+class TagRecordsCompanion extends UpdateCompanion<TagRecord> {
+  final Value<int> tagId;
+  final Value<String> comparisonItemId;
   final Value<String> tagTitle;
-  const TagOverviewRecordsCompanion({
+  const TagRecordsCompanion({
     this.tagId = const Value.absent(),
+    this.comparisonItemId = const Value.absent(),
     this.tagTitle = const Value.absent(),
   });
-  TagOverviewRecordsCompanion.insert({
-    @required String tagId,
+  TagRecordsCompanion.insert({
+    this.tagId = const Value.absent(),
+    @required String comparisonItemId,
     @required String tagTitle,
-  })  : tagId = Value(tagId),
+  })  : comparisonItemId = Value(comparisonItemId),
         tagTitle = Value(tagTitle);
-  static Insertable<TagOverviewRecord> custom({
-    Expression<String> tagId,
+  static Insertable<TagRecord> custom({
+    Expression<int> tagId,
+    Expression<String> comparisonItemId,
     Expression<String> tagTitle,
   }) {
     return RawValuesInsertable({
       if (tagId != null) 'tag_id': tagId,
+      if (comparisonItemId != null) 'comparison_item_id': comparisonItemId,
       if (tagTitle != null) 'tag_title': tagTitle,
     });
   }
 
-  TagOverviewRecordsCompanion copyWith(
-      {Value<String> tagId, Value<String> tagTitle}) {
-    return TagOverviewRecordsCompanion(
+  TagRecordsCompanion copyWith(
+      {Value<int> tagId,
+      Value<String> comparisonItemId,
+      Value<String> tagTitle}) {
+    return TagRecordsCompanion(
       tagId: tagId ?? this.tagId,
+      comparisonItemId: comparisonItemId ?? this.comparisonItemId,
       tagTitle: tagTitle ?? this.tagTitle,
     );
   }
@@ -1852,7 +1876,10 @@ class TagOverviewRecordsCompanion extends UpdateCompanion<TagOverviewRecord> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (tagId.present) {
-      map['tag_id'] = Variable<String>(tagId.value);
+      map['tag_id'] = Variable<int>(tagId.value);
+    }
+    if (comparisonItemId.present) {
+      map['comparison_item_id'] = Variable<String>(comparisonItemId.value);
     }
     if (tagTitle.present) {
       map['tag_title'] = Variable<String>(tagTitle.value);
@@ -1862,26 +1889,38 @@ class TagOverviewRecordsCompanion extends UpdateCompanion<TagOverviewRecord> {
 
   @override
   String toString() {
-    return (StringBuffer('TagOverviewRecordsCompanion(')
+    return (StringBuffer('TagRecordsCompanion(')
           ..write('tagId: $tagId, ')
+          ..write('comparisonItemId: $comparisonItemId, ')
           ..write('tagTitle: $tagTitle')
           ..write(')'))
         .toString();
   }
 }
 
-class $TagOverviewRecordsTable extends TagOverviewRecords
-    with TableInfo<$TagOverviewRecordsTable, TagOverviewRecord> {
+class $TagRecordsTable extends TagRecords
+    with TableInfo<$TagRecordsTable, TagRecord> {
   final GeneratedDatabase _db;
   final String _alias;
-  $TagOverviewRecordsTable(this._db, [this._alias]);
+  $TagRecordsTable(this._db, [this._alias]);
   final VerificationMeta _tagIdMeta = const VerificationMeta('tagId');
-  GeneratedTextColumn _tagId;
+  GeneratedIntColumn _tagId;
   @override
-  GeneratedTextColumn get tagId => _tagId ??= _constructTagId();
-  GeneratedTextColumn _constructTagId() {
+  GeneratedIntColumn get tagId => _tagId ??= _constructTagId();
+  GeneratedIntColumn _constructTagId() {
+    return GeneratedIntColumn('tag_id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _comparisonItemIdMeta =
+      const VerificationMeta('comparisonItemId');
+  GeneratedTextColumn _comparisonItemId;
+  @override
+  GeneratedTextColumn get comparisonItemId =>
+      _comparisonItemId ??= _constructComparisonItemId();
+  GeneratedTextColumn _constructComparisonItemId() {
     return GeneratedTextColumn(
-      'tag_id',
+      'comparison_item_id',
       $tableName,
       false,
     );
@@ -1900,23 +1939,29 @@ class $TagOverviewRecordsTable extends TagOverviewRecords
   }
 
   @override
-  List<GeneratedColumn> get $columns => [tagId, tagTitle];
+  List<GeneratedColumn> get $columns => [tagId, comparisonItemId, tagTitle];
   @override
-  $TagOverviewRecordsTable get asDslTable => this;
+  $TagRecordsTable get asDslTable => this;
   @override
-  String get $tableName => _alias ?? 'tag_overview_records';
+  String get $tableName => _alias ?? 'tag_records';
   @override
-  final String actualTableName = 'tag_overview_records';
+  final String actualTableName = 'tag_records';
   @override
-  VerificationContext validateIntegrity(Insertable<TagOverviewRecord> instance,
+  VerificationContext validateIntegrity(Insertable<TagRecord> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('tag_id')) {
       context.handle(
           _tagIdMeta, tagId.isAcceptableOrUnknown(data['tag_id'], _tagIdMeta));
+    }
+    if (data.containsKey('comparison_item_id')) {
+      context.handle(
+          _comparisonItemIdMeta,
+          comparisonItemId.isAcceptableOrUnknown(
+              data['comparison_item_id'], _comparisonItemIdMeta));
     } else if (isInserting) {
-      context.missing(_tagIdMeta);
+      context.missing(_comparisonItemIdMeta);
     }
     if (data.containsKey('tag_title')) {
       context.handle(_tagTitleMeta,
@@ -1928,226 +1973,16 @@ class $TagOverviewRecordsTable extends TagOverviewRecords
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  Set<GeneratedColumn> get $primaryKey => {tagId};
   @override
-  TagOverviewRecord map(Map<String, dynamic> data, {String tablePrefix}) {
+  TagRecord map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return TagOverviewRecord.fromData(data, _db, prefix: effectivePrefix);
+    return TagRecord.fromData(data, _db, prefix: effectivePrefix);
   }
 
   @override
-  $TagOverviewRecordsTable createAlias(String alias) {
-    return $TagOverviewRecordsTable(_db, alias);
-  }
-}
-
-class ComparisonItemIdRecord extends DataClass
-    implements Insertable<ComparisonItemIdRecord> {
-  final String tagId;
-  final String comparisonItemId;
-  ComparisonItemIdRecord(
-      {@required this.tagId, @required this.comparisonItemId});
-  factory ComparisonItemIdRecord.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
-    final effectivePrefix = prefix ?? '';
-    final stringType = db.typeSystem.forDartType<String>();
-    return ComparisonItemIdRecord(
-      tagId:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}tag_id']),
-      comparisonItemId: stringType.mapFromDatabaseResponse(
-          data['${effectivePrefix}comparison_item_id']),
-    );
-  }
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (!nullToAbsent || tagId != null) {
-      map['tag_id'] = Variable<String>(tagId);
-    }
-    if (!nullToAbsent || comparisonItemId != null) {
-      map['comparison_item_id'] = Variable<String>(comparisonItemId);
-    }
-    return map;
-  }
-
-  ComparisonItemIdRecordsCompanion toCompanion(bool nullToAbsent) {
-    return ComparisonItemIdRecordsCompanion(
-      tagId:
-          tagId == null && nullToAbsent ? const Value.absent() : Value(tagId),
-      comparisonItemId: comparisonItemId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(comparisonItemId),
-    );
-  }
-
-  factory ComparisonItemIdRecord.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return ComparisonItemIdRecord(
-      tagId: serializer.fromJson<String>(json['tagId']),
-      comparisonItemId: serializer.fromJson<String>(json['comparisonItemId']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'tagId': serializer.toJson<String>(tagId),
-      'comparisonItemId': serializer.toJson<String>(comparisonItemId),
-    };
-  }
-
-  ComparisonItemIdRecord copyWith({String tagId, String comparisonItemId}) =>
-      ComparisonItemIdRecord(
-        tagId: tagId ?? this.tagId,
-        comparisonItemId: comparisonItemId ?? this.comparisonItemId,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('ComparisonItemIdRecord(')
-          ..write('tagId: $tagId, ')
-          ..write('comparisonItemId: $comparisonItemId')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => $mrjf($mrjc(tagId.hashCode, comparisonItemId.hashCode));
-  @override
-  bool operator ==(dynamic other) =>
-      identical(this, other) ||
-      (other is ComparisonItemIdRecord &&
-          other.tagId == this.tagId &&
-          other.comparisonItemId == this.comparisonItemId);
-}
-
-class ComparisonItemIdRecordsCompanion
-    extends UpdateCompanion<ComparisonItemIdRecord> {
-  final Value<String> tagId;
-  final Value<String> comparisonItemId;
-  const ComparisonItemIdRecordsCompanion({
-    this.tagId = const Value.absent(),
-    this.comparisonItemId = const Value.absent(),
-  });
-  ComparisonItemIdRecordsCompanion.insert({
-    @required String tagId,
-    @required String comparisonItemId,
-  })  : tagId = Value(tagId),
-        comparisonItemId = Value(comparisonItemId);
-  static Insertable<ComparisonItemIdRecord> custom({
-    Expression<String> tagId,
-    Expression<String> comparisonItemId,
-  }) {
-    return RawValuesInsertable({
-      if (tagId != null) 'tag_id': tagId,
-      if (comparisonItemId != null) 'comparison_item_id': comparisonItemId,
-    });
-  }
-
-  ComparisonItemIdRecordsCompanion copyWith(
-      {Value<String> tagId, Value<String> comparisonItemId}) {
-    return ComparisonItemIdRecordsCompanion(
-      tagId: tagId ?? this.tagId,
-      comparisonItemId: comparisonItemId ?? this.comparisonItemId,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (tagId.present) {
-      map['tag_id'] = Variable<String>(tagId.value);
-    }
-    if (comparisonItemId.present) {
-      map['comparison_item_id'] = Variable<String>(comparisonItemId.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('ComparisonItemIdRecordsCompanion(')
-          ..write('tagId: $tagId, ')
-          ..write('comparisonItemId: $comparisonItemId')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $ComparisonItemIdRecordsTable extends ComparisonItemIdRecords
-    with TableInfo<$ComparisonItemIdRecordsTable, ComparisonItemIdRecord> {
-  final GeneratedDatabase _db;
-  final String _alias;
-  $ComparisonItemIdRecordsTable(this._db, [this._alias]);
-  final VerificationMeta _tagIdMeta = const VerificationMeta('tagId');
-  GeneratedTextColumn _tagId;
-  @override
-  GeneratedTextColumn get tagId => _tagId ??= _constructTagId();
-  GeneratedTextColumn _constructTagId() {
-    return GeneratedTextColumn(
-      'tag_id',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _comparisonItemIdMeta =
-      const VerificationMeta('comparisonItemId');
-  GeneratedTextColumn _comparisonItemId;
-  @override
-  GeneratedTextColumn get comparisonItemId =>
-      _comparisonItemId ??= _constructComparisonItemId();
-  GeneratedTextColumn _constructComparisonItemId() {
-    return GeneratedTextColumn(
-      'comparison_item_id',
-      $tableName,
-      false,
-    );
-  }
-
-  @override
-  List<GeneratedColumn> get $columns => [tagId, comparisonItemId];
-  @override
-  $ComparisonItemIdRecordsTable get asDslTable => this;
-  @override
-  String get $tableName => _alias ?? 'comparison_item_id_records';
-  @override
-  final String actualTableName = 'comparison_item_id_records';
-  @override
-  VerificationContext validateIntegrity(
-      Insertable<ComparisonItemIdRecord> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('tag_id')) {
-      context.handle(
-          _tagIdMeta, tagId.isAcceptableOrUnknown(data['tag_id'], _tagIdMeta));
-    } else if (isInserting) {
-      context.missing(_tagIdMeta);
-    }
-    if (data.containsKey('comparison_item_id')) {
-      context.handle(
-          _comparisonItemIdMeta,
-          comparisonItemId.isAcceptableOrUnknown(
-              data['comparison_item_id'], _comparisonItemIdMeta));
-    } else if (isInserting) {
-      context.missing(_comparisonItemIdMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
-  @override
-  ComparisonItemIdRecord map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return ComparisonItemIdRecord.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  $ComparisonItemIdRecordsTable createAlias(String alias) {
-    return $ComparisonItemIdRecordsTable(_db, alias);
+  $TagRecordsTable createAlias(String alias) {
+    return $TagRecordsTable(_db, alias);
   }
 }
 
@@ -2168,12 +2003,8 @@ abstract class _$ComparisonItemDB extends GeneratedDatabase {
   $Way2DemeritRecordsTable _way2DemeritRecords;
   $Way2DemeritRecordsTable get way2DemeritRecords =>
       _way2DemeritRecords ??= $Way2DemeritRecordsTable(this);
-  $TagOverviewRecordsTable _tagOverviewRecords;
-  $TagOverviewRecordsTable get tagOverviewRecords =>
-      _tagOverviewRecords ??= $TagOverviewRecordsTable(this);
-  $ComparisonItemIdRecordsTable _comparisonItemIdRecords;
-  $ComparisonItemIdRecordsTable get comparisonItemIdRecords =>
-      _comparisonItemIdRecords ??= $ComparisonItemIdRecordsTable(this);
+  $TagRecordsTable _tagRecords;
+  $TagRecordsTable get tagRecords => _tagRecords ??= $TagRecordsTable(this);
   ComparisonItemDao _comparisonItemDao;
   ComparisonItemDao get comparisonItemDao =>
       _comparisonItemDao ??= ComparisonItemDao(this as ComparisonItemDB);
@@ -2186,7 +2017,6 @@ abstract class _$ComparisonItemDB extends GeneratedDatabase {
         way1DemeritRecords,
         way2MeritRecords,
         way2DemeritRecords,
-        tagOverviewRecords,
-        comparisonItemIdRecords
+        tagRecords
       ];
 }

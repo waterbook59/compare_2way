@@ -1,6 +1,7 @@
 import 'package:compare_2way/data_models/comparison_item.dart';
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
+import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_dao.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_database.dart';
 import 'package:compare_2way/utils/extensions.dart';
@@ -235,6 +236,19 @@ class CompareRepository {
   ///リスト1行削除:Way2Merit
   Future<void> deleteWay2Merit(int way2MeritId) async {
     await _comparisonItemDao.deleteWay2Merit(way2MeritId);
+  }
+
+  Future<void> createTag(List<Tag> tagList) async{
+    try {
+      //comparisonOverview=>ComparisonOverviewRecordへ変換保存
+      final tagRecordList =
+      tagList.toTagRecordList(tagList);
+      await _comparisonItemDao
+          .insertTagRecordList(tagRecordList);
+      print('repository:tagListを新規登録');
+    } on SqliteException catch (e) {
+      print('tagList登録時repositoryエラー:${e.toString()}');
+    }
   }
 
 

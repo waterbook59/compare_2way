@@ -1,5 +1,6 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
+import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/models/repository/compare_repository.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -367,9 +368,19 @@ class CompareViewModel extends ChangeNotifier {
   }
 
 
-  Future<void> createTag(String input,
-      ComparisonOverview comparisonOverview) async{
-    print('createTag:$input&${comparisonOverview.comparisonItemId}');
+  Future<void> createTag(ComparisonOverview comparisonOverview) async{
+    print('createTag:$_tagNameList&${comparisonOverview.comparisonItemId}');
+    //todo 完了を押したらinput内容(List<String>)とcomparisonIdを基にList<Tag>クラスをDB登録
+    //comparisonItemIdとtagNameListからList<Tag>作成
+    final tagList = _tagNameList.map((name) {
+      return Tag(
+        comparisonItemId: comparisonOverview.comparisonItemId,
+        tagTitle: name,
+      );
+    }).toList();
+    //tagListをrepositoryへ
+    _compareRepository.createTag(tagList);
+    //新規作成のときはnotifyListenersいらない？取得の時のみ？
   }
 
   Future<void> setTagNameList(List<String> tagNameList)async{

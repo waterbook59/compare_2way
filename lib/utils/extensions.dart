@@ -4,6 +4,7 @@
 import 'package:compare_2way/data_models/comparison_item.dart';
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
+import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_database.dart';
 
 ///(DB=>model):List<ComparisonOverviewRecord>=>List<ComparisonOverview>
@@ -208,5 +209,22 @@ extension ConvertToWay2MeritRecord on Way2Merit{
       way2MeritDesc: initWay2Merit.way2MeritDesc ?? '',
     );
     return way2MeritRecord;
+  }
+}
+
+///新規挿入時(model=>DB):List<Tag>=>List<TagRecord>
+extension ConvertToTagRecordList on List<Tag>{
+  List<TagRecord> toTagRecordList(
+      List<Tag> tagList){
+    final tagRecordList =
+        tagList.map((tag) {
+          return TagRecord(
+            //tagIdはautoIncrementなので新規作成時入れない
+//            tagId:tag.tagId ?? 0,
+            tagTitle:tag.tagTitle ?? '',
+            comparisonItemId:tag.comparisonItemId ?? '',
+          );
+    }).toList();
+    return tagRecordList;
   }
 }

@@ -9,8 +9,9 @@ part 'comparison_item_dao.g.dart';
   Way1DemeritRecords,
   Way2MeritRecords,
   Way2DemeritRecords,
-  TagOverviewRecords,
-  ComparisonItemIdRecords
+  TagRecords,
+//  TagOverviewRecords,
+//  ComparisonItemIdRecords
 ])
 class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     with _$ComparisonItemDaoMixin {
@@ -148,6 +149,12 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     //2行以上の可能性あり
     await batch((batch) {
       batch.insertAll(way1DemeritRecords, way1DemeritDescs);
+    });
+  }
+  ///新規作成:List<TagRecord>
+  Future<void> insertTagRecordList(List<TagRecord> tagRecordList) async{
+    await batch((batch) {
+      batch.insertAll(tagRecords, tagRecordList);
     });
   }
 

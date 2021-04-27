@@ -29,8 +29,10 @@ class TagDialogPage extends StatelessWidget {
           trailing: CupertinoButton(
             child:const Text('完了'),
             onPressed: (){
-              //todo 完了を押したらinput内容(List<String>)とcomparisonIdを基にtagクラスをDB登録
-              print('タグ編集完了してCompareScreenに戻る:');
+              //完了を押したらinput内容(List<String>)とcomparisonIdを基にtagクラスをDB登録
+              //todo 完了時createdAtを更新
+        final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+                ..createTag(comparisonOverview);
               Navigator.of(context).pop();
             },
           )
@@ -51,17 +53,14 @@ class TagDialogPage extends StatelessWidget {
               ),
 
               const Text('Chip'),
-                Wrap(
-                  children: [
-                    TagChips(onSubmitted: (tagNameList){
-//print('TagInputChip=>TagDialogへのtagNameList:${tagNameList.map((tagName) => print).toList()}');
+
+              TagChips(onSubmitted: (tagNameList){
 print('TagInputChip=>TagDialogへのtagNameList:$tagNameList');
+        //tagNameListをviewModelへset
         final viewModel = Provider.of<CompareViewModel>(context, listen: false)
                           ..setTagNameList(tagNameList);
                     },),
-                  ],
-                ),
-//              ),
+
               const Text('この下にタグの候補表示'),
               Chip(
                 label: Text('普通のchip'),
