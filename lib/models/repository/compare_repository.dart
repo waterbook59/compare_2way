@@ -16,6 +16,7 @@ class CompareRepository {
   ComparisonOverview _overviewResult;
   List<Way1Merit> _way1MeritList = <Way1Merit>[];
   List<Way2Merit> _way2MeritList = <Way2Merit>[];
+  List<Tag> _tagList = <Tag>[];
 
 
   ///新規作成 comparisonOverview
@@ -237,6 +238,7 @@ class CompareRepository {
     await _comparisonItemDao.deleteWay2Merit(way2MeritId);
   }
 
+  ///新規作成 List<Tag>
   Future<void> createTag(List<Tag> tagList) async{
     try {
       //List<Tag>=>List<TagRecord>へ変換保存
@@ -248,6 +250,13 @@ class CompareRepository {
     } on SqliteException catch (e) {
       print('tagList登録時repositoryエラー:${e.toString()}');
     }
+  }
+
+  ///Read List<Tag>
+  Future<List<Tag>> getTagList(String comparisonItemId) async{
+    //comparisonItemIdを元に得られたList<TagRecord>をList<Tag>へ変換する
+    final tagRecordList = await _comparisonItemDao.getTagList(comparisonItemId);
+    return _tagList = tagRecordList.toTagList(tagRecordList);
   }
 
 

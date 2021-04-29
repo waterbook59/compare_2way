@@ -14,7 +14,7 @@ class TagDialogPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     return  CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
           backgroundColor: const Color(0xFF363A44),
@@ -32,7 +32,8 @@ class TagDialogPage extends StatelessWidget {
               //完了を押したらinput内容(List<String>)とcomparisonIdを基にtagクラスをDB登録
               //todo 完了時createdAtを更新
         final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-                ..createTag(comparisonOverview);
+                ..createTag(comparisonOverview)
+                ..getTagList(comparisonOverview.comparisonItemId);
               Navigator.of(context).pop();
             },
           )
@@ -52,9 +53,10 @@ class TagDialogPage extends StatelessWidget {
                 ),
               ),
 
-              const Text('Chip'),
-
-              TagChips(onSubmitted: (tagNameList){
+              TagChips(
+                tagList: viewModel.tagList,
+                displayChipList: viewModel.displayChipList,
+                onSubmitted: (tagNameList){
 print('TagInputChip=>TagDialogへのtagNameList:$tagNameList');
         //tagNameListをviewModelへset
         final viewModel = Provider.of<CompareViewModel>(context, listen: false)

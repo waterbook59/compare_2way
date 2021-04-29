@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class TagInputChip extends StatefulWidget {
 
   const TagInputChip({this.onSubmitted});
-  //入力値をtagDialogPageへ上げる
+  //入力値をtagChipsへ上げる
   final ValueChanged<String> onSubmitted;
 
   @override
@@ -52,7 +52,6 @@ class _TagInputChipState extends State<TagInputChip> {
         TextField(
             onSubmitted: (input){
               //todo 入力完了したらDB登録し、chipsのリスト内に入れて、入力chipの左に並べて表示
-              print('tagの入力完了！！:$input');
               _onSubmitted(context,input);
             },
             maxLines: 1,

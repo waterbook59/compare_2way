@@ -155,7 +155,10 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       batch.insertAll(tagRecords, tagRecordList);
     });
   }
-
+  ///読込：comparisonItemIdからList<TagListRecord>をとってくる
+  Future<List<TagRecord>> getTagList(String comparisonItemId) =>
+      (select(tagRecords)..where((tbl) =>
+          tbl.comparisonItemId.equals(comparisonItemId))).get();
 
 
 

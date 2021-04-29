@@ -1,4 +1,5 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/views/compare/dialog_page/tag_dialog_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +7,11 @@ import 'package:flutter/material.dart';
 //todo ここでのchipは表示だけなのでstatelessでいい
 class TagChipPart extends StatefulWidget {
 
-  const TagChipPart({this.comparisonOverview});
+  const TagChipPart({
+    this.comparisonOverview,this.displayChipList});
   final ComparisonOverview comparisonOverview;
+//  final List<Tag> tagList;
+  final List<Chip> displayChipList;
 
   @override
   _TagChipPartState createState() => _TagChipPartState();
@@ -36,7 +40,7 @@ class _TagChipPartState extends State<TagChipPart>{
                 spacing: 8,
                 runSpacing: 0,
                 direction: Axis.horizontal,
-                children: _testChipList,
+                children: widget.displayChipList,
           )
           ),
             ],
@@ -52,6 +56,7 @@ class _TagChipPartState extends State<TagChipPart>{
     );
   }
 
+  //todo addChip=>追加・完了したときにviewModelのdisplayListへ追加する
   void _addChip(BuildContext context, ComparisonOverview comparisonOverview) {
   Navigator.of(context).push(
     MaterialPageRoute<void>(
@@ -60,12 +65,13 @@ class _TagChipPartState extends State<TagChipPart>{
     )
     );
 
-    setState(() {
-      _testChipList.add(
-        Chip(label: Text('追加チップ'),
-      ),
-      );
-    });
+  //
+//    setState(() {
+//      _testChipList.add(
+//        Chip(label: Text('追加チップ'),
+//      ),
+//      );
+//    });
   }
 }
 

@@ -12,15 +12,12 @@ class CompareViewModel extends ChangeNotifier {
 
   final CompareRepository _compareRepository;
   List<ComparisonOverview> _comparisonOverviews = <ComparisonOverview>[];
-
   List<ComparisonOverview> get comparisonOverviews => _comparisonOverviews;
   CompareScreenStatus compareScreenStatus;
   ComparisonOverview overviewDB;
   List<Way1Merit> _way1MeritList = <Way1Merit>[];
-
   List<Way1Merit> get way1MeritList => _way1MeritList;
   List<Way2Merit> _way2MeritList = <Way2Merit>[];
-
   List<Way2Merit> get way2MeritList => _way2MeritList;
 
 //textFieldからviewModelへの変更値登録があるのでカプセル化しない
@@ -49,7 +46,10 @@ class CompareViewModel extends ChangeNotifier {
   //textFieldからviewModelへの変更値登録があるのでカプセル化しない
   String tagTitle= '';
   List<String> _tagNameList = <String>[];
-
+  List<Tag> _tagList = <Tag>[];
+  List<Tag> get tagList => _tagList;
+  List<Chip> _displayChipList = <Chip>[];
+  List<Chip> get displayChipList =>_displayChipList;
 
   ListEditMode editStatus = ListEditMode.display;
 
@@ -367,10 +367,10 @@ class CompareViewModel extends ChangeNotifier {
 //    notifyListeners();
   }
 
-
+ ///tagDialogPageでList<tag>を新規登録
   Future<void> createTag(ComparisonOverview comparisonOverview) async{
     print('createTag:$_tagNameList&${comparisonOverview.comparisonItemId}');
-    //todo 完了を押したらinput内容(List<String>)とcomparisonIdを基にList<Tag>クラスをDB登録
+    //完了を押したらinput内容(List<String>)とcomparisonIdを基にList<Tag>クラスをDB登録
     //comparisonItemIdとtagNameListからList<Tag>作成
     final tagList = _tagNameList.map((name) {
       return Tag(
@@ -379,16 +379,32 @@ class CompareViewModel extends ChangeNotifier {
       );
     }).toList();
     //tagListをrepositoryへ
-    _compareRepository.createTag(tagList);
+    await _compareRepository.createTag(tagList);
     //新規作成のときはnotifyListenersいらない？取得の時のみ？
   }
 
+  //tagChipsでtextField入力内容をviewModelへset
   Future<void> setTagNameList(List<String> tagNameList)async{
     _tagNameList = tagNameList;
 //    print('compareViewModelへtagNameListをset:'
 //        '${_tagNameList.map((tagName) => print('$tagName')).toList()}');
     print('compareViewModelへtagNameListをset:$_tagNameList');
   }
+ ///List<Tag>取得(文頭取得用)
+  Future<void> getTagList(String comparisonItemId) async{
+    _tagList = await _compareRepository.getTagList(comparisonItemId);
+    print('viewModel.getTagList:${_tagList.map((e) => e.tagTitle)}');
+    //List<Tag>=>List<Chips>へ変更
+    _displayChipList = _tagList.map((tag) {
+      return Chip(
+        label: Text(tag.tagTitle),
+      );
+    }).toList();
+    notifyListeners();
+  }
+
+
+
 
 
 //todo textControllerを破棄

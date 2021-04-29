@@ -5,8 +5,10 @@ import 'package:flutter/cupertino.dart';
 
 class TagChips extends StatefulWidget {
 
-  const TagChips({this.onSubmitted});
+  const TagChips({this.onSubmitted,this.tagList,this.displayChipList});
   final ValueChanged<List<String>> onSubmitted;
+  final List<Tag> tagList;
+  final List<Chip> displayChipList;
 
   @override
   _TagChipsState createState() => _TagChipsState();
@@ -14,10 +16,27 @@ class TagChips extends StatefulWidget {
 
 class _TagChipsState extends State<TagChips> {
 
-  var  _testChips =<Chip>[Chip(label: Text('青空'),),];
-  var _chipLabels =<String>['青空'];
-  var _tempoLabels = <String>[];
+  var  _tempoChips =<Chip>[];
+  var _tagNameList =<String>[];
+  final _tempoLabels = <String>[];
+  Set<String>  tagNameListSet= <String>{};
   final _temporaryTags = <Tag>[];
+
+  @override
+  void initState() {
+  //List<Tag>=>List<String>=>Set<String>へ変換したい
+    tagNameListSet =widget.tagList.map<String>(
+      (tag)=>tag.tagTitle).toSet() ;//toListではなく、toSetに変更で一気に変換
+    print('TagInputChip/initState/tagTitles:$_tagNameList');
+
+  //List<Chip>=>Set<String>へ変換したい
+//  final setTest =  widget.displayChipList.map<Widget>((chip)
+//  => chip.label).toSet();
+//    set1= setTest ;
+
+    _tempoChips = widget.displayChipList;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,44 +48,43 @@ class _TagChipsState extends State<TagChips> {
     runSpacing: 0,
     children:
     [
-//      Row(
-//        children:List<Widget>.generate(_chipLabel.length, (int index){
-//          return Chip(label: Text(_chipLabel[index]));
-//        }).toList(),
-//      ),
           Wrap(
             alignment: WrapAlignment.start,
             spacing: 8,
             runSpacing: 0,
             direction: Axis.horizontal,
-            children:_testChips,),
+            children:_tempoChips,),
 
               TagInputChip(
                 onSubmitted: (input){
                   //todo inputが既存の仮tagクラス内またはDB内に存在しないのかvalidation
                   //DBのvalidationはmy_own_flash_card参考
-                  // validation問題なければ保存前の仮tagモデルクラスへ格納
-                  //_chipLabels内にinputあるかどうか
+                  // validation問題なければ仮Chipクラス(_tempoChips)へ格納
+                  //_tagNameList内にinputあるかどうか
 
                   ///リスト内に重複がないかのvalidation
                   //まずは入力値を文字リストに入れる
-                  _tempoLabels.add(input);
                   //set型に変換しないと重複削除できないので、toSet
+                  _tempoLabels.add(input);
+
                   //list.toSet().toList();だけではできなかった
-                  final set1 = _chipLabels.toSet();
-                  final set2 =_tempoLabels.toSet();
+//                  final set1 = _chipLabels.toSet();
+//                  final  set1 = widget.displayChipList.map((chip)
+//                  => chip.label).toSet() as Set<String>;
+
+                  final tempoLabelSet =_tempoLabels.toSet();
                   //addAllで重複削除
-                  set1.addAll(set2);
+                  tagNameListSet.addAll(tempoLabelSet);
                   //Listへ戻す
-                  _chipLabels = set1.toList();
-                  print('_chipLabels.addAll$_chipLabels');
-                  //表示用チップリストList<Chip>を上記で重複を整理したchipLabelsを元に作成
-                  _testChips=
-                    _chipLabels.map((value) {
+                  _tagNameList = tagNameListSet.toList();
+                  print('_chipLabels.addAll$_tagNameList');
+//TagDialogPage表示用チップリスト(完了前)List<Chip>を上記で重複を整理したchipLabelsを元に作成
+                  _tempoChips=
+                      _tagNameList.map((value) {
                       return Chip(label: Text(value));
                     }).toList();
                   //tag_dialog_pageへタグタイトルのリスト上げる
-                    widget.onSubmitted(_chipLabels);
+                    widget.onSubmitted(_tagNameList);
 
 
 //                _chipLabels.forEach((name) {

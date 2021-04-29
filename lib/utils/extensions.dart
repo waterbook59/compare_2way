@@ -227,3 +227,18 @@ extension ConvertToTagRecordList on List<Tag>{
     return tagRecordList;
   }
 }
+
+///読込時(DB=>model) List<TagRecord>=>Lis<Tag>
+extension ConvertToTagList on List<TagRecord>{
+  List<Tag> toTagList(List<TagRecord> tagRecordList){
+    final tagList =
+    tagRecordList.map((tagRecordSingle) {
+      return Tag(
+        tagId: tagRecordSingle.tagId,
+        comparisonItemId: tagRecordSingle.comparisonItemId,
+        tagTitle: tagRecordSingle.tagTitle,
+      );
+    }).toList();
+    return tagList;
+  }
+}

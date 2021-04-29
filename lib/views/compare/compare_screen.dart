@@ -17,11 +17,11 @@ import 'components/table_part.dart';
 
 ///Table=>conclusionの順で編集するとTableリセットされる問題を解決
 class CompareScreen extends StatelessWidget {
-  const CompareScreen({this.itemEditMode, this.comparisonOverview});
+  const CompareScreen({
+    this.comparisonOverview});
 
   final ComparisonOverview comparisonOverview;
-  //todo CompareScreenStatusで設定してるので、削除
-  final ItemEditMode itemEditMode;
+
 
   //todo itemsはList<Merit>に変更
   static List<String> items = [
@@ -46,6 +46,7 @@ class CompareScreen extends StatelessWidget {
         //viewModelで全てのAccordion中のリストとる
         await viewModel.getAccordionList(comparisonOverview.comparisonItemId);
         //todo viewModelにcomparisonIdを元に取って来たtagListを格納
+        await viewModel.getTagList(comparisonOverview.comparisonItemId);
       });
       viewModel.compareScreenStatus = CompareScreenStatus.update;
     }
@@ -298,7 +299,14 @@ class CompareScreen extends StatelessWidget {
                   height: 4,
                 ),
                  //todo SelectorでDBから取って来たtagList渡す
-                 TagChipPart(comparisonOverview: comparisonOverview,),
+                 Selector<CompareViewModel,List<Chip>>(
+                   selector: (context, viewModel) => viewModel.displayChipList,
+                     builder: (context, displayChipList, child) {
+                       return TagChipPart(
+                         comparisonOverview: comparisonOverview,
+                         displayChipList:displayChipList,);
+                     }
+                 ),
               ///保存ボタン
                 //todo ConstrainedBoxでボタンサイズ可変
                 Center(
