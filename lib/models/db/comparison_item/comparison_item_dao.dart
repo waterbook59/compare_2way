@@ -149,12 +149,38 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       batch.insertAll(way1DemeritRecords, way1DemeritDescs);
     });
   }
-  ///新規作成:List<TagRecord>
+
+
+  ///新規作成:List<TagRecord>:batchでやると重複登録されてしまった
   Future<void> insertTagRecordList(List<TagRecord> tagRecordList) async{
-    await batch((batch) {
-      batch.insertAll(tagRecords, tagRecordList);
-    });
+    
+//    await batch((batch) {
+//      batch.insertAll(tagRecords, tagRecordList);
+//    });
+  print('dao/insertTagRecordList:$tagRecordList');
+  //daoの中でmapしても登録されない
+   tagRecordList.map((tagRecord) {
+    return into(tagRecords).insert(tagRecord);
+  });
   }
+
+  ///新規作成:repositoryでmapしたTagRecordを1行ずつ登録
+  Future<void> insertTagRecord(TagRecord tagRecord) async{
+    print('dao/insertTagRecordList:$tagRecord');
+    await into(tagRecords).insert(tagRecord);
+  }
+
+
+
+  ///新規作成:List<TagRecord> 重複回避:
+  ///https://moor.simonbinder.eu/docs/getting-started/writing_queries/
+  Future<void> createOrUpdateTag(List<TagRecord> tagRecordList) async{
+    return tagRecordList.map((tagRecord)
+    => into(tagRecords).insertOnConflictUpdate(tagRecord));
+
+    }
+
+
   ///読込：comparisonItemIdからList<TagListRecord>をとってくる
   Future<List<TagRecord>> getTagList(String comparisonItemId) =>
       (select(tagRecords)..where((tbl) =>

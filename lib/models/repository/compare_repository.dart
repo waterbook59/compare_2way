@@ -239,13 +239,22 @@ class CompareRepository {
   }
 
   ///新規作成 List<Tag>
+  //tagTitleをprimaryKeyに設定して重複登録回避
   Future<void> createTag(List<Tag> tagList) async{
     try {
       //List<Tag>=>List<TagRecord>へ変換保存
       final tagRecordList =
       tagList.toTagRecordList(tagList);
-      await _comparisonItemDao
-          .insertTagRecordList(tagRecordList);
+
+      //todo insetよりもinsertOnConflictUpdateいいかも(毎回エラー発生もうざいので)
+      //mapだとうまくいかずforEach
+      tagRecordList.forEach(
+               (tagRecord) async{
+                 await   _comparisonItemDao.insertTagRecord(tagRecord);
+      }
+      );
+//      await _comparisonItemDao
+//          .insertTagRecordList(tagRecordList);
       print('repository:tagListを新規登録');
     } on SqliteException catch (e) {
       print('tagList登録時repositoryエラー:${e.toString()}');

@@ -1743,9 +1743,7 @@ class TagRecord extends DataClass implements Insertable<TagRecord> {
   final String comparisonItemId;
   final String tagTitle;
   TagRecord(
-      {@required this.tagId,
-      @required this.comparisonItemId,
-      @required this.tagTitle});
+      {this.tagId, @required this.comparisonItemId, @required this.tagTitle});
   factory TagRecord.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -1908,8 +1906,11 @@ class $TagRecordsTable extends TagRecords
   @override
   GeneratedIntColumn get tagId => _tagId ??= _constructTagId();
   GeneratedIntColumn _constructTagId() {
-    return GeneratedIntColumn('tag_id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+    return GeneratedIntColumn(
+      'tag_id',
+      $tableName,
+      true,
+    );
   }
 
   final VerificationMeta _comparisonItemIdMeta =
@@ -1973,7 +1974,7 @@ class $TagRecordsTable extends TagRecords
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {tagId};
+  Set<GeneratedColumn> get $primaryKey => {tagTitle};
   @override
   TagRecord map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;

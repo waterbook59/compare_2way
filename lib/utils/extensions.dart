@@ -5,6 +5,7 @@ import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_database.dart';
+import 'package:uuid/uuid.dart';
 
 ///(DB=>model):List<ComparisonOverviewRecord>=>List<ComparisonOverview>
 extension ConvertToComparisonOverviewRecords on List<ComparisonOverviewRecord> {
@@ -213,6 +214,8 @@ extension ConvertToWay2MeritRecord on Way2Merit{
 
 ///新規挿入時(model=>DB):List<Tag>=>List<TagRecord>
 extension ConvertToTagRecordList on List<Tag>{
+  // tagTitleをprimaryKeyに設定した場合、tagIdのautoIncrement効かないかも
+  //=>tagIdがint型なのでUuid.hashCodeを使う
   List<TagRecord> toTagRecordList(
       List<Tag> tagList){
     final tagRecordList =
@@ -220,6 +223,7 @@ extension ConvertToTagRecordList on List<Tag>{
           return TagRecord(
             //tagIdはautoIncrementなので新規作成時入れない
 //            tagId:tag.tagId ?? 0,
+          tagId: Uuid().hashCode,
             tagTitle:tag.tagTitle ?? '',
             comparisonItemId:tag.comparisonItemId ?? '',
           );

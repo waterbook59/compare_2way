@@ -25,6 +25,7 @@ class _TagChipsState extends State<TagChips> {
   @override
   void initState() {
   //List<Tag>=>List<String>=>Set<String>へ変換したい
+    //型推論に失敗する時はmapの後ろに型を明示
     tagNameListSet =widget.tagList.map<String>(
       (tag)=>tag.tagTitle).toSet() ;//toListではなく、toSetに変更で一気に変換
     print('TagInputChip/initState/tagTitles:$_tagNameList');
@@ -58,6 +59,7 @@ class _TagChipsState extends State<TagChips> {
               TagInputChip(
                 onSubmitted: (input){
                   //todo inputが既存の仮tagクラス内またはDB内に存在しないのかvalidation
+                  //todo スペースは登録されないようvalidation
                   //DBのvalidationはmy_own_flash_card参考
                   // validation問題なければ仮Chipクラス(_tempoChips)へ格納
                   //_tagNameList内にinputあるかどうか
