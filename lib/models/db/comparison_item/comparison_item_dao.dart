@@ -159,9 +159,9 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 //    });
   print('dao/insertTagRecordList:$tagRecordList');
   //daoの中でmapしても登録されない
-   tagRecordList.map((tagRecord) {
-    return into(tagRecords).insert(tagRecord);
-  });
+   tagRecordList.forEach(
+     into(tagRecords).insert
+  );
   }
 
   ///新規作成:repositoryでmapしたTagRecordを1行ずつ登録
@@ -174,9 +174,9 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   ///新規作成:List<TagRecord> 重複回避:
   ///https://moor.simonbinder.eu/docs/getting-started/writing_queries/
-  Future<void> createOrUpdateTag(List<TagRecord> tagRecordList) async{
-    return tagRecordList.map((tagRecord)
-    => into(tagRecords).insertOnConflictUpdate(tagRecord));
+  Future<void> createOrUpdateTag(TagRecord tagRecord) async{
+    print('dao/createOrUpdateTag:$tagRecord');
+    await into(tagRecords).insertOnConflictUpdate(tagRecord);
 
     }
 

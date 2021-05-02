@@ -244,13 +244,13 @@ class CompareRepository {
     try {
       //List<Tag>=>List<TagRecord>へ変換保存
       final tagRecordList =
-      tagList.toTagRecordList(tagList);
+      tagList.toTagRecordList(tagList)
 
-      //todo insetよりもinsertOnConflictUpdateいいかも(毎回エラー発生もうざいので)
+      //insetよりもinsertOnConflictUpdateいいかも(毎回UNIQUE constraint failedエラー発生するので)
       //mapだとうまくいかずforEach
-      tagRecordList.forEach(
+      ..forEach(
                (tagRecord) async{
-                 await   _comparisonItemDao.insertTagRecord(tagRecord);
+                 await   _comparisonItemDao.createOrUpdateTag(tagRecord);
       }
       );
 //      await _comparisonItemDao
