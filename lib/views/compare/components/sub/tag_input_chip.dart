@@ -51,7 +51,7 @@ class _TagInputChipState extends State<TagInputChip> {
 //            ),
         TextField(
             onSubmitted: (input){
-              //todo 入力完了したらDB登録し、chipsのリスト内に入れて、入力chipの左に並べて表示
+              //入力完了したらDB登録し、chipsのリスト内に入れて、入力chipの左に並べて表示
               _onSubmitted(context,input);
             },
             maxLines: 1,
@@ -63,6 +63,7 @@ class _TagInputChipState extends State<TagInputChip> {
             const InputDecoration(
               hintText: 'タグを追加',
               border: InputBorder.none,
+              //isDenseで少し幅狭くなる
               isDense:true,
 //              contentPadding: EdgeInsets.all(8),
             )

@@ -58,29 +58,20 @@ class _TagChipsState extends State<TagChips> {
 
               TagInputChip(
                 onSubmitted: (input){
-                  //todo inputが既存の仮tagクラス内またはDB内に存在しないのかvalidation
+                  //inputが既存の仮tagクラス内またはDB内に存在しないのかvalidation
                   //todo スペースは登録されないようvalidation
-                  //DBのvalidationはmy_own_flash_card参考
-                  // validation問題なければ仮Chipクラス(_tempoChips)へ格納
-                  //_tagNameList内にinputあるかどうか
-
                   ///リスト内に重複がないかのvalidation
                   //まずは入力値を文字リストに入れる
-                  //set型に変換しないと重複削除できないので、toSet
                   _tempoLabels.add(input);
-
-                  //list.toSet().toList();だけではできなかった
-//                  final set1 = _chipLabels.toSet();
-//                  final  set1 = widget.displayChipList.map((chip)
-//                  => chip.label).toSet() as Set<String>;
-
+                  //set型に変換しないと重複削除できないので、toSet
                   final tempoLabelSet =_tempoLabels.toSet();
-                  //addAllで重複削除
+                  //addAllで重複削除：_tagNameList内にinputあるかどうか
                   tagNameListSet.addAll(tempoLabelSet);
                   //Listへ戻す
                   _tagNameList = tagNameListSet.toList();
                   print('_chipLabels.addAll$_tagNameList');
 //TagDialogPage表示用チップリスト(完了前)List<Chip>を上記で重複を整理したchipLabelsを元に作成
+                  // validation問題なければ仮Chipクラス(_tempoChips)へ格納
                   _tempoChips=
                       _tagNameList.map((value) {
                       return Chip(label: Text(value));
@@ -88,29 +79,6 @@ class _TagChipsState extends State<TagChips> {
                   //tag_dialog_pageへタグタイトルのリスト上げる
                     widget.onSubmitted(_tagNameList);
 
-
-//                _chipLabels.forEach((name) {
-//                  if(input.contains(name)){
-//                    print('inputとnameが同じ：$nameと$input');
-//                    //同じ場合はリスト追加できないようにする
-//                    return;
-//                  }else{
-//                    print('inputとnameが違う：$nameと$input');
-//                    //違う場合はリスト追加する
-//                    print('tagChipsリスト追加前:$_chipLabels');
-//                    _chipLabels.add(input);
-//                    print('tagChipsリスト追加後:$_chipLabels');
-//                  }
-//                  ///chipsリストへ追加
-//                  final inputChip = Chip(label: Text(input),);
-//                  _testChips.add(inputChip);
-//                  //tag_dialog_pageへタグタイトルのリスト上げる
-////                    widget.onSubmitted(_chipLabels);
-//                  });
-//print('tagChipsリスト追加後:${_chipLabels.map((name) => print).toList()}');
-//                    final temporaryTagList = Tag(
-//                      tagTitle: input,
-//                    );
                   setState(() {//tag_input_chipのcontroller破棄
                   },);
                 }),

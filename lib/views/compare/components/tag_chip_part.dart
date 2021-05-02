@@ -1,5 +1,4 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
-import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/views/compare/dialog_page/tag_dialog_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +17,6 @@ class TagChipPart extends StatefulWidget {
 }
 
 class _TagChipPartState extends State<TagChipPart>{
-
-
-  final _testChipList =<Chip>[];
-
 
 
   @override
@@ -65,13 +60,6 @@ class _TagChipPartState extends State<TagChipPart>{
     )
     );
 
-  //
-//    setState(() {
-//      _testChipList.add(
-//        Chip(label: Text('追加チップ'),
-//      ),
-//      );
-//    });
   }
 }
 

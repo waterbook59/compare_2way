@@ -239,6 +239,7 @@ class CompareRepository {
   }
 
   ///新規作成 List<Tag>
+  //todo タグ追加したらcreatedAt変更
   //tagTitleをprimaryKeyに設定して重複登録回避
   Future<void> createTag(List<Tag> tagList) async{
     try {
