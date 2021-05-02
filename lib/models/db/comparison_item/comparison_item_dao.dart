@@ -151,7 +151,8 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   }
 
 
-  ///新規作成:List<TagRecord>:batchでやると重複登録されてしまった
+  ///新規作成:List<TagRecord>:batchでやると重複登録されてしまうので
+  ///1行ずつdao側でinsertOnConflictUpdate
   Future<void> insertTagRecordList(List<TagRecord> tagRecordList) async{
     
 //    await batch((batch) {
@@ -160,24 +161,17 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   print('dao/insertTagRecordList:$tagRecordList');
   //daoの中でmapしても登録されない
    tagRecordList.forEach(
-     into(tagRecords).insert
+     into(tagRecords).insertOnConflictUpdate
   );
   }
 
-  ///新規作成:repositoryでmapしたTagRecordを1行ずつ登録
-  Future<void> insertTagRecord(TagRecord tagRecord) async{
-    print('dao/insertTagRecordList:$tagRecord');
-    await into(tagRecords).insert(tagRecord);
-  }
-
-
-
   ///新規作成:List<TagRecord> 重複回避:
   ///https://moor.simonbinder.eu/docs/getting-started/writing_queries/
+  //repository側でforEachしたものをinsertOnConflictUpdate
+  //insertTagRecordListでもどちらでも良い(dao側、repository側どちらかでforEach)
   Future<void> createOrUpdateTag(TagRecord tagRecord) async{
     print('dao/createOrUpdateTag:$tagRecord');
     await into(tagRecords).insertOnConflictUpdate(tagRecord);
-
     }
 
 

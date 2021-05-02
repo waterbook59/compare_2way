@@ -244,17 +244,17 @@ class CompareRepository {
     try {
       //List<Tag>=>List<TagRecord>へ変換保存
       final tagRecordList =
-      tagList.toTagRecordList(tagList)
+      tagList.toTagRecordList(tagList);
+      //insetよりもinsertOnConflictUpdateが良い(毎回UNIQUE constraint failedエラー発生するので)
+      await _comparisonItemDao
+          .insertTagRecordList(tagRecordList);
 
-      //insetよりもinsertOnConflictUpdateいいかも(毎回UNIQUE constraint failedエラー発生するので)
       //mapだとうまくいかずforEach
-      ..forEach(
-               (tagRecord) async{
-                 await   _comparisonItemDao.createOrUpdateTag(tagRecord);
-      }
-      );
-//      await _comparisonItemDao
-//          .insertTagRecordList(tagRecordList);
+//      ..forEach(
+//               (tagRecord) async{
+//                 await   _comparisonItemDao.createOrUpdateTag(tagRecord);
+//      }
+//      );
       print('repository:tagListを新規登録');
     } on SqliteException catch (e) {
       print('tagList登録時repositoryエラー:${e.toString()}');
