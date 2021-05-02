@@ -20,8 +20,6 @@ class _TagInputChipState extends State<TagInputChip> {
 
   @override
   void initState() {
-    ///addListenerしているのでCompareScreenのAccordionPartとかは同時に回る(致し方なし)
-//    _tagTitleController.addListener(_onCaptionUpdated);
   _tagTitleController.text = '';
     super.initState();
   }
@@ -71,11 +69,12 @@ class _TagInputChipState extends State<TagInputChip> {
 
       ),
     );
-    //textfieldにあわせてchipを伸ばしたい
+
 
   }
 
   ///ここではviewModelへのセットは行わず、AppBarの完了ボタンでセットする
+  //直接入力値をセットする場合のみinitStateでメソッドをAddListener登録する
   void _onCaptionUpdated(){
     final viewModel = Provider.of<CompareViewModel>(context, listen: false)
       ..tagTitle = _tagTitleController.text;
