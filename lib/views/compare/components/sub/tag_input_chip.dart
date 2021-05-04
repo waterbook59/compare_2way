@@ -64,7 +64,8 @@ class _TagInputChipState extends State<TagInputChip> {
               //isDenseで少し幅狭くなる
               isDense:true,
 //              contentPadding: EdgeInsets.all(8),
-            )
+            ),
+
         ),
 
       ),

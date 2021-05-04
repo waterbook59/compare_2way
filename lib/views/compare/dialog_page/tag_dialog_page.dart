@@ -61,7 +61,8 @@ print('TagInputChip=>TagDialogへのtagNameList:$tagNameList');
         //tagNameListをviewModelへset
         final viewModel = Provider.of<CompareViewModel>(context, listen: false)
                           ..setTagNameList(tagNameList);
-                    },),
+                    },
+              ),
 
               const Text('この下にタグの候補表示'),
               Chip(
