@@ -6,11 +6,9 @@ import 'package:flutter/cupertino.dart';
 class TagChips extends StatefulWidget {
 
   const TagChips({this.onSubmitted, this.tagList,
-//    this.displayChipList,
   });
   final ValueChanged<List<String>> onSubmitted;
   final List<Tag> tagList;
-//  final List<Chip> displayChipList;
 
   @override
   _TagChipsState createState() => _TagChipsState();
@@ -18,8 +16,8 @@ class TagChips extends StatefulWidget {
 
 class _TagChipsState extends State<TagChips> {
 
-  var _tagNameList =<String>[];
-  final _tempoLabels = <String>[];
+  List<String> _tagNameList =<String>[];
+  List<String> _tempoLabels = <String>[];
   Set<String>  tagNameListSet= <String>{};
   int value;
 
@@ -52,8 +50,8 @@ class _TagChipsState extends State<TagChips> {
             runSpacing: 0,
             direction: Axis.horizontal,
             children:
-            ///_tempoChipsのList<InputChip>への変換はinitState内ではなく、Wrap内で行わないと
-            ///selectedが反映されない、tagNameListからつくることでtempoChipsいらない
+            ///List<InputChip>への変換はinitState内ではなく、Wrap内で行わないとselectedが反映されない
+            ///tagNameListからつくることでtempoChipsいらない
             List<InputChip>.generate(
                 _tagNameList.length, (int index) {
               return InputChip(
@@ -63,7 +61,14 @@ class _TagChipsState extends State<TagChips> {
                 //デフォルトの選択時のチェックマーク消す
                 showCheckmark: false,
                 //選択時だけdeleteIconがでる
-                onDeleted: value == index ?(){}:null,
+                onDeleted: value == index
+                ///仮でtagNameListから選択したindex番目タイトル削除
+                    ?()=> setState(() {
+                    _tagNameList.removeAt(index);
+                    print('チップ削除後_tagNameList:$_tagNameList');
+                    tagNameListSet = _tagNameList.toSet();
+                  })
+                    :null,
                 deleteIcon: const Icon(Icons.highlight_off),
                 onSelected: (bool isSelected){
                   setState(() {
@@ -87,6 +92,8 @@ class _TagChipsState extends State<TagChips> {
                   final tempoLabelSet =_tempoLabels.toSet();
                   //addAllで重複削除：_tagNameList内にinputあるかどうか
                   tagNameListSet.addAll(tempoLabelSet);
+                  //tempoLabelsクリア(しないと編集中に消したものが再度出てくる)
+                  _tempoLabels =[];
                   //Listへ戻す
                   _tagNameList = tagNameListSet.toList();
                   print('_chipLabels.addAll$_tagNameList');
