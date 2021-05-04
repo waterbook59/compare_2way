@@ -42,7 +42,6 @@ class _TagChipsState extends State<TagChips> {
 //        selected: value == index,//bool
 //        selectedColor: Colors.blue,
 //        onSelected: (bool isSelected){
-//
 //            setState(() {
 //              //選択する(isSelected=trueのとき、value = index)
 //              value = isSelected ? index :0 ;
@@ -72,14 +71,16 @@ class _TagChipsState extends State<TagChips> {
             runSpacing: 0,
             direction: Axis.horizontal,
             children:
-            ///_tempoChipsのList<ChoiceChip>への変換はinitState内ではなく、Wrap内で行わないと
+            ///_tempoChipsのList<InputChip>への変換はinitState内ではなく、Wrap内で行わないと
             ///selectedが反映されない、tagNameListからつくることでtempoChipsいらない
-            List<ChoiceChip>.generate(
+            //todo onSelectedからdeleteIconがでるonPressedに変更
+            List<InputChip>.generate(
                 _tagNameList.length, (int index) {
-              return ChoiceChip(
+              return InputChip(
                 label: Text(_tagNameList[index]),
                 selected: value == index,//bool
                 selectedColor: Colors.blue,
+                deleteIcon: const Icon(Icons.highlight_off),
                 onSelected: (bool isSelected){
                   setState(() {
                     //選択する(isSelected=trueのとき、value = index)
