@@ -5,10 +5,12 @@ import 'package:flutter/cupertino.dart';
 
 class TagChips extends StatefulWidget {
 
-  const TagChips({this.onSubmitted, this.tagList,this.displayChipList,});
+  const TagChips({this.onSubmitted, this.tagList,
+//    this.displayChipList,
+  });
   final ValueChanged<List<String>> onSubmitted;
   final List<Tag> tagList;
-  final List<Chip> displayChipList;
+//  final List<Chip> displayChipList;
 
   @override
   _TagChipsState createState() => _TagChipsState();
@@ -32,6 +34,7 @@ class _TagChipsState extends State<TagChips> {
     tagNameListSet =widget.tagList.map<String>(
       (tag)=>tag.tagTitle).toSet() ;//toListではなく、toSetに変更で一気に変換
     print('TagChips/initState/tagTitles(Set):$tagNameListSet');
+    _tagNameList  = tagNameListSet.toList();
 
     ///_tempoChipsのList<ChoiceChip>への変換はinitState内ではなく、Wrap内で行わないと
     ///selectedが反映されない
@@ -101,9 +104,9 @@ class _TagChipsState extends State<TagChips> {
             ///_tempoChipsのList<ChoiceChip>への変換はinitState内ではなく、Wrap内で行わないと
             ///selectedが反映されない
             List<ChoiceChip>.generate(
-                widget.displayChipList.length, (int index) {
+                _tagNameList.length, (int index) {
               return ChoiceChip(
-                label: widget.displayChipList[index].label,
+                label: Text(_tagNameList[index]),
                 selected: value == index,//bool
                 selectedColor: Colors.blue,
                 onSelected: (bool isSelected){
@@ -111,7 +114,6 @@ class _TagChipsState extends State<TagChips> {
                     //選択する(isSelected=trueのとき、value = index)
                     value = isSelected ? index :0 ;
                     print('choicechip/value:$value/isSelected:$isSelected');
-                    onChoiceChipSelected(value);
                   });
                 },
 
@@ -134,28 +136,42 @@ class _TagChipsState extends State<TagChips> {
                   print('_chipLabels.addAll$_tagNameList');
 //TagDialogPage表示用チップリスト(完了前)List<Chip>を上記で重複を整理したchipLabelsを元に作成
                   // validation問題なければ仮Chipクラス(_tempoChips)へ格納
-                  //todo tempoChipsをList.generateに変更
+                  // tempoChipsをmapではなくList.generateに変更
                   _tempoChips=
-                      _tagNameList.map((value) {
-                      return ChoiceChip(
-                          label: Text(value),
-                          selected: _isInputChipSelected,
-                          onSelected: (selected){
-    setState(() {
-    _isInputChipSelected =selected;
-    });
-    },
-                          backgroundColor: Colors.transparent,
-                          selectedColor: Colors.blue,
-//                          deleteIcon: const Icon(Icons.highlight_off),
-//                          onDeleted: (){},
-//                          onPressed: (){
-//                            setState(() {
-//                              _selected = !_selected;
-//                            });
-//                          },
-                      );
-                    }).toList();
+//                      _tagNameList.map((value) {
+//                      return ChoiceChip(
+//                          label: Text(value),
+//                          selected: _isInputChipSelected,
+//                          onSelected: (selected){
+//    setState(() {
+//    _isInputChipSelected =selected;
+//    });
+//    },
+//                          backgroundColor: Colors.transparent,
+//                          selectedColor: Colors.blue,
+////                          deleteIcon: const Icon(Icons.highlight_off),
+////                          onDeleted: (){},
+////                          onPressed: (){
+////                            setState(() {
+////                              _selected = !_selected;
+////                            });
+////                          },
+//                      );
+//                    }).toList();
+
+                  List<ChoiceChip>.generate(_tagNameList.length, (index) {
+                    return ChoiceChip(
+                      label: Text(_tagNameList[index]),
+                      selected: value == index,//bool
+                      onSelected: (bool isSelected){
+                        setState(() {
+                          //選択する(isSelected=trueのとき、value = index)
+                          value = isSelected ? index :0 ;
+                          print('choicechip/value:$value/isSelected:$isSelected');
+                        });
+                      },
+                    );
+                  }).toList();
                   //tag_dialog_pageへタグタイトルのリスト上げる
                     widget.onSubmitted(_tagNameList);
 
@@ -166,10 +182,5 @@ class _TagChipsState extends State<TagChips> {
   );
   }
 
-  void onChoiceChipSelected(int value) {
-
-   print('$value番目のchoiceChip選択!!');
-//    widget.onChoiceChipSelected(value);
-  }
 }
 

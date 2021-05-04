@@ -53,9 +53,10 @@ class TagDialogPage extends StatelessWidget {
                 ),
               ),
 
+              //TagChips以外のところを押すとキーボード下げる
               TagChips(
                 tagList: viewModel.tagList,
-                displayChipList: viewModel.displayChipList,
+//                displayChipList: viewModel.displayChipList,
                 onSubmitted: (tagNameList){
 print('TagInputChip=>TagDialogへのtagNameList:$tagNameList');
         //tagNameListをviewModelへset
