@@ -1,7 +1,6 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/sub/tag_chips.dart';
-import 'package:compare_2way/views/compare/components/sub/tag_input_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -40,39 +39,44 @@ class TagDialogPage extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
-        body: SingleChildScrollView(//cupertino
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  'タグ',
-                  textAlign: TextAlign.left,
+        body: GestureDetector(//cupertino
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: SingleChildScrollView(//cupertino
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    'タグ',
+                    textAlign: TextAlign.left,
+                  ),
                 ),
-              ),
 
-              //TagChips以外のところを押すとキーボード下げる
-              TagChips(
-                tagList: viewModel.tagList,
+                //TagChips以外のところを押すとキーボード下げる
+                TagChips(
+                  tagList: viewModel.tagList,
 //                displayChipList: viewModel.displayChipList,
-                onSubmitted: (tagNameList){
+                  onSubmitted: (tagNameList){
 print('TagInputChip=>TagDialogへのtagNameList:$tagNameList');
-        //tagNameListをviewModelへset
-        final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-                          ..setTagNameList(tagNameList);
-                    },
-              ),
+          //tagNameListをviewModelへset
+          final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+                            ..setTagNameList(tagNameList);
+                      },
+                ),
 
-              const Text('この下にタグの候補表示'),
-              Chip(
-                label: Text('普通のchip'),
-              ),
+                const Text('この下にタグの候補表示'),
+                Chip(
+                  label: Text('普通のchip'),
+                ),
 
 
 
-            ],
+              ],
+            ),
           ),
         ),
       ),

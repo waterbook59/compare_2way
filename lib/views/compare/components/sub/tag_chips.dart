@@ -25,7 +25,7 @@ class _TagChipsState extends State<TagChips> {
 
   @override
   void initState() {
-  ///List<Tag>=>List<String>=>Set<String>へ変換したい
+  ///List<Tag>=>Set<String>とList<String>へ変換
     //型推論に失敗する時はmapの後ろに型を明示
     tagNameListSet =widget.tagList.map<String>(
       (tag)=>tag.tagTitle).toSet() ;//toListではなく、toSetに変更で一気に変換
@@ -34,30 +34,11 @@ class _TagChipsState extends State<TagChips> {
 
     ///_tempoChipsのList<ChoiceChip>への変換はinitState内ではなく、Wrap内で行わないと
     ///selectedが反映されない
-    //mapではなく、List.generateへ変更(news_feed参照)
-//    _tempoChips = List<ChoiceChip>.generate(
-//        widget.displayChipList.length, (int index) {
-//      return ChoiceChip(
-//        label: widget.displayChipList[index].label,
-//        selected: value == index,//bool
-//        selectedColor: Colors.blue,
-//        onSelected: (bool isSelected){
-//            setState(() {
-//              //選択する(isSelected=trueのとき、value = index)
-//              value = isSelected ? index :0 ;
-//              print('choicechip/value:$value/isSelected:$isSelected');
-//              onChoiceChipSelected(value);
-//            });
-//        },
-//
-//      );
-//    }).toList();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Row[tagChipList,TagInputChip]
   return Wrap(
     alignment: WrapAlignment.start,
     direction: Axis.horizontal,
@@ -73,13 +54,16 @@ class _TagChipsState extends State<TagChips> {
             children:
             ///_tempoChipsのList<InputChip>への変換はinitState内ではなく、Wrap内で行わないと
             ///selectedが反映されない、tagNameListからつくることでtempoChipsいらない
-            //todo onSelectedからdeleteIconがでるonPressedに変更
             List<InputChip>.generate(
                 _tagNameList.length, (int index) {
               return InputChip(
                 label: Text(_tagNameList[index]),
                 selected: value == index,//bool
-                selectedColor: Colors.blue,
+                selectedColor:  Colors.blue[100],
+                //デフォルトの選択時のチェックマーク消す
+                showCheckmark: false,
+                //選択時だけdeleteIconがでる
+                onDeleted: value == index ?(){}:null,
                 deleteIcon: const Icon(Icons.highlight_off),
                 onSelected: (bool isSelected){
                   setState(() {

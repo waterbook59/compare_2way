@@ -45,7 +45,7 @@ class CompareScreen extends StatelessWidget {
         await viewModel.setOverview(comparisonOverview);
         //viewModelで全てのAccordion中のリストとる
         await viewModel.getAccordionList(comparisonOverview.comparisonItemId);
-        //todo viewModelにcomparisonIdを元に取って来たtagListを格納
+        //viewModelにcomparisonIdを元に取って来たtagListを格納
         await viewModel.getTagList(comparisonOverview.comparisonItemId);
       });
       viewModel.compareScreenStatus = CompareScreenStatus.update;

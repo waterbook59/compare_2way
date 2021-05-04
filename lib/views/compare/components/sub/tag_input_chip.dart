@@ -37,7 +37,7 @@ class _TagInputChipState extends State<TagInputChip> {
       //todo 入力に合わせてChipのばしたい
     Chip(
       avatar: const Icon(Icons.add_circle_outline),
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.blue[100],
       label: Container(
         width: MediaQuery.of(context).size.width*0.3,
         child:
