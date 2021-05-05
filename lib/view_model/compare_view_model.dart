@@ -50,6 +50,8 @@ class CompareViewModel extends ChangeNotifier {
   List<Tag> get tagList => _tagList;
   List<Chip> _displayChipList = <Chip>[];
   List<Chip> get displayChipList =>_displayChipList;
+  List<Tag> _deleteTagList = <Tag>[];
+  List<Tag> get deleteTagList => _deleteTagList;
 
   ListEditMode editStatus = ListEditMode.display;
 
@@ -383,7 +385,7 @@ class CompareViewModel extends ChangeNotifier {
     //新規作成のときはnotifyListenersいらない？取得の時のみ？
   }
 
-  //tagChipsでtextField入力内容をviewModelへset
+  ///tagChipsでtextField入力内容をviewModelへset
   Future<void> setTagNameList(List<String> tagNameList)async{
     _tagNameList = tagNameList;
 //    print('compareViewModelへtagNameListをset:'
@@ -393,7 +395,12 @@ class CompareViewModel extends ChangeNotifier {
  ///List<Tag>取得(文頭取得用)
   Future<void> getTagList(String comparisonItemId) async{
     _tagList = await _compareRepository.getTagList(comparisonItemId);
-    print('viewModel.getTagList:${_tagList.map((e) => e.tagTitle)}');
+//    print('viewModel.getTagList:${_tagList.map((e) => e.tagTitle)}');
+    //_tagNameListにもtagTitle格納
+    _tagNameList = _tagList.map((tag) {
+      return tag.tagTitle;
+    }).toList();
+    print('viewModel.getTagList/_tagNameList:$_tagNameList');
     //List<Tag>=>List<Chips>へ変更
     _displayChipList = _tagList.map((tag) {
       return Chip(
@@ -401,6 +408,38 @@ class CompareViewModel extends ChangeNotifier {
       );
     }).toList();
     notifyListeners();
+  }
+
+  ///tagChipsで削除するTagを登録
+  Future<void> createDeleteList(
+      List<String> tempoDeleteLabels, String comparisonItemId) async{
+    final joinList = [...tempoDeleteLabels,..._tagNameList];
+//  final joinList= List<String>.from(tempoDeleteLabels)..addAll(_tagNameList);
+    //削除する項目(tempoDeleteLabels)とDB登録してある項目(_tagNameList)を結合して
+    //重複しているものだけを抜き出す（もっと簡単に抜き出す方法はないか??重複したものだけ抜き出せばlistsが登録にも使える）
+    print('viewModel.createDeleteList/joinList:$joinList');
+    final lists =<String>[];
+    joinList.map((title) {
+      if(lists.contains(title)){
+        final deleteTag = Tag(
+            comparisonItemId: comparisonItemId,
+            tagTitle: title,
+        );
+        deleteTagList.add(deleteTag);
+        print('deleteTagList:${deleteTagList.map((e) => e.tagTitle).toList()}');
+      }else{
+       lists.add(title);
+       print('delete以外のリスト：$lists');
+      }
+    }).toList();
+
+
+  }
+  ///tagDialogPageでList<tag>を削除
+  Future<void>deleteTag() async{
+    print('deleteTagメソッドで消すリスト:${deleteTagList.map((e) => e.tagTitle).toList()}');
+    await _compareRepository.deleteTag(deleteTagList);
+   _deleteTagList = [];
   }
 
 

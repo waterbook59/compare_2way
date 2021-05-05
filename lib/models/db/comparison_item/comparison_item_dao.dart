@@ -180,6 +180,15 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       (select(tagRecords)..where((tbl) =>
           tbl.comparisonItemId.equals(comparisonItemId))).get();
 
+  Future<void> deleteTagList(List<TagRecord> deleteTagRecordList){
+    deleteTagRecordList.forEach((tag) {
+      (delete(tagRecords)..where(
+              (tbl) => tbl.comparisonItemId.equals(tag.comparisonItemId)
+              & tbl.tagTitle.equals(tag.tagTitle))).go();
+    });
+    print('dao/削除');
+  }
+
 
 
 

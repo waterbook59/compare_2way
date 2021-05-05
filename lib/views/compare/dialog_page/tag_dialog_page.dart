@@ -28,12 +28,13 @@ class TagDialogPage extends StatelessWidget {
 //          ),
           trailing: CupertinoButton(
             child:const Text('完了'),
-            onPressed: (){
+            onPressed: ()async{
               //完了を押したらinput内容(List<String>)とcomparisonIdを基にtagクラスをDB登録
               //todo 完了時createdAtを更新
-        final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-                ..createTag(comparisonOverview)
-                ..getTagList(comparisonOverview.comparisonItemId);
+//        final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+                await viewModel.createTag(comparisonOverview);
+                await viewModel.deleteTag();
+                await viewModel.getTagList(comparisonOverview.comparisonItemId);
               Navigator.of(context).pop();
             },
           )
@@ -63,9 +64,16 @@ class TagDialogPage extends StatelessWidget {
                   onSubmitted: (tagNameList){
                     print('TagInputChip=>TagDialogへのtagNameList:$tagNameList');
                     //tagNameListをviewModelへset
-         final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-                            ..setTagNameList(tagNameList);
+//final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+                            viewModel.setTagNameList(tagNameList);
                       },
+                  onDeleted: (tempoDeleteLabels){
+                    print('tagDialogPage/tempoDeleteLabels:$tempoDeleteLabels');
+                    //削除項目抽出：viewModelにsetしてある
+                    // _tagNameListとtempoDeleteLabels比較し、重複しているものだけを抜き出す
+                    viewModel.createDeleteList(
+                        tempoDeleteLabels,comparisonOverview.comparisonItemId);
+                  },
                 ),
 
                 const Text('この下にタグの候補表示'),

@@ -269,6 +269,18 @@ class CompareRepository {
     return _tagList = tagRecordList.toTagList(tagRecordList);
   }
 
+///Delete List<Tag>
+  Future<void> deleteTag(List<Tag> deleteTagList) async{
+    try {
+      //List<Tag>=>List<TagRecord>へ変換保存
+      final deleteTagRecordList =
+      deleteTagList.toTagRecordList(deleteTagList);
+      await _comparisonItemDao.deleteTagList(deleteTagRecordList);
+    } on SqliteException catch (e) {
+      print('tagList削除時repositoryエラー:${e.toString()}');
+    }
+  }
+
 
 
 

@@ -5,10 +5,14 @@ import 'package:flutter/cupertino.dart';
 
 class TagChips extends StatefulWidget {
 
-  const TagChips({this.onSubmitted, this.tagList,
+  const TagChips({
+    this.tagList,
+    this.onSubmitted,
+    this.onDeleted,
   });
-  final ValueChanged<List<String>> onSubmitted;
   final List<Tag> tagList;
+  final ValueChanged<List<String>> onSubmitted;
+  final ValueChanged<List<String>> onDeleted;
 
   @override
   _TagChipsState createState() => _TagChipsState();
@@ -18,6 +22,7 @@ class _TagChipsState extends State<TagChips> {
 
   List<String> _tagNameList =<String>[];
   List<String> _tempoLabels = <String>[];
+  List<String> _tempoDeleteLabels =<String>[];
   Set<String>  tagNameListSet= <String>{};
   int value;
 
@@ -64,9 +69,15 @@ class _TagChipsState extends State<TagChips> {
                 onDeleted: value == index
                 ///仮でtagNameListから選択したindex番目タイトル削除
                     ?()=> setState(() {
+                  _tempoDeleteLabels.add(_tagNameList[index]);
+                  print('チップ削除後_tempoDeleteLabels:$_tempoDeleteLabels');
                     _tagNameList.removeAt(index);
                     print('チップ削除後_tagNameList:$_tagNameList');
                     tagNameListSet = _tagNameList.toSet();
+                    widget.onDeleted(_tempoDeleteLabels);
+                  //tempoDeleteLabelsクリア(しないとviewModelのDeleteLabelsに重複して登録されていく)
+                    _tempoDeleteLabels = [];
+
                   })
                     :null,
                 deleteIcon: const Icon(Icons.highlight_off),
@@ -77,7 +88,6 @@ class _TagChipsState extends State<TagChips> {
                     print('choicechip/value:$value/isSelected:$isSelected');
                   });
                 },
-
               );
             }).toList(),),
 
