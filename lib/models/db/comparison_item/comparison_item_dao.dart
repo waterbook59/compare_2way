@@ -189,6 +189,11 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     });
     print('dao/削除');
   }
+  ///削除：List<Tag> CompareScreenを削除時、comparisonItemIdのtag全削除
+  Future<void> deleteAllTagList(String comparisonItemId) =>
+      (delete(tagRecords)
+        ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
+          .go();
 
 
 

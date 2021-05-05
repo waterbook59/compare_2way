@@ -146,8 +146,7 @@ class SingleListPage extends StatelessWidget {
                                 final overview =
                                     compareViewModel.comparisonOverviews[index];
                                 return
-
-                                    ///checkかラジオボタンを押すと右からSlidableが出てきて削除ボタン表示される
+                                  ///checkかラジオボタンを押すと右からSlidableが出てきて削除ボタン表示される
                                     CheckboxListTile(
                                   title: Text(overview.itemTitle),
                                   //conclusionはConsumerで初回描画されない
