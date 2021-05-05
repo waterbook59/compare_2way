@@ -31,7 +31,6 @@ class TagDialogPage extends StatelessWidget {
             onPressed: ()async{
               //完了を押したらinput内容(List<String>)とcomparisonIdを基にtagクラスをDB登録
               //todo 完了時createdAtを更新
-//        final viewModel = Provider.of<CompareViewModel>(context, listen: false)
                 await viewModel.createTag(comparisonOverview);
                 await viewModel.deleteTag();
                 await viewModel.getTagList(comparisonOverview.comparisonItemId);
@@ -64,7 +63,6 @@ class TagDialogPage extends StatelessWidget {
                   onSubmitted: (tagNameList){
                     print('TagInputChip=>TagDialogへのtagNameList:$tagNameList');
                     //tagNameListをviewModelへset
-//final viewModel = Provider.of<CompareViewModel>(context, listen: false)
                             viewModel.setTagNameList(tagNameList);
                       },
                   onDeleted: (tempoDeleteLabels){

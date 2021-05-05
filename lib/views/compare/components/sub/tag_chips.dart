@@ -57,6 +57,7 @@ class _TagChipsState extends State<TagChips> {
             children:
             ///List<InputChip>への変換はinitState内ではなく、Wrap内で行わないとselectedが反映されない
             ///tagNameListからつくることでtempoChipsいらない
+            //todo 長すぎるチップでも全部見えるようにする
             List<InputChip>.generate(
                 _tagNameList.length, (int index) {
               return InputChip(
@@ -85,7 +86,6 @@ class _TagChipsState extends State<TagChips> {
                   setState(() {
                     //選択する(isSelected=trueのとき、value = index)
                     value = isSelected ? index :0 ;
-                    print('choicechip/value:$value/isSelected:$isSelected');
                   });
                 },
               );

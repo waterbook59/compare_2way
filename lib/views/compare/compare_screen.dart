@@ -298,7 +298,7 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(
                   height: 4,
                 ),
-                 //todo SelectorでDBから取って来たtagList渡す
+                 // SelectorでDBから取って来たtagList=>displayList渡す
                  Selector<CompareViewModel,List<Chip>>(
                    selector: (context, viewModel) => viewModel.displayChipList,
                      builder: (context, displayChipList, child) {

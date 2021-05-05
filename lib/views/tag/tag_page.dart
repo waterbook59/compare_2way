@@ -8,11 +8,13 @@ import 'package:flutter/cupertino.dart';
 class TagPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
     final accentColor = CupertinoTheme.of(context).primaryContrastingColor;
 
 
     return CupertinoPageScaffold(
-        navigationBar: const CupertinoNavigationBar(
+        navigationBar:  CupertinoNavigationBar(
+          backgroundColor: primaryColor,
           middle: const Text(
             'タグ',
             style: middleTextStyle,

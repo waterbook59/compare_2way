@@ -437,7 +437,8 @@ class CompareViewModel extends ChangeNotifier {
   }
   ///tagDialogPageでList<tag>を削除
   Future<void>deleteTag() async{
-    print('deleteTagメソッドで消すリスト:${deleteTagList.map((e) => e.tagTitle).toList()}');
+    print('deleteTagメソッドで消すリスト:'
+        '${deleteTagList.map((e) => e.tagTitle).toList()}');
     await _compareRepository.deleteTag(deleteTagList);
    _deleteTagList = [];
   }

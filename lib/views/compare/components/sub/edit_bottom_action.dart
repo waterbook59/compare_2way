@@ -1,4 +1,5 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/home_screen.dart';
 ///CupertinoNavigationBar内ではCupertinoActionSheetAction
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
@@ -98,19 +99,16 @@ class EditBottomAction extends StatelessWidget {
                     isDestructiveAction: true,
                     onPressed: (){
         final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-                      //comparisonOverviewは削除できているが、Way1Merit,Way2Meritは削除できていない
                         ..deleteList(comparisonOverview.comparisonItemId);
                       Navigator.pop(context);
                       Fluttertoast.showToast(
                         msg: '削除完了',
                       );
                       // Navigator.popで画面おちる場合あり、pushReplacement変更
-//        Navigator.pop(context);
-//todo そのまま戻るとBottomNavigationBar消える(HomeScreen=>SingleListPage?)
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute<void>(
-                              builder: (context) => SingleListPage(
+                              builder: (context) => HomeScreen(
                               )));
                     },
                   ),
