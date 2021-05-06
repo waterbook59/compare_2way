@@ -79,7 +79,8 @@ class TagRecords extends Table{
   IntColumn get tagId => integer().nullable()();
   TextColumn get comparisonItemId => text()();
   TextColumn get tagTitle => text()();
-
+  DateTimeColumn get createdAt => dateTime().nullable()();
+  TextColumn get createAtToString => text()();
   //tagTitleの重複登録必要なのでprimaryKeyには設定しない
   @override
   Set<Column> get primaryKey => {tagId};

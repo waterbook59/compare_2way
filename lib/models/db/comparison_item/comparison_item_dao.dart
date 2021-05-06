@@ -176,10 +176,15 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     }
 
 
-  ///読込：comparisonItemIdからList<TagListRecord>をとってくる
+  ///読込：comparisonItemIdからList<TagListRecord>を登録した古いもの順(asc)とってくる
   Future<List<TagRecord>> getTagList(String comparisonItemId) =>
-      (select(tagRecords)..where((tbl) =>
-          tbl.comparisonItemId.equals(comparisonItemId))).get();
+      (select(tagRecords)
+        ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId))
+        //asc時間古い順
+      ///createdAtだと登録桁数が少なすぎて2つ以上登録の場合綺麗なasc順にならないので、createAtToString順でとってくる
+        ..orderBy([(t)=>OrderingTerm(expression:
+        t.createAtToString,mode: OrderingMode.asc)])
+      ).get();
 
   ///削除：List<Tag> comparisonItemIdとtagTitleの２つの条件のもののみ削除
   Future<void> deleteTagList(List<TagRecord> deleteTagRecordList){

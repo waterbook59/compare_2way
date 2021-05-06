@@ -262,6 +262,8 @@ class CompareRepository {
         return Tag(
           comparisonItemId: comparisonItemId,
           tagTitle: name,
+          createdAt: DateTime.now(),
+          createAtToString: DateTime.now().toIso8601String(),
         );
       }).toList();
       print('extractionTagList:$tagList');
@@ -289,6 +291,7 @@ class CompareRepository {
   Future<List<Tag>> getTagList(String comparisonItemId) async{
     //comparisonItemIdを元に得られたList<TagRecord>をList<Tag>へ変換する
     final tagRecordList = await _comparisonItemDao.getTagList(comparisonItemId);
+    print('repo/getTagList/tagRecordList${tagRecordList.map((e) => e.tagTitle)}');
     return _tagList = tagRecordList.toTagList(tagRecordList);
   }
 

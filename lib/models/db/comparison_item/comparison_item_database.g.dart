@@ -1742,19 +1742,30 @@ class TagRecord extends DataClass implements Insertable<TagRecord> {
   final int tagId;
   final String comparisonItemId;
   final String tagTitle;
+  final DateTime createdAt;
+  final String createAtToString;
   TagRecord(
-      {this.tagId, @required this.comparisonItemId, @required this.tagTitle});
+      {this.tagId,
+      @required this.comparisonItemId,
+      @required this.tagTitle,
+      this.createdAt,
+      @required this.createAtToString});
   factory TagRecord.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
+    final dateTimeType = db.typeSystem.forDartType<DateTime>();
     return TagRecord(
       tagId: intType.mapFromDatabaseResponse(data['${effectivePrefix}tag_id']),
       comparisonItemId: stringType.mapFromDatabaseResponse(
           data['${effectivePrefix}comparison_item_id']),
       tagTitle: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}tag_title']),
+      createdAt: dateTimeType
+          .mapFromDatabaseResponse(data['${effectivePrefix}created_at']),
+      createAtToString: stringType.mapFromDatabaseResponse(
+          data['${effectivePrefix}create_at_to_string']),
     );
   }
   @override
@@ -1769,6 +1780,12 @@ class TagRecord extends DataClass implements Insertable<TagRecord> {
     if (!nullToAbsent || tagTitle != null) {
       map['tag_title'] = Variable<String>(tagTitle);
     }
+    if (!nullToAbsent || createdAt != null) {
+      map['created_at'] = Variable<DateTime>(createdAt);
+    }
+    if (!nullToAbsent || createAtToString != null) {
+      map['create_at_to_string'] = Variable<String>(createAtToString);
+    }
     return map;
   }
 
@@ -1782,6 +1799,12 @@ class TagRecord extends DataClass implements Insertable<TagRecord> {
       tagTitle: tagTitle == null && nullToAbsent
           ? const Value.absent()
           : Value(tagTitle),
+      createdAt: createdAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdAt),
+      createAtToString: createAtToString == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createAtToString),
     );
   }
 
@@ -1792,6 +1815,8 @@ class TagRecord extends DataClass implements Insertable<TagRecord> {
       tagId: serializer.fromJson<int>(json['tagId']),
       comparisonItemId: serializer.fromJson<String>(json['comparisonItemId']),
       tagTitle: serializer.fromJson<String>(json['tagTitle']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      createAtToString: serializer.fromJson<String>(json['createAtToString']),
     );
   }
   @override
@@ -1801,72 +1826,104 @@ class TagRecord extends DataClass implements Insertable<TagRecord> {
       'tagId': serializer.toJson<int>(tagId),
       'comparisonItemId': serializer.toJson<String>(comparisonItemId),
       'tagTitle': serializer.toJson<String>(tagTitle),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'createAtToString': serializer.toJson<String>(createAtToString),
     };
   }
 
-  TagRecord copyWith({int tagId, String comparisonItemId, String tagTitle}) =>
+  TagRecord copyWith(
+          {int tagId,
+          String comparisonItemId,
+          String tagTitle,
+          DateTime createdAt,
+          String createAtToString}) =>
       TagRecord(
         tagId: tagId ?? this.tagId,
         comparisonItemId: comparisonItemId ?? this.comparisonItemId,
         tagTitle: tagTitle ?? this.tagTitle,
+        createdAt: createdAt ?? this.createdAt,
+        createAtToString: createAtToString ?? this.createAtToString,
       );
   @override
   String toString() {
     return (StringBuffer('TagRecord(')
           ..write('tagId: $tagId, ')
           ..write('comparisonItemId: $comparisonItemId, ')
-          ..write('tagTitle: $tagTitle')
+          ..write('tagTitle: $tagTitle, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('createAtToString: $createAtToString')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => $mrjf($mrjc(
-      tagId.hashCode, $mrjc(comparisonItemId.hashCode, tagTitle.hashCode)));
+      tagId.hashCode,
+      $mrjc(
+          comparisonItemId.hashCode,
+          $mrjc(tagTitle.hashCode,
+              $mrjc(createdAt.hashCode, createAtToString.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is TagRecord &&
           other.tagId == this.tagId &&
           other.comparisonItemId == this.comparisonItemId &&
-          other.tagTitle == this.tagTitle);
+          other.tagTitle == this.tagTitle &&
+          other.createdAt == this.createdAt &&
+          other.createAtToString == this.createAtToString);
 }
 
 class TagRecordsCompanion extends UpdateCompanion<TagRecord> {
   final Value<int> tagId;
   final Value<String> comparisonItemId;
   final Value<String> tagTitle;
+  final Value<DateTime> createdAt;
+  final Value<String> createAtToString;
   const TagRecordsCompanion({
     this.tagId = const Value.absent(),
     this.comparisonItemId = const Value.absent(),
     this.tagTitle = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.createAtToString = const Value.absent(),
   });
   TagRecordsCompanion.insert({
     this.tagId = const Value.absent(),
     @required String comparisonItemId,
     @required String tagTitle,
+    this.createdAt = const Value.absent(),
+    @required String createAtToString,
   })  : comparisonItemId = Value(comparisonItemId),
-        tagTitle = Value(tagTitle);
+        tagTitle = Value(tagTitle),
+        createAtToString = Value(createAtToString);
   static Insertable<TagRecord> custom({
     Expression<int> tagId,
     Expression<String> comparisonItemId,
     Expression<String> tagTitle,
+    Expression<DateTime> createdAt,
+    Expression<String> createAtToString,
   }) {
     return RawValuesInsertable({
       if (tagId != null) 'tag_id': tagId,
       if (comparisonItemId != null) 'comparison_item_id': comparisonItemId,
       if (tagTitle != null) 'tag_title': tagTitle,
+      if (createdAt != null) 'created_at': createdAt,
+      if (createAtToString != null) 'create_at_to_string': createAtToString,
     });
   }
 
   TagRecordsCompanion copyWith(
       {Value<int> tagId,
       Value<String> comparisonItemId,
-      Value<String> tagTitle}) {
+      Value<String> tagTitle,
+      Value<DateTime> createdAt,
+      Value<String> createAtToString}) {
     return TagRecordsCompanion(
       tagId: tagId ?? this.tagId,
       comparisonItemId: comparisonItemId ?? this.comparisonItemId,
       tagTitle: tagTitle ?? this.tagTitle,
+      createdAt: createdAt ?? this.createdAt,
+      createAtToString: createAtToString ?? this.createAtToString,
     );
   }
 
@@ -1882,6 +1939,12 @@ class TagRecordsCompanion extends UpdateCompanion<TagRecord> {
     if (tagTitle.present) {
       map['tag_title'] = Variable<String>(tagTitle.value);
     }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (createAtToString.present) {
+      map['create_at_to_string'] = Variable<String>(createAtToString.value);
+    }
     return map;
   }
 
@@ -1890,7 +1953,9 @@ class TagRecordsCompanion extends UpdateCompanion<TagRecord> {
     return (StringBuffer('TagRecordsCompanion(')
           ..write('tagId: $tagId, ')
           ..write('comparisonItemId: $comparisonItemId, ')
-          ..write('tagTitle: $tagTitle')
+          ..write('tagTitle: $tagTitle, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('createAtToString: $createAtToString')
           ..write(')'))
         .toString();
   }
@@ -1939,8 +2004,35 @@ class $TagRecordsTable extends TagRecords
     );
   }
 
+  final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
+  GeneratedDateTimeColumn _createdAt;
   @override
-  List<GeneratedColumn> get $columns => [tagId, comparisonItemId, tagTitle];
+  GeneratedDateTimeColumn get createdAt => _createdAt ??= _constructCreatedAt();
+  GeneratedDateTimeColumn _constructCreatedAt() {
+    return GeneratedDateTimeColumn(
+      'created_at',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _createAtToStringMeta =
+      const VerificationMeta('createAtToString');
+  GeneratedTextColumn _createAtToString;
+  @override
+  GeneratedTextColumn get createAtToString =>
+      _createAtToString ??= _constructCreateAtToString();
+  GeneratedTextColumn _constructCreateAtToString() {
+    return GeneratedTextColumn(
+      'create_at_to_string',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns =>
+      [tagId, comparisonItemId, tagTitle, createdAt, createAtToString];
   @override
   $TagRecordsTable get asDslTable => this;
   @override
@@ -1969,6 +2061,18 @@ class $TagRecordsTable extends TagRecords
           tagTitle.isAcceptableOrUnknown(data['tag_title'], _tagTitleMeta));
     } else if (isInserting) {
       context.missing(_tagTitleMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at'], _createdAtMeta));
+    }
+    if (data.containsKey('create_at_to_string')) {
+      context.handle(
+          _createAtToStringMeta,
+          createAtToString.isAcceptableOrUnknown(
+              data['create_at_to_string'], _createAtToStringMeta));
+    } else if (isInserting) {
+      context.missing(_createAtToStringMeta);
     }
     return context;
   }

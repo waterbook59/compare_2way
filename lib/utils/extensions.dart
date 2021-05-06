@@ -226,6 +226,8 @@ extension ConvertToTagRecordList on List<Tag>{
           tagId: Uuid().hashCode,
             tagTitle:tag.tagTitle ?? '',
             comparisonItemId:tag.comparisonItemId ?? '',
+            createdAt: tag.createdAt,
+            createAtToString: tag.createAtToString,
           );
     }).toList();
     return tagRecordList;
@@ -241,6 +243,8 @@ extension ConvertToTagList on List<TagRecord>{
         tagId: tagRecordSingle.tagId,
         comparisonItemId: tagRecordSingle.comparisonItemId,
         tagTitle: tagRecordSingle.tagTitle,
+        createdAt: tagRecordSingle.createdAt,
+          createAtToString: tagRecordSingle.createAtToString,
       );
     }).toList();
     return tagList;

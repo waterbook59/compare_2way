@@ -394,9 +394,7 @@ class CompareViewModel extends ChangeNotifier {
     _tagList = await _compareRepository.getTagList(comparisonItemId);
 //    print('viewModel.getTagList:${_tagList.map((e) => e.tagTitle)}');
     //_tagNameListにもtagTitle格納
-    _tagNameList = _tagList.map((tag) {
-      return tag.tagTitle;
-    }).toList();
+    _tagNameList = _tagList.map((tag)=>tag.tagTitle).toList();
     print('viewModel.getTagList/_tagNameList:$_tagNameList');
     //List<Tag>=>List<Chips>へ変更
     _displayChipList = _tagList.map((tag) {
