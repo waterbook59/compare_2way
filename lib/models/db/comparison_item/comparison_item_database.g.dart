@@ -1974,7 +1974,7 @@ class $TagRecordsTable extends TagRecords
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {tagTitle};
+  Set<GeneratedColumn> get $primaryKey => {tagId};
   @override
   TagRecord map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;

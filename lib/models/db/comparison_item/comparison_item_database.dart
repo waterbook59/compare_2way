@@ -80,8 +80,9 @@ class TagRecords extends Table{
   TextColumn get comparisonItemId => text()();
   TextColumn get tagTitle => text()();
 
+  //tagTitleの重複登録必要なのでprimaryKeyには設定しない
   @override
-  Set<Column> get primaryKey => {tagTitle};
+  Set<Column> get primaryKey => {tagId};
 }
 
 

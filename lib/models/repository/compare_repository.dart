@@ -4,6 +4,7 @@ import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_dao.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_database.dart';
 import 'package:compare_2way/utils/extensions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:moor/ffi.dart';
 import 'package:moor/moor.dart';
 
@@ -241,13 +242,42 @@ class CompareRepository {
 
   ///新規作成 List<Tag>
   //todo タグ追加したらcreatedAt変更
-  //tagTitleをprimaryKeyに設定して重複登録回避
-  Future<void> createTag(List<Tag> tagList) async{
+  ///同一comparisonItemId & 同一tagTitleは登録しないが、同一tagTitleは登録できるように変更
+  Future<void> createTag(List<String> tagNameList, String comparisonItemId)
+  async {
     try {
-      //List<Tag>=>List<TagRecord>へ変換保存
-      final tagRecordList =
-      tagList.toTagRecordList(tagList);
-      //insetよりもinsertOnConflictUpdateが良い(毎回UNIQUE constraint failedエラー発生するので)
+      ///既に登録されているTagListをgetし、Setへ変換
+      final dbTagList = await _comparisonItemDao.getTagList(comparisonItemId);
+      final dbTitleSet = dbTagList.map((dbTag)=>dbTag.tagTitle).toSet();
+      print('dbTitleSet:$dbTitleSet');
+
+      //tagNameListをSetへ変換し、DB登録しているタグを削除
+      final tagNameSet = tagNameList.toSet()
+      ..removeAll(dbTitleSet);
+      print('extractionSet:$tagNameSet');
+      //DBと重複のない抽出したtagNameSetをList<Tag>へ変換
+      final tagList = tagNameSet.map((name) {
+        return Tag(
+          comparisonItemId: comparisonItemId,
+          tagTitle: name,
+        );
+      }).toList();
+      print('extractionTagList:$tagList');
+
+      //最終的に登録するList<Tag>ができたらList<TagRecord>へ変換する
+      final tagRecordList = tagList.toTagRecordList(tagList);
+
+
+      ///2つのリストから重複削除removeAllはSetでしか使えない
+//      tagRecordTitleList.removeAll(dbTitleSet);
+//      print('extractionSet:$tagRecordTitleList');
+      ///extractionSet=>List<Tag>に変換して登録
+
+      //2つのリストを比較しようとしてforEach内でforEachしようとしたけど、動かない
+
+      ///(別のリストのタグにも使うのでtagTitleの重複登録は必要)
+      //primaryKeyで弾かれるものも含めての登録は、insetよりも
+      // insertOnConflictUpdateが良い(毎回UNIQUE constraint failedエラー発生するので)
       await _comparisonItemDao
           .insertTagRecordList(tagRecordList);
 

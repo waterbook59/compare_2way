@@ -155,14 +155,15 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   ///1行ずつdao側でinsertOnConflictUpdate
   Future<void> insertTagRecordList(List<TagRecord> tagRecordList) async{
     
-//    await batch((batch) {
-//      batch.insertAll(tagRecords, tagRecordList);
-//    });
+    await batch((batch) {
+      batch.insertAll(tagRecords, tagRecordList);
+    });
   print('dao/insertTagRecordList:$tagRecordList');
-  //daoの中でmapしても登録されない
-   tagRecordList.forEach(
-     into(tagRecords).insertOnConflictUpdate
-  );
+
+//   tagRecordList.forEach(
+//     into(tagRecords).insertOnConflictUpdate
+//    );
+   
   }
 
   ///新規作成:List<TagRecord> 重複回避:

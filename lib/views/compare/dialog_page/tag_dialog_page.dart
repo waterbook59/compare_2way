@@ -31,6 +31,8 @@ class TagDialogPage extends StatelessWidget {
             onPressed: ()async{
               //完了を押したらinput内容(List<String>)とcomparisonIdを基にtagクラスをDB登録
               //todo 完了時createdAtを更新
+              ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
+              print('tagDialogPageの完了ボタン！');
                 await viewModel.createTag(comparisonOverview);
                 await viewModel.deleteTag();
                 await viewModel.getTagList(comparisonOverview.comparisonItemId);

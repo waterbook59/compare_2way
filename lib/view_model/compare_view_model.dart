@@ -370,8 +370,9 @@ class CompareViewModel extends ChangeNotifier {
   }
 
  ///tagDialogPageでList<tag>を新規登録
+  ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
   Future<void> createTag(ComparisonOverview comparisonOverview) async{
-    print('createTag:$_tagNameList&${comparisonOverview.comparisonItemId}');
+    print('vieModel/createTag:$_tagNameList&Id:${comparisonOverview.comparisonItemId}');
     //完了を押したらinput内容(List<String>)とcomparisonIdを基にList<Tag>クラスをDB登録
     //comparisonItemIdとtagNameListからList<Tag>作成
     final tagList = _tagNameList.map((name) {
@@ -381,7 +382,8 @@ class CompareViewModel extends ChangeNotifier {
       );
     }).toList();
     //tagListをrepositoryへ
-    await _compareRepository.createTag(tagList);
+    //todo tagListはどうせほどくので、_tagNameListを渡せば良いと思う
+    await _compareRepository.createTag(_tagNameList,comparisonOverview.comparisonItemId);
     //新規作成のときはnotifyListenersいらない？取得の時のみ？
   }
 
@@ -416,7 +418,7 @@ class CompareViewModel extends ChangeNotifier {
     final joinList = [...tempoDeleteLabels,..._tagNameList];
 //  final joinList= List<String>.from(tempoDeleteLabels)..addAll(_tagNameList);
     //削除する項目(tempoDeleteLabels)とDB登録してある項目(_tagNameList)を結合して
-    //重複しているものだけを抜き出す（もっと簡単に抜き出す方法はないか??重複したものだけ抜き出せばlistsが登録にも使える）
+    //todo 重複しているものだけを抜き出す（結合いらない、tempoDeleteLabelsと_tagNameListを直接比較 repository/createTag参照）
     print('viewModel.createDeleteList/joinList:$joinList');
     final lists =<String>[];
     joinList.map((title) {
