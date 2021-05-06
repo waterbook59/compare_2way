@@ -374,16 +374,11 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> createTag(ComparisonOverview comparisonOverview) async{
     print('vieModel/createTag:$_tagNameList&Id:${comparisonOverview.comparisonItemId}');
     //完了を押したらinput内容(List<String>)とcomparisonIdを基にList<Tag>クラスをDB登録
-    //comparisonItemIdとtagNameListからList<Tag>作成
-    final tagList = _tagNameList.map((name) {
-      return Tag(
-        comparisonItemId: comparisonOverview.comparisonItemId,
-        tagTitle: name,
-      );
-    }).toList();
-    //tagListをrepositoryへ
-    //todo tagListはどうせほどくので、_tagNameListを渡せば良いと思う
-    await _compareRepository.createTag(_tagNameList,comparisonOverview.comparisonItemId);
+    //List<Tag>作成はDBでの重複削除リスト作成後にrepositoryで行う
+
+    //_tagNameListをrepositoryへ
+    await _compareRepository.createTag(
+        _tagNameList,comparisonOverview.comparisonItemId);
     //新規作成のときはnotifyListenersいらない？取得の時のみ？
   }
 

@@ -252,10 +252,12 @@ class CompareRepository {
       print('dbTitleSet:$dbTitleSet');
 
       //tagNameListをSetへ変換し、DB登録しているタグを削除
+      ///2つのリストから重複削除removeAllはSetでしか使えない
       final tagNameSet = tagNameList.toSet()
       ..removeAll(dbTitleSet);
       print('extractionSet:$tagNameSet');
       //DBと重複のない抽出したtagNameSetをList<Tag>へ変換
+      ///extractionSet(tagNameSet)=>List<Tag>に変換して登録
       final tagList = tagNameSet.map((name) {
         return Tag(
           comparisonItemId: comparisonItemId,
@@ -268,10 +270,6 @@ class CompareRepository {
       final tagRecordList = tagList.toTagRecordList(tagList);
 
 
-      ///2つのリストから重複削除removeAllはSetでしか使えない
-//      tagRecordTitleList.removeAll(dbTitleSet);
-//      print('extractionSet:$tagRecordTitleList');
-      ///extractionSet=>List<Tag>に変換して登録
 
       //2つのリストを比較しようとしてforEach内でforEachしようとしたけど、動かない
 
@@ -281,12 +279,6 @@ class CompareRepository {
       await _comparisonItemDao
           .insertTagRecordList(tagRecordList);
 
-      //mapだとうまくいかずforEach
-//      ..forEach(
-//               (tagRecord) async{
-//                 await   _comparisonItemDao.createOrUpdateTag(tagRecord);
-//      }
-//      );
       print('repository:tagListを新規登録');
     } on SqliteException catch (e) {
       print('tagList登録時repositoryエラー:${e.toString()}');
