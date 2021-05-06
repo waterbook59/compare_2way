@@ -5,10 +5,10 @@ enum ListEditMode{
   edit
 }
 
-enum ItemEditMode{
-  add,
-  edit
-}
+//enum ItemEditMode{
+//  add,
+//  edit
+//}
 
 enum CompareScreenStatus {
   set,

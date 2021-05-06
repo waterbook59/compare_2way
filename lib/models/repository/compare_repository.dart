@@ -1,9 +1,10 @@
-import 'package:compare_2way/data_models/comparison_item.dart';
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
+import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_dao.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_database.dart';
 import 'package:compare_2way/utils/extensions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:moor/ffi.dart';
 import 'package:moor/moor.dart';
 
@@ -16,6 +17,7 @@ class CompareRepository {
   ComparisonOverview _overviewResult;
   List<Way1Merit> _way1MeritList = <Way1Merit>[];
   List<Way2Merit> _way2MeritList = <Way2Merit>[];
+  List<Tag> _tagList = <Tag>[];
 
 
   ///新規作成 comparisonOverview
@@ -116,11 +118,12 @@ class CompareRepository {
   ///Delete
   Future<void> deleteList(String comparisonItemId) async {
 
-//    //todo Merit/Dmerit、Tagのリストも同時に削除必要(transaction)
+//    //todo Merit/Dmeritも同時に削除必要(transaction)
 //    await _comparisonItemDao.deleteListAll(comparisonItemId);
     await _comparisonItemDao.deleteList(comparisonItemId);
     await _comparisonItemDao.deleteWay1MeritList(comparisonItemId);
     await _comparisonItemDao.deleteWay2MeritList(comparisonItemId);
+    await _comparisonItemDao.deleteAllTagList(comparisonItemId);
     print('データ削除完了');
   }
 
@@ -235,6 +238,73 @@ class CompareRepository {
   ///リスト1行削除:Way2Merit
   Future<void> deleteWay2Merit(int way2MeritId) async {
     await _comparisonItemDao.deleteWay2Merit(way2MeritId);
+  }
+
+  ///新規作成 List<Tag>
+  //todo タグ追加したらcreatedAt変更
+  ///同一comparisonItemId & 同一tagTitleは登録しないが、同一tagTitleは登録できるように変更
+  Future<void> createTag(List<String> tagNameList, String comparisonItemId)
+  async {
+    try {
+      ///既に登録されているTagListをgetし、Setへ変換
+      final dbTagList = await _comparisonItemDao.getTagList(comparisonItemId);
+      final dbTitleSet = dbTagList.map((dbTag)=>dbTag.tagTitle).toSet();
+      print('dbTitleSet:$dbTitleSet');
+
+      //tagNameListをSetへ変換し、DB登録しているタグを削除
+      ///2つのリストから重複削除removeAllはSetでしか使えない
+      final tagNameSet = tagNameList.toSet()
+      ..removeAll(dbTitleSet);
+      print('extractionSet:$tagNameSet');
+      //DBと重複のない抽出したtagNameSetをList<Tag>へ変換
+      ///extractionSet(tagNameSet)=>List<Tag>に変換して登録
+      final tagList = tagNameSet.map((name) {
+        return Tag(
+          comparisonItemId: comparisonItemId,
+          tagTitle: name,
+          createdAt: DateTime.now(),
+          createAtToString: DateTime.now().toIso8601String(),
+        );
+      }).toList();
+      print('extractionTagList:$tagList');
+
+      //最終的に登録するList<Tag>ができたらList<TagRecord>へ変換する
+      final tagRecordList = tagList.toTagRecordList(tagList);
+
+
+
+      //2つのリストを比較しようとしてforEach内でforEachしようとしたけど、動かない
+
+      ///(別のリストのタグにも使うのでtagTitleの重複登録は必要)
+      //primaryKeyで弾かれるものも含めての登録は、insetよりも
+      // insertOnConflictUpdateが良い(毎回UNIQUE constraint failedエラー発生するので)
+      await _comparisonItemDao
+          .insertTagRecordList(tagRecordList);
+
+      print('repository:tagListを新規登録');
+    } on SqliteException catch (e) {
+      print('tagList登録時repositoryエラー:${e.toString()}');
+    }
+  }
+
+  ///Read List<Tag>
+  Future<List<Tag>> getTagList(String comparisonItemId) async{
+    //comparisonItemIdを元に得られたList<TagRecord>をList<Tag>へ変換する
+    final tagRecordList = await _comparisonItemDao.getTagList(comparisonItemId);
+    print('repo/getTagList/tagRecordList${tagRecordList.map((e) => e.tagTitle)}');
+    return _tagList = tagRecordList.toTagList(tagRecordList);
+  }
+
+///Delete List<Tag>
+  Future<void> deleteTag(List<Tag> deleteTagList) async{
+    try {
+      //List<Tag>=>List<TagRecord>へ変換保存
+      final deleteTagRecordList =
+      deleteTagList.toTagRecordList(deleteTagList);
+      await _comparisonItemDao.deleteTagList(deleteTagRecordList);
+    } on SqliteException catch (e) {
+      print('tagList削除時repositoryエラー:${e.toString()}');
+    }
   }
 
 

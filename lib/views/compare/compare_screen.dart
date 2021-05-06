@@ -4,25 +4,24 @@ import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/accordion_part.dart';
+import 'package:compare_2way/views/compare/components/tag_chip_part.dart';
 import 'package:compare_2way/views/compare/components/conclusion_input_part.dart';
-import 'package:compare_2way/views/compare/components/desc_form.dart';
-import 'package:compare_2way/views/compare/components/edit_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
-import 'components/edit_bottom_action.dart';
+import 'components/sub/edit_bottom_action.dart';
 import 'components/icon_title.dart';
 import 'components/table_part.dart';
 
 ///Table=>conclusionの順で編集するとTableリセットされる問題を解決
 class CompareScreen extends StatelessWidget {
-  const CompareScreen({this.itemEditMode, this.comparisonOverview});
+  const CompareScreen({
+    this.comparisonOverview});
 
   final ComparisonOverview comparisonOverview;
-  //todo CompareScreenStatusで設定してるので、削除
-  final ItemEditMode itemEditMode;
+
 
   //todo itemsはList<Merit>に変更
   static List<String> items = [
@@ -46,9 +45,12 @@ class CompareScreen extends StatelessWidget {
         await viewModel.setOverview(comparisonOverview);
         //viewModelで全てのAccordion中のリストとる
         await viewModel.getAccordionList(comparisonOverview.comparisonItemId);
+        //viewModelにcomparisonIdを元に取って来たtagListを格納
+        await viewModel.getTagList(comparisonOverview.comparisonItemId);
       });
       viewModel.compareScreenStatus = CompareScreenStatus.update;
     }
+///リストの中身を見るのにtoSet使うと良いかも（map((e)=>print).toListが確実）
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -79,6 +81,7 @@ class CompareScreen extends StatelessWidget {
           ),
         ]),
       ),
+      ///Fab使わないけどScaffold必須
       child: Scaffold(
         body: GestureDetector(
           onTap: () {
@@ -121,7 +124,7 @@ class CompareScreen extends StatelessWidget {
                             (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
                           if (snapshot.hasData && snapshot.data.isNotEmpty) {
                             //todo 変更時、createdAtを更新
-                          print('CompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画');
+//                          print('CompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画');
                             return AccordionPart(
                               title: way1Title,
                               displayList: DisplayList.way1Merit,
@@ -251,6 +254,7 @@ class CompareScreen extends StatelessWidget {
               ///テーブル
                 TablePart(
                   way1Title: comparisonOverview.way1Title,
+                  //way1Merit以外はTablePart内でviewModelへsetしている
                   way1MeritChanged: (newValue) =>
                       _setWay1Merit(context, newValue),
                   way1MeritEvaluate: comparisonOverview.way1MeritEvaluate,
@@ -294,11 +298,17 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(
                   height: 4,
                 ),
-                const IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: null,
-                ),
+                 // SelectorでDBから取って来たtagList=>displayList渡す
+                 Selector<CompareViewModel,List<Chip>>(
+                   selector: (context, viewModel) => viewModel.displayChipList,
+                     builder: (context, displayChipList, child) {
+                       return TagChipPart(
+                         comparisonOverview: comparisonOverview,
+                         displayChipList:displayChipList,);
+                     }
+                 ),
               ///保存ボタン
+                //todo ConstrainedBoxでボタンサイズ可変
                 Center(
                   child: RaisedButton(
                       child: const Text('保存'),

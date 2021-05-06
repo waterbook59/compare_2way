@@ -74,46 +74,16 @@ class Way2DemeritRecords extends Table {
   @override
   Set<Column> get primaryKey => {way2DemeritId};
 }
-//テーブルtags
-//class TagTitleRecords extends Table{
-//  TextColumn get comparisonItemId => text()();
-//}
-
-///タグ結合(TagRecords=TagOverviewRecords+ComparisonItemIdRecords)
-class TagOverviewRecords extends Table {
-  //autoIncrementのidあった方がいいかも
-  TextColumn get tagId => text()(); //タグを結合するためにComparisonItemIdとは別のUuid
-  TextColumn get tagTitle => text()();
-}
-
-class ComparisonItemIdRecords extends Table {
-  TextColumn get tagId => text()();
+//テーブルtag
+class TagRecords extends Table{
+  IntColumn get tagId => integer().nullable()();
   TextColumn get comparisonItemId => text()();
-}
-
-//タグ結合クラス
-class TagRecords {
-  TagRecords({this.tagOverviewRecords, this.comparisonItemIds,});
-  final TagOverviewRecords tagOverviewRecords;
-  final ComparisonItemIdRecords comparisonItemIds;
-
-}
-
-///comparison_item結合クラス
-class ComparisonItemRecord {
-  ComparisonItemRecord({
-    this.comparisonOverviewRecord,
-    this.way1MeritRecord,
-    this.way1DemeritRecord,
-//    this.tagRecord
-  });
-
-  final ComparisonOverviewRecord comparisonOverviewRecord;
-  final List<Way1MeritRecord> way1MeritRecord;
-  final List<Way1DemeritRecord> way1DemeritRecord;
-//  final TagRecord tagRecord;
-
-
+  TextColumn get tagTitle => text()();
+  DateTimeColumn get createdAt => dateTime().nullable()();
+  TextColumn get createAtToString => text()();
+  //tagTitleの重複登録必要なのでprimaryKeyには設定しない
+  @override
+  Set<Column> get primaryKey => {tagId};
 }
 
 
@@ -123,8 +93,7 @@ class ComparisonItemRecord {
   Way1DemeritRecords,
   Way2MeritRecords,
   Way2DemeritRecords,
-  TagOverviewRecords,
-  ComparisonItemIdRecords
+  TagRecords,
 ],daos: [ComparisonItemDao])
 class ComparisonItemDB  extends _$ComparisonItemDB{
   ComparisonItemDB() : super(_openConnection());

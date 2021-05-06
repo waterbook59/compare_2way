@@ -1,10 +1,11 @@
 //リスト形式ではなくて１行単位
 //Dartのモデルクラス(Task)=>DBのテーブルクラス(TaskRecord)へ変換
 
-import 'package:compare_2way/data_models/comparison_item.dart';
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
+import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_database.dart';
+import 'package:uuid/uuid.dart';
 
 ///(DB=>model):List<ComparisonOverviewRecord>=>List<ComparisonOverview>
 extension ConvertToComparisonOverviewRecords on List<ComparisonOverviewRecord> {
@@ -208,5 +209,44 @@ extension ConvertToWay2MeritRecord on Way2Merit{
       way2MeritDesc: initWay2Merit.way2MeritDesc ?? '',
     );
     return way2MeritRecord;
+  }
+}
+
+///新規挿入時(model=>DB):List<Tag>=>List<TagRecord>
+extension ConvertToTagRecordList on List<Tag>{
+  // tagTitleをprimaryKeyに設定した場合、tagIdのautoIncrement効かないかも
+  //=>tagIdがint型なのでUuid.hashCodeを使う
+  List<TagRecord> toTagRecordList(
+      List<Tag> tagList){
+    final tagRecordList =
+        tagList.map((tag) {
+          return TagRecord(
+            //tagIdはautoIncrementなので新規作成時入れない
+//            tagId:tag.tagId ?? 0,
+          tagId: Uuid().hashCode,
+            tagTitle:tag.tagTitle ?? '',
+            comparisonItemId:tag.comparisonItemId ?? '',
+            createdAt: tag.createdAt,
+            createAtToString: tag.createAtToString,
+          );
+    }).toList();
+    return tagRecordList;
+  }
+}
+
+///読込時(DB=>model) List<TagRecord>=>Lis<Tag>
+extension ConvertToTagList on List<TagRecord>{
+  List<Tag> toTagList(List<TagRecord> tagRecordList){
+    final tagList =
+    tagRecordList.map((tagRecordSingle) {
+      return Tag(
+        tagId: tagRecordSingle.tagId,
+        comparisonItemId: tagRecordSingle.comparisonItemId,
+        tagTitle: tagRecordSingle.tagTitle,
+        createdAt: tagRecordSingle.createdAt,
+          createAtToString: tagRecordSingle.createAtToString,
+      );
+    }).toList();
+    return tagList;
   }
 }

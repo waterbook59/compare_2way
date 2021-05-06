@@ -1,5 +1,6 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
+import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/models/repository/compare_repository.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -11,15 +12,12 @@ class CompareViewModel extends ChangeNotifier {
 
   final CompareRepository _compareRepository;
   List<ComparisonOverview> _comparisonOverviews = <ComparisonOverview>[];
-
   List<ComparisonOverview> get comparisonOverviews => _comparisonOverviews;
   CompareScreenStatus compareScreenStatus;
   ComparisonOverview overviewDB;
   List<Way1Merit> _way1MeritList = <Way1Merit>[];
-
   List<Way1Merit> get way1MeritList => _way1MeritList;
   List<Way2Merit> _way2MeritList = <Way2Merit>[];
-
   List<Way2Merit> get way2MeritList => _way2MeritList;
 
 //textFieldからviewModelへの変更値登録があるのでカプセル化しない
@@ -28,30 +26,32 @@ class CompareViewModel extends ChangeNotifier {
   String way2Title = '';
 
   int _way1MeritEvaluate = 0;
-
   int get way1MeritEvaluate => _way1MeritEvaluate;
   int _way1DemeritEvaluate = 0;
-
   int get way1DemeritEvaluate => _way1DemeritEvaluate;
   int _way2MeritEvaluate = 0;
-
   int get way2MeritEvaluate => _way2MeritEvaluate;
   int _way2DemeritEvaluate = 0;
-
   int get way2DemeritEvaluate => _way2DemeritEvaluate;
   int _way3MeritEvaluate = 0;
-
   int get way3MeritEvaluate => _way3MeritEvaluate;
   int _way3DemeritEvaluate = 0;
-
   int get way3DemeritEvaluate => _way3DemeritEvaluate;
 
   //いらんかも
   TextEditingController _conclusionController = TextEditingController();
-
   TextEditingController get conclusionController => _conclusionController;
   String conclusion = '';
 
+  //textFieldからviewModelへの変更値登録があるのでカプセル化しない
+  String tagTitle= '';
+  List<String> _tagNameList = <String>[];
+  List<Tag> _tagList = <Tag>[];
+  List<Tag> get tagList => _tagList;
+  List<Chip> _displayChipList = <Chip>[];
+  List<Chip> get displayChipList =>_displayChipList;
+  List<Tag> _deleteTagList = <Tag>[];
+  List<Tag> get deleteTagList => _deleteTagList;
 
   ListEditMode editStatus = ListEditMode.display;
 
@@ -368,6 +368,78 @@ class CompareViewModel extends ChangeNotifier {
 //        comparisonOverview.comparisonItemId);
 //    notifyListeners();
   }
+
+ ///tagDialogPageでList<tag>を新規登録
+  ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
+  Future<void> createTag(ComparisonOverview comparisonOverview) async{
+    print('vieModel/createTag:$_tagNameList&Id:${comparisonOverview.comparisonItemId}');
+    //完了を押したらinput内容(List<String>)とcomparisonIdを基にList<Tag>クラスをDB登録
+    //List<Tag>作成はDBでの重複削除リスト作成後にrepositoryで行う
+
+    //_tagNameListをrepositoryへ
+    await _compareRepository.createTag(
+        _tagNameList,comparisonOverview.comparisonItemId);
+    //新規作成のときはnotifyListenersいらない？取得の時のみ？
+  }
+
+  ///tagChipsでtextField入力内容をviewModelへset
+  Future<void> setTagNameList(List<String> tagNameList)async{
+    _tagNameList = tagNameList;
+//    print('compareViewModelへtagNameListをset:'
+//        '${_tagNameList.map((tagName) => print('$tagName')).toList()}');
+    print('compareViewModelへtagNameListをset:$_tagNameList');
+  }
+ ///List<Tag>取得(文頭取得用)
+  Future<void> getTagList(String comparisonItemId) async{
+    _tagList = await _compareRepository.getTagList(comparisonItemId);
+//    print('viewModel.getTagList:${_tagList.map((e) => e.tagTitle)}');
+    //_tagNameListにもtagTitle格納
+    _tagNameList = _tagList.map((tag)=>tag.tagTitle).toList();
+    print('viewModel.getTagList/_tagNameList:$_tagNameList');
+    //List<Tag>=>List<Chips>へ変更
+    _displayChipList = _tagList.map((tag) {
+      return Chip(
+        label: Text(tag.tagTitle),
+      );
+    }).toList();
+    notifyListeners();
+  }
+
+  ///tagChipsで削除するTagを登録
+  Future<void> createDeleteList(
+      List<String> tempoDeleteLabels, String comparisonItemId) async{
+    final joinList = [...tempoDeleteLabels,..._tagNameList];
+//  final joinList= List<String>.from(tempoDeleteLabels)..addAll(_tagNameList);
+    //削除する項目(tempoDeleteLabels)とDB登録してある項目(_tagNameList)を結合して
+    //todo 重複しているものだけを抜き出す（結合いらない、tempoDeleteLabelsと_tagNameListを直接比較 repository/createTag参照）
+    print('viewModel.createDeleteList/joinList:$joinList');
+    final lists =<String>[];
+    joinList.map((title) {
+      if(lists.contains(title)){
+        final deleteTag = Tag(
+            comparisonItemId: comparisonItemId,
+            tagTitle: title,
+        );
+        deleteTagList.add(deleteTag);
+        print('deleteTagList:${deleteTagList.map((e) => e.tagTitle).toList()}');
+      }else{
+       lists.add(title);
+       print('delete以外のリスト：$lists');
+      }
+    }).toList();
+
+
+  }
+  ///tagDialogPageでList<tag>を削除
+  Future<void>deleteTag() async{
+    print('deleteTagメソッドで消すリスト:'
+        '${deleteTagList.map((e) => e.tagTitle).toList()}');
+    await _compareRepository.deleteTag(deleteTagList);
+   _deleteTagList = [];
+  }
+
+
+
 
 
 //todo textControllerを破棄

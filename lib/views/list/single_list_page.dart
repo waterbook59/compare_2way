@@ -3,7 +3,6 @@ import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/compare_screen.dart';
-import 'package:compare_2way/views/compare/compare_screen_stateful.dart';
 import 'package:compare_2way/views/list/add_screen.dart';
 import 'package:compare_2way/views/list/componets/overview_list.dart';
 import 'package:flutter/cupertino.dart';
@@ -147,8 +146,7 @@ class SingleListPage extends StatelessWidget {
                                 final overview =
                                     compareViewModel.comparisonOverviews[index];
                                 return
-
-                                    ///checkかラジオボタンを押すと右からSlidableが出てきて削除ボタン表示される
+                                  ///checkかラジオボタンを押すと右からSlidableが出てきて削除ボタン表示される
                                     CheckboxListTile(
                                   title: Text(overview.itemTitle),
                                   //conclusionはConsumerで初回描画されない
@@ -215,7 +213,6 @@ class SingleListPage extends StatelessWidget {
         context,
         MaterialPageRoute<void>(
             builder: (context) => CompareScreen(
-                  itemEditMode: ItemEditMode.edit,
                   comparisonOverview: updateOverview,
                 )));
   }

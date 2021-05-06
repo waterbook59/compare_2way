@@ -1,8 +1,8 @@
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/views/compare/components/accordion_part.dart';
-import 'package:compare_2way/views/compare/components/desc_form.dart';
-import 'package:compare_2way/views/compare/components/desc_form_and_button.dart';
+import 'package:compare_2way/views/compare/components/sub/desc_form.dart';
+import 'package:compare_2way/views/compare/components/sub/desc_form_and_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';

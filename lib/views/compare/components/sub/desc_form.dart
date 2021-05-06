@@ -31,6 +31,8 @@ class _DescFormState extends State<DescForm> {
             hintText: 'メリットを入力してください',
             ///TextFieldを長く入力するとボタンが重なるのを回避
             contentPadding: EdgeInsets.fromLTRB(6, 6, 48, 0),
+//InputDecoration/isDense:trueで幅狭くなる
+//            isDense: true,
           ),
           controller: widget.controllers[widget.index],
           onChanged: (newDesc) => widget.inputChanged(newDesc),

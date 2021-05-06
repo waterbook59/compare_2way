@@ -9,8 +9,7 @@ part 'comparison_item_dao.g.dart';
   Way1DemeritRecords,
   Way2MeritRecords,
   Way2DemeritRecords,
-  TagOverviewRecords,
-  ComparisonItemIdRecords
+  TagRecords,
 ])
 class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     with _$ComparisonItemDaoMixin {
@@ -151,6 +150,56 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     });
   }
 
+
+  ///新規作成:List<TagRecord>:batchでやると重複登録されてしまうので
+  ///1行ずつdao側でinsertOnConflictUpdate
+  Future<void> insertTagRecordList(List<TagRecord> tagRecordList) async{
+    
+    await batch((batch) {
+      batch.insertAll(tagRecords, tagRecordList);
+    });
+  print('dao/insertTagRecordList:$tagRecordList');
+
+//   tagRecordList.forEach(
+//     into(tagRecords).insertOnConflictUpdate
+//    );
+   
+  }
+
+  ///新規作成:List<TagRecord> 重複回避:
+  ///https://moor.simonbinder.eu/docs/getting-started/writing_queries/
+  //repository側でforEachしたものをinsertOnConflictUpdate
+  //insertTagRecordListでもどちらでも良い(dao側、repository側どちらかでforEach)
+  Future<void> createOrUpdateTag(TagRecord tagRecord) async{
+    print('dao/createOrUpdateTag:$tagRecord');
+    await into(tagRecords).insertOnConflictUpdate(tagRecord);
+    }
+
+
+  ///読込：comparisonItemIdからList<TagListRecord>を登録した古いもの順(asc)とってくる
+  Future<List<TagRecord>> getTagList(String comparisonItemId) =>
+      (select(tagRecords)
+        ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId))
+        //asc時間古い順
+      ///createdAtだと登録桁数が少なすぎて2つ以上登録の場合綺麗なasc順にならないので、createAtToString順でとってくる
+        ..orderBy([(t)=>OrderingTerm(expression:
+        t.createAtToString,mode: OrderingMode.asc)])
+      ).get();
+
+  ///削除：List<Tag> comparisonItemIdとtagTitleの２つの条件のもののみ削除
+  Future<void> deleteTagList(List<TagRecord> deleteTagRecordList){
+    deleteTagRecordList.forEach((tag) {
+      (delete(tagRecords)..where(
+              (tbl) => tbl.comparisonItemId.equals(tag.comparisonItemId)
+              & tbl.tagTitle.equals(tag.tagTitle))).go();
+    });
+    print('dao/削除');
+  }
+  ///削除：List<Tag> CompareScreenを削除時、comparisonItemIdのtag全削除
+  Future<void> deleteAllTagList(String comparisonItemId) =>
+      (delete(tagRecords)
+        ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
+          .go();
 
 
 
