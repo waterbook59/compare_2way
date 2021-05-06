@@ -65,7 +65,7 @@ class SingleListPage extends StatelessWidget {
 //                    );
 //                  })),
 //        ),
-        //todo リスト長くなったときにスライドできない
+
         //todo Consumer=>Selectorへ変更を検討
         body: Consumer<CompareViewModel>(
             builder: (context, compareViewModel, child) {
@@ -101,6 +101,8 @@ class SingleListPage extends StatelessWidget {
                               ListView.builder(
                             //ListView.builderの高さを自動指定
                             shrinkWrap: true,
+                            //リストが縦方向にスクロールできるようになる
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: snapshot.data.length,
                             itemBuilder: (BuildContext context, int index) {
                               final overview = snapshot.data[index];

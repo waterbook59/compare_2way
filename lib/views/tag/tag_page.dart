@@ -58,6 +58,8 @@ class TagPage extends StatelessWidget {
                         return ListView.builder(
                           //ListView.builderの高さを自動指定
                           shrinkWrap: true,
+                          //リストが縦方向にスクロールできるようになる
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: snapshot.data.length,
                           itemBuilder: (BuildContext context, int index) {
                             final overview = snapshot.data[index];
