@@ -66,6 +66,7 @@ class SingleListPage extends StatelessWidget {
 //                  })),
 //        ),
         //todo リスト長くなったときにスライドできない
+        //todo Consumer=>Selectorへ変更を検討
         body: Consumer<CompareViewModel>(
             builder: (context, compareViewModel, child) {
           return (viewModel.editStatus == ListEditMode.display)
@@ -79,12 +80,11 @@ class SingleListPage extends StatelessWidget {
                         BoxConstraints(minHeight: constraints.maxHeight),
                     //初回描画の時にgetListが２回発動される
                     child: FutureBuilder(
-                      //todo Consumer=>Selectorへ変更を検討
                       future: viewModel.getList(),
                       builder: (context,
                           AsyncSnapshot<List<ComparisonOverview>> snapshot) {
                         if (snapshot.data == null) {
-                          print('snapshotがnull');
+                          print('List<ComparisonOverview>>snapshotがnull');
                           return Container();
                         }
                       ///viewModel.comparisonOverviews.isEmptyだとEmptyView通ってしまう

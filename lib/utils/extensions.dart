@@ -244,7 +244,7 @@ extension ConvertToTagList on List<TagRecord>{
         comparisonItemId: tagRecordSingle.comparisonItemId,
         tagTitle: tagRecordSingle.tagTitle,
         createdAt: tagRecordSingle.createdAt,
-          createAtToString: tagRecordSingle.createAtToString,
+        createAtToString: tagRecordSingle.createAtToString,
       );
     }).toList();
     return tagList;

@@ -201,6 +201,8 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
         ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
           .go();
 
+  ///読込：全タグ情報取得
+  Future<List<TagRecord>>getAllTagList() => select(tagRecords).get();
 
 
 

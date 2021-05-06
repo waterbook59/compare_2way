@@ -307,6 +307,11 @@ class CompareRepository {
     }
   }
 
+  Future<List<Tag>> getAllTagList() async{
+    final tagRecordList = await _comparisonItemDao.getAllTagList();
+    return _tagList = tagRecordList.toTagList(tagRecordList);
+  }
+
 
 
 
