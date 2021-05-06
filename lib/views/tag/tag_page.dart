@@ -1,4 +1,5 @@
 import 'package:compare_2way/style.dart';
+import 'package:compare_2way/views/tag/components/sub/page_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -26,8 +27,17 @@ class TagPage extends StatelessWidget {
         ),
         child: Scaffold(
             backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
-            body: Container(
-              child: const Center(child: Text('タグページ')),
+            body: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const PageTitle(title: 'タグ',),
+
+                  Container(
+                    child: const Center(child: Text('タグづけされたリストはありません')),
+                  ),
+                ],
+              ),
             ),
           floatingActionButton: SizedBox(
             width: 56,
