@@ -48,6 +48,8 @@ class CompareViewModel extends ChangeNotifier {
   List<String> _tagNameList = <String>[];
   List<Tag> _tagList = <Tag>[];
   List<Tag> get tagList => _tagList;
+  List<Tag> _allTagList = <Tag>[];
+  List<Tag> get allTagList => _tagList;
   List<Chip> _displayChipList = <Chip>[];
   List<Chip> get displayChipList =>_displayChipList;
   List<Tag> _deleteTagList = <Tag>[];
@@ -436,6 +438,14 @@ class CompareViewModel extends ChangeNotifier {
         '${deleteTagList.map((e) => e.tagTitle).toList()}');
     await _compareRepository.deleteTag(deleteTagList);
    _deleteTagList = [];
+  }
+
+  ///TagPageのFutureBuilder用
+  Future<List<Tag>> getAllTagList() async {
+    _allTagList = await _compareRepository.getAllTagList();
+    print('viewModel.getTagAllList:${_allTagList.map((e) => e.tagTitle)}');
+    return _allTagList;
+
   }
 
 

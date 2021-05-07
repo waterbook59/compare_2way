@@ -34,6 +34,7 @@ class TagDialogPage extends StatelessWidget {
               ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
               print('tagDialogPageの完了ボタン！');
                 await viewModel.createTag(comparisonOverview);
+                //todo 削除時tagPageに反映されない
                 await viewModel.deleteTag();
                 await viewModel.getTagList(comparisonOverview.comparisonItemId);
               Navigator.of(context).pop();

@@ -1,5 +1,6 @@
 import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/style.dart';
+import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/view_model/tag_view_model.dart';
 import 'package:compare_2way/views/list/componets/overview_list.dart';
 import 'package:compare_2way/views/tag/components/sub/page_title.dart';
@@ -33,8 +34,10 @@ class TagPage extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
-        body: Consumer<TagViewModel>(
-          builder: (context, tagViewModel, child) {
+        body:
+//        const Center(child: Text('タグづけされたリストはありません')),
+        Consumer<CompareViewModel>(
+          builder: (context, compareViewModel, child) {
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +46,7 @@ class TagPage extends StatelessWidget {
                     title: 'タグ',
                   ),
                   FutureBuilder(
-                    future: tagViewModel.getAllTagList(),
+                    future: compareViewModel.getAllTagList(),
                     builder: (context, AsyncSnapshot<List<Tag>> snapshot) {
                       if (snapshot.data == null) {
                         print('AsyncSnapshot<List<Tag>> snapshotがnull');
