@@ -202,7 +202,9 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
           .go();
 
   ///読込：全タグ情報取得
-  Future<List<TagRecord>>getAllTagList() => select(tagRecords).get();
+  Future<List<TagRecord>>getAllTagList() =>
+      (select(tagRecords)..orderBy([(t)=>OrderingTerm(expression:
+      t.createAtToString,mode: OrderingMode.asc)])).get();
 
 
 

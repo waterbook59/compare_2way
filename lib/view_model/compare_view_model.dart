@@ -443,27 +443,25 @@ class CompareViewModel extends ChangeNotifier {
 
   ///TagPageのFutureBuilder用
   Future<List<TagChart>> getAllTagList() async {
-    //todo ordrybyで登録時間順で取得
+    //ordrybyで登録時間順で取得
     _allTagList = await _compareRepository.getAllTagList();
-    print('viewModel.getTagAllList:${_allTagList.map((e) => e.tagTitle)}');
+//    print('viewModel.getTagAllList:${_allTagList.map((e) => e.tagTitle)}');
 
     //TagPageを表示する手順
     ///方法1. List<Tag>の内容を全てList<TagChart>として取得して表示する:難
     ///重複タイトルを削除&重複タイトルのcomparisonItemIdをリスト化する
     ///List<Tag> => List<Map<String,dynamic>> =>同じタイトル数とそのidを抽出 =>List<TagChart>
       //List<Map<String, dynamic>>へ変換
-        final  allTagListMap = _allTagList.map((tag) => tag.toMap()).toList();
-        print('allTagList=>allTagListMap:$allTagListMap');
+//        final  allTagListMap = _allTagList.map((tag) => tag.toMap()).toList();
+//        print('allTagList=>allTagListMap:$allTagListMap');
 
     ///方法2. List<Tag>から最低限必要なタイトルとアイテム数だけをList<TagChart>に格納して表示する:簡単
-
-
     final tagAllTitleList = <String>[];
     _allTagList.map((tag) {
      return tagAllTitleList.add(tag.tagTitle);
     }).toList();
 
-    Map<String,int> tagSummary =<String, int>{};
+    final tagSummary =<String, int>{};//Map<String,int>
 
     ///重複タイトルの数を数えてMap型に格納
     ///参照:https://www.fixes.pub/program/268895.html
@@ -477,12 +475,9 @@ class CompareViewModel extends ChangeNotifier {
     tagSummary.forEach((key, amount) =>
         tagChartList.add(TagChart(tagTitle: key,tagAmount: amount)));
 
-
-    print('tagSummary:$tagSummary');
-    print('tagChartList:$tagChartList');
-
+//    print('tagSummary:$tagSummary');
+//    print('tagChartList:$tagChartList');
     return tagChartList;
-
   }
 
 
