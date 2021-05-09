@@ -20,6 +20,9 @@ class TagList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
+    final accentColor = Theme.of(context).accentColor;
+
     return Slidable(
       actionPane: const SlidableScrollActionPane(),
       secondaryActions: [
@@ -37,6 +40,7 @@ class TagList extends StatelessWidget {
         //todo decorationはインスタンス設定してすっきり書く
         decoration: listDecoration,
         child: ListTile(
+          leading: Icon(CupertinoIcons.tag_solid,size: 40,color: primaryColor,),
           onTap: onTap,
           title: Text(title),
           //conclusionはConsumerで初回描画されない
@@ -44,9 +48,10 @@ class TagList extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('アイテム数：$tagAmountアイテム'),
-              Text(createdAt),
+//              Text(createdAt),
             ],
           ),
+          trailing:Icon(Icons.arrow_forward_ios) ,
 //          isThreeLine: true,
         ),
       ),

@@ -60,6 +60,7 @@ class TagPage extends StatelessWidget {
                       }
                       if (snapshot.hasData && snapshot.data.isEmpty) {
                         print('EmptyView側通って描画');
+                        //todo 中央に位置変更 listPage参考
                         return Container(
                             child:
                                 const Center(child: Text('タグづけされたリストはありません')));
@@ -73,6 +74,10 @@ class TagPage extends StatelessWidget {
                           itemBuilder: (BuildContext context, int index) {
                             final overview = snapshot.data[index];
                             //DateTime=>String変換
+                            //todo リストの左側にタグ画像、右側に矢印表示
+                            //todo 1つめのリストの上にDivider的な線が必要
+                            //todo onTapでアイテムリスト表示画面へ移行
+                            //todo slidableでアイテムから削除実行
                             return TagList(
                               title: overview.tagTitle,
                               tagAmount: overview.tagAmount,

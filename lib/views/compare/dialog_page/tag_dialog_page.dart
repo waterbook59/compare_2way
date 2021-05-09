@@ -26,6 +26,7 @@ class TagDialogPage extends StatelessWidget {
 //              Navigator.of(context).pop();
 //            },
 //          ),
+      //todo iPhoneだとtrailingの'完了'の下が切れてる..
           trailing: CupertinoButton(
             child:const Text('完了'),
             onPressed: ()async{

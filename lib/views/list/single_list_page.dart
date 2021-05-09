@@ -28,6 +28,8 @@ class SingleListPage extends StatelessWidget {
           'Compare List',
           style: middleTextStyle,
         ),
+        //todo ListPageに戻るとtrailing位置の編集に黄色下線出る
+        //参考https://qiita.com/kurararara/items/2afd7f93f2676c5cee34
         trailing: GestureDetector(
             onTap: () => _changeEdit(context, viewModel.editStatus),
             child: Consumer<CompareViewModel>(
@@ -190,6 +192,7 @@ class SingleListPage extends StatelessWidget {
   } //buildはここまで
 
   // DB登録とComparePageへ移動
+  //todo ページ遷移は下からに変更
   void _createComparisonItems(BuildContext context) {
     ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
     Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(

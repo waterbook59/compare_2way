@@ -53,6 +53,8 @@ class CompareScreen extends StatelessWidget {
 ///リストの中身を見るのにtoSet使うと良いかも（map((e)=>print).toListが確実）
 
     return CupertinoPageScaffold(
+      //todo ListPageに戻るとtrailing位置の編集に黄色下線出る
+      //参考https://qiita.com/kurararara/items/2afd7f93f2676c5cee34
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
 //        leading: GestureDetector(child: const Icon(Icons.arrow_back_ios),
@@ -76,6 +78,7 @@ class CompareScreen extends StatelessWidget {
             width: 8,
           ),
           ///編集ボタン
+          //todo iphoneだと編集の下が切れてる
           EditBottomAction(
             comparisonOverview: comparisonOverview,
           ),
@@ -252,6 +255,7 @@ class CompareScreen extends StatelessWidget {
                   height: 4,
                 ),
               ///テーブル
+                //todo  width: MediaQuery.of(context).size.width*0.8の形に変更
                 TablePart(
                   way1Title: comparisonOverview.way1Title,
                   //way1Merit以外はTablePart内でviewModelへsetしている
