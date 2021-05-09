@@ -1,4 +1,5 @@
 import 'package:compare_2way/data_models/tag.dart';
+import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/view_model/tag_view_model.dart';
@@ -35,8 +36,11 @@ class TagPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
         body:
-//        const Center(child: Text('タグづけされたリストはありません')),
-        Consumer<CompareViewModel>(
+///Selectorに変更するとbuilder:(context,allTagList,child)になって、
+        ///FutureBuilderのfuture:でエラーがでる
+//        Selector<CompareViewModel,List<Tag>>(
+//          selector: (context, compareViewModel) => compareViewModel.allTagList,
+          Consumer<CompareViewModel>(
           builder: (context, compareViewModel, child) {
             return SingleChildScrollView(
               child: Column(
@@ -46,8 +50,10 @@ class TagPage extends StatelessWidget {
                     title: 'タグ',
                   ),
                   FutureBuilder(
-                    future: compareViewModel.getAllTagList(),
-                    builder: (context, AsyncSnapshot<List<Tag>> snapshot) {
+                    future:
+                    compareViewModel.getAllTagList(),
+                    //compareViewModel.allTagList,
+                    builder: (context, AsyncSnapshot<List<TagChart>> snapshot) {
                       if (snapshot.data == null) {
                         print('AsyncSnapshot<List<Tag>> snapshotがnull');
                         return Container();
@@ -69,7 +75,7 @@ class TagPage extends StatelessWidget {
                             //DateTime=>String変換
                             return TagList(
                               title: overview.tagTitle,
-                              conclusion: overview.comparisonItemId,
+                              tagAmount: overview.tagAmount,
                               createdAt: '登録時間',
                               onDelete: (){},
                               onTap: (){},

@@ -5,14 +5,14 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 class TagList extends StatelessWidget {
   const TagList(
       {this.title,
-        this.conclusion,
+        this.tagAmount,
         this.createdAt,
         this.onDelete,
         this.onTap,
         this.listDecoration});
 
   final String title;
-  final String conclusion;
+  final int tagAmount;
   final String createdAt;
   final VoidCallback onDelete;
   final VoidCallback onTap;
@@ -43,7 +43,7 @@ class TagList extends StatelessWidget {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('comparisonId：$conclusion'),
+              Text('アイテム数：$tagAmountアイテム'),
               Text(createdAt),
             ],
           ),

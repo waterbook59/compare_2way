@@ -68,6 +68,9 @@ class SingleListPage extends StatelessWidget {
 
         //todo Consumer=>Selectorへ変更を検討
         body: Consumer<CompareViewModel>(
+          /// Consumer=>FutureBuilderは空リスト表示できるが、リスト押してからCompareScreen表示が遅い?
+          //todo FutureBuilderを再考する(Consumer or Selectorのみ)iPhoneでは遅さ感じない
+
             builder: (context, compareViewModel, child) {
           return (viewModel.editStatus == ListEditMode.display)
 

@@ -1,6 +1,7 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
+import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/models/repository/compare_repository.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -441,10 +442,74 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   ///TagPageのFutureBuilder用
-  Future<List<Tag>> getAllTagList() async {
+  Future<List<TagChart>> getAllTagList() async {
+    //todo ordrybyで登録時間順で取得
     _allTagList = await _compareRepository.getAllTagList();
     print('viewModel.getTagAllList:${_allTagList.map((e) => e.tagTitle)}');
-    return _allTagList;
+
+    //TagPageを表示する手順
+    ///方法1. List<Tag>の内容を全てList<TagChart>として取得して表示する:難
+    ///List<Tag> => List<Map<String,dynamic>> =>同じタイトル数とそのidを抽出 =>List<TagChart>
+      //List<Map<String, dynamic>>へ変換
+        final  allTagListMap = _allTagList.map((tag) => tag.toMap()).toList();
+        print('allTagList=>allTagListMap:$allTagListMap');
+
+    ///方法2. List<Tag>から最低限必要なタイトルとアイテム数だけをList<TagChart>に格納して表示する:簡単
+    //重複タイトルを削除&重複タイトルのcomparisonItemIdをリスト化する
+    //重複タイトルの数を数える
+    //参考:https://www.fixes.pub/program/268895.html
+
+    final tagAllTitleList = <String>[];
+    _allTagList.map((tag) {
+     return tagAllTitleList.add(tag.tagTitle);
+    }).toList();
+
+    print('allTagList=>tagAllTitleList:$tagAllTitleList');
+//    const data= [4, 3, 2, 3, 2, 4, 3, 4, 2, 5, 2, 2, 3, 4, 5, 6, 0, 4, 8, 3, 2, 1];
+        const data= ['テスト', 'test', 'てすと','テスト','test','テスト','ふー'];
+    Map<String,int> summary= <String, int>{};
+    Map<String,int> tagSummary =<String, int>{};
+//    data.toSet().toList()
+//      ..sort()
+//      ..forEach((e)=> summary[e]= data.where((i)=> i== e).length);
+    //この式でdataは重複削除されて、summaryへタイトル:重複数を代入している
+    var test =data.toSet().toList()..forEach(//dataにsort()すると、summaryのkeyの部分がsortされて0,1,2...となる
+            (st)=> summary[st]=//summary[st]=はkeyの部分(ex.'テスト'：)にデータを入れる
+                data.where((i)=> i== st).length//iにはdataの中の要素が一つずつ入っていって、一致する総数を返す
+                                              // ex.テスト 'テスト':3
+                //.whereはテストを満たす要素のコレクション(Mag型)を返す
+      //参照:https://qiita.com/dennougorilla/items/170deacf178891ced41e
+    );
+
+    tagAllTitleList.toSet().toList().forEach(
+            (st)=> tagSummary[st]=
+            tagAllTitleList.where((i)=> i== st).length);
+    ///Map<String,dynamic> =>List<TagChart>
+    final tagChartList = <TagChart>[];
+    tagSummary.forEach((key, amount) =>
+        tagChartList.add(TagChart(tagTitle: key,tagAmount: amount)));
+    //{テスト:3,test:2,てすと:1,ふー:1}という形をそれぞれTagChartのtagTitleとtagAmountへ格納したい
+//    print('data.toSet().toList().sort;$data');
+    print('data.toSet().toList().sort.forEachのdata;$data');
+    print('data.toSet().toList().sort.forEachのsummary;$summary');
+    print('summary.length:${summary.length}');
+    print('test:$test');
+    print('tagSummary:$tagSummary');
+    print('tagChartList:$tagChartList');
+
+//    var dataline= List<TagChart>.generate(
+//        summary.length, (int index){
+//          return TagChart(
+//              tagTitle: summary['テスト'][index], summary[st]
+//              tagAmount: summary[index] ?? 0);
+//        });
+//    print('dataline:$dataline');
+
+    //TagChart(String title, int count, List<String> comparisonItemIds>に格納する？
+
+
+//    print('allTagListの数：${_allTagList.length}');
+    return tagChartList;
 
   }
 
