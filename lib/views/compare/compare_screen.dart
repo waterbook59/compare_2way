@@ -79,6 +79,7 @@ class CompareScreen extends StatelessWidget {
           ),
           ///編集ボタン
           //todo iphoneだと編集の下が切れてる
+          //todo タイトル編集=>addScreenは下から遷移
           EditBottomAction(
             comparisonOverview: comparisonOverview,
           ),

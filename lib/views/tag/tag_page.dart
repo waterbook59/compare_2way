@@ -79,11 +79,11 @@ class TagPage extends StatelessWidget {
                             //todo onTapでアイテムリスト表示画面へ移行
                             //todo slidableでアイテムから削除実行
                             return TagList(
-                              title: overview.tagTitle,
-                              tagAmount: overview.tagAmount,
-                              createdAt: '登録時間',
-                              onDelete: (){},
-                              onTap: (){},
+                            title: overview.tagTitle,
+                            tagAmount: overview.tagAmount,
+                            createdAt: '登録時間',
+                            onDelete: (){},
+                            onTap: ()=>_onSelectTag(context,overview.tagTitle),
                               listDecoration: listDecoration,
                             );
                           },
@@ -96,16 +96,16 @@ class TagPage extends StatelessWidget {
             );
           },
         ),
-        floatingActionButton: SizedBox(
-          width: 56,
-          height: 56,
-          child: FloatingActionButton(
-            backgroundColor: accentColor,
-            child: const Icon(Icons.add, color: Colors.black, size: 40),
-            onPressed: () => print('押したぜFAB'),
-          ),
-        ),
+
       ),
     );
+  }
+
+  ///Tagを押したらタグ登録されたCompareList一覧表示
+  Future<void>_onSelectTag(BuildContext context, String tagTitle) async{
+    print('tagTitleでDB検索:$tagTitle');
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.onSelectTag(tagTitle);
+    //materialpagerputeでリスト一覧へ遷移
   }
 }

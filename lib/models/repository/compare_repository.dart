@@ -18,6 +18,8 @@ class CompareRepository {
   List<Way1Merit> _way1MeritList = <Way1Merit>[];
   List<Way2Merit> _way2MeritList = <Way2Merit>[];
   List<Tag> _tagList = <Tag>[];
+  //todo _tagListに統一しても不具合がないか？？
+  List<Tag> _selectTagList = <Tag>[];
 
 
   ///新規作成 comparisonOverview
@@ -310,6 +312,13 @@ class CompareRepository {
   Future<List<Tag>> getAllTagList() async{
     final tagRecordList = await _comparisonItemDao.getAllTagList();
     return _tagList = tagRecordList.toTagList(tagRecordList);
+  }
+
+  Future<List<Tag>> onSelectTag(String tagTitle) async{
+    final selectTagRecordList = await _comparisonItemDao.onSelectTag(tagTitle);
+        print('repo/onSelectTag/selectTagRecordList:$selectTagRecordList');
+    //List<TagRecord>=>List<Tag>
+    return _selectTagList = selectTagRecordList.toTagList(selectTagRecordList);
   }
 
 

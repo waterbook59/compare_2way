@@ -16,6 +16,7 @@ class TagList extends StatelessWidget {
   final String createdAt;
   final VoidCallback onDelete;
   final VoidCallback onTap;
+//  final Function(String) onTap;
   final BoxDecoration listDecoration;
 
   @override

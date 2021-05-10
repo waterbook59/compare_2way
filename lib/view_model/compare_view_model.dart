@@ -55,6 +55,9 @@ class CompareViewModel extends ChangeNotifier {
   List<Chip> get displayChipList =>_displayChipList;
   List<Tag> _deleteTagList = <Tag>[];
   List<Tag> get deleteTagList => _deleteTagList;
+  List<Tag> _selctTagList = <Tag>[];
+  List<Tag> get selctTagList => _selctTagList;
+
 
   ListEditMode editStatus = ListEditMode.display;
 
@@ -478,6 +481,12 @@ class CompareViewModel extends ChangeNotifier {
 //    print('tagSummary:$tagSummary');
 //    print('tagChartList:$tagChartList');
     return tagChartList;
+  }
+
+  Future<void> onSelectTag(String tagTitle) async{
+    _selctTagList =await _compareRepository.onSelectTag(tagTitle);
+    print('viewModel/onSelectTag:${_selctTagList.map((e) => e.tagTitle)}');
+    notifyListeners();
   }
 
 

@@ -240,13 +240,13 @@ extension ConvertToTagList on List<TagRecord>{
     final tagList =
     tagRecordList.map((tagRecordSingle) {
       return Tag(
-        tagId: tagRecordSingle.tagId,
-        comparisonItemId: tagRecordSingle.comparisonItemId,
-        tagTitle: tagRecordSingle.tagTitle,
+        tagId: tagRecordSingle.tagId ??0,
+        comparisonItemId: tagRecordSingle.comparisonItemId ??'',
+        tagTitle: tagRecordSingle.tagTitle ?? '',
         createdAt: tagRecordSingle.createdAt,
-        createAtToString: tagRecordSingle.createAtToString,
+        createAtToString: tagRecordSingle.createAtToString ??'',
       );
-    }).toList();
+    }).toList() ;
     return tagList;
   }
 }

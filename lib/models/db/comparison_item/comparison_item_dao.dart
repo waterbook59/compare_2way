@@ -187,6 +187,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       ).get();
 
   ///削除：List<Tag> comparisonItemIdとtagTitleの２つの条件のもののみ削除
+  //todo forEach=>map.toList
   Future<void> deleteTagList(List<TagRecord> deleteTagRecordList){
     deleteTagRecordList.forEach((tag) {
       (delete(tagRecords)..where(
@@ -202,9 +203,20 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
           .go();
 
   ///読込：全タグ情報取得
-  Future<List<TagRecord>>getAllTagList() =>
+  Future<List<TagRecord>> getAllTagList() =>
       (select(tagRecords)..orderBy([(t)=>OrderingTerm(expression:
       t.createAtToString,mode: OrderingMode.asc)])).get();
+
+  ///読込：選択タグ情報取得
+  //なぜか取得できない=>async/awaitではなくreturnがよかったみたい
+  Future<List<TagRecord>> onSelectTag(String tagTitle) {
+    return (select(tagRecords)
+            ..where((tbl) => tbl.tagTitle.equals(tagTitle))).get();
+
+  }
+
+
+
 
 
 
