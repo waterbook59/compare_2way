@@ -221,4 +221,6 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
 
 
+
+
 }

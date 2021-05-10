@@ -55,8 +55,10 @@ class CompareViewModel extends ChangeNotifier {
   List<Chip> get displayChipList =>_displayChipList;
   List<Tag> _deleteTagList = <Tag>[];
   List<Tag> get deleteTagList => _deleteTagList;
-  List<Tag> _selctTagList = <Tag>[];
-  List<Tag> get selctTagList => _selctTagList;
+  List<Tag> _selectTagList = <Tag>[];
+  List<Tag> get selectTagList => _selectTagList;
+  List<ComparisonOverview> _selectOverviews = <ComparisonOverview>[];
+  List<ComparisonOverview> get selectOverviews => _selectOverviews;
 
 
   ListEditMode editStatus = ListEditMode.display;
@@ -483,12 +485,38 @@ class CompareViewModel extends ChangeNotifier {
     return tagChartList;
   }
 
+  ///TagPage=>SelectTagPage
   Future<void> onSelectTag(String tagTitle) async{
-    _selctTagList =await _compareRepository.onSelectTag(tagTitle);
-    print('viewModel/onSelectTag:${_selctTagList.map((e) => e.tagTitle)}');
+    _selectOverviews =[];
+    //tagTitleを元にList<Tag>を取得
+    _selectTagList =await _compareRepository.onSelectTag(tagTitle);
+//    print('viewModel/onSelectTag:${_selectTagList.map((e) => e.tagTitle)}');
+
+   // Tag内のcomparisonItemIdを元にoverViewを取得しリスト化
+  final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
+
+
+///forEach内の非同期処理でcomparisonIdからList<overview>取得
+    ///参照:https://qiita.com/hisw/items/2df0052a400263d5863e
+   await Future.forEach(idList, (String id) async{
+           final selectOverView =
+      await  _compareRepository.getComparisonOverview(id);
+       _selectOverviews.add(selectOverView);
+       print('Future.forEach:$_selectOverviews');
+    });
+
+
+    print('viewModel/onSelectTag/selectOverview:${_selectOverviews.map((overview) => overview.itemTitle)}');
+//        print('viewModel/onSelectTag/selectOverviews:$selectOverviews');
     notifyListeners();
   }
 
+
+//  final selectOverviews = await  _selectTagList.map((tag)async{
+////     final selectOverView =
+//  await _compareRepository.getComparisonOverview(tag.comparisonItemId);
+////       _selectOverviews.add(selectOverView);
+//}).toList();
 
 
 

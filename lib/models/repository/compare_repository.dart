@@ -131,6 +131,7 @@ class CompareRepository {
 
   ///List<ComparisonOverview>ではなく、comparisonItemIdからComparisonOverview１行だけ取ってくる
   Future<ComparisonOverview> getComparisonOverview(
+
       String comparisonItemId) async {
     final comparisonOverviewRecord =
         await _comparisonItemDao.getComparisonOverview(comparisonItemId);
@@ -138,6 +139,7 @@ class CompareRepository {
     ///ComparisonOverviewRecord=>ComparisonOverview
     return _overviewResult =
         comparisonOverviewRecord.toComparisonOverview(comparisonOverviewRecord);
+
   }
 
   ///ComparisonItem=>ComparisonOverviewRecord,List<Way1Merit>に分解登録
@@ -320,6 +322,18 @@ class CompareRepository {
     //List<TagRecord>=>List<Tag>
     return _selectTagList = selectTagRecordList.toTagList(selectTagRecordList);
   }
+
+//  Future<List<ComparisonOverview>> selectOverview(
+//      String comparisonItemId) async{
+//    print('repo/selectOverview/comparisonId:$comparisonItemId');
+//
+//    final resultComparisonOverviewRecords =
+//    await _comparisonItemDao.getOverview(comparisonItemId);
+//    ///comparisonOverviewRecords=>comparisonOverview
+//    return _overviewResults = resultComparisonOverviewRecords
+//        .toComparisonOverviews(resultComparisonOverviewRecords);
+//  }
+
 
 
 

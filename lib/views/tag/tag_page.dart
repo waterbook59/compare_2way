@@ -5,6 +5,7 @@ import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/view_model/tag_view_model.dart';
 import 'package:compare_2way/views/list/componets/overview_list.dart';
 import 'package:compare_2way/views/tag/components/sub/page_title.dart';
+import 'package:compare_2way/views/tag/select_tag_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +34,7 @@ class TagPage extends StatelessWidget {
           style: trailingTextStyle,
         ),
       ),
+      //todo Cupertino TabScaffoldに再チャレンジ
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
         body:
@@ -74,7 +76,6 @@ class TagPage extends StatelessWidget {
                           itemBuilder: (BuildContext context, int index) {
                             final overview = snapshot.data[index];
                             //DateTime=>String変換
-                            //todo リストの左側にタグ画像、右側に矢印表示
                             //todo 1つめのリストの上にDivider的な線が必要
                             //todo onTapでアイテムリスト表示画面へ移行
                             //todo slidableでアイテムから削除実行
@@ -102,10 +103,18 @@ class TagPage extends StatelessWidget {
   }
 
   ///Tagを押したらタグ登録されたCompareList一覧表示
+  ///IdからcomparisonOverview.titleを取得し表示
   Future<void>_onSelectTag(BuildContext context, String tagTitle) async{
     print('tagTitleでDB検索:$tagTitle');
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.onSelectTag(tagTitle);
     //materialpagerputeでリスト一覧へ遷移
+    await Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+            builder: (context) => SelectTagPage(
+              //todo viewModel値渡しではなく、SelectTagPage側でviewModelで取得する形に
+              selectTagList: viewModel.selectTagList,
+            )));
   }
 }
