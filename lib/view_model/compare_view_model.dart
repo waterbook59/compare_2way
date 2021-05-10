@@ -502,21 +502,13 @@ class CompareViewModel extends ChangeNotifier {
            final selectOverView =
       await  _compareRepository.getComparisonOverview(id);
        _selectOverviews.add(selectOverView);
-       print('Future.forEach:$_selectOverviews');
+//       print('Future.forEach:$_selectOverviews');
     });
-
-
-    print('viewModel/onSelectTag/selectOverview:${_selectOverviews.map((overview) => overview.itemTitle)}');
-//        print('viewModel/onSelectTag/selectOverviews:$selectOverviews');
+//    print('viewModel/onSelectTag/selectOverview:${_selectOverviews.map((overview) => overview.itemTitle)}');
     notifyListeners();
   }
 
 
-//  final selectOverviews = await  _selectTagList.map((tag)async{
-////     final selectOverView =
-//  await _compareRepository.getComparisonOverview(tag.comparisonItemId);
-////       _selectOverviews.add(selectOverView);
-//}).toList();
 
 
 

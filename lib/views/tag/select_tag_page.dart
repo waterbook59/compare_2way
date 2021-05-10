@@ -21,6 +21,7 @@ class SelectTagPage extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
         middle: Text(
+          //todo viewModel値渡しではなく、SelectTagPage側でviewModelで取得する形に
           selectTagList[0].tagTitle,
           style: middleTextStyle,
         ),
@@ -51,18 +52,6 @@ class SelectTagPage extends StatelessWidget {
     }
         ),
 
-//        ListView.builder(
-//            itemCount: selectTagList.length,
-//            itemBuilder: (BuildContext context, int index) {
-//              final testdisp = selectTagList[index];
-//              return Column(
-//                children: [
-//                  Text(testdisp.tagTitle),
-//                  Text(testdisp.comparisonItemId),
-//                ],
-//              );
-//            }
-//        ),
 
       )
 

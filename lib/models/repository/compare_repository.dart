@@ -323,16 +323,6 @@ class CompareRepository {
     return _selectTagList = selectTagRecordList.toTagList(selectTagRecordList);
   }
 
-//  Future<List<ComparisonOverview>> selectOverview(
-//      String comparisonItemId) async{
-//    print('repo/selectOverview/comparisonId:$comparisonItemId');
-//
-//    final resultComparisonOverviewRecords =
-//    await _comparisonItemDao.getOverview(comparisonItemId);
-//    ///comparisonOverviewRecords=>comparisonOverview
-//    return _overviewResults = resultComparisonOverviewRecords
-//        .toComparisonOverviews(resultComparisonOverviewRecords);
-//  }
 
 
 
