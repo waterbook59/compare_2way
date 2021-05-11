@@ -318,7 +318,7 @@ class CompareRepository {
 
   Future<List<Tag>> onSelectTag(String tagTitle) async{
     final selectTagRecordList = await _comparisonItemDao.onSelectTag(tagTitle);
-        print('repo/onSelectTag/selectTagRecordList:$selectTagRecordList');
+//        print('repo/onSelectTag/selectTagRecordList:$selectTagRecordList');
     //List<TagRecord>=>List<Tag>
     return _selectTagList = selectTagRecordList.toTagList(selectTagRecordList);
   }

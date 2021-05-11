@@ -34,7 +34,7 @@ class TagPage extends StatelessWidget {
           style: trailingTextStyle,
         ),
       ),
-      //todo Cupertino TabScaffoldに再チャレンジ
+      ///Scaffoldで全く問題なし
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
         body:
@@ -105,7 +105,7 @@ class TagPage extends StatelessWidget {
   ///Tagを押したらタグ登録されたCompareList一覧表示
   ///IdからcomparisonOverview.titleを取得し表示
   Future<void>_onSelectTag(BuildContext context, String tagTitle) async{
-    print('tagTitleでDB検索:$tagTitle');
+//    print('tagTitleでDB検索:$tagTitle');
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.onSelectTag(tagTitle);
     //materialpagerputeでリスト一覧へ遷移

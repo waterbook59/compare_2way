@@ -105,26 +105,26 @@ class SingleListPage extends StatelessWidget {
 // => overview.conclusion).toList());
                               ListView.builder(
                             //ListView.builderの高さを自動指定
-                            shrinkWrap: true,
-                            //リストが縦方向にスクロールできるようになる
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final overview = snapshot.data[index];
-                              //DateTime=>String変換
-                            final formatter =
-                                  DateFormat('yyyy/MM/dd(E) HH:mm:ss', 'ja_JP');
-                              final formatted =
-                                  formatter.format(overview.createdAt);
-                            return OverViewList(
-                              title: overview.itemTitle,
-                              conclusion: overview.conclusion,
-                              createdAt: formatted,
-                              onDelete: () => _deleteList(
-                                  context, overview.comparisonItemId),
-                              onTap: () => _updateList(context, overview),
-                              listDecoration: listDecoration,
-                            );
+                                shrinkWrap: true,
+                                //リストが縦方向にスクロールできるようになる
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final overview = snapshot.data[index];
+                                  //DateTime=>String変換
+                                final formatter =
+                                      DateFormat('yyyy/MM/dd(E) HH:mm:ss', 'ja_JP');
+                                  final formatted =
+                                      formatter.format(overview.createdAt);
+                                return OverViewList(
+                                  title: overview.itemTitle,
+                                  conclusion: overview.conclusion,
+                                  createdAt: formatted,
+                                  onDelete: () => _deleteList(
+                                      context, overview.comparisonItemId),
+                                  onTap: () => _updateList(context, overview),
+                                  listDecoration: listDecoration,
+                                );
 
                             },
                           );

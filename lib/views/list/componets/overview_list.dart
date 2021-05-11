@@ -47,6 +47,7 @@ class OverViewList extends StatelessWidget {
               Text(createdAt),
             ],
           ),
+          trailing:const Icon(Icons.arrow_forward_ios) ,
 //          isThreeLine: true,
         ),
       ),
