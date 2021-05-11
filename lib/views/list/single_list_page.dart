@@ -222,6 +222,7 @@ class SingleListPage extends StatelessWidget {
         MaterialPageRoute<void>(
             builder: (context) => CompareScreen(
                   comparisonOverview: updateOverview,
+              itemTitleEditMode: ItemTitleEditMode.all,
                 )));
   }
 }

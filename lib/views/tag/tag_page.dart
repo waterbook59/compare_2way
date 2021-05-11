@@ -105,7 +105,7 @@ class TagPage extends StatelessWidget {
   ///Tagを押したらタグ登録されたCompareList一覧表示
   ///IdからcomparisonOverview.titleを取得し表示
   Future<void>_onSelectTag(BuildContext context, String tagTitle) async{
-//    print('tagTitleでDB検索:$tagTitle');
+    print('tagTitleでDB検索:$tagTitle');
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.onSelectTag(tagTitle);
     //materialpagerputeでリスト一覧へ遷移
@@ -114,7 +114,8 @@ class TagPage extends StatelessWidget {
         MaterialPageRoute<void>(
             builder: (context) => SelectTagPage(
               //todo viewModel値渡しではなく、SelectTagPage側でviewModelで取得する形に
-              selectTagList: viewModel.selectTagList,
+//              selectTagList: viewModel.selectTagList,
+            tagTitle: tagTitle,
             )));
   }
 }

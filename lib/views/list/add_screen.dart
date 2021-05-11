@@ -11,13 +11,13 @@ class AddScreen extends StatelessWidget {
   const AddScreen({
     this.displayMode,
     this.comparisonOverview,
-//    this.itemTitle,
-//    this.way1Title,
-//    this.way2Title
+    this.tagTitle,
+    this.itemTitleEditMode,
   });
   final AddScreenMode displayMode;
   final ComparisonOverview comparisonOverview;
-//  final String itemTitle;
+  final String tagTitle;
+  final ItemTitleEditMode itemTitleEditMode;
 //  final String way1Title;
 //  final String way2Title;
 
@@ -61,9 +61,8 @@ class AddScreen extends StatelessWidget {
 ///InputPart
               InputPart(displayMode: displayMode,
                 comparisonOverview: comparisonOverview,
-//                itemTitle: itemTitle,
-//              way1Title: way1Title,
-//              way2Title: way2Title,
+                tagTitle: tagTitle,
+                itemTitleEditMode: itemTitleEditMode,
               ),
             ],
           ),

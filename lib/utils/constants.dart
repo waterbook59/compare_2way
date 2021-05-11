@@ -34,3 +34,8 @@ enum AddScreenMode{
   add,
   edit,
 }
+
+enum ItemTitleEditMode{
+  all,
+  select
+}

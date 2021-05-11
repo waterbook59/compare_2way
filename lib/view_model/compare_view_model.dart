@@ -99,8 +99,9 @@ class CompareViewModel extends ChangeNotifier {
 //    notifyListeners();
   }
   ///AddScreen/InputPartでComparisonOverview更新：itemTitle,way1Title,way2Titleのみ変更
-  Future<void> updateComparisonOverView(
-      ComparisonOverview comparisonOverview) async {
+  Future<void> updateComparisonOverView({
+      ComparisonOverview comparisonOverview, String tagTitle,
+  ItemTitleEditMode itemTitleEditMode}) async {
     //更新するプロパティだけ入れてrepositoryでCompanion作成=>更新
     final updateOverview = ComparisonOverview(
       comparisonItemId: comparisonOverview.comparisonItemId,
@@ -111,6 +112,13 @@ class CompareViewModel extends ChangeNotifier {
     );
     await _compareRepository.updateComparisonOverView(updateOverview);
   print('comparisonOverviewのタイトル類を更新');
+
+  if(itemTitleEditMode ==ItemTitleEditMode.select){
+    print('viewModel.updateComparison/onSelectTagする前:$tagTitle');//tagTitleがnull
+    //todo 名前付引数でtagTitleを設定=>selectTagPage側から編集の場合はtagTitleを渡し、onSelectTagすることで、selectTagPageはSelectorのみでいいかも
+     return onSelectTag(tagTitle);
+  }
+
     notifyListeners();
   }
 
@@ -137,23 +145,18 @@ class CompareViewModel extends ChangeNotifier {
     overviewDB =
     await _compareRepository.getComparisonOverview(comparisonItemId);
   }
-
   Future<void> setWay1MeritNewValue(int newValue) async {
     _way1MeritEvaluate = newValue;
   }
-
   Future<void> setWay1DemeritNewValue(int newValue) async {
     _way1DemeritEvaluate = newValue;
   }
-
   Future<void> setWay2MeritNewValue(int newValue) async {
     _way2MeritEvaluate = newValue;
   }
-
   Future<void> setWay2DemeritNewValue(int newValue) async {
     _way2DemeritEvaluate = newValue;
   }
-
   Future<void> setConclusion(String newConclusion) async {
     conclusion = newConclusion;
   }
@@ -490,7 +493,7 @@ class CompareViewModel extends ChangeNotifier {
     _selectOverviews =[];
     //tagTitleを元にList<Tag>を取得
     _selectTagList =await _compareRepository.onSelectTag(tagTitle);
-//    print('viewModel/onSelectTag:${_selectTagList.map((e) => e.tagTitle)}');
+    print('viewModel/onSelectTag:${_selectTagList.map((e) => e.tagTitle)}');
 
    // Tag内のcomparisonItemIdを元にoverViewを取得しリスト化
   final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
@@ -502,13 +505,24 @@ class CompareViewModel extends ChangeNotifier {
            final selectOverView =
       await  _compareRepository.getComparisonOverview(id);
        _selectOverviews.add(selectOverView);
-//       print('Future.forEach:$_selectOverviews');
+       print('Future.forEach:$_selectOverviews');
     });
 //    print('viewModel/onSelectTag/selectOverview:${_selectOverviews.map((overview) => overview.itemTitle)}');
     notifyListeners();
   }
 
-
+  ///SelectTagPageのFutureBuilder用
+  Future<List<ComparisonOverview>> getSelectList(String tagTitle) async {
+    _selectOverviews =[];
+    _selectTagList = await _compareRepository.onSelectTag(tagTitle);
+    final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
+    await Future.forEach(idList, (String id) async{
+      final selectOverView =
+      await  _compareRepository.getComparisonOverview(id);
+      _selectOverviews.add(selectOverView);
+    });
+    return _selectOverviews;
+  }
 
 
 

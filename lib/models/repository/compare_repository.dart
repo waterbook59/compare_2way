@@ -111,6 +111,7 @@ class CompareRepository {
         .toComparisonOverviews(comparisonOverviewRecords);
   }
 
+  //todo getOverviewListと内容同じなので、統一してもいいかも
   Future<List<ComparisonOverview>> getList() async {
     final comparisonOverviewRecords = await _comparisonItemDao.allOverviews;
     return _overviewResults = comparisonOverviewRecords
@@ -322,6 +323,8 @@ class CompareRepository {
     //List<TagRecord>=>List<Tag>
     return _selectTagList = selectTagRecordList.toTagList(selectTagRecordList);
   }
+
+
 
 
 
