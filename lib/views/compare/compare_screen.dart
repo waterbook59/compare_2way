@@ -19,12 +19,13 @@ import 'components/table_part.dart';
 class CompareScreen extends StatelessWidget {
   const CompareScreen({
     this.comparisonOverview,
-//    this.tagTitle,  this.itemTitleEditMode,
+    this.tagTitle,
+    this.screenEditMode,
   });
 
   final ComparisonOverview comparisonOverview;
-//  final String tagTitle;
-//  final ItemTitleEditMode itemTitleEditMode;
+  final String tagTitle;
+  final ScreenEditMode screenEditMode;
 
 
   //todo itemsはList<Merit>に変更
@@ -63,10 +64,12 @@ class CompareScreen extends StatelessWidget {
         backgroundColor: primaryColor,
 //        leading: GestureDetector(child: const Icon(Icons.arrow_back_ios),
 //    onTap: ()=> _backListPage(context)),
-        middle: const Text(
-          'Compare List',
-          style: middleTextStyle,
-        ),
+        middle:
+        screenEditMode ==ScreenEditMode.fromListPage
+            ?
+        const Text('Compare List', style: middleTextStyle,)
+        :
+        Text(tagTitle),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
           ///保存完了ボタン //todo 保存完了ボタンWidget分割
           GestureDetector(
@@ -158,27 +161,6 @@ class CompareScreen extends StatelessWidget {
                         },
                       );
                     }),
-              ///way1メリット_Consumer
-//                Consumer<CompareViewModel>(
-//                    builder: (context, compareViewModel, child) {
-//                      return AccordionPart(
-//                        title: compareViewModel.way1Title,
-//                        displayList: DisplayList.way1Merit,
-//                        inputChanged: (newDesc, index) =>
-//                            _accordionInputChange(
-//                                context,DisplayList.way1Merit,
-//                                newDesc, index,comparisonOverview),
-//                        way1MeritList: compareViewModel.way1MeritList,
-//                        addList: () =>
-//                            _accordionAddList(context,
-//                                DisplayList.way1Merit, comparisonOverview),
-//                        deleteList: (way1MeritIdIndex)=>
-//                            _accordionDeleteList(context,
-//                                DisplayList.way1Merit,
-//                                way1MeritIdIndex,comparisonOverview),
-//                      );
-//                    }
-//                ),
                 ///way2 メリット
                 Selector<CompareViewModel, String>(
                   selector: (context, viewModel) => viewModel.way2Title,

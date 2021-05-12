@@ -293,6 +293,11 @@ class CompareViewModel extends ChangeNotifier {
       createdAt: DateTime.now(),
     );
     await _compareRepository.saveComparisonItem(saveOverview);
+
+    ///updateComparisonOverViewと同じで内容更新されたらonSelectTag実施
+    //todo 自動更新の場合はキーボード完了ボタンを押したらonSelectTag
+    await onSelectTag(selectTagTitle);
+
     notifyListeners();
   }
 

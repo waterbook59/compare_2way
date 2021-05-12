@@ -29,9 +29,9 @@ class TagPage extends StatelessWidget {
           'タグ',
           style: middleTextStyle,
         ),
-        trailing: const Text(
-          '編集',
-          style: trailingTextStyle,
+        trailing:
+        //todo 編集ボタン押すとタグ名編集できるように
+         const Text('編集', style: trailingTextStyle,
         ),
       ),
       ///Scaffoldで全く問題なし
@@ -77,7 +77,6 @@ class TagPage extends StatelessWidget {
                             final overview = snapshot.data[index];
                             //DateTime=>String変換
                             //todo 1つめのリストの上にDivider的な線が必要
-                            //todo onTapでアイテムリスト表示画面へ移行
                             //todo slidableでアイテムから削除実行
                             return TagList(
                             title: overview.tagTitle,
@@ -113,7 +112,6 @@ class TagPage extends StatelessWidget {
         context,
         MaterialPageRoute<void>(
             builder: (context) => SelectTagPage(
-              //todo viewModel値渡しではなく、SelectTagPage側でviewModelで取得する形に
 //              selectTagList: viewModel.selectTagList,
             tagTitle: tagTitle,
             )));

@@ -188,7 +188,7 @@ class _InputPartState extends State<InputPart> {
         context,
         MaterialPageRoute<void>(
             builder: (context) => CompareScreen(
-//                  itemEditMode: ItemEditMode.add,
+                   screenEditMode: ScreenEditMode.fromListPage,
 //                  comparisonOverview: comparisonOverview,
                   comparisonOverview: viewModel.overviewDB,
                 )));

@@ -12,9 +12,8 @@ import "package:intl/intl.dart";
 
 
 class SelectTagPage extends StatelessWidget {
-  const SelectTagPage({this.selectTagList,this.tagTitle});
-//todo viewModel値渡しではなく、SelectTagPage側でviewModelで取得する形に
-  final List<Tag> selectTagList;
+  const SelectTagPage({this.tagTitle});
+
   final String tagTitle;
 
   @override
@@ -22,12 +21,11 @@ class SelectTagPage extends StatelessWidget {
     final primaryColor = Theme
         .of(context)
         .primaryColor;
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
         middle: Text(
-          //todo viewModel値渡しではなく、SelectTagPage側でviewModelで取得する形に
           tagTitle,
           style: middleTextStyle,
         ),
@@ -35,15 +33,14 @@ class SelectTagPage extends StatelessWidget {
       //materialのScaffoldで問題なし
       child:Scaffold(
         body:
-//todo タイトル編集や結論編集をした内容が反映されない(selectOverviewsが更新されているが
-        //viewModel.selectOverviewsを更新されていない
+        //todo tagChipPartに新規タブ追加時、SelectTagPageに
         Selector<CompareViewModel, List<ComparisonOverview>>(
             selector: (context, viewModel) => viewModel.selectOverviews,
             builder: (context, selectOverviews, child) {
               print('SelectTagPage通って描画');
-        return //FutureBuilderでgetList()しないと再描画してもselectOverviews更新されない
-
-
+        return
+          //FutureBuilderでgetList()しないと再描画してもselectOverviews更新されない
+          //=>この画面を更新したいメソッドのところでselectOverviewsを更新する
               ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -63,13 +60,8 @@ class SelectTagPage extends StatelessWidget {
                       listDecoration: listDecoration,
                     );
 
-
-
-
-
                   });
 
-        Text(selectOverviews[0].itemTitle);
     }
         ),
 
@@ -89,7 +81,8 @@ class SelectTagPage extends StatelessWidget {
         MaterialPageRoute<void>(
             builder: (context) => CompareScreen(
               comparisonOverview: updateOverview,
-//              itemTitleEditMode: ItemTitleEditMode.all,
+              tagTitle: tagTitle,
+              screenEditMode: ScreenEditMode.fromSelectTagPage,
             )));
 
   }
