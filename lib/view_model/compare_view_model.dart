@@ -59,6 +59,7 @@ class CompareViewModel extends ChangeNotifier {
   List<Tag> get selectTagList => _selectTagList;
   List<ComparisonOverview> _selectOverviews = <ComparisonOverview>[];
   List<ComparisonOverview> get selectOverviews => _selectOverviews;
+  String selectTagTitle= '';
 
 
   ListEditMode editStatus = ListEditMode.display;
@@ -100,8 +101,10 @@ class CompareViewModel extends ChangeNotifier {
   }
   ///AddScreen/InputPartでComparisonOverview更新：itemTitle,way1Title,way2Titleのみ変更
   Future<void> updateComparisonOverView({
-      ComparisonOverview comparisonOverview, String tagTitle,
-  ItemTitleEditMode itemTitleEditMode}) async {
+      ComparisonOverview comparisonOverview,
+//    String tagTitle,
+//    ItemTitleEditMode itemTitleEditMode,
+  }) async {
     //更新するプロパティだけ入れてrepositoryでCompanion作成=>更新
     final updateOverview = ComparisonOverview(
       comparisonItemId: comparisonOverview.comparisonItemId,
@@ -113,11 +116,14 @@ class CompareViewModel extends ChangeNotifier {
     await _compareRepository.updateComparisonOverView(updateOverview);
   print('comparisonOverviewのタイトル類を更新');
 
-  if(itemTitleEditMode ==ItemTitleEditMode.select){
-    print('viewModel.updateComparison/onSelectTagする前:$tagTitle');//tagTitleがnull
-    //todo 名前付引数でtagTitleを設定=>selectTagPage側から編集の場合はtagTitleを渡し、onSelectTagすることで、selectTagPageはSelectorのみでいいかも
-     return onSelectTag(tagTitle);
-  }
+//  if(itemTitleEditMode ==ItemTitleEditMode.select){
+//    print('viewModel.updateComparison/onSelectTagする前:$tagTitle');
+//    //todo 名前付引数でtagTitleを設定=>selectTagPage側から編集の場合はtagTitleを渡し、onSelectTagすることで、selectTagPageはSelectorのみでいいかも
+//     return onSelectTag(tagTitle);//todo selectTagTitleでいいのではないか説
+//  }else{
+    print('viewModel.updateComparison/onSelectTagする前:$tagTitle');
+    await onSelectTag(selectTagTitle);
+//  }
 
     notifyListeners();
   }
@@ -490,6 +496,7 @@ class CompareViewModel extends ChangeNotifier {
 
   ///TagPage=>SelectTagPage
   Future<void> onSelectTag(String tagTitle) async{
+    selectTagTitle = tagTitle;
     _selectOverviews =[];
     //tagTitleを元にList<Tag>を取得
     _selectTagList =await _compareRepository.onSelectTag(tagTitle);

@@ -35,7 +35,7 @@ enum AddScreenMode{
   edit,
 }
 
-enum ItemTitleEditMode{
-  all,
-  select
-}
+//enum ItemTitleEditMode{
+//  all,
+//  select
+//}

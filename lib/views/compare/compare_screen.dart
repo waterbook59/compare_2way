@@ -18,11 +18,13 @@ import 'components/table_part.dart';
 ///Table=>conclusionの順で編集するとTableリセットされる問題を解決
 class CompareScreen extends StatelessWidget {
   const CompareScreen({
-    this.comparisonOverview,this.tagTitle,  this.itemTitleEditMode,});
+    this.comparisonOverview,
+//    this.tagTitle,  this.itemTitleEditMode,
+  });
 
   final ComparisonOverview comparisonOverview;
-  final String tagTitle;
-  final ItemTitleEditMode itemTitleEditMode;
+//  final String tagTitle;
+//  final ItemTitleEditMode itemTitleEditMode;
 
 
   //todo itemsはList<Merit>に変更
@@ -83,8 +85,9 @@ class CompareScreen extends StatelessWidget {
           //todo iphoneだと編集の下が切れてる
           //todo タイトル編集=>addScreenは下から遷移
           EditBottomAction(
-            comparisonOverview: comparisonOverview,tagTitle: tagTitle,
-            itemTitleEditMode: itemTitleEditMode,
+            comparisonOverview: comparisonOverview,
+//            tagTitle: tagTitle,
+//            itemTitleEditMode: itemTitleEditMode,
           ),
         ]),
       ),

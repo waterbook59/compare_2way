@@ -89,8 +89,8 @@ class SelectTagPage extends StatelessWidget {
         MaterialPageRoute<void>(
             builder: (context) => CompareScreen(
               comparisonOverview: updateOverview,
-              tagTitle: tagTitle,
-              itemTitleEditMode: ItemTitleEditMode.select,
+//              tagTitle: tagTitle,
+//              itemTitleEditMode: ItemTitleEditMode.select,
             )));
 
   }

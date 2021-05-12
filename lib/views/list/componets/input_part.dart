@@ -17,20 +17,16 @@ class InputPart extends StatefulWidget {
   const InputPart({
     this.displayMode,
     this.comparisonOverview,
-    this.tagTitle,
-    this.itemTitleEditMode,
-//    this.itemTitle,
-//    this.way1Title,
-//    this.way2Title,
+//    this.tagTitle,
+//    this.itemTitleEditMode,
+
   });
 
   final AddScreenMode displayMode;
   final ComparisonOverview comparisonOverview;
-  final String tagTitle;
-  final ItemTitleEditMode itemTitleEditMode;
-//  final String itemTitle;
-//  final String way1Title;
-//  final String way2Title;
+//  final String tagTitle;
+//  final ItemTitleEditMode itemTitleEditMode;
+
 
   @override
   _InputPartState createState() => _InputPartState();
@@ -121,7 +117,9 @@ class _InputPartState extends State<InputPart> {
           // AddScreenMode.editならupdateメソッド
               ? widget.displayMode == AddScreenMode.add
                 ?() => _createComparisonItems(context)
-                :()=>_updateComparisonItems(context,widget.tagTitle,widget.itemTitleEditMode)
+                :()=>_updateComparisonItems(context,
+//              widget.tagTitle,widget.itemTitleEditMode,
+          )
               : null,
         ),
       ],
@@ -200,14 +198,16 @@ class _InputPartState extends State<InputPart> {
 
   //更新メソッド
   Future<void>_updateComparisonItems(BuildContext context,
-      String tagTitle,ItemTitleEditMode itemTitleEditMode) async{
+//      String tagTitle,ItemTitleEditMode itemTitleEditMode
+      ) async{
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
   //登録
-    print('更新ボタン押すtagTitle&itemTitleEditMode：$tagTitle & $itemTitleEditMode');
+//    print('更新ボタン押すtagTitle&itemTitleEditMode：$tagTitle & $itemTitleEditMode');
     await viewModel.updateComparisonOverView(
         comparisonOverview:widget.comparisonOverview,
-    tagTitle: tagTitle,
-    itemTitleEditMode:itemTitleEditMode );
+//    tagTitle: tagTitle,
+//    itemTitleEditMode:itemTitleEditMode
+    );
     //CompareScreenへ
     Navigator.pop(context);
   }

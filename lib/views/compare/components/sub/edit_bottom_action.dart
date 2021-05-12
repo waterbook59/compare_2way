@@ -14,12 +14,13 @@ import 'package:provider/provider.dart';
 class EditBottomAction extends StatelessWidget {
 
   const EditBottomAction({
-    this.comparisonOverview,this.tagTitle,this.itemTitleEditMode,
+    this.comparisonOverview,
+//    this.tagTitle,this.itemTitleEditMode,
   });
 
   final ComparisonOverview comparisonOverview;
-  final String tagTitle;
-  final ItemTitleEditMode itemTitleEditMode;
+//  final String tagTitle;
+//  final ItemTitleEditMode itemTitleEditMode;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +44,8 @@ class EditBottomAction extends StatelessWidget {
                         _onPopupMenuSelected(
                           context:context,
                           selectedMenu:CompareEditMenu.titleEdit,
-                          tagTitle:tagTitle,
-                          itemTitleEditMode:itemTitleEditMode,
+//                          tagTitle:tagTitle,
+//                          itemTitleEditMode:itemTitleEditMode,
                         ),
                   ),
                   CupertinoActionSheetAction(
@@ -71,12 +72,15 @@ class EditBottomAction extends StatelessWidget {
     );
   }
 
+  //todo CompareScreenで連続で編集ボタンを押すと初回の変更がAddScreenに反映されない
   void _onPopupMenuSelected({BuildContext context,
-      CompareEditMenu selectedMenu,String tagTitle,
-      ItemTitleEditMode itemTitleEditMode}) {
+      CompareEditMenu selectedMenu,
+//    String tagTitle,
+//      ItemTitleEditMode itemTitleEditMode
+  }) {
     switch (selectedMenu) {
       case CompareEditMenu.titleEdit:
-        print('edit_bottom_actionでタイトル編集押す/tagTitle&itemTitleEditMode:$tagTitle & $itemTitleEditMode');
+//        print('edit_bottom_actionでタイトル編集押す/tagTitle&itemTitleEditMode:$tagTitle & $itemTitleEditMode');
         final viewModel = Provider.of<CompareViewModel>(context, listen: false)
           ..itemTitle = comparisonOverview.itemTitle
           ..way1Title = comparisonOverview.way1Title
@@ -88,8 +92,8 @@ class EditBottomAction extends StatelessWidget {
           builder: (context) => AddScreen(
             displayMode: AddScreenMode.edit,
             comparisonOverview: comparisonOverview,
-            tagTitle: tagTitle,
-            itemTitleEditMode: itemTitleEditMode,
+//            tagTitle: tagTitle,
+//            itemTitleEditMode: itemTitleEditMode,
           ),
         ));
         break;
