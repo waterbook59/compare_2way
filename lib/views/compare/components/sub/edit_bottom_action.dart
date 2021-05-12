@@ -92,8 +92,6 @@ class EditBottomAction extends StatelessWidget {
           builder: (context) => AddScreen(
             displayMode: AddScreenMode.edit,
             comparisonOverview: comparisonOverview,
-//            tagTitle: tagTitle,
-//            itemTitleEditMode: itemTitleEditMode,
           ),
         ));
         break;

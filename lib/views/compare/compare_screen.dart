@@ -81,17 +81,11 @@ class CompareScreen extends StatelessWidget {
               return _saveItem(context, comparisonOverview);
             },
           ),
-          const SizedBox(
-            width: 8,
-          ),
+          const SizedBox(width: 8,),
           ///編集ボタン
           //todo iphoneだと編集の下が切れてる
           //todo タイトル編集=>addScreenは下から遷移
-          EditBottomAction(
-            comparisonOverview: comparisonOverview,
-//            tagTitle: tagTitle,
-//            itemTitleEditMode: itemTitleEditMode,
-          ),
+          EditBottomAction(comparisonOverview: comparisonOverview,),
         ]),
       ),
       ///Fab使わないけどScaffold必須
@@ -252,19 +246,12 @@ class CompareScreen extends StatelessWidget {
                   },
                 ),
                 //todo 自己評価&TablePart widget分割
-                const SizedBox(
-                  height: 4,
-                ),
+                const SizedBox(height: 4,),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Text(
-                    '自己評価',
-                    textAlign: TextAlign.left,
-                  ),
+                  child: Text('自己評価', textAlign: TextAlign.left,),
                 ),
-                const SizedBox(
-                  height: 4,
-                ),
+                const SizedBox(height: 4,),
               ///テーブル
                 //todo  width: MediaQuery.of(context).size.width*0.8の形に変更
                 TablePart(
@@ -299,20 +286,13 @@ class CompareScreen extends StatelessWidget {
                   inputChanged: (newConclusion) =>
                       _conclusionInputChanged(context, newConclusion),
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
+                const SizedBox(height: 16,),
               ///タグエリア
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Text(
-                    'タグ',
-                    textAlign: TextAlign.left,
-                  ),
+                  child: Text('タグ', textAlign: TextAlign.left,),
                 ),
-                const SizedBox(
-                  height: 4,
-                ),
+                const SizedBox(height: 4,),
                  // SelectorでDBから取って来たtagList=>displayList渡す
                  Selector<CompareViewModel,List<Chip>>(
                    selector: (context, viewModel) => viewModel.displayChipList,
@@ -335,9 +315,7 @@ class CompareScreen extends StatelessWidget {
                         );
                       }),
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
+                const SizedBox(height: 16,),
               ],
             ),
           ),

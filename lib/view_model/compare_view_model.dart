@@ -424,6 +424,9 @@ class CompareViewModel extends ChangeNotifier {
         label: Text(tag.tagTitle),
       );
     }).toList();
+
+    //ここでSelectTaPage更新するとComPareScreenへ映る毎に読み込まれてしまうのでやめる
+//    await onSelectTag(selectTagTitle);
     notifyListeners();
   }
 
@@ -534,6 +537,12 @@ class CompareViewModel extends ChangeNotifier {
       _selectOverviews.add(selectOverView);
     });
     return _selectOverviews;
+  }
+  ///onSelectTagを実施してSelectTagPageを更新するだけのメソッド
+  //TagDialogPageの完了ボタンで追加=>削除=>このメソッド=>読み込み(notifyListeners)するので
+  //notifyListenersはなし
+  Future<void> updateSelectTagPage() async{
+        await onSelectTag(selectTagTitle);
   }
 
 

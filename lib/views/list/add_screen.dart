@@ -61,8 +61,6 @@ class AddScreen extends StatelessWidget {
 ///InputPart
               InputPart(displayMode: displayMode,
                 comparisonOverview: comparisonOverview,
-//                tagTitle: tagTitle,
-//                itemTitleEditMode: itemTitleEditMode,
               ),
             ],
           ),

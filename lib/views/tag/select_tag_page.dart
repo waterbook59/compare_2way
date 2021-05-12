@@ -33,11 +33,11 @@ class SelectTagPage extends StatelessWidget {
       //materialのScaffoldで問題なし
       child:Scaffold(
         body:
-        //todo tagChipPartに新規タブ追加時、SelectTagPageに
+        //todo 並び順を更新日順に変更する
         Selector<CompareViewModel, List<ComparisonOverview>>(
             selector: (context, viewModel) => viewModel.selectOverviews,
             builder: (context, selectOverviews, child) {
-              print('SelectTagPage通って描画');
+//              print('SelectTagPage通って描画');
         return
           //FutureBuilderでgetList()しないと再描画してもselectOverviews更新されない
           //=>この画面を更新したいメソッドのところでselectOverviewsを更新する

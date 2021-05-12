@@ -17,15 +17,11 @@ class InputPart extends StatefulWidget {
   const InputPart({
     this.displayMode,
     this.comparisonOverview,
-//    this.tagTitle,
-//    this.itemTitleEditMode,
 
   });
 
   final AddScreenMode displayMode;
   final ComparisonOverview comparisonOverview;
-//  final String tagTitle;
-//  final ItemTitleEditMode itemTitleEditMode;
 
 
   @override
@@ -145,7 +141,7 @@ class _InputPartState extends State<InputPart> {
     });
   }
 
-  //todo 新規作成を追加すると、過去のWay1,2Meritリストの項目が重複して作成されるエラー発生
+
   // 押せる・押せないはinsta_cloneのcomment_input_part参照
   ///textEditingControllerをview側で設定=>viewModelに設定するメソッド
   Future<void> _createComparisonItems(BuildContext context) async {
@@ -205,8 +201,6 @@ class _InputPartState extends State<InputPart> {
 //    print('更新ボタン押すtagTitle&itemTitleEditMode：$tagTitle & $itemTitleEditMode');
     await viewModel.updateComparisonOverView(
         comparisonOverview:widget.comparisonOverview,
-//    tagTitle: tagTitle,
-//    itemTitleEditMode:itemTitleEditMode
     );
     //CompareScreenへ
     Navigator.pop(context);
