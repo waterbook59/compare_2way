@@ -40,6 +40,7 @@ class _DescFormState extends State<DescForm> {
           ///TextFieldを長く入力すると折り返し
           maxLines: null,
         ),
+        //todo ボタンをフォーカス時のみ出す
         IconButton(
           icon: const Icon(
             Icons.remove_circle_outline,

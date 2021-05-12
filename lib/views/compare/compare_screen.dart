@@ -124,6 +124,7 @@ class CompareScreen extends StatelessWidget {
                   iconColor: accentColor,
                 ),
               ///way1 メリット way1Titleこの画面で変えないのでSelectorいらんかも
+                ///ListPageとSelectTagPageそれぞれから編集が入るので、way1Titleのみの変更に対応しているSelectorよりComsumerがいいかも
                 Selector<CompareViewModel, String>(
                     selector: (context, viewModel) => viewModel.way1Title,
                     builder: (context, way1Title, child) {
@@ -157,7 +158,28 @@ class CompareScreen extends StatelessWidget {
                         },
                       );
                     }),
-              ///way2 メリット
+              ///way1メリット_Consumer
+//                Consumer<CompareViewModel>(
+//                    builder: (context, compareViewModel, child) {
+//                      return AccordionPart(
+//                        title: compareViewModel.way1Title,
+//                        displayList: DisplayList.way1Merit,
+//                        inputChanged: (newDesc, index) =>
+//                            _accordionInputChange(
+//                                context,DisplayList.way1Merit,
+//                                newDesc, index,comparisonOverview),
+//                        way1MeritList: compareViewModel.way1MeritList,
+//                        addList: () =>
+//                            _accordionAddList(context,
+//                                DisplayList.way1Merit, comparisonOverview),
+//                        deleteList: (way1MeritIdIndex)=>
+//                            _accordionDeleteList(context,
+//                                DisplayList.way1Merit,
+//                                way1MeritIdIndex,comparisonOverview),
+//                      );
+//                    }
+//                ),
+                ///way2 メリット
                 Selector<CompareViewModel, String>(
                   selector: (context, viewModel) => viewModel.way2Title,
                   builder: (context, way2Title, child) {

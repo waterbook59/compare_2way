@@ -14,7 +14,8 @@ import 'sub/gf_accordian.dart' as custom;
 class AccordionPart extends StatefulWidget {
 
   const AccordionPart({
-    this.title,this.displayList,
+    this.title,
+    this.displayList,
     this.way1MeritList,
     this.way2MeritList,
     this.inputChanged, this.addList,this.deleteList});

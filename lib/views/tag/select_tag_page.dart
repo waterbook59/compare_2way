@@ -84,13 +84,12 @@ class SelectTagPage extends StatelessWidget {
     ///初期表示は読み込みさせる
     final viewModel = Provider.of<CompareViewModel>(context, listen: false)
       ..compareScreenStatus =CompareScreenStatus.set;
-    Navigator.push(
-        context,
+    ///画面遷移時、bottomNavbarを外す
+    Navigator.of(context, rootNavigator: true).push(
         MaterialPageRoute<void>(
             builder: (context) => CompareScreen(
               comparisonOverview: updateOverview,
-//              tagTitle: tagTitle,
-//              itemTitleEditMode: ItemTitleEditMode.select,
+//              itemTitleEditMode: ItemTitleEditMode.all,
             )));
 
   }

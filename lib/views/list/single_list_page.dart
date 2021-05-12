@@ -217,8 +217,8 @@ class SingleListPage extends StatelessWidget {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     ///初期表示は読み込みさせる
     viewModel.compareScreenStatus =CompareScreenStatus.set;
-    Navigator.push(
-        context,
+    ///画面遷移時、bottomNavbarを外す
+    Navigator.of(context, rootNavigator: true).push(
         MaterialPageRoute<void>(
             builder: (context) => CompareScreen(
                   comparisonOverview: updateOverview,
