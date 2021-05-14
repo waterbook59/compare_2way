@@ -66,10 +66,8 @@ class CompareScreen extends StatelessWidget {
 //    onTap: ()=> _backListPage(context)),
         middle:
         screenEditMode ==ScreenEditMode.fromListPage
-            ?
-        const Text('Compare List', style: middleTextStyle,)
-        :
-        Text(tagTitle),
+            ? const Text('Compare List', style: middleTextStyle,)
+            : Text(tagTitle),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
           ///保存完了ボタン //todo 保存完了ボタンWidget分割
           GestureDetector(

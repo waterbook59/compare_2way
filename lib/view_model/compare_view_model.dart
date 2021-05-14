@@ -63,6 +63,7 @@ class CompareViewModel extends ChangeNotifier {
 
 
   ListEditMode editStatus = ListEditMode.display;
+  bool tagEditMode = true; //初期設定は通常モード
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
   Future<void> getOverview(String comparisonItemId) async {
@@ -506,9 +507,13 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> onSelectTag(String tagTitle) async{
     selectTagTitle = tagTitle;
     _selectOverviews =[];
-    //tagTitleを元にList<Tag>を取得
+    //tagTitleを元にList<Tag>を取得(更新順)
+    // todo ListPage(_comparisonOverviews)とSelectListPage(_selectOverviews)のcreatedAtが異なることでリスト表示が違う
+    //タグが追加された順になっている(一方で更新されたものほど上に来た方が使い勝手いいかも(ascでなくてdesc))
     _selectTagList =await _compareRepository.onSelectTag(tagTitle);
     print('viewModel/onSelectTag:${_selectTagList.map((e) => e.tagTitle)}');
+    print('viewModel/onSelectTag:${_selectTagList.map((e) => e.createAtToString)}');
+    //[Tag(),Tag(),Tag()]みたいなイメージ
 
    // Tag内のcomparisonItemIdを元にoverViewを取得しリスト化
   final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
@@ -543,6 +548,12 @@ class CompareViewModel extends ChangeNotifier {
   //notifyListenersはなし
   Future<void> updateSelectTagPage() async{
         await onSelectTag(selectTagTitle);
+  }
+
+  //TagPageでの通常モード(編集)<=>編集モード(完了)の切替
+  Future<void> changeTagEditMode() {
+     tagEditMode = !tagEditMode;
+    notifyListeners();
   }
 
 

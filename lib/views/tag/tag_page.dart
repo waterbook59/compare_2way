@@ -25,15 +25,24 @@ class TagPage extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
-        middle: const Text(
-          'タグ',
-          style: middleTextStyle,
-        ),
+        middle: const Text('タグ', style: middleTextStyle,),
         trailing:
         //todo 編集ボタン押すとタグ名編集できるように
-         const Text('編集', style: trailingTextStyle,
+        //編集モード(true)の時はリストをタップするとTagListのtagTitle部を編集する形に
+        GestureDetector(
+          onTap: () => _changeEdit(context),
+          child:Selector<CompareViewModel,bool>(
+          selector: (context, viewModel) => viewModel.tagEditMode,
+          builder:(context, tagEditMode, child){
+            return tagEditMode
+                ? const Text('編集', style: trailingTextStyle)
+                : const Text('完了', style: trailingTextStyle);
+          },
+//         const Text('編集', style: trailingTextStyle,
+        ),
         ),
       ),
+
       ///Scaffoldで全く問題なし
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
@@ -83,7 +92,8 @@ class TagPage extends StatelessWidget {
                             tagAmount: overview.tagAmount,
                             createdAt: '登録時間',
                             onDelete: (){},
-                            onTap: ()=>_onSelectTag(context,overview.tagTitle),
+                            onTap: ()=>_onSelectTag(
+                                context,overview.tagTitle,overview.itemIdList),
                               listDecoration: listDecoration,
                             );
                           },
@@ -103,17 +113,30 @@ class TagPage extends StatelessWidget {
 
   ///Tagを押したらタグ登録されたCompareList一覧表示
   ///IdからcomparisonOverview.titleを取得し表示
-  Future<void>_onSelectTag(BuildContext context, String tagTitle) async{
-    print('tagTitleでDB検索:$tagTitle');
+  Future<void>_onSelectTag(BuildContext context,
+      String tagTitle, List<String> itemIdList) async{
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.onSelectTag(tagTitle);
-    //materialpagerputeでリスト一覧へ遷移
-    await Navigator.push(
-        context,
-        MaterialPageRoute<void>(
-            builder: (context) => SelectTagPage(
-//              selectTagList: viewModel.selectTagList,
-            tagTitle: tagTitle,
-            )));
+    //通常モード：タップでDB検索=>SelectTagPage
+    if(viewModel.tagEditMode){
+      await viewModel.onSelectTag(tagTitle);
+      await Navigator.push(context,
+          MaterialPageRoute<void>(
+              builder: (context) => SelectTagPage(tagTitle: tagTitle,
+              )));
+    }else{
+      //編集モード：タップでタイトルをeditTagTitleへ変更=>onSubmittedでitemIdListを元にDBをupdate
+    print('編集モード');
+    }
+
+
+
+
+  }
+
+  //編集タップでtagEditMode切替(trueが通常モード)
+  Future<void>_changeEdit(BuildContext context) async{
+    print('編集タップ！');
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.changeTagEditMode();
   }
 }

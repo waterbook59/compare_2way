@@ -30,6 +30,7 @@ class SingleListPage extends StatelessWidget {
         ),
         //todo ListPageに戻るとtrailing位置の編集に黄色下線出る
         //参考https://qiita.com/kurararara/items/2afd7f93f2676c5cee34
+        //todo Selectorでbool型での方がすっきりかける(TagPage参照)
         trailing: GestureDetector(
             onTap: () => _changeEdit(context, viewModel.editStatus),
             child: Consumer<CompareViewModel>(

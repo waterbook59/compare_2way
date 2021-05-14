@@ -207,11 +207,14 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       (select(tagRecords)..orderBy([(t)=>OrderingTerm(expression:
       t.createAtToString,mode: OrderingMode.asc)])).get();
 
-  ///読込：選択タグ情報取得
+  ///読込：選択タグ情報取得 tagTitleから登録順に返す
   //なぜか取得できない=>async/awaitではなくreturnがよかったみたい
   Future<List<TagRecord>> onSelectTag(String tagTitle) {
     return (select(tagRecords)
-            ..where((tbl) => tbl.tagTitle.equals(tagTitle))).get();
+            ..where((tbl) => tbl.tagTitle.equals(tagTitle))
+            ..orderBy([(t)=>OrderingTerm(expression:
+            t.createAtToString,mode: OrderingMode.asc)])
+    ).get();
 
   }
 
