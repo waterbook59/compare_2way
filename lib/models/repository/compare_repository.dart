@@ -1,6 +1,7 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
+import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_dao.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_database.dart';
 import 'package:compare_2way/utils/extensions.dart';
@@ -281,7 +282,7 @@ class CompareRepository {
       //2つのリストを比較しようとしてforEach内でforEachしようとしたけど、動かない
 
       ///(別のリストのタグにも使うのでtagTitleの重複登録は必要)
-      //primaryKeyで弾かれるものも含めての登録は、insetよりも
+      //primaryKeyで弾かれるものも含めての登録は、insertよりも
       // insertOnConflictUpdateが良い(毎回UNIQUE constraint failedエラー発生するので)
       await _comparisonItemDao
           .insertTagRecordList(tagRecordList);
@@ -322,6 +323,44 @@ class CompareRepository {
 //        print('repo/onSelectTag/selectTagRecordList:$selectTagRecordList');
     //List<TagRecord>=>List<Tag>
     return _selectTagList = selectTagRecordList.toTagList(selectTagRecordList);
+  }
+  ///更新 Tag List<TagChart>=>List<Tag>=>List<TagRecord>
+  Future<void> updateTagTitle(
+      //わかりやすいように引数名変更
+      TagChart updateTagChart,List<String> idList) async{
+      //comparisonItemIdを元にtagTitleを編集
+    try{
+      //todo もしかしたらidとTagRecordsCompanionだけでいいかも
+      //List<TagChart>=>List<Tag>
+      final updateTagList = idList.map((id) {
+        return Tag(
+          tagTitle: updateTagChart.tagTitle,
+          comparisonItemId: id,
+        );
+      }).toList();
+
+      //List<Tag>=>List<TagRecord>
+      //更新プロパティ以外のtagIdとかcreatedAtは値入ってないのでnull
+//      final updateTagRecordList =
+//      updateTagList.toTagRecordList(updateTagList);
+//      print('repo/updateTagTitle/updateTagRecordList:$updateTagRecordList');
+
+//      final tagRecordCompanionList = updateTagRecordList.map((tagRecord){
+//        return TagRecordsCompanion(
+//          tagTitle: Value(tagRecord.tagTitle)
+//        );
+//      }).toList();
+      final updateTagRecordCompanion =TagRecordsCompanion(
+            tagTitle: Value(updateTagChart.tagTitle)
+          );
+
+      //saveComparisonOverviewDB参考 1つのidと1つのcompanion渡し
+      await _comparisonItemDao.updateTagTitle(
+          idList, updateTagRecordCompanion);
+
+    }on SqliteException catch (e) {
+      print('repository更新エラー:${e.toString()}');
+    }
   }
 
 

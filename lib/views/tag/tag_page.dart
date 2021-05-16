@@ -84,16 +84,18 @@ class TagPage extends StatelessWidget {
                           itemCount: snapshot.data.length,
                           itemBuilder: (BuildContext context, int index) {
                             final overview = snapshot.data[index];
+//                            print('tagPage/itemIdList:$overview');
                             //DateTime=>String変換
                             //todo 1つめのリストの上にDivider的な線が必要
                             //todo slidableでアイテムから削除実行
                             return TagList(
                             title: overview.tagTitle,
+                            selectTagIdList: overview.itemIdList,
                             tagAmount: overview.tagAmount,
                             createdAt: '登録時間',
                             onDelete: (){},
                             onTap: ()=>_onSelectTag(
-                                context,overview.tagTitle,overview.itemIdList),
+                                context,overview.tagTitle),
                               listDecoration: listDecoration,
                             );
                           },
@@ -114,7 +116,7 @@ class TagPage extends StatelessWidget {
   ///Tagを押したらタグ登録されたCompareList一覧表示
   ///IdからcomparisonOverview.titleを取得し表示
   Future<void>_onSelectTag(BuildContext context,
-      String tagTitle, List<String> itemIdList) async{
+      String tagTitle) async{
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     //通常モード：タップでDB検索=>SelectTagPage
     if(viewModel.tagEditMode){
@@ -125,7 +127,13 @@ class TagPage extends StatelessWidget {
               )));
     }else{
       //編集モード：タップでタイトルをeditTagTitleへ変更=>onSubmittedでitemIdListを元にDBをupdate
+      //todo タップでtextFieldにfocus
     print('編集モード');
+    //tagTitleからcomparisonItemIdをviewModelへ格納する
+    await viewModel.getTagTitleId(tagTitle);
+
+
+
     }
 
 

@@ -1,3 +1,4 @@
+import 'package:compare_2way/data_models/tag.dart';
 import 'package:moor/moor.dart';
 import 'comparison_item_database.dart';
 
@@ -37,7 +38,8 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
           .getSingle();
 
   ///保存:comparisonOverview
-  Future<void> saveComparisonOverviewDB(String comparisonItemId,
+  Future<void> saveComparisonOverviewDB(
+      String comparisonItemId,
       ComparisonOverviewRecordsCompanion overviewCompanion) {
     return (update(comparisonOverviewRecords)
       ..where((it) => it.comparisonItemId.equals(comparisonItemId)))
@@ -218,7 +220,19 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   }
 
+  ///編集 タグタイトル
+  Future<void> updateTagTitle(
+      List<String> idList,
+      TagRecordsCompanion tagRecordCompanion) async{
+    //saveComparisonOverviewDB参考
 
+//comparisonItemIdを元にタイトルを編集
+    await Future.forEach(idList,(String id) {
+      (update(tagRecords)
+        ..where((tbl) => tbl.comparisonItemId.equals(id)))
+          .write(tagRecordCompanion);
+    });
+  }
 
 
 

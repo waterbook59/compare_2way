@@ -1,3 +1,4 @@
+import 'package:compare_2way/data_models/comparison_item_id.dart';
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
@@ -60,6 +61,9 @@ class CompareViewModel extends ChangeNotifier {
   List<ComparisonOverview> _selectOverviews = <ComparisonOverview>[];
   List<ComparisonOverview> get selectOverviews => _selectOverviews;
   String selectTagTitle= '';
+  TagChart updateTagChart;
+  List<String> idList=[];//ComparisonItemIdのリスト
+
 
 
   ListEditMode editStatus = ListEditMode.display;
@@ -525,13 +529,13 @@ class CompareViewModel extends ChangeNotifier {
            final selectOverView =
       await  _compareRepository.getComparisonOverview(id);
        _selectOverviews.add(selectOverView);
-       print('Future.forEach:$_selectOverviews');
+       print('Future.forEach/id:${_selectOverviews.map((e) =>e.comparisonItemId).toList()}');
     });
 //    print('viewModel/onSelectTag/selectOverview:${_selectOverviews.map((overview) => overview.itemTitle)}');
     notifyListeners();
   }
 
-  ///SelectTagPageのFutureBuilder用
+  ///SelectTagPageのFutureBuilder用=>使わないので削除して良い
   Future<List<ComparisonOverview>> getSelectList(String tagTitle) async {
     _selectOverviews =[];
     _selectTagList = await _compareRepository.onSelectTag(tagTitle);
@@ -543,7 +547,8 @@ class CompareViewModel extends ChangeNotifier {
     });
     return _selectOverviews;
   }
-  ///onSelectTagを実施してSelectTagPageを更新するだけのメソッド
+
+  ///onSelectTagを実施してSelectTagPageのSelectorを更新するだけのメソッド
   //TagDialogPageの完了ボタンで追加=>削除=>このメソッド=>読み込み(notifyListeners)するので
   //notifyListenersはなし
   Future<void> updateSelectTagPage() async{
@@ -554,6 +559,34 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> changeTagEditMode() {
      tagEditMode = !tagEditMode;
     notifyListeners();
+  }
+
+  ///タグ名の編集時にタグ選択した時にcomparisonIdを取得する タグ名変えてもcreatedAtは更新しない
+  //updateTagTitleと２こ１
+  //todo getAllTagListの方法1でList<TagChart>内にcomparisonItemId格納できればこのメソッドいらない
+  Future<void> getTagTitleId(String tagTitle) async{
+    selectTagTitle = tagTitle;
+
+    //tagTitleからList<Tag>読取
+    _selectTagList =await _compareRepository.onSelectTag(tagTitle);
+    //Tag内のcomparisonItemIdを元にTagChartのList<ComparisonItemId>へ格納
+     idList =
+    _selectTagList.map((tag) => tag.comparisonItemId).toList();
+    print('viewModel/getTagTitled/idList:$idList');
+//    await _compareRepository.updateTagTitle(updateTagList);
+  }
+
+  ///タグ名編集画面でtextFieldに変更があればDBを更新
+  Future<void>updateTagTitle(String newTagTitle) async{
+    ///List<Tag>=>TagChart
+    updateTagChart = TagChart(
+      tagTitle: newTagTitle,
+      tagAmount: _selectTagList.length,
+      itemIdList: idList,
+    );
+    print('viewModel/updateTagTitle/updateTagChart:$updateTagChart');
+    //上のgetTagTitleIdで格納したupdateTagChartを使う
+    await _compareRepository.updateTagTitle(updateTagChart,idList);
   }
 
 

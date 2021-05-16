@@ -1,5 +1,4 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
-import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
