@@ -220,13 +220,13 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   }
 
-  ///編集 タグタイトル
+  ///編集 タグタイトル     saveComparisonOverviewDB参考
   Future<void> updateTagTitle(
       List<String> idList,
       TagRecordsCompanion tagRecordCompanion) async{
-    //saveComparisonOverviewDB参考
 
 //comparisonItemIdを元にタイトルを編集
+  //Future内でforEach回そうとするとエラー=>Future.forEachへ変更
     await Future.forEach(idList,(String id) {
       (update(tagRecords)
         ..where((tbl) => tbl.comparisonItemId.equals(id)))

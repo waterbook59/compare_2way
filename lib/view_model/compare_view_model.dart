@@ -520,7 +520,7 @@ class CompareViewModel extends ChangeNotifier {
     //[Tag(),Tag(),Tag()]みたいなイメージ
 
    // Tag内のcomparisonItemIdを元にoverViewを取得しリスト化
-  final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
+   idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
 
 
 ///forEach内の非同期処理でcomparisonIdからList<overview>取得

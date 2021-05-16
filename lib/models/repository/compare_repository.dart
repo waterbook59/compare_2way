@@ -324,37 +324,16 @@ class CompareRepository {
     //List<TagRecord>=>List<Tag>
     return _selectTagList = selectTagRecordList.toTagList(selectTagRecordList);
   }
-  ///更新 Tag List<TagChart>=>List<Tag>=>List<TagRecord>
+  ///更新 Tag List<TagChart>=>TagRecordsCompanion
   Future<void> updateTagTitle(
-      //わかりやすいように引数名変更
       TagChart updateTagChart,List<String> idList) async{
+    // idとTagRecordsCompanionだけでいい
       //comparisonItemIdを元にtagTitleを編集
     try{
-      //todo もしかしたらidとTagRecordsCompanionだけでいいかも
-      //List<TagChart>=>List<Tag>
-      final updateTagList = idList.map((id) {
-        return Tag(
-          tagTitle: updateTagChart.tagTitle,
-          comparisonItemId: id,
-        );
-      }).toList();
-
-      //List<Tag>=>List<TagRecord>
-      //更新プロパティ以外のtagIdとかcreatedAtは値入ってないのでnull
-//      final updateTagRecordList =
-//      updateTagList.toTagRecordList(updateTagList);
-//      print('repo/updateTagTitle/updateTagRecordList:$updateTagRecordList');
-
-//      final tagRecordCompanionList = updateTagRecordList.map((tagRecord){
-//        return TagRecordsCompanion(
-//          tagTitle: Value(tagRecord.tagTitle)
-//        );
-//      }).toList();
       final updateTagRecordCompanion =TagRecordsCompanion(
             tagTitle: Value(updateTagChart.tagTitle)
           );
-
-      //saveComparisonOverviewDB参考 1つのidと1つのcompanion渡し
+      //saveComparisonOverviewDB参考 idとcompanion渡し
       await _comparisonItemDao.updateTagTitle(
           idList, updateTagRecordCompanion);
 
