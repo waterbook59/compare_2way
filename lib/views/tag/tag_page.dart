@@ -88,13 +88,13 @@ class TagPage extends StatelessWidget {
                             //DateTime=>String変換
                             //todo 1つめのリストの上にDivider的な線が必要
                             //todo slidableでアイテムから削除実行
+                            //todo 編集時はTagList全体をGestureDetectorでgetTagTitleIdできるようにする
                             return TagList(
                             title: overview.tagTitle,
                             selectTagIdList: overview.itemIdList,
                             tagAmount: overview.tagAmount,
                             createdAt: '登録時間',
                             onDelete: (){},
-                              //todo 複数タグがあって編集しようとすると最初の1行しか変更されない
                             onTap: ()=>_onSelectTag(
                                 context,overview.tagTitle),
                               listDecoration: listDecoration,

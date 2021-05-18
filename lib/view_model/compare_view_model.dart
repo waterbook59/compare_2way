@@ -571,29 +571,11 @@ class CompareViewModel extends ChangeNotifier {
     //tagTitleからList<Tag>読取
     _selectTagList =await _compareRepository.onSelectTag(tagTitle);
     print('viewModel/getTagTitled/_selectTagList:${_selectTagList.map((e) => e.tagTitle)}');
-    //Tag内のcomparisonItemIdを元にTagChartのList<ComparisonItemId>へ格納
-
-//     idList =
-//    _selectTagList.map((tag) => tag.comparisonItemId).toList();
-//    print('viewModel/getTagTitled/idList:$idList');
-//    await _compareRepository.updateTagTitle(updateTagList);
   }
 
   ///タグ名編集画面でtextFieldに変更があればDBを更新
   Future<void>updateTagTitle(String newTagTitle) async{
-//    ///List<Tag>=>TagChart
-//    updateTagChart = TagChart(
-//      tagTitle: newTagTitle,
-//      tagAmount: _selectTagList.length,
-//      itemIdList: idList,
-//    );
-
-    //1つのcomparisonItemIdに複数のタグがある時、編集しようと入力した瞬間1つ消える(_selectTagListやidList空に)
-    //問題1.getTagTitleIdを行わず、いきなり編集すると_selectTagListやidが空っぽで編集されない
-    //=>全体をComtainerでGestrureIndector
-    //問題2.タグが1つのIdに複数あっても編集した単一のものに変更されてしまう(結果、1つに集約されてしまう)
-    //=>tagIdもひもづけ
-
+    //タグが1つのcomparisonItemIdに複数ある場合があるので、comparisonItemId&tagIdで更新
     _selectTagList = _selectTagList.map((tag) {
       return Tag(
         comparisonItemId: tag.comparisonItemId,
@@ -604,17 +586,12 @@ class CompareViewModel extends ChangeNotifier {
       );
     }).toList();
 
-
-
-//    print('viewModel/updateTagTitle/newTitle:${updateTagChart.tagTitle}');
     print('viewModel/updateTagTitle/_selectTagListのtitle:${_selectTagList.map((e) => e.tagTitle)}');
-    print('viewModel/updateTagTitle/_selectTagListのtagId:${_selectTagList.map((e) => e.tagId)}');
-//    print('viewModel/updateTagTitle/updateTagChartId:${updateTagChart.itemIdList}');
-//    print('viewModel/updateTagTitle/idList:$idList');
-    //上のgetTagTitleIdで格納したupdateTagChartを使う
+    print('/_selectTagListのcomparisonItemId:${_selectTagList.map((e) => e.comparisonItemId)}');
+    print('_selectTagListのtagId:${_selectTagList.map((e) => e.tagId)}');
+
     await _compareRepository.updateTagTitle(_selectTagList,newTagTitle);
-//    idList = [];
-//    notifyListeners();
+
   }
 
 

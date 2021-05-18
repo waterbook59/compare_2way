@@ -226,9 +226,8 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       List<TagRecord> selectTagRecordList,
       TagRecordsCompanion tagRecordCompanion) async{
 
-//comparisonItemIdを元にタイトルを編集
+  //comparisonItemIdとtagIdを元にタイトルを編集(参照:deleteTagList)
   //Future内でforEach回そうとするとエラー=>Future.forEachへ変更
-    ///idList=>TagRecordList
     await Future.forEach(selectTagRecordList,(TagRecord tag) {
       (update(tagRecords)
         ..where((tbl) => tbl.comparisonItemId.equals(tag.comparisonItemId)
