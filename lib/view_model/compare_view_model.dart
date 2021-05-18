@@ -62,7 +62,7 @@ class CompareViewModel extends ChangeNotifier {
   List<ComparisonOverview> get selectOverviews => _selectOverviews;
   String selectTagTitle= '';
   TagChart updateTagChart;
-  List<String> idList=[];//ComparisonItemIdのリスト
+//  List<String> idList=[];//ComparisonItemIdのリスト
 
 
 
@@ -472,7 +472,7 @@ class CompareViewModel extends ChangeNotifier {
   Future<List<TagChart>> getAllTagList() async {
     //ordrybyで登録時間順で取得
     _allTagList = await _compareRepository.getAllTagList();
-//    print('viewModel.getTagAllList:${_allTagList.map((e) => e.tagTitle)}');
+    print('viewModel.getTagAllList:${_allTagList.map((e) => e.tagTitle)}');
 
     //TagPageを表示する手順
     ///方法1. List<Tag>の内容を全てList<TagChart>として取得して表示する:難
@@ -520,7 +520,7 @@ class CompareViewModel extends ChangeNotifier {
     //[Tag(),Tag(),Tag()]みたいなイメージ
 
    // Tag内のcomparisonItemIdを元にoverViewを取得しリスト化
-   idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
+    final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
 
 
 ///forEach内の非同期処理でcomparisonIdからList<overview>取得
@@ -565,28 +565,56 @@ class CompareViewModel extends ChangeNotifier {
   //updateTagTitleと２こ１
   //todo getAllTagListの方法1でList<TagChart>内にcomparisonItemId格納できればこのメソッドいらない
   Future<void> getTagTitleId(String tagTitle) async{
-    selectTagTitle = tagTitle;
 
+    print('viewModel/getTagTitleId/tagTitle:$tagTitle');
+    print('viewModel/getTagTitled/_selectTagList:Before:${_selectTagList.map((e) => e.tagTitle)}');
     //tagTitleからList<Tag>読取
     _selectTagList =await _compareRepository.onSelectTag(tagTitle);
+    print('viewModel/getTagTitled/_selectTagList:${_selectTagList.map((e) => e.tagTitle)}');
     //Tag内のcomparisonItemIdを元にTagChartのList<ComparisonItemId>へ格納
-     idList =
-    _selectTagList.map((tag) => tag.comparisonItemId).toList();
-    print('viewModel/getTagTitled/idList:$idList');
+
+//     idList =
+//    _selectTagList.map((tag) => tag.comparisonItemId).toList();
+//    print('viewModel/getTagTitled/idList:$idList');
 //    await _compareRepository.updateTagTitle(updateTagList);
   }
 
   ///タグ名編集画面でtextFieldに変更があればDBを更新
   Future<void>updateTagTitle(String newTagTitle) async{
-    ///List<Tag>=>TagChart
-    updateTagChart = TagChart(
-      tagTitle: newTagTitle,
-      tagAmount: _selectTagList.length,
-      itemIdList: idList,
-    );
-    print('viewModel/updateTagTitle/updateTagChart:$updateTagChart');
+//    ///List<Tag>=>TagChart
+//    updateTagChart = TagChart(
+//      tagTitle: newTagTitle,
+//      tagAmount: _selectTagList.length,
+//      itemIdList: idList,
+//    );
+
+    //1つのcomparisonItemIdに複数のタグがある時、編集しようと入力した瞬間1つ消える(_selectTagListやidList空に)
+    //問題1.getTagTitleIdを行わず、いきなり編集すると_selectTagListやidが空っぽで編集されない
+    //=>全体をComtainerでGestrureIndector
+    //問題2.タグが1つのIdに複数あっても編集した単一のものに変更されてしまう(結果、1つに集約されてしまう)
+    //=>tagIdもひもづけ
+
+    _selectTagList = _selectTagList.map((tag) {
+      return Tag(
+        comparisonItemId: tag.comparisonItemId,
+        tagId: tag.tagId,
+        tagTitle: newTagTitle,
+        createdAt:tag.createdAt,
+        createAtToString:tag.createAtToString,
+      );
+    }).toList();
+
+
+
+//    print('viewModel/updateTagTitle/newTitle:${updateTagChart.tagTitle}');
+    print('viewModel/updateTagTitle/_selectTagListのtitle:${_selectTagList.map((e) => e.tagTitle)}');
+    print('viewModel/updateTagTitle/_selectTagListのtagId:${_selectTagList.map((e) => e.tagId)}');
+//    print('viewModel/updateTagTitle/updateTagChartId:${updateTagChart.itemIdList}');
+//    print('viewModel/updateTagTitle/idList:$idList');
     //上のgetTagTitleIdで格納したupdateTagChartを使う
-    await _compareRepository.updateTagTitle(updateTagChart,idList);
+    await _compareRepository.updateTagTitle(_selectTagList,newTagTitle);
+//    idList = [];
+//    notifyListeners();
   }
 
 

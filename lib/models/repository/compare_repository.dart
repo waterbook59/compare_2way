@@ -326,16 +326,18 @@ class CompareRepository {
   }
   ///更新 Tag List<TagChart>=>TagRecordsCompanion
   Future<void> updateTagTitle(
-      TagChart updateTagChart,List<String> idList) async{
-    // idとTagRecordsCompanionだけでいい
-      //comparisonItemIdを元にtagTitleを編集
+      List<Tag> selectTagList,String newTagTitle) async{
+    //List<Tag>=>List<TagRecord>
+    final selectTagRecordList =
+    selectTagList.toUpdateTagRecordList(selectTagList);
+
     try{
       final updateTagRecordCompanion =TagRecordsCompanion(
-            tagTitle: Value(updateTagChart.tagTitle)
+            tagTitle: Value(newTagTitle)
           );
       //saveComparisonOverviewDB参考 idとcompanion渡し
       await _comparisonItemDao.updateTagTitle(
-          idList, updateTagRecordCompanion);
+          selectTagRecordList, updateTagRecordCompanion);
 
     }on SqliteException catch (e) {
       print('repository更新エラー:${e.toString()}');

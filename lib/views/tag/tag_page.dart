@@ -94,6 +94,7 @@ class TagPage extends StatelessWidget {
                             tagAmount: overview.tagAmount,
                             createdAt: '登録時間',
                             onDelete: (){},
+                              //todo 複数タグがあって編集しようとすると最初の1行しか変更されない
                             onTap: ()=>_onSelectTag(
                                 context,overview.tagTitle),
                               listDecoration: listDecoration,
@@ -128,7 +129,7 @@ class TagPage extends StatelessWidget {
     }else{
       //編集モード：タップでタイトルをeditTagTitleへ変更=>onSubmittedでitemIdListを元にDBをupdate
       //todo タップでtextFieldにfocus
-    print('編集モード');
+//    print('編集モード');
     //tagTitleからcomparisonItemIdをviewModelへ格納する
     await viewModel.getTagTitleId(tagTitle);
 

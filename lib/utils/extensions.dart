@@ -234,6 +234,27 @@ extension ConvertToTagRecordList on List<Tag>{
   }
 }
 
+///更新時(model=>DB):List<Tag>=>List<TagRecord>
+extension ConvertToUpdateTagRecordList on List<Tag>{
+  // tagTitleをprimaryKeyに設定した場合、tagIdのautoIncrement効かないかも
+  //=>tagIdがint型なのでUuid.hashCodeを使う
+  List<TagRecord> toUpdateTagRecordList(
+      List<Tag> tagList){
+    final tagRecordList =
+    tagList.map((tag) {
+      return TagRecord(
+        //tagIdは更新時はそのまま変換
+        tagId: tag.tagId,
+        tagTitle:tag.tagTitle ?? '',
+        comparisonItemId:tag.comparisonItemId ?? '',
+        createdAt: tag.createdAt,
+        createAtToString: tag.createAtToString,
+      );
+    }).toList();
+    return tagRecordList;
+  }
+}
+
 ///読込時(DB=>model) List<TagRecord>=>Lis<Tag>
 extension ConvertToTagList on List<TagRecord>{
   List<Tag> toTagList(List<TagRecord> tagRecordList){
