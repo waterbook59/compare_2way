@@ -68,6 +68,7 @@ class CompareViewModel extends ChangeNotifier {
 
   ListEditMode editStatus = ListEditMode.display;
   bool tagEditMode = true; //初期設定は通常モード
+  bool editFocus = false; //初期設定はタイトルのみ
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
   Future<void> getOverview(String comparisonItemId) async {
@@ -558,6 +559,12 @@ class CompareViewModel extends ChangeNotifier {
   //TagPageでの通常モード(編集)<=>編集モード(完了)の切替
   Future<void> changeTagEditMode() {
      tagEditMode = !tagEditMode;
+    notifyListeners();
+  }
+
+  //TagListでの通常モード(タイトル)<=>フォーカスモードの切替
+  Future<void> changeEditFocus() {
+    editFocus = !editFocus;
     notifyListeners();
   }
 

@@ -8,12 +8,14 @@ class EditTagTitle extends StatefulWidget {
   const EditTagTitle({
     this.tagTitle,
     this.selectTagIdList,
+    this.myFocusNode,
 //    this.inputChanged,
   });
 
   final String tagTitle;
 //  final Function(String) inputChanged;
   final List<String> selectTagIdList;//tagTitle編集時に更新するIDリスト
+  final FocusNode myFocusNode;
 
   @override
   _EditTagTitleState createState() => _EditTagTitleState();
@@ -41,7 +43,9 @@ class _EditTagTitleState extends State<EditTagTitle> {
   @override
   Widget build(BuildContext context) {
     return CupertinoTextField(
+      //todo decoration編集
       controller: _tagTitleController,
+      focusNode: widget.myFocusNode,
 //      onChanged:  (newDesc) => widget.inputChanged(newDesc),
     ///変更したらtagTitle更新
       onChanged: (newTagTitle)=>updateTagTile(context,newTagTitle),

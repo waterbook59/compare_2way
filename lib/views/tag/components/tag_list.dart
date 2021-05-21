@@ -13,57 +13,91 @@ class TagList extends StatelessWidget {
         this.onDelete,
         this.onTap,
         this.listDecoration,
-        this.selectTagIdList});
+        this.selectTagIdList,
+      this.listNumber});
 
   final String title;
   final int tagAmount;
   final String createdAt;
   final VoidCallback onDelete;
   final VoidCallback onTap;
-//  final Function(String) onTap;
+//  final Function(FocusNode) onTap;
   final BoxDecoration listDecoration;
   final List<String> selectTagIdList;//tagTitle編集時に更新するIDリスト
+  final int listNumber;
 
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    final myFocusNode = FocusNode();
 
-    return Slidable(
+    ///StackでGestureDetector??
+    return
+      Slidable(
       actionPane: const SlidableScrollActionPane(),
-      secondaryActions: [
-        IconSlideAction(
-          caption: '削除',
+          secondaryActions: [
+          IconSlideAction(
+          //todo 折り返し表示
+          caption: 'アイテムから削除',
           color: Colors.red,
           icon: Icons.remove_circle_outline,
           onTap: () {
-            print('削除します');
-            onDelete();
+          print('削除します');
+          onDelete();
           },
-        )
-      ],
-      child: Container(
-        //todo decorationはインスタンス設定してすっきり書く
-        decoration: listDecoration,
-        child: ListTile(
-          leading: Icon(CupertinoIcons.tag_solid,size: 40,color: primaryColor,),
-          onTap: onTap,
-          title: viewModel.tagEditMode
-            ? Text(title)
-            : EditTagTitle(
-            tagTitle: title,selectTagIdList: selectTagIdList,),//tagTitleの編集
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('アイテム数：$tagAmountアイテム'),
-//              Text(createdAt),
-            ],
+          )
+          ],
+        child: Container(
+          //todo decorationはインスタンス設定してすっきり書く
+              decoration: listDecoration,
+          child: ListTile(
+        leading: Icon(CupertinoIcons.tag_solid,size: 40,color: primaryColor,),
+            ///getTagTitleIdしつlistTileのonTapでfocusNode設定
+          onTap: ()=> getTitleAndFocus(context,onTap,myFocusNode,listNumber),
+            title: viewModel.tagEditMode
+                ? Text(title)
+                : viewModel.editFocus//List全部が一斉に変わってしまう
+                  ? EditTagTitle(
+                    tagTitle: title,
+                    selectTagIdList: selectTagIdList,
+                    myFocusNode: myFocusNode,)
+                  :Text(title),//tagTitleの編集
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('アイテム数：$tagAmountアイテム'),
+            //              Text(createdAt),
+                ],
+                ),
+                trailing:const Icon(Icons.arrow_forward_ios) ,
+            //          isThreeLine: true,
+//            selected: _isSelected,
           ),
-          trailing:const Icon(Icons.arrow_forward_ios) ,
-//          isThreeLine: true,
-        ),
-      ),
-    );
+          ),
+          );
+
+
+
+
   }
+
+  //ListTileの一つをタップすることでgetTagTitleIdしつつタップされたものだけにfocusNode設定
+  //まずタップされたものだけ背景変えてみる
+  Future<void> getTitleAndFocus(BuildContext context,
+      VoidCallback onTap, FocusNode myFocusNode, int listNumber) async{
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    print('tagEditMode:${viewModel.tagEditMode}');
+    print('フォーカスするListTileタップ！:$listNumber');
+
+//   await viewModel.changeEditFocus();
+    onTap();
+    myFocusNode.requestFocus();
+
+  }
+
+
+
+
 }
