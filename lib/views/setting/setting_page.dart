@@ -53,10 +53,6 @@ class _SettingPageState extends State<SettingPage> {
 //    List<bool>
    final _selected = List.generate(testTagChart.length, (i) => false);
 
-
-
-
-
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,

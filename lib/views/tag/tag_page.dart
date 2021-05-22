@@ -97,7 +97,7 @@ class TagPage extends StatelessWidget {
                             onDelete: (){},
                             onTap: ()=>_onSelectTag(
                                 context,overview.tagTitle,),
-                            listDecoration: listDecoration,
+//                            listDecoration: listDecoration,
                               listNumber: index,
                             );
                           },

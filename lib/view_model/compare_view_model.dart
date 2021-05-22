@@ -68,7 +68,9 @@ class CompareViewModel extends ChangeNotifier {
 
   ListEditMode editStatus = ListEditMode.display;
   bool tagEditMode = true; //初期設定は通常モード
-  bool editFocus = false; //初期設定はタイトルのみ
+//  bool editFocus = false; //初期設定はタイトルのみ
+  int selectedIndex;//tagPageでのListTile選択
+
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
   Future<void> getOverview(String comparisonItemId) async {
@@ -559,13 +561,17 @@ class CompareViewModel extends ChangeNotifier {
   //TagPageでの通常モード(編集)<=>編集モード(完了)の切替
   Future<void> changeTagEditMode() {
      tagEditMode = !tagEditMode;
+     ///"完了"押した時に_selectedIndexをデフォルトに
+       selectedIndex =null;
     notifyListeners();
   }
 
   //TagListでの通常モード(タイトル)<=>フォーカスモードの切替
-  Future<void> changeEditFocus() {
-    editFocus = !editFocus;
+  Future<void> changeEditFocus( int listNumber ) {
+//    editFocus = !editFocus;
+  selectedIndex = listNumber;
     notifyListeners();
+//  selectedIndex =null;//ここでデフォルトにするとリストタップしても変更しなくなる
   }
 
   ///タグ名の編集時にタグ選択した時にcomparisonIdを取得する タグ名変えてもcreatedAtは更新しない

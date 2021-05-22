@@ -12,7 +12,7 @@ class TagList extends StatelessWidget {
         this.createdAt,
         this.onDelete,
         this.onTap,
-        this.listDecoration,
+//        this.listDecoration,
         this.selectTagIdList,
       this.listNumber});
 
@@ -22,9 +22,13 @@ class TagList extends StatelessWidget {
   final VoidCallback onDelete;
   final VoidCallback onTap;
 //  final Function(FocusNode) onTap;
-  final BoxDecoration listDecoration;
+//  final BoxDecoration listDecoration;
   final List<String> selectTagIdList;//tagTitle編集時に更新するIDリスト
   final int listNumber;
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +36,7 @@ class TagList extends StatelessWidget {
     final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     final myFocusNode = FocusNode();
+//    int _selectedIndex;
 
     ///StackでGestureDetector??
     return
@@ -49,19 +54,35 @@ class TagList extends StatelessWidget {
           },
           )
           ],
+        //todo 編集ボタン時にいきなり背景色やfocusが当たらないようにする(完了ボタン押す時にselectedIndexを初期値に戻したい)
         child: Container(
-          //todo decorationはインスタンス設定してすっきり書く
-              decoration: listDecoration,
+          decoration: BoxDecoration(
+            color:
+            viewModel.tagEditMode
+            ?Colors.transparent
+            :viewModel.selectedIndex == listNumber
+                ?Colors.grey[400]
+                :Colors.transparent,
+              border:const Border(
+                  bottom: BorderSide(width: 0.5, color: Colors.grey)),
+        ),
           child: ListTile(
-        leading: Icon(CupertinoIcons.tag_solid,size: 40,color: primaryColor,),
-            ///getTagTitleIdしつlistTileのonTapでfocusNode設定
-          onTap: ()=> getTitleAndFocus(context,onTap,myFocusNode,listNumber),
-            title: viewModel.tagEditMode
+            leading: Icon(CupertinoIcons.tag_solid,
+              size: 40,color: primaryColor,),
+            title:
+//            _selectedIndex == listNumber
+//            ?EditTagTitle(
+//              tagTitle: title,
+//              selectTagIdList: selectTagIdList,
+//              myFocusNode: myFocusNode,)
+//            :Text(title),
+
+            viewModel.tagEditMode
                 ? Text(title)
-                : viewModel.editFocus//List全部が一斉に変わってしまう
+                : viewModel.selectedIndex == listNumber
                   ? EditTagTitle(
                     tagTitle: title,
-                    selectTagIdList: selectTagIdList,
+                    selectTagIdList:selectTagIdList,
                     myFocusNode: myFocusNode,)
                   :Text(title),//tagTitleの編集
             subtitle: Column(
@@ -72,6 +93,19 @@ class TagList extends StatelessWidget {
                 ],
                 ),
                 trailing:const Icon(Icons.arrow_forward_ios) ,
+            ///getTagTitleIdしつlistTileのonTapでfocusNode設定(tagEditModeで場合わけ)
+            ///ListTileだけを再ビルドしても反映されない
+            onTap:(){
+//              _selectedIndex = listNumber;
+//                print('widget.listNumber:$listNumber');
+//                print('_selectedIndex:$_selectedIndex');
+//                myFocusNode.requestFocus();
+//                onTap();
+
+            getTitleAndFocus(
+                context,onTap,myFocusNode,listNumber);
+
+            },
             //          isThreeLine: true,
 //            selected: _isSelected,
           ),
@@ -83,21 +117,16 @@ class TagList extends StatelessWidget {
 
   }
 
-  //ListTileの一つをタップすることでgetTagTitleIdしつつタップされたものだけにfocusNode設定
-  //まずタップされたものだけ背景変えてみる
   Future<void> getTitleAndFocus(BuildContext context,
       VoidCallback onTap, FocusNode myFocusNode, int listNumber) async{
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     print('tagEditMode:${viewModel.tagEditMode}');
     print('フォーカスするListTileタップ！:$listNumber');
 
-//   await viewModel.changeEditFocus();
+   await viewModel.changeEditFocus(listNumber);
     onTap();
     myFocusNode.requestFocus();
 
   }
-
-
-
 
 }
