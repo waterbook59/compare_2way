@@ -43,7 +43,8 @@ class _EditTagTitleState extends State<EditTagTitle> {
   @override
   Widget build(BuildContext context) {
     return CupertinoTextField(
-      //todo decoration編集(背景をtransparentにしたり)
+      //背景をtransparent
+      decoration: const BoxDecoration(color: Colors.transparent),
       controller: _tagTitleController,
       focusNode: widget.myFocusNode,
 //      onChanged:  (newDesc) => widget.inputChanged(newDesc),
