@@ -27,7 +27,7 @@ class TagPage extends StatelessWidget {
         backgroundColor: primaryColor,
         middle: const Text('タグ', style: middleTextStyle,),
         trailing:
-        //todo 編集ボタン押すとタグ名編集できるように
+        //todo タグ名編集時にキーボードunFocusできるアイコン追加
         //編集モード(true)の時はリストをタップするとTagListのtagTitle部を編集する形に
         GestureDetector(
           onTap: () => _changeEdit(context),
@@ -88,7 +88,6 @@ class TagPage extends StatelessWidget {
                             //DateTime=>String変換
                             //todo 1つめのリストの上にDivider的な線が必要
                             //todo slidableでアイテムから削除実行
-                            //todo 編集モードではTagList全体を押せてgetTagTitleIdしつつtextFieldへのフォーカス
                             return TagList(
                             title: overview.tagTitle,
                             selectTagIdList: overview.itemIdList,
@@ -116,40 +115,31 @@ class TagPage extends StatelessWidget {
     );
   }
 
-  ///Tagを押したらタグ登録されたCompareList一覧表示
-  ///IdからcomparisonOverview.titleを取得し表示
+  //ListTile内のTagを押したら
+  ///通常：タグ登録されたCompareList一覧表示
+  ///編集：タグ名変更のためのフォーカス
   Future<void>_onSelectTag(BuildContext context,
       String tagTitle, FocusNode myFocusNode ) async{
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    //通常モード：タップでDB検索=>SelectTagPage
+    ///通常モード：タップでDB検索=>SelectTagPage
     if(viewModel.tagEditMode){
+      //IdからcomparisonOverview.titleを取得し表示
       await viewModel.onSelectTag(tagTitle);
       await Navigator.push(context,
           MaterialPageRoute<void>(
               builder: (context) => SelectTagPage(tagTitle: tagTitle,
               )));
     }else{
-      //編集モード：タップでタイトルをeditTagTitleへ変更=>onSubmittedでitemIdListを元にDBをupdate
-      //todo タップでtextFieldにfocus
-//    print('編集モード');
-    //tagTitleからcomparisonItemIdをviewModelへ格納する
+      ///編集モード：タップでタイトルをeditTagTitleへ変更=>onSubmittedでitemIdListを元にDBをupdate
+      // タップでtextFieldにfocus
       myFocusNode.requestFocus();
+      //tagTitleからcomparisonItemIdをviewModelへ格納する
     await viewModel.getTagTitleId(tagTitle);
-    print('tagEditMode:${viewModel.tagEditMode}');
-//    myFocusNode.requestFocus();
-
-
-
     }
-
-
-
-
   }
 
   //編集タップでtagEditMode切替(trueが通常モード)
   Future<void>_changeEdit(BuildContext context) async{
-    print('編集タップ！');
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.changeTagEditMode();
   }

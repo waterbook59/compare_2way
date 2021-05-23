@@ -12,7 +12,6 @@ class TagList extends StatelessWidget {
         this.createdAt,
         this.onDelete,
         this.onTap,
-//        this.listDecoration,
         this.selectTagIdList,
       this.listNumber,
       this.myFocusNode,});
@@ -23,7 +22,6 @@ class TagList extends StatelessWidget {
   final VoidCallback onDelete;
   final VoidCallback onTap;
 //  final Function(FocusNode) onTap;
-//  final BoxDecoration listDecoration;
   final List<String> selectTagIdList;//tagTitle編集時に更新するIDリスト
   final int listNumber;
   final FocusNode myFocusNode;
@@ -35,7 +33,6 @@ class TagList extends StatelessWidget {
     final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
-    ///StackでGestureDetector??
     return
       Slidable(
       actionPane: const SlidableScrollActionPane(),
@@ -51,7 +48,6 @@ class TagList extends StatelessWidget {
           },
           )
           ],
-        //todo 編集ボタン時にいきなり背景色やfocusが当たらないようにする(完了ボタン押す時にselectedIndexを初期値に戻したい)
         child: Container(
           decoration: BoxDecoration(
             color:
@@ -67,13 +63,6 @@ class TagList extends StatelessWidget {
             leading: Icon(CupertinoIcons.tag_solid,
               size: 40,color: primaryColor,),
             title:
-//            _selectedIndex == listNumber
-//            ?EditTagTitle(
-//              tagTitle: title,
-//              selectTagIdList: selectTagIdList,
-//              myFocusNode: myFocusNode,)
-//            :Text(title),
-
             viewModel.tagEditMode
                 ? Text(title)
                 : viewModel.selectedIndex == listNumber
@@ -86,25 +75,16 @@ class TagList extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('アイテム数：$tagAmountアイテム'),
-            //              Text(createdAt),
                 ],
                 ),
                 trailing:const Icon(Icons.arrow_forward_ios) ,
             ///getTagTitleIdしつlistTileのonTapでfocusNode設定(tagEditModeで場合わけ)
-            ///ListTileだけを再ビルドしても反映されない
+            ///ListTileだけを再ビルドしても反映されない(notifyListenersしてListView含め再ビルド)
             onTap:(){
-//              _selectedIndex = listNumber;
-//                print('widget.listNumber:$listNumber');
-//                print('_selectedIndex:$_selectedIndex');
-//                myFocusNode.requestFocus();
-//                onTap();
-
             getTitleAndFocus(
                 context,onTap,myFocusNode,listNumber);
-
             },
             //          isThreeLine: true,
-//            selected: _isSelected,
           ),
           ),
           );
@@ -114,9 +94,6 @@ class TagList extends StatelessWidget {
   Future<void> getTitleAndFocus(BuildContext context,
       VoidCallback onTap, FocusNode myFocusNode, int listNumber) async{
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    print('tagEditMode:${viewModel.tagEditMode}');
-    print('フォーカスするListTileタップ！:$listNumber');
-
    await viewModel.changeEditFocus(listNumber);
     onTap();
   }

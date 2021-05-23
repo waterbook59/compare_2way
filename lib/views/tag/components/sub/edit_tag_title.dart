@@ -43,7 +43,7 @@ class _EditTagTitleState extends State<EditTagTitle> {
   @override
   Widget build(BuildContext context) {
     return CupertinoTextField(
-      //todo decoration編集
+      //todo decoration編集(背景をtransparentにしたり)
       controller: _tagTitleController,
       focusNode: widget.myFocusNode,
 //      onChanged:  (newDesc) => widget.inputChanged(newDesc),
@@ -62,7 +62,6 @@ class _EditTagTitleState extends State<EditTagTitle> {
   Future<void> updateTagTile(
       BuildContext context,String newTagTitle
       ) async{
-//    print('editTagTitle/selectTagIdList:$selectTagIdList');
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     //viewModelに既に値格納されているので、newTagTitleは渡さなくて良い
     await  viewModel.updateTagTitle(newTagTitle);

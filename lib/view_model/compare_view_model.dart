@@ -565,14 +565,13 @@ class CompareViewModel extends ChangeNotifier {
   //TagPageでの通常モード(編集)<=>編集モード(完了)の切替
   Future<void> changeTagEditMode() {
      tagEditMode = !tagEditMode;
-     ///"完了"押した時に_selectedIndexをデフォルトに
+     ///"完了"押した時に_selectedIndexをデフォルトに(次に編集押した時に前の選択状態にならないようにする)
        selectedIndex =null;
     notifyListeners();
   }
 
   //TagListでの通常モード(タイトル)<=>フォーカスモードの切替
   Future<void> changeEditFocus( int listNumber ) {
-//    editFocus = !editFocus;
   selectedIndex = listNumber;
     notifyListeners();
 //  selectedIndex =null;//ここでデフォルトにするとリストタップしても変更しなくなる
