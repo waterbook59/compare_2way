@@ -14,7 +14,8 @@ class TagList extends StatelessWidget {
         this.onTap,
 //        this.listDecoration,
         this.selectTagIdList,
-      this.listNumber});
+      this.listNumber,
+      this.myFocusNode,});
 
   final String title;
   final int tagAmount;
@@ -25,9 +26,7 @@ class TagList extends StatelessWidget {
 //  final BoxDecoration listDecoration;
   final List<String> selectTagIdList;//tagTitle編集時に更新するIDリスト
   final int listNumber;
-
-
-
+  final FocusNode myFocusNode;
 
 
   @override
@@ -35,8 +34,6 @@ class TagList extends StatelessWidget {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    final myFocusNode = FocusNode();
-//    int _selectedIndex;
 
     ///StackでGestureDetector??
     return
@@ -112,9 +109,6 @@ class TagList extends StatelessWidget {
           ),
           );
 
-
-
-
   }
 
   Future<void> getTitleAndFocus(BuildContext context,
@@ -125,8 +119,6 @@ class TagList extends StatelessWidget {
 
    await viewModel.changeEditFocus(listNumber);
     onTap();
-    myFocusNode.requestFocus();
-
   }
 
 }

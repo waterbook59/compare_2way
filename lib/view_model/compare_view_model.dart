@@ -503,7 +503,11 @@ class CompareViewModel extends ChangeNotifier {
     ///参考:https://qiita.com/7_asupara/items/01c29c006556e89f5b17
     final tagChartList = <TagChart>[];
     tagSummary.forEach((key, amount) =>
-        tagChartList.add(TagChart(tagTitle: key,tagAmount: amount)));
+        tagChartList.add(TagChart(
+            tagTitle: key,
+            tagAmount: amount,
+            myFocusNode: FocusNode(),//タップした時focusする用に追加
+        )));
 
 //    print('tagSummary:$tagSummary');
 //    print('tagChartList:$tagChartList');

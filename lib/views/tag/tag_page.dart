@@ -96,9 +96,10 @@ class TagPage extends StatelessWidget {
                             createdAt: '登録時間',
                             onDelete: (){},
                             onTap: ()=>_onSelectTag(
-                                context,overview.tagTitle,),
+                                context,overview.tagTitle,overview.myFocusNode),
 //                            listDecoration: listDecoration,
-                              listNumber: index,
+                            listNumber: index,
+                            myFocusNode:overview.myFocusNode,
                             );
                           },
                         );
@@ -118,7 +119,7 @@ class TagPage extends StatelessWidget {
   ///Tagを押したらタグ登録されたCompareList一覧表示
   ///IdからcomparisonOverview.titleを取得し表示
   Future<void>_onSelectTag(BuildContext context,
-      String tagTitle, ) async{
+      String tagTitle, FocusNode myFocusNode ) async{
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     //通常モード：タップでDB検索=>SelectTagPage
     if(viewModel.tagEditMode){
@@ -132,7 +133,7 @@ class TagPage extends StatelessWidget {
       //todo タップでtextFieldにfocus
 //    print('編集モード');
     //tagTitleからcomparisonItemIdをviewModelへ格納する
-
+      myFocusNode.requestFocus();
     await viewModel.getTagTitleId(tagTitle);
     print('tagEditMode:${viewModel.tagEditMode}');
 //    myFocusNode.requestFocus();

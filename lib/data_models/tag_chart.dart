@@ -1,14 +1,18 @@
+import 'package:flutter/cupertino.dart';
+
 class TagChart{
   TagChart({
     this.tagTitle,
     this.tagAmount,
     this.itemIdList,
+    this.myFocusNode,
 //    this.createdAt,
   });
 
   final String tagTitle;
   final int tagAmount;//同じタグをもつリストの総数
   final List<String> itemIdList;//同じタグをもつcomparisonItemIdのリスト
+  final FocusNode myFocusNode;
 //  final DateTime createdAt;
 
 
