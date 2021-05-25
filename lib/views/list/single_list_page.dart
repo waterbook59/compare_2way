@@ -28,6 +28,9 @@ class SingleListPage extends StatelessWidget {
           'Compare List',
           style: middleTextStyle,
         ),
+        //todo ListPageに戻るとtrailing位置の編集に黄色下線出る
+        //参考https://qiita.com/kurararara/items/2afd7f93f2676c5cee34
+        //todo Selectorでbool型での方がすっきりかける(TagPage参照)
         trailing: GestureDetector(
             onTap: () => _changeEdit(context, viewModel.editStatus),
             child: Consumer<CompareViewModel>(
@@ -65,8 +68,12 @@ class SingleListPage extends StatelessWidget {
 //                    );
 //                  })),
 //        ),
-        //todo リスト長くなったときにスライドできない
+
+        //todo Consumer=>Selectorへ変更を検討
         body: Consumer<CompareViewModel>(
+          /// Consumer=>FutureBuilderは空リスト表示できるが、リスト押してからCompareScreen表示が遅い?
+          //todo FutureBuilderを再考する(Consumer or Selectorのみ)iPhoneでは遅さ感じない
+
             builder: (context, compareViewModel, child) {
           return (viewModel.editStatus == ListEditMode.display)
 
@@ -79,12 +86,11 @@ class SingleListPage extends StatelessWidget {
                         BoxConstraints(minHeight: constraints.maxHeight),
                     //初回描画の時にgetListが２回発動される
                     child: FutureBuilder(
-                      //todo Consumer=>Selectorへ変更を検討
                       future: viewModel.getList(),
                       builder: (context,
                           AsyncSnapshot<List<ComparisonOverview>> snapshot) {
                         if (snapshot.data == null) {
-                          print('snapshotがnull');
+                          print('List<ComparisonOverview>>snapshotがnull');
                           return Container();
                         }
                       ///viewModel.comparisonOverviews.isEmptyだとEmptyView通ってしまう
@@ -100,24 +106,26 @@ class SingleListPage extends StatelessWidget {
 // => overview.conclusion).toList());
                               ListView.builder(
                             //ListView.builderの高さを自動指定
-                            shrinkWrap: true,
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final overview = snapshot.data[index];
-                              //DateTime=>String変換
-                            final formatter =
-                                  DateFormat('yyyy/MM/dd(E) HH:mm:ss', 'ja_JP');
-                              final formatted =
-                                  formatter.format(overview.createdAt);
-                            return OverViewList(
-                              title: overview.itemTitle,
-                              conclusion: overview.conclusion,
-                              createdAt: formatted,
-                              onDelete: () => _deleteList(
-                                  context, overview.comparisonItemId),
-                              onTap: () => _updateList(context, overview),
-                              listDecoration: listDecoration,
-                            );
+                                shrinkWrap: true,
+                                //リストが縦方向にスクロールできるようになる
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final overview = snapshot.data[index];
+                                  //DateTime=>String変換
+                                final formatter =
+                                      DateFormat('yyyy/MM/dd(E) HH:mm:ss', 'ja_JP');
+                                  final formatted =
+                                      formatter.format(overview.createdAt);
+                                return OverViewList(
+                                  title: overview.itemTitle,
+                                  conclusion: overview.conclusion,
+                                  createdAt: formatted,
+                                  onDelete: () => _deleteList(
+                                      context, overview.comparisonItemId),
+                                  onTap: () => _updateList(context, overview),
+                                  listDecoration: listDecoration,
+                                );
 
                             },
                           );
@@ -185,6 +193,7 @@ class SingleListPage extends StatelessWidget {
   } //buildはここまで
 
   // DB登録とComparePageへ移動
+  //todo ページ遷移は下からに変更
   void _createComparisonItems(BuildContext context) {
     ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
     Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
@@ -209,11 +218,12 @@ class SingleListPage extends StatelessWidget {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     ///初期表示は読み込みさせる
     viewModel.compareScreenStatus =CompareScreenStatus.set;
-    Navigator.push(
-        context,
+    ///画面遷移時、bottomNavbarを外す
+    Navigator.of(context, rootNavigator: true).push(
         MaterialPageRoute<void>(
             builder: (context) => CompareScreen(
                   comparisonOverview: updateOverview,
+              screenEditMode: ScreenEditMode.fromListPage,
                 )));
   }
 }

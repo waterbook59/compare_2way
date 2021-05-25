@@ -1,6 +1,7 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
+import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_dao.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_database.dart';
 import 'package:compare_2way/utils/extensions.dart';
@@ -18,6 +19,8 @@ class CompareRepository {
   List<Way1Merit> _way1MeritList = <Way1Merit>[];
   List<Way2Merit> _way2MeritList = <Way2Merit>[];
   List<Tag> _tagList = <Tag>[];
+  //todo _tagListに統一しても不具合がないか？？
+  List<Tag> _selectTagList = <Tag>[];
 
 
   ///新規作成 comparisonOverview
@@ -109,6 +112,7 @@ class CompareRepository {
         .toComparisonOverviews(comparisonOverviewRecords);
   }
 
+  //todo getOverviewListと内容同じなので、統一してもいいかも
   Future<List<ComparisonOverview>> getList() async {
     final comparisonOverviewRecords = await _comparisonItemDao.allOverviews;
     return _overviewResults = comparisonOverviewRecords
@@ -129,6 +133,7 @@ class CompareRepository {
 
   ///List<ComparisonOverview>ではなく、comparisonItemIdからComparisonOverview１行だけ取ってくる
   Future<ComparisonOverview> getComparisonOverview(
+
       String comparisonItemId) async {
     final comparisonOverviewRecord =
         await _comparisonItemDao.getComparisonOverview(comparisonItemId);
@@ -136,6 +141,7 @@ class CompareRepository {
     ///ComparisonOverviewRecord=>ComparisonOverview
     return _overviewResult =
         comparisonOverviewRecord.toComparisonOverview(comparisonOverviewRecord);
+
   }
 
   ///ComparisonItem=>ComparisonOverviewRecord,List<Way1Merit>に分解登録
@@ -276,7 +282,7 @@ class CompareRepository {
       //2つのリストを比較しようとしてforEach内でforEachしようとしたけど、動かない
 
       ///(別のリストのタグにも使うのでtagTitleの重複登録は必要)
-      //primaryKeyで弾かれるものも含めての登録は、insetよりも
+      //primaryKeyで弾かれるものも含めての登録は、insertよりも
       // insertOnConflictUpdateが良い(毎回UNIQUE constraint failedエラー発生するので)
       await _comparisonItemDao
           .insertTagRecordList(tagRecordList);
@@ -306,6 +312,52 @@ class CompareRepository {
       print('tagList削除時repositoryエラー:${e.toString()}');
     }
   }
+
+  Future<List<Tag>> getAllTagList() async{
+    final tagRecordList = await _comparisonItemDao.getAllTagList();
+    return _tagList = tagRecordList.toTagList(tagRecordList);
+  }
+
+  Future<List<Tag>> onSelectTag(String tagTitle) async{
+    final selectTagRecordList = await _comparisonItemDao.onSelectTag(tagTitle);
+//        print('repo/onSelectTag/selectTagRecordList:$selectTagRecordList');
+    //List<TagRecord>=>List<Tag>
+    return _selectTagList = selectTagRecordList.toTagList(selectTagRecordList);
+  }
+  ///更新 Tag List<TagChart>=>TagRecordsCompanion
+  Future<void> updateTagTitle(
+      List<Tag> selectTagList,String newTagTitle) async{
+    //List<Tag>=>List<TagRecord>
+    final selectTagRecordList =
+    selectTagList.toUpdateTagRecordList(selectTagList);
+
+    try{
+      final updateTagRecordCompanion =TagRecordsCompanion(
+            tagTitle: Value(newTagTitle)
+          );
+      //saveComparisonOverviewDB参考 idとcompanion渡し
+      await _comparisonItemDao.updateTagTitle(
+          selectTagRecordList, updateTagRecordCompanion);
+
+    }on SqliteException catch (e) {
+      print('repository更新エラー:${e.toString()}');
+    }
+  }
+  ///削除 Tag
+  Future<void> onDeleteTag(Tag deleteTag) async{
+    try {
+      //List<Tag>=>List<TagRecord>へ変換保存
+      final deleteTagRecord =
+      deleteTag.toTagRecord(deleteTag);
+      await _comparisonItemDao.onDeleteTag(deleteTagRecord);
+    } on SqliteException catch (e) {
+      print('tagList削除時repositoryエラー:${e.toString()}');
+    }
+  }
+
+
+
+
 
 
 

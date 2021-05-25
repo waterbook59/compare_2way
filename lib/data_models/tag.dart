@@ -14,4 +14,17 @@ class Tag{
   final DateTime createdAt;
   //登録順でデータ取得のためcreateAtToString追加
   final String createAtToString;
+
+//Map型への変換
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'comparisonItemId': comparisonItemId,
+      'tagId':tagId,
+      'tagTitle':tagTitle,
+      'createdAt': createdAt,
+      'createAtToString':createAtToString,
+    };
+  }
+
+
 }

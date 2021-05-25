@@ -234,19 +234,55 @@ extension ConvertToTagRecordList on List<Tag>{
   }
 }
 
-///読込時(DB=>model) List<TagRecord>=>Lis<Tag>
+///更新時(model=>DB):List<Tag>=>List<TagRecord>
+extension ConvertToUpdateTagRecordList on List<Tag>{
+  // tagTitleをprimaryKeyに設定した場合、tagIdのautoIncrement効かないかも
+  //=>tagIdがint型なのでUuid.hashCodeを使う
+  List<TagRecord> toUpdateTagRecordList(
+      List<Tag> tagList){
+    final tagRecordList =
+    tagList.map((tag) {
+      return TagRecord(
+        //tagIdは更新時はそのまま変換
+        tagId: tag.tagId,
+        tagTitle:tag.tagTitle ?? '',
+        comparisonItemId:tag.comparisonItemId ?? '',
+        createdAt: tag.createdAt,
+        createAtToString: tag.createAtToString,
+      );
+    }).toList();
+    return tagRecordList;
+  }
+}
+
+///読込時(DB=>model) List<TagRecord>=>List<Tag>
 extension ConvertToTagList on List<TagRecord>{
   List<Tag> toTagList(List<TagRecord> tagRecordList){
     final tagList =
     tagRecordList.map((tagRecordSingle) {
       return Tag(
-        tagId: tagRecordSingle.tagId,
-        comparisonItemId: tagRecordSingle.comparisonItemId,
-        tagTitle: tagRecordSingle.tagTitle,
+        tagId: tagRecordSingle.tagId ??0,
+        comparisonItemId: tagRecordSingle.comparisonItemId ??'',
+        tagTitle: tagRecordSingle.tagTitle ?? '',
         createdAt: tagRecordSingle.createdAt,
-          createAtToString: tagRecordSingle.createAtToString,
+        createAtToString: tagRecordSingle.createAtToString ??'',
       );
-    }).toList();
+    }).toList() ;
     return tagList;
+  }
+}
+
+///削除時(model=>DB) Tag=>TagRecord
+extension ConvertToTagRecord on Tag{
+  TagRecord toTagRecord(Tag tag){
+    final tagRecord =
+    TagRecord(
+        tagId: tag.tagId ??0,
+        comparisonItemId: tag.comparisonItemId ??'',
+        tagTitle: tag.tagTitle ?? '',
+        createdAt: tag.createdAt,
+        createAtToString: tag.createAtToString ??'',
+      );
+    return tagRecord;
   }
 }

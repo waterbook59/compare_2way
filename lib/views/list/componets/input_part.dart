@@ -17,16 +17,12 @@ class InputPart extends StatefulWidget {
   const InputPart({
     this.displayMode,
     this.comparisonOverview,
-//    this.itemTitle,
-//    this.way1Title,
-//    this.way2Title,
+
   });
 
   final AddScreenMode displayMode;
   final ComparisonOverview comparisonOverview;
-//  final String itemTitle;
-//  final String way1Title;
-//  final String way2Title;
+
 
   @override
   _InputPartState createState() => _InputPartState();
@@ -117,7 +113,9 @@ class _InputPartState extends State<InputPart> {
           // AddScreenMode.editならupdateメソッド
               ? widget.displayMode == AddScreenMode.add
                 ?() => _createComparisonItems(context)
-                :()=>_updateComparisonItems(context)
+                :()=>_updateComparisonItems(context,
+//              widget.tagTitle,widget.itemTitleEditMode,
+          )
               : null,
         ),
       ],
@@ -143,7 +141,7 @@ class _InputPartState extends State<InputPart> {
     });
   }
 
-  //todo 新規作成を追加すると、過去のWay1,2Meritリストの項目が重複して作成されるエラー発生
+
   // 押せる・押せないはinsta_cloneのcomment_input_part参照
   ///textEditingControllerをview側で設定=>viewModelに設定するメソッド
   Future<void> _createComparisonItems(BuildContext context) async {
@@ -186,7 +184,7 @@ class _InputPartState extends State<InputPart> {
         context,
         MaterialPageRoute<void>(
             builder: (context) => CompareScreen(
-//                  itemEditMode: ItemEditMode.add,
+                   screenEditMode: ScreenEditMode.fromListPage,
 //                  comparisonOverview: comparisonOverview,
                   comparisonOverview: viewModel.overviewDB,
                 )));
@@ -195,10 +193,15 @@ class _InputPartState extends State<InputPart> {
   }
 
   //更新メソッド
-  Future<void>_updateComparisonItems(BuildContext context) async{
+  Future<void>_updateComparisonItems(BuildContext context,
+//      String tagTitle,ItemTitleEditMode itemTitleEditMode
+      ) async{
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
   //登録
-    await viewModel.updateComparisonOverView(widget.comparisonOverview);
+//    print('更新ボタン押すtagTitle&itemTitleEditMode：$tagTitle & $itemTitleEditMode');
+    await viewModel.updateComparisonOverView(
+        comparisonOverview:widget.comparisonOverview,
+    );
     //CompareScreenへ
     Navigator.pop(context);
   }

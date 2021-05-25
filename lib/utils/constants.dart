@@ -5,11 +5,6 @@ enum ListEditMode{
   edit
 }
 
-//enum ItemEditMode{
-//  add,
-//  edit
-//}
-
 enum CompareScreenStatus {
   set,
   update,
@@ -33,4 +28,9 @@ enum CompareEditMenu{
 enum AddScreenMode{
   add,
   edit,
+}
+
+enum ScreenEditMode{
+  fromListPage,
+  fromSelectTagPage
 }

@@ -1,6 +1,8 @@
+import 'package:compare_2way/data_models/comparison_item_id.dart';
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
+import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/models/repository/compare_repository.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -48,12 +50,27 @@ class CompareViewModel extends ChangeNotifier {
   List<String> _tagNameList = <String>[];
   List<Tag> _tagList = <Tag>[];
   List<Tag> get tagList => _tagList;
+  List<Tag> _allTagList = <Tag>[];
+  List<Tag> get allTagList => _tagList;
   List<Chip> _displayChipList = <Chip>[];
   List<Chip> get displayChipList =>_displayChipList;
   List<Tag> _deleteTagList = <Tag>[];
   List<Tag> get deleteTagList => _deleteTagList;
+  List<Tag> _selectTagList = <Tag>[];
+  List<Tag> get selectTagList => _selectTagList;
+  List<ComparisonOverview> _selectOverviews = <ComparisonOverview>[];
+  List<ComparisonOverview> get selectOverviews => _selectOverviews;
+  String selectTagTitle= '';
+  TagChart updateTagChart;
+//  List<String> idList=[];//ComparisonItemIdのリスト
+
+
 
   ListEditMode editStatus = ListEditMode.display;
+  bool tagEditMode = true; //初期設定は通常モード
+//  bool editFocus = false; //初期設定はタイトルのみ
+  int selectedIndex;//tagPageでのListTile選択
+
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
   Future<void> getOverview(String comparisonItemId) async {
@@ -91,8 +108,11 @@ class CompareViewModel extends ChangeNotifier {
 //    notifyListeners();
   }
   ///AddScreen/InputPartでComparisonOverview更新：itemTitle,way1Title,way2Titleのみ変更
-  Future<void> updateComparisonOverView(
-      ComparisonOverview comparisonOverview) async {
+  Future<void> updateComparisonOverView({
+      ComparisonOverview comparisonOverview,
+//    String tagTitle,
+//    ItemTitleEditMode itemTitleEditMode,
+  }) async {
     //更新するプロパティだけ入れてrepositoryでCompanion作成=>更新
     final updateOverview = ComparisonOverview(
       comparisonItemId: comparisonOverview.comparisonItemId,
@@ -103,6 +123,16 @@ class CompareViewModel extends ChangeNotifier {
     );
     await _compareRepository.updateComparisonOverView(updateOverview);
   print('comparisonOverviewのタイトル類を更新');
+
+//  if(itemTitleEditMode ==ItemTitleEditMode.select){
+//    print('viewModel.updateComparison/onSelectTagする前:$tagTitle');
+//    //todo 名前付引数でtagTitleを設定=>selectTagPage側から編集の場合はtagTitleを渡し、onSelectTagすることで、selectTagPageはSelectorのみでいいかも
+//     return onSelectTag(tagTitle);//todo selectTagTitleでいいのではないか説
+//  }else{
+    print('viewModel.updateComparison/onSelectTagする前:$tagTitle');
+    await onSelectTag(selectTagTitle);
+//  }
+
     notifyListeners();
   }
 
@@ -129,23 +159,18 @@ class CompareViewModel extends ChangeNotifier {
     overviewDB =
     await _compareRepository.getComparisonOverview(comparisonItemId);
   }
-
   Future<void> setWay1MeritNewValue(int newValue) async {
     _way1MeritEvaluate = newValue;
   }
-
   Future<void> setWay1DemeritNewValue(int newValue) async {
     _way1DemeritEvaluate = newValue;
   }
-
   Future<void> setWay2MeritNewValue(int newValue) async {
     _way2MeritEvaluate = newValue;
   }
-
   Future<void> setWay2DemeritNewValue(int newValue) async {
     _way2DemeritEvaluate = newValue;
   }
-
   Future<void> setConclusion(String newConclusion) async {
     conclusion = newConclusion;
   }
@@ -276,6 +301,11 @@ class CompareViewModel extends ChangeNotifier {
       createdAt: DateTime.now(),
     );
     await _compareRepository.saveComparisonItem(saveOverview);
+
+    ///updateComparisonOverViewと同じで内容更新されたらonSelectTag実施
+    //todo 自動更新の場合はキーボード完了ボタンを押したらonSelectTag
+    await onSelectTag(selectTagTitle);
+
     notifyListeners();
   }
 
@@ -402,6 +432,9 @@ class CompareViewModel extends ChangeNotifier {
         label: Text(tag.tagTitle),
       );
     }).toList();
+
+    //ここでSelectTaPage更新するとComPareScreenへ映る毎に読み込まれてしまうのでやめる
+//    await onSelectTag(selectTagTitle);
     notifyListeners();
   }
 
@@ -438,6 +471,153 @@ class CompareViewModel extends ChangeNotifier {
    _deleteTagList = [];
   }
 
+  ///TagPageのFutureBuilder用
+  Future<List<TagChart>> getAllTagList() async {
+    //ordrybyで登録時間順で取得
+    _allTagList = await _compareRepository.getAllTagList();
+    print('viewModel.getTagAllList:${_allTagList.map((e) => e.tagTitle)}');
+
+    //TagPageを表示する手順
+    ///方法1. List<Tag>の内容を全てList<TagChart>として取得して表示する:難
+    ///重複タイトルを削除&重複タイトルのcomparisonItemIdをリスト化する
+    ///List<Tag> => List<Map<String,dynamic>> =>同じタイトル数とそのidを抽出 =>List<TagChart>
+      //List<Map<String, dynamic>>へ変換
+//        final  allTagListMap = _allTagList.map((tag) => tag.toMap()).toList();
+//        print('allTagList=>allTagListMap:$allTagListMap');
+
+    ///方法2. List<Tag>から最低限必要なタイトルとアイテム数だけをList<TagChart>に格納して表示する:簡単
+    final tagAllTitleList = <String>[];
+    _allTagList.map((tag) {
+     return tagAllTitleList.add(tag.tagTitle);
+    }).toList();
+
+    final tagSummary =<String, int>{};//Map<String,int>
+
+    ///重複タイトルの数を数えてMap型に格納
+    ///参照:https://www.fixes.pub/program/268895.html
+    ///.where参照:https://qiita.com/dennougorilla/items/170deacf178891ced41e
+    tagAllTitleList.toSet().toList().forEach(
+            (st)=> tagSummary[st]=
+            tagAllTitleList.where((i)=> i== st).length);
+    ///Map<String,dynamic> =>List<TagChart>
+    ///参考:https://qiita.com/7_asupara/items/01c29c006556e89f5b17
+    final tagChartList = <TagChart>[];
+    tagSummary.forEach((key, amount) =>
+        tagChartList.add(TagChart(
+            tagTitle: key,
+            tagAmount: amount,
+            myFocusNode: FocusNode(),//タップした時focusする用に追加
+        )));
+
+//    print('tagSummary:$tagSummary');
+//    print('tagChartList:$tagChartList');
+    return tagChartList;
+  }
+
+  ///TagPage=>SelectTagPage
+  Future<void> onSelectTag(String tagTitle) async{
+    selectTagTitle = tagTitle;
+    _selectOverviews =[];
+    //tagTitleを元にList<Tag>を取得(更新順)
+    // todo ListPage(_comparisonOverviews)とSelectListPage(_selectOverviews)のcreatedAtが異なることでリスト表示が違う
+    //タグが追加された順になっている(一方で更新されたものほど上に来た方が使い勝手いいかも(ascでなくてdesc))
+    _selectTagList =await _compareRepository.onSelectTag(tagTitle);
+    print('viewModel/onSelectTag:${_selectTagList.map((e) => e.tagTitle)}');
+    print('viewModel/onSelectTag:${_selectTagList.map((e) => e.createAtToString)}');
+    //[Tag(),Tag(),Tag()]みたいなイメージ
+
+   // Tag内のcomparisonItemIdを元にoverViewを取得しリスト化
+    final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
+
+
+///forEach内の非同期処理でcomparisonIdからList<overview>取得
+    ///参照:https://qiita.com/hisw/items/2df0052a400263d5863e
+   await Future.forEach(idList, (String id) async{
+           final selectOverView =
+      await  _compareRepository.getComparisonOverview(id);
+       _selectOverviews.add(selectOverView);
+       print('Future.forEach/id:${_selectOverviews.map((e) =>e.comparisonItemId).toList()}');
+    });
+//    print('viewModel/onSelectTag/selectOverview:${_selectOverviews.map((overview) => overview.itemTitle)}');
+    notifyListeners();
+  }
+
+  ///SelectTagPageのFutureBuilder用=>使わないので削除して良い
+  Future<List<ComparisonOverview>> getSelectList(String tagTitle) async {
+    _selectOverviews =[];
+    _selectTagList = await _compareRepository.onSelectTag(tagTitle);
+    final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
+    await Future.forEach(idList, (String id) async{
+      final selectOverView =
+      await  _compareRepository.getComparisonOverview(id);
+      _selectOverviews.add(selectOverView);
+    });
+    return _selectOverviews;
+  }
+
+  ///onSelectTagを実施してSelectTagPageのSelectorを更新するだけのメソッド
+  //TagDialogPageの完了ボタンで追加=>削除=>このメソッド=>読み込み(notifyListeners)するので
+  //notifyListenersはなし
+  Future<void> updateSelectTagPage() async{
+        await onSelectTag(selectTagTitle);
+  }
+
+  //TagPageでの通常モード(編集)<=>編集モード(完了)の切替
+  Future<void> changeTagEditMode() {
+     tagEditMode = !tagEditMode;
+     ///"完了"押した時に_selectedIndexをデフォルトに(次に編集押した時に前の選択状態にならないようにする)
+       selectedIndex =null;
+    notifyListeners();
+  }
+
+  //TagListでの通常モード(タイトル)<=>フォーカスモードの切替
+  Future<void> changeEditFocus( int listNumber ) {
+  selectedIndex = listNumber;
+    notifyListeners();
+//  selectedIndex =null;//ここでデフォルトにするとリストタップしても変更しなくなる
+  }
+
+  ///タグ名の編集時にタグ選択した時にcomparisonIdを取得する タグ名変えてもcreatedAtは更新しない
+  //updateTagTitleと２こ１
+  //todo getAllTagListの方法1でList<TagChart>内にcomparisonItemId格納できればこのメソッドいらない
+  Future<void> getTagTitleId(String tagTitle) async{
+
+    print('viewModel/getTagTitleId/tagTitle:$tagTitle');
+    print('viewModel/getTagTitled/_selectTagList:Before:${_selectTagList.map((e) => e.tagTitle)}');
+    //tagTitleからList<Tag>読取
+    _selectTagList =await _compareRepository.onSelectTag(tagTitle);
+    print('viewModel/getTagTitled/_selectTagList:${_selectTagList.map((e) => e.tagTitle)}');
+  }
+
+  ///タグ名編集画面でtextFieldに変更があればDBを更新
+  Future<void>updateTagTitle(String newTagTitle) async{
+    //タグが1つのcomparisonItemIdに複数ある場合があるので、comparisonItemId&tagIdで更新
+    _selectTagList = _selectTagList.map((tag) {
+      return Tag(
+        comparisonItemId: tag.comparisonItemId,
+        tagId: tag.tagId,
+        tagTitle: newTagTitle,
+        createdAt:tag.createdAt,
+        createAtToString:tag.createAtToString,
+      );
+    }).toList();
+
+    print('viewModel/updateTagTitle/_selectTagListのtitle:${_selectTagList.map((e) => e.tagTitle)}');
+    print('/_selectTagListのcomparisonItemId:${_selectTagList.map((e) => e.comparisonItemId)}');
+    print('_selectTagListのtagId:${_selectTagList.map((e) => e.tagId)}');
+
+    await _compareRepository.updateTagTitle(_selectTagList,newTagTitle);
+
+  }
+
+  Future<void> onDeleteTag(String tagTitle) async{
+    //tagTitleで紐づけて削除するのでcomparisonItemIdいらない
+    //一応Tag形式にしてやりとりしてるが、tagTitleだけあれば削除可能(のはず)
+    final deleteTag = Tag(tagTitle: tagTitle);
+    await _compareRepository.onDeleteTag(deleteTag);
+    //削除してtagPage更新
+    notifyListeners();
+  }
 
 
 

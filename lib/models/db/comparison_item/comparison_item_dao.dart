@@ -1,3 +1,4 @@
+import 'package:compare_2way/data_models/tag.dart';
 import 'package:moor/moor.dart';
 import 'comparison_item_database.dart';
 
@@ -37,7 +38,8 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
           .getSingle();
 
   ///保存:comparisonOverview
-  Future<void> saveComparisonOverviewDB(String comparisonItemId,
+  Future<void> saveComparisonOverviewDB(
+      String comparisonItemId,
       ComparisonOverviewRecordsCompanion overviewCompanion) {
     return (update(comparisonOverviewRecords)
       ..where((it) => it.comparisonItemId.equals(comparisonItemId)))
@@ -187,6 +189,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       ).get();
 
   ///削除：List<Tag> comparisonItemIdとtagTitleの２つの条件のもののみ削除
+  //todo forEach=>map.toList
   Future<void> deleteTagList(List<TagRecord> deleteTagRecordList){
     deleteTagRecordList.forEach((tag) {
       (delete(tagRecords)..where(
@@ -200,6 +203,46 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       (delete(tagRecords)
         ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
           .go();
+
+  ///読込：全タグ情報取得
+  Future<List<TagRecord>> getAllTagList() =>
+      (select(tagRecords)..orderBy([(t)=>OrderingTerm(expression:
+      t.createAtToString,mode: OrderingMode.asc)])).get();
+
+  ///読込：選択タグ情報取得 tagTitleから登録順に返す
+  //なぜか取得できない=>async/awaitではなくreturnがよかったみたい
+  Future<List<TagRecord>> onSelectTag(String tagTitle) {
+    return (select(tagRecords)
+            ..where((tbl) => tbl.tagTitle.equals(tagTitle))
+            ..orderBy([(t)=>OrderingTerm(expression:
+            t.createAtToString,mode: OrderingMode.asc)])
+    ).get();
+
+  }
+
+  ///編集 タグタイトル     saveComparisonOverviewDB参考
+  //idListではなく、tagIdも入れたList<TagRecord>でcomparisonItemId & tagIdが一致したものだけ上書き
+  Future<void> updateTagTitle(
+      List<TagRecord> selectTagRecordList,
+      TagRecordsCompanion tagRecordCompanion) async{
+
+  //comparisonItemIdとtagIdを元にタイトルを編集(参照:deleteTagList)
+  //Future内でforEach回そうとするとエラー=>Future.forEachへ変更
+    await Future.forEach(selectTagRecordList,(TagRecord tag) {
+      (update(tagRecords)
+        ..where((tbl) => tbl.comparisonItemId.equals(tag.comparisonItemId)
+        & tbl.tagId.equals(tag.tagId)
+        ))
+          .write(tagRecordCompanion);
+    });
+  }
+
+  ///削除：Tag tagPageでのtagTitleを削除
+  Future<void> onDeleteTag(TagRecord deleteTagRecord) =>
+      (delete(tagRecords)
+        ..where((tbl) => tbl.tagTitle.equals(deleteTagRecord.tagTitle)))
+          .go();
+
 
 
 

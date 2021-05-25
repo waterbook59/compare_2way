@@ -18,9 +18,14 @@ import 'components/table_part.dart';
 ///Table=>conclusionの順で編集するとTableリセットされる問題を解決
 class CompareScreen extends StatelessWidget {
   const CompareScreen({
-    this.comparisonOverview});
+    this.comparisonOverview,
+    this.tagTitle,
+    this.screenEditMode,
+  });
 
   final ComparisonOverview comparisonOverview;
+  final String tagTitle;
+  final ScreenEditMode screenEditMode;
 
 
   //todo itemsはList<Merit>に変更
@@ -53,14 +58,16 @@ class CompareScreen extends StatelessWidget {
 ///リストの中身を見るのにtoSet使うと良いかも（map((e)=>print).toListが確実）
 
     return CupertinoPageScaffold(
+      //todo ListPageに戻るとtrailing位置の編集に黄色下線出る
+      //参考https://qiita.com/kurararara/items/2afd7f93f2676c5cee34
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
 //        leading: GestureDetector(child: const Icon(Icons.arrow_back_ios),
 //    onTap: ()=> _backListPage(context)),
-        middle: const Text(
-          'Compare List',
-          style: middleTextStyle,
-        ),
+        middle:
+        screenEditMode ==ScreenEditMode.fromListPage
+            ? const Text('Compare List', style: middleTextStyle,)
+            : Text(tagTitle),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
           ///保存完了ボタン //todo 保存完了ボタンWidget分割
           GestureDetector(
@@ -72,13 +79,11 @@ class CompareScreen extends StatelessWidget {
               return _saveItem(context, comparisonOverview);
             },
           ),
-          const SizedBox(
-            width: 8,
-          ),
+          const SizedBox(width: 8,),
           ///編集ボタン
-          EditBottomAction(
-            comparisonOverview: comparisonOverview,
-          ),
+          //todo iphoneだと編集の下が切れてる
+          //todo タイトル編集=>addScreenは下から遷移
+          EditBottomAction(comparisonOverview: comparisonOverview,),
         ]),
       ),
       ///Fab使わないけどScaffold必須
@@ -114,6 +119,7 @@ class CompareScreen extends StatelessWidget {
                   iconColor: accentColor,
                 ),
               ///way1 メリット way1Titleこの画面で変えないのでSelectorいらんかも
+                ///ListPageとSelectTagPageそれぞれから編集が入るので、way1Titleのみの変更に対応しているSelectorよりComsumerがいいかも
                 Selector<CompareViewModel, String>(
                     selector: (context, viewModel) => viewModel.way1Title,
                     builder: (context, way1Title, child) {
@@ -147,7 +153,7 @@ class CompareScreen extends StatelessWidget {
                         },
                       );
                     }),
-              ///way2 メリット
+                ///way2 メリット
                 Selector<CompareViewModel, String>(
                   selector: (context, viewModel) => viewModel.way2Title,
                   builder: (context, way2Title, child) {
@@ -238,20 +244,14 @@ class CompareScreen extends StatelessWidget {
                   },
                 ),
                 //todo 自己評価&TablePart widget分割
-                const SizedBox(
-                  height: 4,
-                ),
+                const SizedBox(height: 4,),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Text(
-                    '自己評価',
-                    textAlign: TextAlign.left,
-                  ),
+                  child: Text('自己評価', textAlign: TextAlign.left,),
                 ),
-                const SizedBox(
-                  height: 4,
-                ),
+                const SizedBox(height: 4,),
               ///テーブル
+                //todo  width: MediaQuery.of(context).size.width*0.8の形に変更
                 TablePart(
                   way1Title: comparisonOverview.way1Title,
                   //way1Merit以外はTablePart内でviewModelへsetしている
@@ -284,20 +284,13 @@ class CompareScreen extends StatelessWidget {
                   inputChanged: (newConclusion) =>
                       _conclusionInputChanged(context, newConclusion),
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
+                const SizedBox(height: 16,),
               ///タグエリア
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Text(
-                    'タグ',
-                    textAlign: TextAlign.left,
-                  ),
+                  child: Text('タグ', textAlign: TextAlign.left,),
                 ),
-                const SizedBox(
-                  height: 4,
-                ),
+                const SizedBox(height: 4,),
                  // SelectorでDBから取って来たtagList=>displayList渡す
                  Selector<CompareViewModel,List<Chip>>(
                    selector: (context, viewModel) => viewModel.displayChipList,
@@ -320,9 +313,7 @@ class CompareScreen extends StatelessWidget {
                         );
                       }),
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
+                const SizedBox(height: 16,),
               ],
             ),
           ),

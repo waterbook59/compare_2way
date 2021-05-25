@@ -26,15 +26,18 @@ class TagDialogPage extends StatelessWidget {
 //              Navigator.of(context).pop();
 //            },
 //          ),
+      //todo iPhoneだとtrailingの'完了'の下が切れてる..
+          //todo 完了ボタン押した時にTagInputChip入力中の項目も追加されるように(キーボード完了よりこっちをおしてしまう)
           trailing: CupertinoButton(
             child:const Text('完了'),
             onPressed: ()async{
               //完了を押したらinput内容(List<String>)とcomparisonIdを基にtagクラスをDB登録
               //todo 完了時createdAtを更新
               ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
-              print('tagDialogPageの完了ボタン！');
+//              print('tagDialogPageの完了ボタン！');
                 await viewModel.createTag(comparisonOverview);
                 await viewModel.deleteTag();
+                await viewModel.updateSelectTagPage();
                 await viewModel.getTagList(comparisonOverview.comparisonItemId);
               Navigator.of(context).pop();
             },
