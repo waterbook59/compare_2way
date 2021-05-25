@@ -255,7 +255,7 @@ extension ConvertToUpdateTagRecordList on List<Tag>{
   }
 }
 
-///読込時(DB=>model) List<TagRecord>=>Lis<Tag>
+///読込時(DB=>model) List<TagRecord>=>List<Tag>
 extension ConvertToTagList on List<TagRecord>{
   List<Tag> toTagList(List<TagRecord> tagRecordList){
     final tagList =
@@ -269,5 +269,20 @@ extension ConvertToTagList on List<TagRecord>{
       );
     }).toList() ;
     return tagList;
+  }
+}
+
+///削除時(model=>DB) Tag=>TagRecord
+extension ConvertToTagRecord on Tag{
+  TagRecord toTagRecord(Tag tag){
+    final tagRecord =
+    TagRecord(
+        tagId: tag.tagId ??0,
+        comparisonItemId: tag.comparisonItemId ??'',
+        tagTitle: tag.tagTitle ?? '',
+        createdAt: tag.createdAt,
+        createAtToString: tag.createAtToString ??'',
+      );
+    return tagRecord;
   }
 }

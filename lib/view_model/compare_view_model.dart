@@ -610,6 +610,15 @@ class CompareViewModel extends ChangeNotifier {
 
   }
 
+  Future<void> onDeleteTag(String tagTitle) async{
+    //tagTitleで紐づけて削除するのでcomparisonItemIdいらない
+    //一応Tag形式にしてやりとりしてるが、tagTitleだけあれば削除可能(のはず)
+    final deleteTag = Tag(tagTitle: tagTitle);
+    await _compareRepository.onDeleteTag(deleteTag);
+    //削除してtagPage更新
+    notifyListeners();
+  }
+
 
 
 

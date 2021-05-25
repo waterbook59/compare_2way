@@ -93,7 +93,8 @@ class TagPage extends StatelessWidget {
                             selectTagIdList: overview.itemIdList,
                             tagAmount: overview.tagAmount,
                             createdAt: '登録時間',
-                            onDelete: (){},
+                            onDelete: ()=> _onDeleteTag(
+                                context, overview.tagTitle),
                             onTap: ()=>_onSelectTag(
                                 context,overview.tagTitle,overview.myFocusNode),
 //                            listDecoration: listDecoration,
@@ -142,5 +143,12 @@ class TagPage extends StatelessWidget {
   Future<void>_changeEdit(BuildContext context) async{
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.changeTagEditMode();
+  }
+
+  //tagTitleを元に削除
+  Future<void> _onDeleteTag(BuildContext context, String tagTitle) async{
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.onDeleteTag(tagTitle);
+
   }
 }

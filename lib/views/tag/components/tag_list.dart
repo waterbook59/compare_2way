@@ -38,8 +38,7 @@ class TagList extends StatelessWidget {
       actionPane: const SlidableScrollActionPane(),
           secondaryActions: [
           IconSlideAction(
-          //todo 折り返し表示
-          caption: 'アイテムから削除',
+          caption: 'タグを削除',
           color: Colors.red,
           icon: Icons.remove_circle_outline,
           onTap: () {

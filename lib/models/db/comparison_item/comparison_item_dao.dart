@@ -237,6 +237,11 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     });
   }
 
+  ///削除：Tag tagPageでのtagTitleを削除
+  Future<void> onDeleteTag(TagRecord deleteTagRecord) =>
+      (delete(tagRecords)
+        ..where((tbl) => tbl.tagTitle.equals(deleteTagRecord.tagTitle)))
+          .go();
 
 
 
