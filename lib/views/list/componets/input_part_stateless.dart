@@ -18,7 +18,6 @@ class InputPartStateless extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accentColor = Theme.of(context).accentColor;
-    final isCreateItemEnabled = false;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
 
@@ -71,18 +70,17 @@ class InputPartStateless extends StatelessWidget {
         ///button
         Consumer<CompareViewModel>(
         builder: (context, compareViewModel, child) {
-                  return
-        RaisedButton(
-          child: displayMode == AddScreenMode.add
+          return RaisedButton(
+              child: displayMode == AddScreenMode.add
               ?const Text('比較')
               :const Text('更新'),
-          color: accentColor,
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          onPressed:
-          viewModel.titleController.text.isNotEmpty &&
-          viewModel.way1Controller.text.isNotEmpty &&
-          viewModel.way2Controller.text.isNotEmpty
+              color: accentColor,
+              shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              onPressed:
+              viewModel.titleController.text.isNotEmpty &&
+                  viewModel.way1Controller.text.isNotEmpty &&
+                  viewModel.way2Controller.text.isNotEmpty
               ? displayMode == AddScreenMode.add
                 ?() => _createComparisonItems(context)
                 :()=>_updateComparisonItems(context)
@@ -92,23 +90,6 @@ class InputPartStateless extends StatelessWidget {
       ],
     );
   }
-
-//  void _onInputChanged() {
-//    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-//      ..itemTitle = _titleController.text
-//      ..way1Title = _way1Controller.text
-//      ..way2Title = _way2Controller.text;
-//
-//    setState(() {
-//      if (_titleController.text.isNotEmpty &&
-//          _way1Controller.text.isNotEmpty &&
-//          _way2Controller.text.isNotEmpty) {
-//        isCreateItemEnabled = true;
-//      } else {
-//        isCreateItemEnabled = false;
-//      }
-//    });
-//  }
 
   ///新規作成
   Future<void> _createComparisonItems(BuildContext context) async {
@@ -155,9 +136,8 @@ class InputPartStateless extends StatelessWidget {
 //                  comparisonOverview: comparisonOverview,
               comparisonOverview: viewModel.overviewDB,
             )));
-    viewModel.titleController.clear();
-    viewModel.way1Controller.clear();
-    viewModel.way2Controller.clear();
+    //DB登録後controllerクリア
+   await viewModel.itemControllerClear();
 
     //この時点でcontrollerが破棄されるので、CompareScreenから戻るときにclearメソッドがあると、
     //Once you have called dispose() on a TextEditingController,のエラー出る

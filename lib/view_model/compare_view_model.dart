@@ -658,20 +658,23 @@ class CompareViewModel extends ChangeNotifier {
     _way1Controller.text= comparisonOverview.way1Title;
     _way2Controller.text = comparisonOverview.way2Title;
   }
-  //タイトル更新時(AddScreenMode.edit)、inputPartの初期表示(CompareScreeのSelectorで表示されているものを表示)
+  //タイトル更新時(AddScreenMode.edit)、
+  // inputPartの初期表示(CompareScreeのSelectorで表示されているものを表示)
   void setEditController(){
     _titleController.text = itemTitle;
     _way1Controller.text = way1Title;
     _way2Controller.text = way2Title;
   }
 
-
+  //タイトル作成時(AddScreenMode.add)、
+  // addScreenでの初期表示、cancelするときとDB登録したあと
   Future<void> itemControllerClear() async{
     _titleController.clear();
     _way1Controller.clear();
     _way2Controller.clear();
   }
 
+  //AddScreenでのボタン押せる・押せないの判定のため、TextField入力に変更があったらnotifyListeners
   void itemTitleChanged (){
     notifyListeners();
   }

@@ -83,17 +83,9 @@ class AddScreen extends StatelessWidget {
 //              InputPart(displayMode: displayMode,
 //                comparisonOverview: comparisonOverview,
 //              ),
-
-//              Consumer<CompareViewModel>(
-//                builder: (context, compareViewModel, child) {
-//                  return
                     InputPartStateless(
                     displayMode: displayMode,
                     comparisonOverview: comparisonOverview,)
-//                  ;
-//                }
-
-//              ),
 
             ],
           ),
@@ -104,10 +96,7 @@ class AddScreen extends StatelessWidget {
 
   void _cancelTitleEdit(BuildContext context) {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    print('編集モードでのキャンセルメソッド');
-    ///入力途中の場合、InputPart内の入力中のcontrollerをdisposeするか、空にする
-    //キャンセル時は元に表示していたviewModelの値をInputPartに表示したい
-    //InputPartにSelector設定してキャンセルボタンおしたらInputPart再ビルドしてdisposeする？
+    //todo 画面閉じる前にTextFieldへの変更が少し見える
      Navigator.pop(context);
      displayMode == AddScreenMode.add
     ? viewModel.itemControllerClear()
