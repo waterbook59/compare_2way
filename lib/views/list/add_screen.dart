@@ -3,7 +3,6 @@ import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/list/componets/input_part.dart';
-import 'package:compare_2way/views/list/componets/input_part_stateless.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -80,10 +79,7 @@ class AddScreen extends StatelessWidget {
                 height: 48,
               ),
 ///InputPart
-//              InputPart(displayMode: displayMode,
-//                comparisonOverview: comparisonOverview,
-//              ),
-                    InputPartStateless(
+                    InputPart(
                     displayMode: displayMode,
                     comparisonOverview: comparisonOverview,)
 

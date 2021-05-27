@@ -4,79 +4,42 @@ import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/compare_screen.dart';
 import 'package:compare_2way/views/list/componets/text_field_part.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-///Screenへの通知を行い、登録ボタンを押せるか判断するためstatefulへ変更
-///Changenoitfierのbuilder内で実行しないとエラー？？？(instacloneのcommentscreenの場所確認)
-class InputPart extends StatefulWidget {
-  const InputPart({
-    this.displayMode,
-    this.comparisonOverview,
+class InputPart extends StatelessWidget {
 
-  });
-
+  const InputPart({this.displayMode,this.comparisonOverview});
   final AddScreenMode displayMode;
   final ComparisonOverview comparisonOverview;
-
-
-  @override
-  _InputPartState createState() => _InputPartState();
-}
-
-class _InputPartState extends State<InputPart> {
-  final _titleController = TextEditingController();
-  final _way1Controller = TextEditingController();
-  final _way2Controller = TextEditingController();
-  bool isCreateItemEnabled = false;
-
-
-  //addListenerはcontrollerの入力値とviewModelの値とのやりとりをするのに必須
-  @override
-  void initState() {
-    ///controllerとviewModelをaddListerで結びつける
-    _titleController.addListener(_onInputChanged);
-    _way1Controller.addListener(_onInputChanged);
-    _way2Controller.addListener(_onInputChanged);
-    ///controllerの初期値を代入
-    switch(widget.displayMode){
-      case AddScreenMode.add:
-        _titleController.text = '';
-        _way1Controller.text = '';
-        _way2Controller.text = '';
-        break;
-    //todo キャンセルして戻った場合、仮でも変更値がviewModelを経由してして画面に反映されてしまう
-    ///widget.comparisonOverviewを表示すると連続して変更した場合に初回変更が反映されない
-      case AddScreenMode.edit:
-        _titleController.text = widget.comparisonOverview.itemTitle;
-        _way1Controller.text = widget.comparisonOverview.way1Title;
-        _way2Controller.text = widget.comparisonOverview.way2Title;
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _way1Controller.dispose();
-    _way2Controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final accentColor = Theme.of(context).accentColor;
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+
+
+    if (displayMode == AddScreenMode.add) {
+      Future(() async {
+        await viewModel.itemControllerClear();
+      });
+    }
+
+
     return Column(
       children: [
         ///タイトル
+      //AddScreenMode.editの場合、controllerはviewModelのitemTitle,way1Title,way2Titleを代入
         TextFieldPart(
           label: 'タイトル',
           placeholder: 'タイトルを入力',
-          autofocus: widget.displayMode == AddScreenMode.add
-               ?true:false,
-          textEditingController: _titleController,
+          autofocus: displayMode == AddScreenMode.add
+              ?true:false,
+          textEditingController: viewModel.titleController,
+          //テキスト入力があるかどうかを下のRaisedButtonを押せる押せないのために通知するだけ
+          didChanged: (text)=>viewModel.itemTitleChanged(),
         ),
         const SizedBox(height: 24),
 
@@ -85,7 +48,9 @@ class _InputPartState extends State<InputPart> {
           label: 'way1',
           placeholder: '比較項目を入力',
           autofocus: false,
-          textEditingController: _way1Controller,
+          textEditingController: viewModel.way1Controller,
+          //テキスト入力があるかどうかを下のRaisedButtonを押せる押せないのために通知するだけ
+          didChanged: (text)=>viewModel.itemTitleChanged(),
         ),
         const SizedBox(height: 8),
         const Text('と', style: TextStyle(color: Colors.black)),
@@ -96,130 +61,96 @@ class _InputPartState extends State<InputPart> {
           label: 'way2',
           placeholder: '比較項目を入力',
           autofocus: false,
-          textEditingController: _way2Controller,
+          textEditingController: viewModel.way2Controller,
+          //テキスト入力があるかどうかを下のRaisedButtonを押せる押せないのために通知するだけ
+          didChanged: (text)=>viewModel.itemTitleChanged(),
         ),
         const SizedBox(height: 40),
 
         ///button
-        RaisedButton(
-          child: widget.displayMode == AddScreenMode.add
+        Consumer<CompareViewModel>(
+        builder: (context, compareViewModel, child) {
+          return RaisedButton(
+              child: displayMode == AddScreenMode.add
               ?const Text('比較')
               :const Text('更新'),
-          color: accentColor,
-          shape:
+              color: accentColor,
+              shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          onPressed: isCreateItemEnabled
-          //todo AddScreenMode.addならcreateメソッド、
-          // AddScreenMode.editならupdateメソッド
-              ? widget.displayMode == AddScreenMode.add
+              onPressed:
+              viewModel.titleController.text.isNotEmpty &&
+                  viewModel.way1Controller.text.isNotEmpty &&
+                  viewModel.way2Controller.text.isNotEmpty
+              ? displayMode == AddScreenMode.add
                 ?() => _createComparisonItems(context)
-                :()=>_updateComparisonItems(context,
-//              widget.tagTitle,widget.itemTitleEditMode,
-          )
-              : null,
-        ),
+                :()=>_updateComparisonItems(context)
+              :null
+        );
+  }),
       ],
     );
   }
 
-  ///ここでviewModelのisCreateItemEnabledをセットする
-  // テキスト変更したものをviewModel側へ格納
-  void _onInputChanged() {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-      ..itemTitle = _titleController.text
-      ..way1Title = _way1Controller.text
-      ..way2Title = _way2Controller.text;
-
-    setState(() {
-      if (_titleController.text.isNotEmpty &&
-          _way1Controller.text.isNotEmpty &&
-          _way2Controller.text.isNotEmpty) {
-        isCreateItemEnabled = true;
-      } else {
-        isCreateItemEnabled = false;
-      }
-    });
-  }
-
-
-  // 押せる・押せないはinsta_cloneのcomment_input_part参照
-  ///textEditingControllerをview側で設定=>viewModelに設定するメソッド
+  ///新規作成
   Future<void> _createComparisonItems(BuildContext context) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-      //初期表示は読み込みさせる
+    //初期表示は読み込みさせる
       ..compareScreenStatus = CompareScreenStatus.set;
 
-    // ComparisonItemではなく、ComparisonOverviewに変更,CompareScreenへ値渡し
-    final comparisonOverview = ComparisonOverview(
+    //Uuid渡したいので、view側でcomparisonOverview作成
+    final newComparisonOverview = ComparisonOverview(
       comparisonItemId: Uuid().v1(),
-      itemTitle: _titleController.text,
-      way1Title: _way1Controller.text,
-      way2Title: _way2Controller.text,
+      itemTitle: viewModel.titleController.text,
+      way1Title: viewModel.way1Controller.text,
+      way2Title: viewModel.way2Controller.text,
       createdAt: DateTime.now(),
     );
 
     //最初は1つだけComparisonIdが入ったWay1Merit,Way2Meritを入れたい
     final initWay1Merit = Way1Merit(
-      comparisonItemId: comparisonOverview.comparisonItemId,
+      comparisonItemId: newComparisonOverview.comparisonItemId,
       way1MeritDesc: '',
     );
     final initWay2Merit = Way2Merit(
-      comparisonItemId: comparisonOverview.comparisonItemId,
+      comparisonItemId: newComparisonOverview.comparisonItemId,
       way2MeritDesc: '',
     );
 
-    //DB登録
-    await viewModel.createComparisonOverview(comparisonOverview);
+    ///DB登録
+    ///viewModel側でcontroller.textを入力してDB登録
+   await viewModel.createNewItem(newComparisonOverview);
     //DB登録 Merit/Demeritの1行だけをUuidでつけたComparisonIdを入れて登録する
     await viewModel.createDesc(initWay1Merit, initWay2Merit);
 
     //DBからUuidでつけたComparisonIdを元に1行だけ読込(overviewDBへ格納)=>compareScreenへ渡す
     ///Merit/DemeritのリストはCompareScreenでFutureBuilderから読込のでviewModel側への格納はなし
-  await viewModel.getComparisonOverview(comparisonOverview.comparisonItemId);
-
-//    viewModel.compareScreenStatus =CompareScreenStatus.set;
+    await viewModel.getComparisonOverview(
+        newComparisonOverview.comparisonItemId);
 
     ///DBに登録されたcomparisonOverviewをCompareScreenへ渡したい
     await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
             builder: (context) => CompareScreen(
-                   screenEditMode: ScreenEditMode.fromListPage,
+              screenEditMode: ScreenEditMode.fromListPage,
 //                  comparisonOverview: comparisonOverview,
-                  comparisonOverview: viewModel.overviewDB,
-                )));
+              comparisonOverview: viewModel.overviewDB,
+            )));
+    //DB登録後controllerクリア
+   await viewModel.itemControllerClear();
+
     //この時点でcontrollerが破棄されるので、CompareScreenから戻るときにclearメソッドがあると、
     //Once you have called dispose() on a TextEditingController,のエラー出る
   }
 
-  //更新メソッド
+  ///更新メソッド
   Future<void>_updateComparisonItems(BuildContext context,
-//      String tagTitle,ItemTitleEditMode itemTitleEditMode
       ) async{
     //テキスト入力したものをviewModel側へ格納
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-    ..itemTitle = _titleController.text
-    ..way1Title = _way1Controller.text
-    ..way2Title = _way2Controller.text;
-
-    final updateOverview = ComparisonOverview(
-      comparisonItemId:widget.comparisonOverview.comparisonItemId,
-      itemTitle: _titleController.text,
-      way1Title: _way1Controller.text,
-      way2Title: _way2Controller.text,
-      createdAt: DateTime.now(),
-    );
-
-
-    await viewModel.updateComparisonOverView(
-//        comparisonOverview:widget.comparisonOverview,
-    updateOverview: updateOverview,
-    );
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.updateItem(comparisonOverview);
     //CompareScreenへ
     Navigator.pop(context);
   }
-
-
-
 
 }
