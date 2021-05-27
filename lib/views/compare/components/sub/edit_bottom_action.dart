@@ -5,7 +5,6 @@ import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/list/add_screen.dart';
-import 'package:compare_2way/views/list/single_list_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -81,17 +80,29 @@ class EditBottomAction extends StatelessWidget {
     switch (selectedMenu) {
       case CompareEditMenu.titleEdit:
 //        print('edit_bottom_actionでタイトル編集押す/tagTitle&itemTitleEditMode:$tagTitle & $itemTitleEditMode');
-        final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-          ..itemTitle = comparisonOverview.itemTitle
-          ..way1Title = comparisonOverview.way1Title
-          ..way2Title = comparisonOverview.way2Title;
+      ///インスタンスのcomparisonOverviewではなく、viewModel格納のitemTitleをAddScreen側で使用
+        final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+//          ..itemTitle = comparisonOverview.itemTitle
+//          ..way1Title = comparisonOverview.way1Title
+//          ..way2Title = comparisonOverview.way2Title;
+        viewModel.setEditController();
 
+//        final updateOverview = ComparisonOverview(
+//          comparisonItemId: comparisonOverview.comparisonItemId,
+//          itemTitle: viewModel.itemTitle,
+//          way1Title: viewModel.way1Title,
+//          way2Title: viewModel.way2Title,
+//        );
+
+        print('タイトル編集/viewModel.itemTitle:${viewModel.itemTitle}');
+        print('タイトル編集/comparisonOverview.itemTitle:${comparisonOverview.itemTitle}');
         //画面移行する前にCupertinoActionSheetを閉じる(戻ると表示されたままになってしまう)
         Navigator.pop(context);
         Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
           builder: (context) => AddScreen(
             displayMode: AddScreenMode.edit,
-            comparisonOverview: comparisonOverview,
+            //comparisonItemIdしか使わない
+            comparisonOverview:comparisonOverview,
           ),
         ));
         break;

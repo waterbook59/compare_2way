@@ -1,9 +1,12 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
+import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/list/componets/input_part.dart';
+import 'package:compare_2way/views/list/componets/input_part_stateless.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 class AddScreen extends StatelessWidget {
@@ -26,12 +29,30 @@ class AddScreen extends StatelessWidget {
     final primaryColor = Theme
         .of(context)
         .primaryColor;
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         //todo Androidでの端末下の戻るボタン無効:WillPopScopeのonWillPopをfalse
         //todo leading新規作成時はキャンセルボタン、編集時はleadingの表示なし
 //        automaticallyImplyLeading: false,
+      leading: displayMode == AddScreenMode.add
+      //新規追加時キャンセル
+        ? GestureDetector(
+        child: const Icon(
+          CupertinoIcons.clear_thick_circled,
+          color: Colors.white,
+        ),
+        onTap: () =>Navigator.pop(context)
+      )
+      //タイトル編集時キャンセル
+        : GestureDetector(
+          child: const Icon(
+            CupertinoIcons.clear_thick_circled,
+            color: Colors.white,
+          ),
+          onTap: ()=> _cancelTitleEdit(context),
+      ),
         backgroundColor: primaryColor,
         middle:displayMode == AddScreenMode.add
         ? const Text(
@@ -59,14 +80,38 @@ class AddScreen extends StatelessWidget {
                 height: 48,
               ),
 ///InputPart
-              InputPart(displayMode: displayMode,
-                comparisonOverview: comparisonOverview,
-              ),
+//              InputPart(displayMode: displayMode,
+//                comparisonOverview: comparisonOverview,
+//              ),
+
+//              Consumer<CompareViewModel>(
+//                builder: (context, compareViewModel, child) {
+//                  return
+                    InputPartStateless(
+                    displayMode: displayMode,
+                    comparisonOverview: comparisonOverview,)
+//                  ;
+//                }
+
+//              ),
+
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _cancelTitleEdit(BuildContext context) {
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    print('編集モードでのキャンセルメソッド');
+    ///入力途中の場合、InputPart内の入力中のcontrollerをdisposeするか、空にする
+    //キャンセル時は元に表示していたviewModelの値をInputPartに表示したい
+    //InputPartにSelector設定してキャンセルボタンおしたらInputPart再ビルドしてdisposeする？
+     Navigator.pop(context);
+     displayMode == AddScreenMode.add
+    ? viewModel.itemControllerClear()
+    :viewModel.cancelControllerEdit(comparisonOverview);
   }
 
 }

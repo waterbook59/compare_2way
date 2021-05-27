@@ -1,7 +1,5 @@
-import 'package:compare_2way/data_models/comparison_item.dart';
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
-import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/compare_screen.dart';
@@ -34,6 +32,7 @@ class _InputPartState extends State<InputPart> {
   final _way2Controller = TextEditingController();
   bool isCreateItemEnabled = false;
 
+
   //addListenerはcontrollerの入力値とviewModelの値とのやりとりをするのに必須
   @override
   void initState() {
@@ -49,6 +48,7 @@ class _InputPartState extends State<InputPart> {
         _way2Controller.text = '';
         break;
     //todo キャンセルして戻った場合、仮でも変更値がviewModelを経由してして画面に反映されてしまう
+    ///widget.comparisonOverviewを表示すると連続して変更した場合に初回変更が反映されない
       case AddScreenMode.edit:
         _titleController.text = widget.comparisonOverview.itemTitle;
         _way1Controller.text = widget.comparisonOverview.way1Title;
@@ -123,7 +123,7 @@ class _InputPartState extends State<InputPart> {
   }
 
   ///ここでviewModelのisCreateItemEnabledをセットする
-  // AddViewModel=>CompareViewModelで統一
+  // テキスト変更したものをviewModel側へ格納
   void _onInputChanged() {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false)
       ..itemTitle = _titleController.text
@@ -196,11 +196,24 @@ class _InputPartState extends State<InputPart> {
   Future<void>_updateComparisonItems(BuildContext context,
 //      String tagTitle,ItemTitleEditMode itemTitleEditMode
       ) async{
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-  //登録
-//    print('更新ボタン押すtagTitle&itemTitleEditMode：$tagTitle & $itemTitleEditMode');
+    //テキスト入力したものをviewModel側へ格納
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+    ..itemTitle = _titleController.text
+    ..way1Title = _way1Controller.text
+    ..way2Title = _way2Controller.text;
+
+    final updateOverview = ComparisonOverview(
+      comparisonItemId:widget.comparisonOverview.comparisonItemId,
+      itemTitle: _titleController.text,
+      way1Title: _way1Controller.text,
+      way2Title: _way2Controller.text,
+      createdAt: DateTime.now(),
+    );
+
+
     await viewModel.updateComparisonOverView(
-        comparisonOverview:widget.comparisonOverview,
+//        comparisonOverview:widget.comparisonOverview,
+    updateOverview: updateOverview,
     );
     //CompareScreenへ
     Navigator.pop(context);

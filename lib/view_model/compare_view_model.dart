@@ -1,4 +1,3 @@
-import 'package:compare_2way/data_models/comparison_item_id.dart';
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
@@ -26,6 +25,12 @@ class CompareViewModel extends ChangeNotifier {
   String itemTitle = '';
   String way1Title = '';
   String way2Title = '';
+  final _titleController = TextEditingController();
+  TextEditingController get titleController => _titleController;
+  final _way1Controller = TextEditingController();
+  TextEditingController get way1Controller => _way1Controller;
+  final _way2Controller = TextEditingController();
+  TextEditingController get way2Controller => _way2Controller;
 
   int _way1MeritEvaluate = 0;
   int get way1MeritEvaluate => _way1MeritEvaluate;
@@ -109,18 +114,18 @@ class CompareViewModel extends ChangeNotifier {
   }
   ///AddScreen/InputPartでComparisonOverview更新：itemTitle,way1Title,way2Titleのみ変更
   Future<void> updateComparisonOverView({
-      ComparisonOverview comparisonOverview,
+      ComparisonOverview updateOverview,
 //    String tagTitle,
 //    ItemTitleEditMode itemTitleEditMode,
   }) async {
     //更新するプロパティだけ入れてrepositoryでCompanion作成=>更新
-    final updateOverview = ComparisonOverview(
-      comparisonItemId: comparisonOverview.comparisonItemId,
-      itemTitle: itemTitle,
-      way1Title: way1Title,
-      way2Title: way2Title,
-      createdAt: DateTime.now(),
-    );
+//    final updateOverview = ComparisonOverview(
+//      comparisonItemId: comparisonOverview.comparisonItemId,
+//      itemTitle: itemTitle,
+//      way1Title: way1Title,
+//      way2Title: way2Title,
+//      createdAt: DateTime.now(),
+//    );
     await _compareRepository.updateComparisonOverView(updateOverview);
   print('comparisonOverviewのタイトル類を更新');
 
@@ -174,6 +179,7 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> setConclusion(String newConclusion) async {
     conclusion = newConclusion;
   }
+
 
   ///DescFormAndButtonでList<Way1Merit>の入力変更があったとき
   Future<void> setChangeListDesc(
@@ -618,6 +624,59 @@ class CompareViewModel extends ChangeNotifier {
     //削除してtagPage更新
     notifyListeners();
   }
+
+  ///AddScreen/InputPartでComparisonOverview新規登録：ComparisonOverview=>ComparisonOverviewRecordでDB登録
+  Future<void> createNewItem(ComparisonOverview newComparisonOverview) async {
+    await _compareRepository.createComparisonOverview(newComparisonOverview);
+    notifyListeners();
+  }
+
+  Future<void> updateItem(ComparisonOverview comparisonOverview) async{
+    //compareScreenのSelectorまわすので入力
+    itemTitle = _titleController.text;
+    way1Title = _way1Controller.text;
+    way2Title = _way2Controller.text;
+
+    //引数はcomparisonItemIdしか使わず、テキスト入力はviewModelの値
+        final updateOverview = ComparisonOverview(
+      comparisonItemId:comparisonOverview.comparisonItemId,
+      itemTitle: _titleController.text,
+      way1Title: _way1Controller.text,
+      way2Title: _way2Controller.text,
+      createdAt: DateTime.now(),
+    );
+    await _compareRepository.updateComparisonOverView(updateOverview);
+    await onSelectTag(selectTagTitle);
+    notifyListeners();
+    _titleController.clear();
+    _way1Controller.clear();
+    _way2Controller.clear();
+  }
+  //タイトル更新時(AddScreenMode.edit)、addScreenでcancelするとき
+  void cancelControllerEdit(ComparisonOverview comparisonOverview) {
+    _titleController.text = comparisonOverview.itemTitle;
+    _way1Controller.text= comparisonOverview.way1Title;
+    _way2Controller.text = comparisonOverview.way2Title;
+  }
+  //タイトル更新時(AddScreenMode.edit)、inputPartの初期表示(CompareScreeのSelectorで表示されているものを表示)
+  void setEditController(){
+    _titleController.text = itemTitle;
+    _way1Controller.text = way1Title;
+    _way2Controller.text = way2Title;
+  }
+
+
+  Future<void> itemControllerClear() async{
+    _titleController.clear();
+    _way1Controller.clear();
+    _way2Controller.clear();
+  }
+
+  void itemTitleChanged (){
+    notifyListeners();
+  }
+
+
 
 
 
