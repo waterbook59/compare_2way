@@ -48,6 +48,7 @@ class CompareScreen extends StatelessWidget {
       print('compareScreenのFuture通過');
       Future(() async {
         await viewModel.setOverview(comparisonOverview);
+        //todo notifyListenersは１回でいいかも
         //viewModelで全てのAccordion中のリストとる
         await viewModel.getAccordionList(comparisonOverview.comparisonItemId);
         //viewModelにcomparisonIdを元に取って来たtagListを格納
