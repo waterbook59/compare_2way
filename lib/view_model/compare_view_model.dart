@@ -75,7 +75,7 @@ class CompareViewModel extends ChangeNotifier {
   bool tagEditMode = true; //初期設定は通常モード
 //  bool editFocus = false; //初期設定はタイトルのみ
   int selectedIndex;//tagPageでのListTile選択
-
+  bool isDisplayIcon =false;//AccordionPart=>DescFormのIconButton表示有無
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
   Future<void> getOverview(String comparisonItemId) async {
@@ -107,39 +107,41 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   ///AddScreen/InputPartでComparisonOverview新規登録：ComparisonOverview=>ComparisonOverviewRecordでDB登録
-  Future<void> createComparisonOverview(
-      ComparisonOverview comparisonOverview) async {
-    await _compareRepository.createComparisonOverview(comparisonOverview);
-//    notifyListeners();
-  }
-  ///AddScreen/InputPartでComparisonOverview更新：itemTitle,way1Title,way2Titleのみ変更
-  Future<void> updateComparisonOverView({
-      ComparisonOverview updateOverview,
-//    String tagTitle,
-//    ItemTitleEditMode itemTitleEditMode,
-  }) async {
-    //更新するプロパティだけ入れてrepositoryでCompanion作成=>更新
-//    final updateOverview = ComparisonOverview(
-//      comparisonItemId: comparisonOverview.comparisonItemId,
-//      itemTitle: itemTitle,
-//      way1Title: way1Title,
-//      way2Title: way2Title,
-//      createdAt: DateTime.now(),
-//    );
-    await _compareRepository.updateComparisonOverView(updateOverview);
-  print('comparisonOverviewのタイトル類を更新');
-
-//  if(itemTitleEditMode ==ItemTitleEditMode.select){
-//    print('viewModel.updateComparison/onSelectTagする前:$tagTitle');
-//    //todo 名前付引数でtagTitleを設定=>selectTagPage側から編集の場合はtagTitleを渡し、onSelectTagすることで、selectTagPageはSelectorのみでいいかも
-//     return onSelectTag(tagTitle);//todo selectTagTitleでいいのではないか説
-//  }else{
-    print('viewModel.updateComparison/onSelectTagする前:$tagTitle');
-    await onSelectTag(selectTagTitle);
+  ///createNewItemに変更
+//  Future<void> createComparisonOverview(
+//      ComparisonOverview comparisonOverview) async {
+//    await _compareRepository.createComparisonOverview(comparisonOverview);
+////    notifyListeners();
 //  }
-
-    notifyListeners();
-  }
+  ///AddScreen/InputPartでComparisonOverview更新：itemTitle,way1Title,way2Titleのみ変更
+  ///updateItem
+//  Future<void> updateComparisonOverView({
+//      ComparisonOverview updateOverview,
+////    String tagTitle,
+////    ItemTitleEditMode itemTitleEditMode,
+//  }) async {
+//    //更新するプロパティだけ入れてrepositoryでCompanion作成=>更新
+////    final updateOverview = ComparisonOverview(
+////      comparisonItemId: comparisonOverview.comparisonItemId,
+////      itemTitle: itemTitle,
+////      way1Title: way1Title,
+////      way2Title: way2Title,
+////      createdAt: DateTime.now(),
+////    );
+//    await _compareRepository.updateComparisonOverView(updateOverview);
+//  print('comparisonOverviewのタイトル類を更新');
+//
+////  if(itemTitleEditMode ==ItemTitleEditMode.select){
+////    print('viewModel.updateComparison/onSelectTagする前:$tagTitle');
+////    //todo 名前付引数でtagTitleを設定=>selectTagPage側から編集の場合はtagTitleを渡し、onSelectTagすることで、selectTagPageはSelectorのみでいいかも
+////     return onSelectTag(tagTitle);//todo selectTagTitleでいいのではないか説
+////  }else{
+//    print('viewModel.updateComparison/onSelectTagする前:$tagTitle');
+//    await onSelectTag(selectTagTitle);
+////  }
+//
+//    notifyListeners();
+//  }
 
   ///AddScreen/InputPartでWay1Merit,Way2Meritリストを新規登録
   //way1Merit,way2Meritのリストを作って保存

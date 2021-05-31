@@ -60,6 +60,8 @@ class _SettingPageState extends State<SettingPage> {
     ),
   ];
 
+  final myFocusNode = FocusNode();
+  bool isDisplayIcon = false;
 
   @override
   void initState() {
@@ -71,6 +73,11 @@ class _SettingPageState extends State<SettingPage> {
 //      print('$index,$tagChart');
 //    });
     print('myControllers:$myControllers');
+
+    myFocusNode.addListener(() {
+     print('Has focus: ${myFocusNode.hasFocus}');
+                    });
+
     super.initState();
   }
 
@@ -78,7 +85,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    final myFocusNode = FocusNode();
+
 
 
 //    List<bool>
@@ -98,6 +105,8 @@ class _SettingPageState extends State<SettingPage> {
           onTap: () {
             ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
             FocusScope.of(context).unfocus();
+            //setStateいらない
+              isDisplayIcon = false;
           },
           child: SingleChildScrollView(
             child: Column(children: [
@@ -138,21 +147,35 @@ class _SettingPageState extends State<SettingPage> {
                         child: ListTile(
 
                           title: _selectedIndex == index
-                          ?  CupertinoTextField(
-                            //todo decoration編集
-                            controller: myControllers[index],
-                            focusNode: myFocusNodes[index],
-//      onChanged:  (newDesc) => widget.inputChanged(newDesc),
-                            ///変更したらtagTitle更新
-//                        onChanged: (newTagTitle)=>updateTagTile(context,newTagTitle),
-                            maxLines: null,
+                          ?  Stack(
+                            alignment: Alignment.centerRight,
+                            children: [
+                              CupertinoTextField(
+                              //todo decoration編集
+                              controller: myControllers[index],
+                              focusNode:
+//                              myFocusNode,
+                              myFocusNodes[index],
+                              maxLines: null,
+                            ),
+                              ///hasFocus使うと初回でてこないので、isDisplayIcon設定
+                              _selectedIndex == index && isDisplayIcon
+//                              myFocusNodes[index].hasFocus
+                              ?IconButton(
+                                icon: const Icon(
+                                  Icons.remove_circle_outline,
+                                  color: Colors.grey,
+                                  size: 24,
+                                ),
+                                //ここではvoidCallbackでindexのみ渡して具体的なロジックはDescFormAndButtonで
+                                onPressed: (){},
+                              )
+                                  :Container(),
+
+
+                          ]
                           )
 
-//                      EditTagTitle(
-//                        tagTitle: testTagChart[index].tagTitle,
-//                        selectTagIdList: selectTagIdList,
-//                        myFocusNode: myFocusNode,
-//                      )
                           :Text(testTagChart[index].tagTitle),
                           subtitle:Text('アイテム数:${testTagChart[index].tagAmount}'),
                           onTap: (){
@@ -160,22 +183,15 @@ class _SettingPageState extends State<SettingPage> {
                             setState(() {
                               _selectedIndex = index;
                               myFocusNodes[index].requestFocus();
-                              // _selected[index]の変更＆変更後はfalseに戻さない
-//                          if(_selected[index]== false) {
-//                            _selected[index] = !_selected[index];
-//                          }
-//                          print('selected]$_selected');
+                              isDisplayIcon = true;
+//                              myFocusNode.requestFocus();
                             });
                           },
-                          //ListTileThemeいじる時、今のflutter versionだと文字色しかいじれない
-//                      selected: index == _selectedIndex,
+
                         ),
                       ),
                     );
-//                  TagList(
 
-//                  tagAmount: testTagChart[index].tagAmount,
-//                );
                   }),
 
             ],),

@@ -37,11 +37,14 @@ class CompareScreen extends StatelessWidget {
   static final List<TextEditingController> _controllers =
       List.generate(items.length, (i) => TextEditingController(text: items[i]));
 
+
+
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+
 
     //initState的に他の画面から写ってきた時のみ読込
     if (viewModel.compareScreenStatus == CompareScreenStatus.set) {
@@ -91,9 +94,11 @@ class CompareScreen extends StatelessWidget {
       child: Scaffold(
         body: GestureDetector(
           onTap: () {
-            print('GestureDetectorをonTap!');
+            print('GestureDetectorをonTap!isDisplayIcon:${viewModel.isDisplayIcon}');
             ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
             FocusScope.of(context).unfocus();
+            //accordionpart=>descFormのiconButtonの非表示
+            viewModel.isDisplayIcon = false;
           },
           child: SingleChildScrollView(
             child: Column(

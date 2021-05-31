@@ -18,7 +18,10 @@ class AccordionPart extends StatefulWidget {
     this.displayList,
     this.way1MeritList,
     this.way2MeritList,
-    this.inputChanged, this.addList,this.deleteList});
+    this.inputChanged,
+    this.addList,
+    this.deleteList,
+  });
 
   final String title;
   final DisplayList displayList;

@@ -1,7 +1,9 @@
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/utils/constants.dart';
+import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 import 'desc_form.dart';
 
@@ -12,7 +14,8 @@ class DescFormAndButton extends StatefulWidget {
       this.way2MeritList,
       this.inputChanged,
       this.addList,
-      this.deleteList});
+      this.deleteList,
+      });
 
   final DisplayList displayList;
   final List<Way1Merit> way1MeritList;
@@ -27,22 +30,27 @@ class DescFormAndButton extends StatefulWidget {
 
 class _DescFormAndButtonState extends State<DescFormAndButton> {
   List<TextEditingController> controllers = <TextEditingController>[];
+  List<FocusNode> focusNodes = <FocusNode>[];
+  int _selectedIndex ;
+
 
   @override
   void initState() {
     switch(widget.displayList){
       case DisplayList.way1Merit:
         widget.way1MeritList.isNotEmpty
-            ? controllers = widget.way1MeritList.map((item) {
-          return TextEditingController(text: item.way1MeritDesc);
-        }).toList()
+            ? createWay1MeritList()
+//        controllers = widget.way1MeritList.map((item) {
+//          return TextEditingController(text: item.way1MeritDesc);
+//        }).toList()
         :controllers = [];
         break;
       case DisplayList.way2Merit:
         widget.way2MeritList.isNotEmpty
-            ? controllers = widget.way2MeritList.map((item) {
-          return TextEditingController(text: item.way2MeritDesc);
-        }).toList()
+            ? createWay2MeritList()
+//        controllers = widget.way2MeritList.map((item) {
+//          return TextEditingController(text: item.way2MeritDesc);
+//        }).toList()
             :controllers = [];
         break;
     }
@@ -51,6 +59,8 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+
     return Column(
       children: [
         ListView.builder(
@@ -60,12 +70,40 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
             itemBuilder: (context, index) {
               return
                   //deleteするときのキーボード立ち上がりをふせぐにはStackでボタン独立
-                  DescForm(
-                inputChanged: (newDesc) => widget.inputChanged(newDesc, index),
-                controllers: controllers,
-                index: index,
-                deleteList: (deleteIndex) => _deleteList(context, deleteIndex),
-              );
+                //タップ時のみdeleteButton表示させるのにGestureDetector
+            //１回閉じると２回目TapしてもonTapがまわらない(isDisplayIcon反応なし)
+            GestureDetector(
+              onTap: (){
+                setState(() {
+                  _selectedIndex = index;
+                  print('_selectecIndex:$_selectedIndex');
+                  focusNodes[index].requestFocus();
+                  //isDisplayIconをviewModelにもたせる
+                  viewModel.isDisplayIcon = true;
+                  print('Listの１つをonTap!isDisplayIcon:${viewModel.isDisplayIcon}');
+                });
+              },
+              child://選択時はTextField+削除アイコン
+              _selectedIndex ==index
+                ?DescForm(
+                  inputChanged: (newDesc) => widget.inputChanged(newDesc, index),
+                  controllers: controllers,
+                  index: index,
+                  deleteList: (deleteIndex) => _deleteList(context, deleteIndex),
+//todo focusNodeをcontrollers.lengthの長さだけList<FocusNode>つくり、focusNode[index]でわたす
+                  focusNode: focusNodes[index],
+                )
+                  ://非選択時はただのText(幅とかはTextFieldに寄せる)
+              //todo temporaryTextとしてwidget分割(できるだけTextFieldに近づける)
+              controllers[index].text.isNotEmpty
+                ?Container(
+                  decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.black12))),
+                  child: Text('${controllers[index].text}'))
+                :Container(
+                  decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.black12))),
+                  child: Text('メリットを入力',style:TextStyle(color: Colors.grey) ,)),
+
+            );
             }),
         RaisedButton(
           child: const Icon(Icons.add),
@@ -77,6 +115,8 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
               //追加直後にCompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画しない
               widget.addList();
               controllers.add(TextEditingController());
+              focusNodes.add(FocusNode());
+              viewModel.isDisplayIcon = true;
               print(
                   'descFormAndButton/RaisedButton:controllers${controllers.map((controller) => controller.text).toList()}');
             });
@@ -96,10 +136,27 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
     if (controllers.length > 1) {
       setState(() {
         controllers.removeAt(deleteIndex);
+        focusNodes.removeAt(deleteIndex);
         widget.deleteList(deleteIndex);
         print('DescForm削除setState時のcontrollers.length:'
             '${controllers.length}');
       });
     }
   }
+
+  void createWay1MeritList() {
+    controllers = widget.way1MeritList.map((item) {
+      return TextEditingController(text: item.way1MeritDesc);
+    }).toList();
+    focusNodes = widget.way1MeritList.map((item) => FocusNode()).toList();
+//    print('Way1MeritのfocusNodesの数:${focusNodes.length}');
+  }
+
+  void createWay2MeritList() {
+    controllers = widget.way2MeritList.map((item) {
+      return TextEditingController(text: item.way2MeritDesc);
+    }).toList();
+    focusNodes = widget.way2MeritList.map((item) => FocusNode()).toList();
+  }
+
 }
