@@ -23,6 +23,12 @@ class _SettingPageState extends State<SettingPage> {
     TextEditingController(),
     TextEditingController(),
   ];
+  List<TextEditingController> my2ndControllers = [
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+  ];
   List<TagChart> testTagChart = [
     TagChart(
       tagTitle: 'オラオラオラオラ',
@@ -41,14 +47,39 @@ class _SettingPageState extends State<SettingPage> {
       tagAmount: 7,
     ),
   ];
+  List<TagChart> test2ndTagChart = [
+    TagChart(
+      tagTitle: 'スタープラチナ',
+      tagAmount: 20,
+    ),
+    TagChart(
+      tagTitle: 'ディオ・ブランドーTHE WORLD',
+      tagAmount: 99,
+    ),
+    TagChart(
+      tagTitle: 'ゴールドエクスペリエンス・レクイエム',
+      tagAmount: 15,
+    ),
+    TagChart(
+      tagTitle: '東方仗助',
+      tagAmount: 16,
+    ),
+  ];
   List<FocusNode> myFocusNodes =[
    FocusNode(),
    FocusNode(),
    FocusNode(),
    FocusNode(),
   ];
+  List<FocusNode> my2ndFocusNodes =[
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+  ];
 
   int _selectedIndex ;
+  int _selected2ndIndex ;
   //List<bool>
 
 
@@ -62,6 +93,9 @@ class _SettingPageState extends State<SettingPage> {
 
   final myFocusNode = FocusNode();
   bool isDisplayIcon = false;
+  bool is2ndDisplayIcon =false;
+  bool isReturnText = true;
+  bool is2ndReturnText = true;
 
   @override
   void initState() {
@@ -69,18 +103,30 @@ class _SettingPageState extends State<SettingPage> {
     myControllers.asMap().forEach((index, controller) {
       controller.text = testTagChart[index].tagTitle;
     });
+    my2ndControllers.asMap().forEach((index, controller) {
+      controller.text = test2ndTagChart[index].tagTitle;
+    });
 //    final tagChartMap = testTagChart.asMap().forEach((index, tagChart) {
 //      print('$index,$tagChart');
 //    });
     print('myControllers:$myControllers');
 
-    myFocusNode.addListener(() {
-     print('Has focus: ${myFocusNode.hasFocus}');
-                    });
+//    myFocusNode.addListener(() {
+//     print('Has focus: ${myFocusNode.hasFocus}');
+//                    });
 
     super.initState();
   }
 
+@override
+  void dispose() {
+    ///controllerやFocusNodeがリスト型の場合のdispose方法
+    myControllers.map((e) => e.dispose()).toList();
+    print('myControllersをdispose:$myControllers');
+    myFocusNodes.map((e) => e.dispose()).toList();
+    print('myFocusNodesをdispose:$myFocusNodes');
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +153,9 @@ class _SettingPageState extends State<SettingPage> {
             FocusScope.of(context).unfocus();
             //setStateいらない
               isDisplayIcon = false;
+              is2ndDisplayIcon = false;
+              isReturnText = false;
+              is2ndReturnText = false;
           },
           child: SingleChildScrollView(
             child: Column(children: [
@@ -136,7 +185,7 @@ class _SettingPageState extends State<SettingPage> {
                     return Container(
                       decoration: BoxDecoration(
                         color:
-                        _selectedIndex == index
+                        _selectedIndex == index && isReturnText
 //                    index == _selectedIndex
 //                    _selected[index]
                           ?Colors.grey[400]
@@ -146,7 +195,7 @@ class _SettingPageState extends State<SettingPage> {
 //                    selectedColor: Colors.blueGrey,
                         child: ListTile(
 
-                          title: _selectedIndex == index
+                          title: _selectedIndex == index && isReturnText
                           ?  Stack(
                             alignment: Alignment.centerRight,
                             children: [
@@ -171,8 +220,6 @@ class _SettingPageState extends State<SettingPage> {
                                 onPressed: (){},
                               )
                                   :Container(),
-
-
                           ]
                           )
 
@@ -184,6 +231,8 @@ class _SettingPageState extends State<SettingPage> {
                               _selectedIndex = index;
                               myFocusNodes[index].requestFocus();
                               isDisplayIcon = true;
+                              isReturnText = true;
+                              is2ndReturnText =false;
 //                              myFocusNode.requestFocus();
                             });
                           },
@@ -192,6 +241,62 @@ class _SettingPageState extends State<SettingPage> {
                       ),
                     );
 
+                  }),
+              const SizedBox(height: 16,),
+              const Text('ListView/ListTileテスト2'),
+              ListView.builder(
+                  itemCount: test2ndTagChart.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index){
+                    return Container(
+                      decoration: BoxDecoration(
+                        color:
+                        _selected2ndIndex == index && is2ndReturnText
+                            ?Colors.grey[400]
+                            :Colors.transparent,
+                      ),
+                        child: ListTile(
+                          title: _selected2ndIndex == index && is2ndReturnText
+                              ?  Stack(
+                              alignment: Alignment.centerRight,
+                              children: [
+                                CupertinoTextField(
+                                  controller: my2ndControllers[index],
+                                  focusNode:
+                                  my2ndFocusNodes[index],
+                                  maxLines: null,
+                                ),
+                                ///hasFocus使うと初回でてこないので、isDisplayIcon設定
+                        _selected2ndIndex == index && is2ndDisplayIcon ||
+                              my2ndFocusNodes[index].hasFocus
+                                    ?IconButton(
+                                  icon: const Icon(
+                                    Icons.remove_circle_outline,
+                                    color: Colors.grey,
+                                    size: 24,
+                                  ),
+                                  //ここではvoidCallbackでindexのみ渡して具体的なロジックはDescFormAndButtonで
+                                  onPressed: (){},
+                                )
+                                    :Container(),
+                              ]
+                          )
+                              :Text(test2ndTagChart[index].tagTitle),
+                          subtitle:Text('アイテム数:${test2ndTagChart[index].tagAmount}'),
+                          onTap: (){
+                            print('ListTile2ndのリストonTap!:_selectedIndex:$_selectedIndex,selected2ndIndex:$_selected2ndIndex,isReturnText:$isReturnText,is2ndReturnText:$is2ndReturnText');
+                            setState(() {
+                              _selected2ndIndex = index;
+                              my2ndFocusNodes[index].requestFocus();
+                              is2ndDisplayIcon = true;
+                              isReturnText = false;
+                              is2ndReturnText = true;
+                            });
+                          },
+
+                        ),
+                    );
                   }),
 
             ],),

@@ -75,7 +75,8 @@ class CompareViewModel extends ChangeNotifier {
   bool tagEditMode = true; //初期設定は通常モード
 //  bool editFocus = false; //初期設定はタイトルのみ
   int selectedIndex;//tagPageでのListTile選択
-  bool isDisplayIcon =false;//AccordionPart=>DescFormのIconButton表示有無
+  bool isWay1MeritDeleteIcon =false;//AccordionPart=>DescFormのIconButton表示有無
+  bool isWay2MeritDeleteIcon =false;
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
   Future<void> getOverview(String comparisonItemId) async {

@@ -1,4 +1,5 @@
 import 'package:compare_2way/data_models/merit_demerit.dart';
+import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,7 @@ class DescForm extends StatefulWidget {
       this.controllers,
       this.deleteList,
       this.focusNode,
+        this.displayList,
       });
 
   final Function(String) inputChanged;
@@ -19,6 +21,7 @@ class DescForm extends StatefulWidget {
   final int index;
   final List<TextEditingController> controllers;
   final FocusNode focusNode;
+  final DisplayList displayList;
 
 
   @override
@@ -66,7 +69,9 @@ class _DescFormState extends State<DescForm> {
         //ListViewのcontrollersの中をfocus中に移動すると最初のfocus時しかIconButton出ない=>focusNodeをListView.builderの中でindexとともに設定=>DescFormのインスタンスに渡す
         //focus中に移動するとtrue=>false=>trueとなって結局消えない、移動した時にfocusNodeをfalseにするには？
         //初回 isDisplayIconをviewModelにもたせる、2回目以降hasFocus
-        viewModel.isDisplayIcon || widget.focusNode.hasFocus
+
+//         widget.displayList ==DisplayList.way1Merit
+        viewModel.isWay1MeritDeleteIcon || widget.focusNode.hasFocus
 //    widget.focusNode.hasFocus
         ?//GestureDetector _selectedIndex ==index 且つfocus当たってるとき
         IconButton(

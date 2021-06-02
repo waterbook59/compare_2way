@@ -94,11 +94,14 @@ class CompareScreen extends StatelessWidget {
       child: Scaffold(
         body: GestureDetector(
           onTap: () {
-            print('GestureDetectorをonTap!isDisplayIcon:${viewModel.isDisplayIcon}');
+//            print('GestureDetectorをonTap!isDisplayIcon:${viewModel.isDisplayIcon}');
             ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
+
             FocusScope.of(context).unfocus();
             //accordionpart=>descFormのiconButtonの非表示
-            viewModel.isDisplayIcon = false;
+            viewModel
+                ..isWay1MeritDeleteIcon  = false
+                ..isWay2MeritDeleteIcon  = false;
           },
           child: SingleChildScrollView(
             child: Column(

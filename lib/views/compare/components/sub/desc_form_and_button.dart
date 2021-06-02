@@ -79,11 +79,19 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
                   print('_selectecIndex:$_selectedIndex');
                   focusNodes[index].requestFocus();
                   //isDisplayIconをviewModelにもたせる
-                  viewModel.isDisplayIcon = true;
-                  print('Listの１つをonTap!isDisplayIcon:${viewModel.isDisplayIcon}');
+                  switch(widget.displayList){
+                    case DisplayList.way1Merit:
+                      viewModel.isWay1MeritDeleteIcon  = true;
+                      break;
+                    case DisplayList.way2Merit:
+                      viewModel.isWay2MeritDeleteIcon = true;
+                  }
+
+                  print('DescFormAndButton/Listの１つをonTap!');
                 });
               },
               child://選択時はTextField+削除アイコン
+              //todo way1=>way2などDescFormのtextFieldまたいだらText表示にするとか
               _selectedIndex ==index
                 ?DescForm(
                   inputChanged: (newDesc) => widget.inputChanged(newDesc, index),
@@ -92,6 +100,7 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
                   deleteList: (deleteIndex) => _deleteList(context, deleteIndex),
 //todo focusNodeをcontrollers.lengthの長さだけList<FocusNode>つくり、focusNode[index]でわたす
                   focusNode: focusNodes[index],
+                  displayList: widget.displayList,
                 )
                   ://非選択時はただのText(幅とかはTextFieldに寄せる)
               //todo temporaryTextとしてwidget分割(できるだけTextFieldに近づける)
@@ -116,7 +125,7 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
               widget.addList();
               controllers.add(TextEditingController());
               focusNodes.add(FocusNode());
-              viewModel.isDisplayIcon = true;
+//              viewModel.isDisplayIcon = true;
               print(
                   'descFormAndButton/RaisedButton:controllers${controllers.map((controller) => controller.text).toList()}');
             });
