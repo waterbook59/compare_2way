@@ -79,7 +79,7 @@ class _SettingPageState extends State<SettingPage> {
   ];
 
   int _selectedIndex ;
-  int _selected2ndIndex ;
+//  int _selected2ndIndex ;
   //List<bool>
 
 
@@ -252,12 +252,12 @@ class _SettingPageState extends State<SettingPage> {
                     return Container(
                       decoration: BoxDecoration(
                         color:
-                        _selected2ndIndex == index && is2ndReturnText
+                        _selectedIndex == index && is2ndReturnText
                             ?Colors.grey[400]
                             :Colors.transparent,
                       ),
                         child: ListTile(
-                          title: _selected2ndIndex == index && is2ndReturnText
+                          title: _selectedIndex == index && is2ndReturnText
                               ?  Stack(
                               alignment: Alignment.centerRight,
                               children: [
@@ -268,8 +268,8 @@ class _SettingPageState extends State<SettingPage> {
                                   maxLines: null,
                                 ),
                                 ///hasFocus使うと初回でてこないので、isDisplayIcon設定
-                        _selected2ndIndex == index && is2ndDisplayIcon ||
-                              my2ndFocusNodes[index].hasFocus
+                        _selectedIndex == index && is2ndDisplayIcon
+//                            || my2ndFocusNodes[index].hasFocus
                                     ?IconButton(
                                   icon: const Icon(
                                     Icons.remove_circle_outline,
@@ -285,9 +285,9 @@ class _SettingPageState extends State<SettingPage> {
                               :Text(test2ndTagChart[index].tagTitle),
                           subtitle:Text('アイテム数:${test2ndTagChart[index].tagAmount}'),
                           onTap: (){
-                            print('ListTile2ndのリストonTap!:_selectedIndex:$_selectedIndex,selected2ndIndex:$_selected2ndIndex,isReturnText:$isReturnText,is2ndReturnText:$is2ndReturnText');
+                            print('ListTile2ndのリストonTap!:_selectedIndex:$_selectedIndex,isReturnText:$isReturnText,is2ndReturnText:$is2ndReturnText');
                             setState(() {
-                              _selected2ndIndex = index;
+                              _selectedIndex = index;
                               my2ndFocusNodes[index].requestFocus();
                               is2ndDisplayIcon = true;
                               isReturnText = false;
