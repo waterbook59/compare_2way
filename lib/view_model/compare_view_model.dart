@@ -75,8 +75,11 @@ class CompareViewModel extends ChangeNotifier {
   bool tagEditMode = true; //初期設定は通常モード
 //  bool editFocus = false; //初期設定はタイトルのみ
   int selectedIndex;//tagPageでのListTile選択
+  int selectedDescListIndex;//DescFromAndButtonでのListTIle選択
   bool isWay1MeritDeleteIcon =false;//AccordionPart=>DescFormのIconButton表示有無
   bool isWay2MeritDeleteIcon =false;
+  bool isWay1MeritFocusList = true;//settingPageでやったisReturnText
+  bool isWay2MeritFocusList = true;
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
   Future<void> getOverview(String comparisonItemId) async {
@@ -681,6 +684,23 @@ class CompareViewModel extends ChangeNotifier {
   void itemTitleChanged (){
     notifyListeners();
   }
+
+  //way1MeritListをtapしたら他のリストのTextFieldはTextに戻る
+  void focusWay1MeritList() {
+    isWay1MeritDeleteIcon  = true;
+    isWay1MeritFocusList = true;
+    //isWay1MeritFocusList以外false
+    isWay2MeritFocusList = false;
+    notifyListeners();
+  }
+  void focusWay2MeritList() {
+    isWay2MeritDeleteIcon = true;
+    isWay2MeritFocusList = true;
+    //isWay2MeritFocusList以外false
+    isWay1MeritFocusList = false;
+    notifyListeners();
+  }
+
 
 
 

@@ -191,53 +191,43 @@ class _SettingPageState extends State<SettingPage> {
                           ?Colors.grey[400]
                             :Colors.transparent,
                       ),
-                      child: ListTileTheme(
-//                    selectedColor: Colors.blueGrey,
-                        child: ListTile(
-
-                          title: _selectedIndex == index && isReturnText
-                          ?  Stack(
-                            alignment: Alignment.centerRight,
-                            children: [
-                              CupertinoTextField(
-                              //todo decoration編集
-                              controller: myControllers[index],
-                              focusNode:
-//                              myFocusNode,
-                              myFocusNodes[index],
-                              maxLines: null,
-                            ),
-                              ///hasFocus使うと初回でてこないので、isDisplayIcon設定
-                              _selectedIndex == index && isDisplayIcon
+                      child: ListTile(
+                        title: _selectedIndex == index && isReturnText
+                        ?  Stack(
+                          alignment: Alignment.centerRight,
+                          children: [
+                            CupertinoTextField(
+                            controller: myControllers[index],
+                            focusNode: myFocusNodes[index],
+                            maxLines: null,
+                          ),
+                            _selectedIndex == index && isDisplayIcon
 //                              myFocusNodes[index].hasFocus
-                              ?IconButton(
-                                icon: const Icon(
-                                  Icons.remove_circle_outline,
-                                  color: Colors.grey,
-                                  size: 24,
-                                ),
-                                //ここではvoidCallbackでindexのみ渡して具体的なロジックはDescFormAndButtonで
-                                onPressed: (){},
-                              )
-                                  :Container(),
-                          ]
-                          )
+                            ?IconButton(
+                              icon: const Icon(
+                                Icons.remove_circle_outline,
+                                color: Colors.grey,
+                                size: 24,
+                              ),
+                              onPressed: (){},
+                            )
+                                :Container(),
+                        ]
+                        )
 
-                          :Text(testTagChart[index].tagTitle),
-                          subtitle:Text('アイテム数:${testTagChart[index].tagAmount}'),
-                          onTap: (){
-                            print('ListTileのリスト onTap!');
-                            setState(() {
-                              _selectedIndex = index;
-                              myFocusNodes[index].requestFocus();
-                              isDisplayIcon = true;
-                              isReturnText = true;
-                              is2ndReturnText =false;
-//                              myFocusNode.requestFocus();
-                            });
-                          },
+                        :Text(testTagChart[index].tagTitle),
+                        subtitle:Text('アイテム数:${testTagChart[index].tagAmount}'),
+                        onTap: (){
+                          print('ListTileのリスト onTap!');
+                          setState(() {
+                            _selectedIndex = index;
+                            myFocusNodes[index].requestFocus();
+                            isDisplayIcon = true;
+                            isReturnText = true;
+                            is2ndReturnText =false;
+                          });
+                        },
 
-                        ),
                       ),
                     );
 

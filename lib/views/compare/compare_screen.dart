@@ -96,12 +96,14 @@ class CompareScreen extends StatelessWidget {
           onTap: () {
 //            print('GestureDetectorをonTap!isDisplayIcon:${viewModel.isDisplayIcon}');
             ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
-
+            //todo way1,2,3Merit,Demerit分作成
             FocusScope.of(context).unfocus();
             //accordionpart=>descFormのiconButtonの非表示
             viewModel
                 ..isWay1MeritDeleteIcon  = false
-                ..isWay2MeritDeleteIcon  = false;
+                ..isWay2MeritDeleteIcon  = false
+                ..isWay1MeritFocusList = false//settingPageでやったisReturnText
+                ..isWay2MeritFocusList = false;
           },
           child: SingleChildScrollView(
             child: Column(
@@ -127,11 +129,11 @@ class CompareScreen extends StatelessWidget {
                   iconData: Icons.thumb_up,
                   iconColor: accentColor,
                 ),
-              ///way1 メリット way1Titleこの画面で変えないのでSelectorいらんかも
-                ///ListPageとSelectTagPageそれぞれから編集が入るので、way1Titleのみの変更に対応しているSelectorよりComsumerがいいかも
-                Selector<CompareViewModel, String>(
-                    selector: (context, viewModel) => viewModel.way1Title,
-                    builder: (context, way1Title, child) {
+             ///リストのDeleteIconの表示をリスト跨ぎで再ビルドが必要なので、Selector=>Consumer
+            Consumer<CompareViewModel>(
+//                Selector<CompareViewModel, String>(
+//                    selector: (context, viewModel) => viewModel.way1Title,
+                    builder: (context, viewModel, child) {
                       return FutureBuilder( //material
                         future: viewModel
                         .getWay1MeritDesc(comparisonOverview.comparisonItemId),
@@ -141,7 +143,7 @@ class CompareScreen extends StatelessWidget {
                             //todo 変更時、createdAtを更新
 //                          print('CompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画');
                             return AccordionPart(
-                              title: way1Title,
+                              title: viewModel.way1Title,
                               displayList: DisplayList.way1Merit,
                               inputChanged: (newDesc, index) =>
                                   _accordionInputChange(
@@ -163,9 +165,10 @@ class CompareScreen extends StatelessWidget {
                       );
                     }),
                 ///way2 メリット
-                Selector<CompareViewModel, String>(
-                  selector: (context, viewModel) => viewModel.way2Title,
-                  builder: (context, way2Title, child) {
+                Consumer<CompareViewModel>(
+//                Selector<CompareViewModel, String>(
+//                  selector: (context, viewModel) => viewModel.way2Title,
+                  builder: (context, viewModel, child) {
                     return FutureBuilder(
                       future: viewModel
                         .getWay2MeritDesc(comparisonOverview.comparisonItemId),
@@ -174,7 +177,7 @@ class CompareScreen extends StatelessWidget {
                         return snapshot.hasData && snapshot.data.isNotEmpty
                         ?
                           AccordionPart(
-                            title: way2Title,
+                            title: viewModel.way2Title,
                             displayList: DisplayList.way2Merit,
                             inputChanged: (newDesc, index) =>
                                 _accordionInputChange(
