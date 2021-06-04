@@ -29,15 +29,6 @@ class DescForm extends StatefulWidget {
 }
 
 class _DescFormState extends State<DescForm> {
-//  final _focusNode = FocusNode();
-
-//  @override
-//  void initState() {
-//    widget.focusNode.addListener(() {
-//      print('Has focus: ${widget.focusNode.hasFocus}');
-//    });
-//    super.initState();
-//  }
 
 
   @override
