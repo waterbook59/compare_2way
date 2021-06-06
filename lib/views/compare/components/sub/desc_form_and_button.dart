@@ -57,6 +57,13 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
   }
 
   @override
+  void dispose() {
+    controllers.map((e) => e.dispose()).toList();
+    focusNodes.map((e) => e.dispose()).toList();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 

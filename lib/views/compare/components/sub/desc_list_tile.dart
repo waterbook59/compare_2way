@@ -27,12 +27,13 @@ class DescListTile extends StatelessWidget {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     //todo way1,2,3Merit,Demerit分作成
-    //todo temporaryTextとしてwidget分割(できるだけ幅やdecorationをTextFieldに近づける)
-    //todo もしくは全体をタイルにしてタイトルのところだけDescForm/Textで切り替える
+    //todo ListTile同士の間隔空きすぎ
     switch (displayList) {
       case DisplayList.way1Merit:
         return
-          viewModel.selectedDescListIndex == index &&
+        ListTile(
+          dense: true,
+          title: viewModel.selectedDescListIndex == index &&
               viewModel.isWay1MeritFocusList
               ? DescForm(
             inputChanged: inputChanged,
@@ -43,18 +44,21 @@ class DescListTile extends StatelessWidget {
             displayList: displayList,
           )
               : controllers[index].text.isNotEmpty
-               ? Container(
-              decoration: BoxDecoration(
+              ? Container(
+              decoration: const BoxDecoration(
                   border: Border(bottom: BorderSide(color: Colors.black12))),
               child: Text('${controllers[index].text}'))
-               : Container(
-              decoration: BoxDecoration(
+              :  Container(
+              decoration:const BoxDecoration(
                   border: Border(bottom: BorderSide(color: Colors.black12))),
-              child: Text('メリットを入力', style: TextStyle(color: Colors.grey),));
+              child:  const
+              Text('メリットを入力', style: TextStyle(color: Colors.grey),)),
+        );
         break;
       case DisplayList.way2Merit:
         return
-          viewModel.selectedDescListIndex == index &&
+        ListTile(
+          title:           viewModel.selectedDescListIndex == index &&
               viewModel.isWay2MeritFocusList
               ? DescForm(
             inputChanged: inputChanged,
@@ -65,14 +69,15 @@ class DescListTile extends StatelessWidget {
             displayList: displayList,
           )
               : controllers[index].text.isNotEmpty
-               ? Container(
+              ? Container(
               decoration: BoxDecoration(
                   border: Border(bottom: BorderSide(color: Colors.black12))),
               child: Text('${controllers[index].text}'))
-               : Container(
+              : Container(
               decoration: BoxDecoration(
                   border: Border(bottom: BorderSide(color: Colors.black12))),
-              child: Text('メリットを入力', style: TextStyle(color: Colors.grey),));
+              child: Text('メリットを入力', style: TextStyle(color: Colors.grey),)),
+        );
         break;
     }
   }
