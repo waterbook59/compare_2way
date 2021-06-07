@@ -64,6 +64,7 @@ class _DescFormState extends State<DescForm> {
               onChanged: (newDesc) => widget.inputChanged(newDesc),
               style: const TextStyle(color: Colors.black),
               maxLines: null,
+              suffix: const SizedBox(width: 24,),//IconButton分(24)隙間あける
               focusNode: widget.focusNode,
               placeholder: 'メリットを入力',
               decoration:
@@ -74,19 +75,19 @@ class _DescFormState extends State<DescForm> {
 //            selectionHeightStyle: BoxHeightStyle.includeLineSpacingBottom,
             ),
 
-
-            //todo displayListで場合わけしたい
             viewModel.isWay1MeritDeleteIcon
                 ?//GestureDetector _selectedIndex ==index 且つfocus当たってるとき
             IconButton(
-              icon: const Icon(
-                Icons.remove_circle_outline,
-                color: Colors.grey,
-                size: 24,
-              ),
-              //ここではvoidCallbackでindexのみ渡して具体的なロジックはDescFormAndButtonで
-              onPressed: () => widget.deleteList(widget.index),
-            )
+                  icon: const Icon(
+                    Icons.remove_circle_outline,
+                    color: Colors.grey,
+                    size: 24,
+                  ),
+                  //ここではvoidCallbackでindexのみ渡して具体的なロジックはDescFormAndButtonで
+                  onPressed: () => widget.deleteList(widget.index),
+                )
+
+
                 :Container(),
           ],
         );
