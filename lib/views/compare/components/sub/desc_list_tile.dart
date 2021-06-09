@@ -33,43 +33,44 @@ class DescListTile extends StatelessWidget {
         return
         Container(
 //          decoration:  BoxDecoration(border: Border.all(color: Colors.orangeAccent)),
-          child: ListTileTheme(
-//            contentPadding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: ListTile(
-//              dense: true,
-            contentPadding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-              title: viewModel.selectedDescListIndex == index &&
-                  viewModel.isWay1MeritFocusList
-                  ? DescForm(
-                inputChanged: inputChanged,
-                controllers: controllers,
-                index: index,
-                deleteList: deleteList,
-                focusNode: focusNode,
-                displayList: displayList,
-              )
-                  : controllers[index].text.isNotEmpty
-              //todo decoration,Column部分Widget分割
-                  ? Container(
-                  decoration: const BoxDecoration(
-                      border: Border(bottom: BorderSide(color: Colors.black12))),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                      children:[ Text('${controllers[index].text}'),
-                        SizedBox(height: 4,)
-                      ]))
-                  :  Container(
-                  decoration:const BoxDecoration(
-                      border: Border(bottom: BorderSide(color: Colors.black12))),
-                  child:  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children:[
-                      Text('メリットを入力',
-                        style: TextStyle(color: Colors.grey),),
-                    SizedBox(height: 4,)]
-                  )),
-            ),
-          ),
+          child:
+//          ListTile(
+////              dense: true,
+//          contentPadding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+//            title:
+            viewModel.selectedDescListIndex == index &&
+                viewModel.isWay1MeritFocusList
+                ? DescForm(
+              inputChanged: inputChanged,
+              controllers: controllers,
+              index: index,
+              deleteList: deleteList,
+              focusNode: focusNode,
+              displayList: displayList,
+            )
+                : controllers[index].text.isNotEmpty
+            //todo decoration,Column部分Widget分割
+                ? Container(
+                decoration: const BoxDecoration(
+                    border: Border(bottom: BorderSide(color: Colors.black12))),
+                padding: EdgeInsets.only(left: 4,top: 16,right: 4),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                    children:[ Text('${controllers[index].text}'),
+                      SizedBox(height: 4,)
+                    ]))
+                :  Container(
+                decoration:const BoxDecoration(
+                    border: Border(bottom: BorderSide(color: Colors.black12))),
+                padding: EdgeInsets.only(left: 4,top: 16,right: 4),
+                child:  Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:[
+                    Text('メリットを入力',
+                      style: TextStyle(color: Colors.grey),),
+                  SizedBox(height: 4,)]
+                )),
+//          ),
         );
         break;
       case DisplayList.way2Merit:
