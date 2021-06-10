@@ -28,58 +28,47 @@ class DescListTile extends StatelessWidget {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     //todo way1,2,3Merit,Demerit分作成
-    //todo ListTile同士の間隔contentPadding調整しても空きすぎ,=>ListTile使用しない
     switch (displayList) {
       case DisplayList.way1Merit:
-        return
-        Container(
-//          decoration:  BoxDecoration(border: Border.all(color: Colors.orangeAccent)),
-          child:
-//          ListTile(
-////              dense: true,
-//          contentPadding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-//            title:
-            viewModel.selectedDescListIndex == index &&
+        return viewModel.selectedDescListIndex == index &&
                 viewModel.isWay1MeritFocusList
-                ? DescForm(
-              inputChanged: inputChanged,
-              controllers: controllers,
-              index: index,
-              deleteList: deleteList,
-              focusNode: focusNode,
-              displayList: displayList,
-            )
-                : controllers[index].text.isNotEmpty
-                ? DescDisplay(description:'${controllers[index].text}',)
-                :DescDisplay(description:'メリットを入力',textColor: Colors.grey,),
-//          ),
-        );
+            ? DescForm(
+                inputChanged: inputChanged,
+                controllers: controllers,
+                index: index,
+                deleteList: deleteList,
+                focusNode: focusNode,
+                displayList: displayList,
+              )
+            : controllers[index].text.isNotEmpty
+                ? DescDisplay(
+                    description: '${controllers[index].text}',
+                  )
+                : const DescDisplay(
+                    description: 'メリットを入力',
+                    textColor: Colors.grey,
+                  );
         break;
       case DisplayList.way2Merit:
-        return
-        ListTile(
-          title:           viewModel.selectedDescListIndex == index &&
-              viewModel.isWay2MeritFocusList
-              ? DescForm(
-            inputChanged: inputChanged,
-            controllers: controllers,
-            index: index,
-            deleteList: deleteList,
-            focusNode: focusNode,
-            displayList: displayList,
-          )
-              : controllers[index].text.isNotEmpty
-              ? Container(
-              decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(color: Colors.black12))),
-              child: Text('${controllers[index].text}'))
-              : Container(
-              decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(color: Colors.black12))),
-              child: Text('メリットを入力', style: TextStyle(color: Colors.grey),)),
-        );
+        return viewModel.selectedDescListIndex == index &&
+                viewModel.isWay2MeritFocusList
+            ? DescForm(
+                inputChanged: inputChanged,
+                controllers: controllers,
+                index: index,
+                deleteList: deleteList,
+                focusNode: focusNode,
+                displayList: displayList,
+              )
+            : controllers[index].text.isNotEmpty
+                ? DescDisplay(
+                    description: '${controllers[index].text}',
+                  )
+                : const DescDisplay(
+                    description: 'メリットを入力',
+                    textColor: Colors.grey,
+                  );
         break;
     }
   }
 }
-
