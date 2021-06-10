@@ -1,5 +1,6 @@
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
+import 'package:compare_2way/views/compare/components/sub/desc_display.dart';
 import 'package:compare_2way/views/compare/components/sub/desc_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -49,27 +50,8 @@ class DescListTile extends StatelessWidget {
               displayList: displayList,
             )
                 : controllers[index].text.isNotEmpty
-            //todo decoration,Column部分Widget分割
-                ? Container(
-                decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Colors.black12))),
-                padding: EdgeInsets.only(left: 4,top: 16,right: 4),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                    children:[ Text('${controllers[index].text}'),
-                      SizedBox(height: 4,)
-                    ]))
-                :  Container(
-                decoration:const BoxDecoration(
-                    border: Border(bottom: BorderSide(color: Colors.black12))),
-                padding: EdgeInsets.only(left: 4,top: 16,right: 4),
-                child:  Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:[
-                    Text('メリットを入力',
-                      style: TextStyle(color: Colors.grey),),
-                  SizedBox(height: 4,)]
-                )),
+                ? DescDisplay(description:'${controllers[index].text}',)
+                :DescDisplay(description:'メリットを入力',textColor: Colors.grey,),
 //          ),
         );
         break;
