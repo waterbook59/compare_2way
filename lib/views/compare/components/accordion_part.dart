@@ -41,9 +41,11 @@ class _AccordionPartState extends State<AccordionPart> {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+
     return Column(
       children: [
-        //todo collapsed時にDB再読み込み
+
         custom.GFAccordion(
             title: widget.title,
             titleBorderRadius: accordionTopBorderRadius,
@@ -52,6 +54,17 @@ class _AccordionPartState extends State<AccordionPart> {
             showAccordion: true,
             collapsedTitleBackgroundColor:
             const Color(0xFFE0E0E0),
+          //todo collapsed時にDB再読込,更新される場合されない場合のエラー回避
+          //todo way1,2,3Merit,Demerit分作成
+            onToggleCollapsed: (value){
+              FocusScope.of(context).unfocus();
+              //accordionpart=>descFormのiconButtonの非表示
+              viewModel
+                ..isWay1MeritDeleteIcon  = false
+                ..isWay2MeritDeleteIcon  = false
+                ..isWay1MeritFocusList = false//settingPageでやったisReturnText
+                ..isWay2MeritFocusList = false;
+            },
             contentChild:
           //リストが増えていくとDescFormButtonがタイトル部分にはみ出している
             ///=>custom.GFAccordion設定で初期位置修正

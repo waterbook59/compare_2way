@@ -35,6 +35,7 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
 
   @override
   void initState() {
+    //todo way1,2,3Merit,Demerit分作成
     switch (widget.displayList) {
       case DisplayList.way1Merit:
         widget.way1MeritList.isNotEmpty
