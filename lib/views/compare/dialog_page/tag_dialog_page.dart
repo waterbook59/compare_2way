@@ -1,6 +1,9 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/sub/tag_chips.dart';
+import 'package:compare_2way/views/tag/components/sub/choice_tag.dart';
+import 'package:compare_2way/views/tag/components/tag_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -79,10 +82,43 @@ class TagDialogPage extends StatelessWidget {
                   },
                 ),
 
-                const Text('この下にタグの候補表示'),
-                Chip(
-                  label: Text('普通のchip'),
+                const Divider(
+                  color: Colors.black,
                 ),
+                FutureBuilder(
+                  future:viewModel.getAllTagList(),
+                  builder:  (context, AsyncSnapshot<List<TagChart>> snapshot) {
+                  if (snapshot.data == null) {
+                  print('AsyncSnapshot<List<Tag>> snapshotがnull');
+                  return Container();
+                  }
+                  if (snapshot.hasData && snapshot.data.isEmpty) {
+                  print('EmptyView側通って描画');
+                  //todo 中央に位置変更 listPage参考
+                  return Container(
+                  child:
+                  const Center(child: Text('タグづけされたリストはありません')));
+                  } else {
+                  return ListView.builder(
+                  shrinkWrap: true,
+                  //リストが縦方向にスクロールできるようになる
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final overview = snapshot.data[index];
+
+                      return ChoiceTag(
+                        title: overview.tagTitle,
+                        selectTagIdList: overview.itemIdList,
+                        tagAmount: overview.tagAmount,
+                        createdAt: '登録時間',
+//                        onTap: ()=>_onSelectTag(
+//                            context,overview.tagTitle,overview.myFocusNode),
+                        listNumber: index,
+                      );
+                    },
+                  );
+                  }}),
 
 
 

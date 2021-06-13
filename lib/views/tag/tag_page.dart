@@ -35,7 +35,7 @@ class TagPage extends StatelessWidget {
           selector: (context, viewModel) => viewModel.tagEditMode,
           builder:(context, tagEditMode, child){
             return tagEditMode
-                ? const Text('編集', style: trailingTextStyle)
+                ? const Text('タグ名編集', style: trailingTextStyle)
                 : const Text('完了', style: trailingTextStyle);
           },
 //         const Text('編集', style: trailingTextStyle,
@@ -87,7 +87,6 @@ class TagPage extends StatelessWidget {
 //                            print('tagPage/itemIdList:$overview');
                             //DateTime=>String変換
                             //todo 1つめのリストの上にDivider的な線が必要
-                            //todo slidableでアイテムから削除実行
                             return TagList(
                             title: overview.tagTitle,
                             selectTagIdList: overview.itemIdList,

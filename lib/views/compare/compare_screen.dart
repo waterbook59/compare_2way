@@ -82,23 +82,7 @@ class CompareScreen extends StatelessWidget {
       child: Scaffold(
         body: GestureDetector(
           onTap: () {
-//            print('GestureDetectorをonTap!isDisplayIcon:${viewModel.isDisplayIcon}');
-            ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
-            FocusScope.of(context).unfocus();
-            //accordionpart=>descFormのiconButtonの非表示
-            viewModel
-                ..isWay1MeritDeleteIcon  = false
-                ..isWay2MeritDeleteIcon  = false
-              ..isWay1DemeritDeleteIcon  = false
-              ..isWay2DemeritDeleteIcon  = false
-              ..isWay3MeritDeleteIcon  = false
-              ..isWay3DemeritDeleteIcon  = false
-                ..isWay1MeritFocusList = false//settingPageでやったisReturnText
-                ..isWay2MeritFocusList = false
-            ..isWay1DemeritFocusList = false
-            ..isWay2DemeritFocusList = false
-            ..isWay3MeritFocusList = false
-            ..isWay3DemeritFocusList = false;
+            _onTapUnFocus(context);
           },
           child: SingleChildScrollView(
             child: Column(
@@ -404,6 +388,29 @@ class CompareScreen extends StatelessWidget {
     await viewModel.accordionDeleteList(
         displayList,accordionIdIndex,comparisonOverview);
   }
+
+  void _onTapUnFocus(BuildContext context) {
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    //print('GestureDetectorをonTap!isDisplayIcon:${viewModel.isDisplayIcon}');
+    ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
+    FocusScope.of(context).unfocus();
+    //accordionpart=>descFormのiconButtonの非表示
+    viewModel
+      ..isWay1MeritDeleteIcon  = false
+      ..isWay2MeritDeleteIcon  = false
+      ..isWay1DemeritDeleteIcon  = false
+      ..isWay2DemeritDeleteIcon  = false
+      ..isWay3MeritDeleteIcon  = false
+      ..isWay3DemeritDeleteIcon  = false
+      ..isWay1MeritFocusList = false//settingPageでやったisReturnText
+      ..isWay2MeritFocusList = false
+      ..isWay1DemeritFocusList = false
+      ..isWay2DemeritFocusList = false
+      ..isWay3MeritFocusList = false
+      ..isWay3DemeritFocusList = false;
+  }
+
+
 
 
   }

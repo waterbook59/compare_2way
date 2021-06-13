@@ -137,6 +137,7 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
                 ),
               );
             }),
+        //todo テキスト編集時のみ表示
         RaisedButton(
           child: const Icon(Icons.add),
           onPressed: () {
