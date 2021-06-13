@@ -89,18 +89,17 @@ extension ConvertToComparisonOverviewRecord on ComparisonOverviewRecord {
   }
 }
 
+//way1Merit関連
 ///新規挿入時(model=>DB):way1Merit=>way1MeritRecord
 extension ConvertToWay1MeritRecord on Way1Merit{
   Way1MeritRecord toCreateWay1MeritRecord (Way1Merit initWay1Merit){
     final way1MeritRecord= Way1MeritRecord(
-
       comparisonItemId: initWay1Merit.comparisonItemId,
       way1MeritDesc: initWay1Merit.way1MeritDesc ?? '',
     );
     return way1MeritRecord;
   }
 }
-
 ///更新時(model=>DB):way1Merit=>way1MeritRecord
 extension ConvertToUpdateWay1MeritRecord on Way1Merit{
   Way1MeritRecord toUpdateWay1MeritRecord (Way1Merit updateWay1Merit){
@@ -112,7 +111,6 @@ extension ConvertToUpdateWay1MeritRecord on Way1Merit{
     return way1MeritRecord;
   }
 }
-
 ///新規登録(model=>DB):List<Way1Merit>=>List<Way1MeritRecord>
 extension ConvertToWay1InitMeritRecordList on List<Way1Merit>{
   List<Way1MeritRecord> toWay1InitMeritRecordList(
@@ -127,8 +125,7 @@ extension ConvertToWay1InitMeritRecordList on List<Way1Merit>{
     return way1MeritItemRecords;
   }
 }
-
-///保存時(model=>DB):Lis<Way1Merit>=>List<Way1MeritRecord>
+///保存時(model=>DB):Lis<Way1Merit>=>List<Way1MeritRecord>//todo 更新時のメソッド使えばいらないかも
 extension ConvertToWay1MeritRecordList on List<Way1Merit>{
   List<Way1MeritRecord> toWay1MeritRecordList(List<Way1Merit> way1MeritItems) {
 //    way1MeritId:autoIncrementにしてるのでそのまま
@@ -144,7 +141,6 @@ extension ConvertToWay1MeritRecordList on List<Way1Merit>{
     return way1MeritItemRecords;
   }
 }
-
 ///読込時(DB=>model):List<Way1MeritRecord>=>Lis<Way1Merit>
 extension ConvertToWay1MeritList on List<Way1MeritRecord>{
   List<Way1Merit> toWay1MeritList(List<Way1MeritRecord> way1MeritRecordList){
@@ -160,6 +156,80 @@ extension ConvertToWay1MeritList on List<Way1MeritRecord>{
   }
 }
 
+//way1Demerit関連
+///新規挿入時(model=>DB):way1Demerit=>way1DemeritRecord
+extension ConvertToWay1DemeritRecord on Way1Demerit{
+  Way1DemeritRecord toCreateWay1DemeritRecord (Way1Demerit initWay1Demerit){
+    final way1DemeritRecord= Way1DemeritRecord(
+      comparisonItemId: initWay1Demerit.comparisonItemId,
+      way1DemeritDesc: initWay1Demerit.way1DemeritDesc ?? '',
+    );
+    return way1DemeritRecord;
+  }
+}
+///更新時(model=>DB):way1Demerit=>way1DemeritRecord
+extension ConvertToUpdateWay1DemeritRecord on Way1Demerit{
+  Way1DemeritRecord toUpdateWay1DemeritRecord (Way1Demerit updateWay1Demerit){
+    final way1DemeritRecord= Way1DemeritRecord(
+      way1DemeritId: updateWay1Demerit.way1DemeritId,
+      comparisonItemId: updateWay1Demerit.comparisonItemId,
+      way1DemeritDesc: updateWay1Demerit.way1DemeritDesc ?? '',
+    );
+    return way1DemeritRecord;
+  }
+}
+///新規登録(model=>DB):List<Way1Demerit>=>List<Way1DemeritRecord>
+extension ConvertToWay1InitDemeritRecordList on List<Way1Demerit>{
+  List<Way1DemeritRecord> toWay1InitDemeritRecordList(
+      List<Way1Demerit> way1DemeritItems) {
+    final way1DemeritItemRecords =
+    way1DemeritItems.map((way1DemeritSingle) {
+      return Way1DemeritRecord(
+        comparisonItemId: way1DemeritSingle.comparisonItemId,
+        way1DemeritDesc: way1DemeritSingle.way1DemeritDesc,
+      );
+    }).toList();
+    return way1DemeritItemRecords;
+  }
+}
+///読込時(DB=>model):List<Way1DemeritRecord>=>Lis<Way1Demerit>
+extension ConvertToWay1DemeritList on List<Way1DemeritRecord>{
+  List<Way1Demerit> toWay1DemeritList(
+      List<Way1DemeritRecord> way1DemeritRecordList){
+    final way1DemeritList =
+    way1DemeritRecordList.map((way1DemeritRecordSingle) {
+      return Way1Demerit(
+        way1DemeritId: way1DemeritRecordSingle.way1DemeritId,
+        comparisonItemId: way1DemeritRecordSingle.comparisonItemId,
+        way1DemeritDesc: way1DemeritRecordSingle.way1DemeritDesc,
+      );
+    }).toList();
+    return way1DemeritList;
+  }
+}
+
+//way2Merit関連
+///新規挿入時(model=>DB):way2Merit=>way2MeritRecord
+extension ConvertToWay2MeritRecord on Way2Merit{
+  Way2MeritRecord toCreateWay2MeritRecord (Way2Merit initWay2Merit){
+    final way2MeritRecord= Way2MeritRecord(
+      comparisonItemId: initWay2Merit.comparisonItemId,
+      way2MeritDesc: initWay2Merit.way2MeritDesc ?? '',
+    );
+    return way2MeritRecord;
+  }
+}
+///更新時(model=>DB):way2Merit=>way2MeritRecord
+extension ConvertToUpdateWay2MeritRecord on Way2Merit{
+  Way2MeritRecord toUpdateWay2MeritRecord (Way2Merit updateWay2Merit){
+    final way2MeritRecord= Way2MeritRecord(
+      way2MeritId: updateWay2Merit.way2MeritId,
+      comparisonItemId: updateWay2Merit.comparisonItemId,
+      way2MeritDesc: updateWay2Merit.way2MeritDesc ?? '',
+    );
+    return way2MeritRecord;
+  }
+}
 ///新規登録(model=>DB):List<Way2Merit>=>List<Way2MeritRecord>
 extension ConvertToWay2InitMeritRecordList on List<Way2Merit>{
   List<Way2MeritRecord> toWay2InitMeritRecordList(
@@ -189,28 +259,60 @@ extension ConvertToWay2MeritList on List<Way2MeritRecord>{
   }
 }
 
-///更新時(model=>DB):way2Merit=>way2MeritRecord
-extension ConvertToUpdateWay2MeritRecord on Way2Merit{
-  Way2MeritRecord toUpdateWay2MeritRecord (Way2Merit updateWay2Merit){
-    final way2MeritRecord= Way2MeritRecord(
-      way2MeritId: updateWay2Merit.way2MeritId,
-      comparisonItemId: updateWay2Merit.comparisonItemId,
-      way2MeritDesc: updateWay2Merit.way2MeritDesc ?? '',
+//way2Demerit関連
+///新規挿入時(model=>DB):way2Demerit=>way2DemeritRecord
+extension ConvertToWay2DemeritRecord on Way2Demerit{
+  Way2DemeritRecord toCreateWay2DemeritRecord (Way2Demerit initWay2Demerit){
+    final way2DemeritRecord= Way2DemeritRecord(
+      comparisonItemId: initWay2Demerit.comparisonItemId,
+      way2DemeritDesc: initWay2Demerit.way2DemeritDesc ?? '',
     );
-    return way2MeritRecord;
+    return way2DemeritRecord;
+  }
+}
+///更新時(model=>DB):way2Demerit=>way2DemeritRecord
+extension ConvertToUpdateWay2DemeritRecord on Way2Demerit{
+  Way2DemeritRecord toUpdateWay2DemeritRecord (Way2Demerit updateWay2Demerit){
+    final way2DemeritRecord= Way2DemeritRecord(
+      way2DemeritId: updateWay2Demerit.way2DemeritId,
+      comparisonItemId: updateWay2Demerit.comparisonItemId,
+      way2DemeritDesc: updateWay2Demerit.way2DemeritDesc ?? '',
+    );
+    return way2DemeritRecord;
+  }
+}
+///新規登録(model=>DB):List<Way2Demerit>=>List<Way2DemeritRecord>
+extension ConvertToWay2InitDemeritRecordList on List<Way2Demerit>{
+  List<Way2DemeritRecord> toWay2InitDemeritRecordList(
+      List<Way2Demerit> way2DemeritItems) {
+    final way2DemeritItemRecords =
+    way2DemeritItems.map((way2DemeritSingle) {
+      return Way2DemeritRecord(
+        comparisonItemId: way2DemeritSingle.comparisonItemId,
+        way2DemeritDesc: way2DemeritSingle.way2DemeritDesc,
+      );
+    }).toList();
+    return way2DemeritItemRecords;
+  }
+}
+///読込時(DB=>model):List<Way2DemeritRecord>=>Lis<Way2Demerit>
+extension ConvertToWay2DemeritList on List<Way2DemeritRecord>{
+  List<Way2Demerit> toWay2DemeritList(
+      List<Way2DemeritRecord> way2DemeritRecordList){
+    final way2DemeritList =
+    way2DemeritRecordList.map((way2DemeritRecordSingle) {
+      return Way2Demerit(
+        way2DemeritId: way2DemeritRecordSingle.way2DemeritId,
+        comparisonItemId: way2DemeritRecordSingle.comparisonItemId,
+        way2DemeritDesc: way2DemeritRecordSingle.way2DemeritDesc,
+      );
+    }).toList();
+    return way2DemeritList;
   }
 }
 
-///新規挿入時(model=>DB):way2Merit=>way2MeritRecord
-extension ConvertToWay2MeritRecord on Way2Merit{
-  Way2MeritRecord toCreateWay2MeritRecord (Way2Merit initWay2Merit){
-    final way2MeritRecord= Way2MeritRecord(
-      comparisonItemId: initWay2Merit.comparisonItemId,
-      way2MeritDesc: initWay2Merit.way2MeritDesc ?? '',
-    );
-    return way2MeritRecord;
-  }
-}
+//todo way3Merit関連
+//todo way3Demerit関連
 
 ///新規挿入時(model=>DB):List<Tag>=>List<TagRecord>
 extension ConvertToTagRecordList on List<Tag>{
@@ -233,7 +335,6 @@ extension ConvertToTagRecordList on List<Tag>{
     return tagRecordList;
   }
 }
-
 ///更新時(model=>DB):List<Tag>=>List<TagRecord>
 extension ConvertToUpdateTagRecordList on List<Tag>{
   // tagTitleをprimaryKeyに設定した場合、tagIdのautoIncrement効かないかも
@@ -254,7 +355,6 @@ extension ConvertToUpdateTagRecordList on List<Tag>{
     return tagRecordList;
   }
 }
-
 ///読込時(DB=>model) List<TagRecord>=>List<Tag>
 extension ConvertToTagList on List<TagRecord>{
   List<Tag> toTagList(List<TagRecord> tagRecordList){
@@ -271,7 +371,6 @@ extension ConvertToTagList on List<TagRecord>{
     return tagList;
   }
 }
-
 ///削除時(model=>DB) Tag=>TagRecord
 extension ConvertToTagRecord on Tag{
   TagRecord toTagRecord(Tag tag){

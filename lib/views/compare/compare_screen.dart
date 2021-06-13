@@ -27,21 +27,12 @@ class CompareScreen extends StatelessWidget {
   final String tagTitle;
   final ScreenEditMode screenEditMode;
 
-
-  //todo itemsはList<Merit>に変更
-  static List<String> items = [
-    'Content 1',
-    'Content 2',
-    'Content 3',
-  ];
-  static final List<TextEditingController> _controllers =
-      List.generate(items.length, (i) => TextEditingController(text: items[i]));
-
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+
 
     //initState的に他の画面から写ってきた時のみ読込
     if (viewModel.compareScreenStatus == CompareScreenStatus.set) {
@@ -91,9 +82,23 @@ class CompareScreen extends StatelessWidget {
       child: Scaffold(
         body: GestureDetector(
           onTap: () {
-            print('GestureDetectorをonTap!');
+//            print('GestureDetectorをonTap!isDisplayIcon:${viewModel.isDisplayIcon}');
             ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
             FocusScope.of(context).unfocus();
+            //accordionpart=>descFormのiconButtonの非表示
+            viewModel
+                ..isWay1MeritDeleteIcon  = false
+                ..isWay2MeritDeleteIcon  = false
+              ..isWay1DemeritDeleteIcon  = false
+              ..isWay2DemeritDeleteIcon  = false
+              ..isWay3MeritDeleteIcon  = false
+              ..isWay3DemeritDeleteIcon  = false
+                ..isWay1MeritFocusList = false//settingPageでやったisReturnText
+                ..isWay2MeritFocusList = false
+            ..isWay1DemeritFocusList = false
+            ..isWay2DemeritFocusList = false
+            ..isWay3MeritFocusList = false
+            ..isWay3DemeritFocusList = false;
           },
           child: SingleChildScrollView(
             child: Column(
@@ -119,11 +124,11 @@ class CompareScreen extends StatelessWidget {
                   iconData: Icons.thumb_up,
                   iconColor: accentColor,
                 ),
-              ///way1 メリット way1Titleこの画面で変えないのでSelectorいらんかも
-                ///ListPageとSelectTagPageそれぞれから編集が入るので、way1Titleのみの変更に対応しているSelectorよりComsumerがいいかも
-                Selector<CompareViewModel, String>(
-                    selector: (context, viewModel) => viewModel.way1Title,
-                    builder: (context, way1Title, child) {
+             ///リストのDeleteIconの表示をリスト跨ぎで再ビルドが必要なので、Selector=>Consumer
+                Consumer<CompareViewModel>(
+//                Selector<CompareViewModel, String>(
+//                    selector: (context, viewModel) => viewModel.way1Title,
+                    builder: (context, viewModel, child) {
                       return FutureBuilder( //material
                         future: viewModel
                         .getWay1MeritDesc(comparisonOverview.comparisonItemId),
@@ -133,7 +138,7 @@ class CompareScreen extends StatelessWidget {
                             //todo 変更時、createdAtを更新
 //                          print('CompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画');
                             return AccordionPart(
-                              title: way1Title,
+                              title: viewModel.way1Title,
                               displayList: DisplayList.way1Merit,
                               inputChanged: (newDesc, index) =>
                                   _accordionInputChange(
@@ -155,9 +160,10 @@ class CompareScreen extends StatelessWidget {
                       );
                     }),
                 ///way2 メリット
-                Selector<CompareViewModel, String>(
-                  selector: (context, viewModel) => viewModel.way2Title,
-                  builder: (context, way2Title, child) {
+                Consumer<CompareViewModel>(
+//                Selector<CompareViewModel, String>(
+//                  selector: (context, viewModel) => viewModel.way2Title,
+                  builder: (context, viewModel, child) {
                     return FutureBuilder(
                       future: viewModel
                         .getWay2MeritDesc(comparisonOverview.comparisonItemId),
@@ -166,7 +172,7 @@ class CompareScreen extends StatelessWidget {
                         return snapshot.hasData && snapshot.data.isNotEmpty
                         ?
                           AccordionPart(
-                            title: way2Title,
+                            title: viewModel.way2Title,
                             displayList: DisplayList.way2Merit,
                             inputChanged: (newDesc, index) =>
                                 _accordionInputChange(
@@ -196,51 +202,66 @@ class CompareScreen extends StatelessWidget {
                   iconColor: accentColor,
                 ),
               ///way1 デメリット
-                Selector<CompareViewModel, String>(
-                  selector: (context, viewModel) => viewModel.way1Title,
-                  builder: (context, way1Title, child) {
-                    return GFAccordion(
-                      title: way1Title,
-                      titleBorderRadius: accordionTopBorderRadius,
-                      contentBorderRadius: accordionBottomBorderRadius,
-                      showAccordion: false,
-                      collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
-                      contentChild: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _controllers.length,
-                          itemBuilder: (context, index) {
-                            return CupertinoTextField(
-                              placeholder: 'メリットを入力してください',
-                              controller: _controllers[index],
-                              style: const TextStyle(color: Colors.black),
-                            );
-                          }),
+                Consumer<CompareViewModel>(
+                  builder: (context, viewModel, child) {
+                    return FutureBuilder(
+                      future:
+                      viewModel.getWay1DemeritDesc(
+                          comparisonOverview.comparisonItemId),
+                      builder:
+                          (context, AsyncSnapshot<List<Way1Demerit>> snapshot) {
+                        return snapshot.hasData && snapshot.data.isNotEmpty
+                            ?
+                        AccordionPart(
+                          title: viewModel.way1Title,
+                          displayList: DisplayList.way1Demerit,
+                          inputChanged: (newDesc, index) =>
+                              _accordionInputChange(
+                                  context,DisplayList.way1Demerit,
+                                  newDesc, index,comparisonOverview),
+                          way1DemeritList: snapshot.data,
+                          addList: () =>
+                              _accordionAddList(context,
+                                  DisplayList.way1Demerit,comparisonOverview),
+                          deleteList: (way1DemeritIdIndex)=>
+                              _accordionDeleteList(context,
+                                  DisplayList.way1Demerit,
+                                  way1DemeritIdIndex,comparisonOverview),
+                        )
+                            : Container();
+                      },
                     );
                   },
                 ),
               ///way2 デメリット
-                Selector<CompareViewModel, String>(
-                  selector: (context, viewModel) => viewModel.way2Title,
-                  builder: (context, way2Title, child) {
-                    return GFAccordion(
-                      title: way2Title,
-                      titleBorderRadius: accordionTopBorderRadius,
-                      contentBorderRadius: accordionBottomBorderRadius,
-                      collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
-                      showAccordion: false,
-                      contentChild: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _controllers.length,
-                          itemBuilder: (context, index) {
-//              textItems.add(new TextEditingController());
-                            return CupertinoTextField(
-                              placeholder: 'メリットを入力してください',
-                              controller: _controllers[index],
-                              style: const TextStyle(color: Colors.black),
-                            );
-                          }),
+                Consumer<CompareViewModel>(
+                  builder: (context, viewModel, child) {
+                    return FutureBuilder(
+                      future:
+                      viewModel.getWay2DemeritDesc(
+                          comparisonOverview.comparisonItemId),
+                      builder:
+                          (context, AsyncSnapshot<List<Way2Demerit>> snapshot) {
+                        return snapshot.hasData && snapshot.data.isNotEmpty
+                            ?
+                        AccordionPart(
+                          title: viewModel.way2Title,
+                          displayList: DisplayList.way2Demerit,
+                          inputChanged: (newDesc, index) =>
+                              _accordionInputChange(
+                                  context,DisplayList.way2Demerit,
+                                  newDesc, index,comparisonOverview),
+                          way2DemeritList: snapshot.data,
+                          addList: () =>
+                              _accordionAddList(context,
+                                  DisplayList.way2Demerit,comparisonOverview),
+                          deleteList: (way1DemeritIdIndex)=>
+                              _accordionDeleteList(context,
+                                  DisplayList.way2Demerit,
+                                  way1DemeritIdIndex,comparisonOverview),
+                        )
+                            : Container();
+                      },
                     );
                   },
                 ),

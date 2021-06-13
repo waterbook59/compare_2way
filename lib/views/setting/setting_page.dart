@@ -23,6 +23,12 @@ class _SettingPageState extends State<SettingPage> {
     TextEditingController(),
     TextEditingController(),
   ];
+  List<TextEditingController> my2ndControllers = [
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+  ];
   List<TagChart> testTagChart = [
     TagChart(
       tagTitle: 'オラオラオラオラ',
@@ -41,14 +47,39 @@ class _SettingPageState extends State<SettingPage> {
       tagAmount: 7,
     ),
   ];
+  List<TagChart> test2ndTagChart = [
+    TagChart(
+      tagTitle: 'スタープラチナ',
+      tagAmount: 20,
+    ),
+    TagChart(
+      tagTitle: 'ディオ・ブランドーTHE WORLD',
+      tagAmount: 99,
+    ),
+    TagChart(
+      tagTitle: 'ゴールドエクスペリエンス・レクイエム',
+      tagAmount: 15,
+    ),
+    TagChart(
+      tagTitle: '東方仗助',
+      tagAmount: 16,
+    ),
+  ];
   List<FocusNode> myFocusNodes =[
    FocusNode(),
    FocusNode(),
    FocusNode(),
    FocusNode(),
   ];
+  List<FocusNode> my2ndFocusNodes =[
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+  ];
 
   int _selectedIndex ;
+//  int _selected2ndIndex ;
   //List<bool>
 
 
@@ -60,6 +91,11 @@ class _SettingPageState extends State<SettingPage> {
     ),
   ];
 
+  final myFocusNode = FocusNode();
+  bool isDisplayIcon = false;
+  bool is2ndDisplayIcon =false;
+  bool isReturnText = true;
+  bool is2ndReturnText = true;
 
   @override
   void initState() {
@@ -67,18 +103,35 @@ class _SettingPageState extends State<SettingPage> {
     myControllers.asMap().forEach((index, controller) {
       controller.text = testTagChart[index].tagTitle;
     });
+    my2ndControllers.asMap().forEach((index, controller) {
+      controller.text = test2ndTagChart[index].tagTitle;
+    });
 //    final tagChartMap = testTagChart.asMap().forEach((index, tagChart) {
 //      print('$index,$tagChart');
 //    });
     print('myControllers:$myControllers');
+
+//    myFocusNode.addListener(() {
+//     print('Has focus: ${myFocusNode.hasFocus}');
+//                    });
+
     super.initState();
   }
 
+@override
+  void dispose() {
+    ///controllerやFocusNodeがリスト型の場合のdispose方法
+    myControllers.map((e) => e.dispose()).toList();
+    print('myControllersをdispose:$myControllers');
+    myFocusNodes.map((e) => e.dispose()).toList();
+    print('myFocusNodesをdispose:$myFocusNodes');
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    final myFocusNode = FocusNode();
+
 
 
 //    List<bool>
@@ -98,6 +151,11 @@ class _SettingPageState extends State<SettingPage> {
           onTap: () {
             ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
             FocusScope.of(context).unfocus();
+            //setStateいらない
+              isDisplayIcon = false;
+              is2ndDisplayIcon = false;
+              isReturnText = false;
+              is2ndReturnText = false;
           },
           child: SingleChildScrollView(
             child: Column(children: [
@@ -127,55 +185,108 @@ class _SettingPageState extends State<SettingPage> {
                     return Container(
                       decoration: BoxDecoration(
                         color:
-                        _selectedIndex == index
+                        _selectedIndex == index && isReturnText
 //                    index == _selectedIndex
 //                    _selected[index]
                           ?Colors.grey[400]
                             :Colors.transparent,
                       ),
-                      child: ListTileTheme(
-//                    selectedColor: Colors.blueGrey,
-                        child: ListTile(
-
-                          title: _selectedIndex == index
-                          ?  CupertinoTextField(
-                            //todo decoration編集
+                      child: ListTile(
+                        title: _selectedIndex == index && isReturnText
+                        ?  Stack(
+                          alignment: Alignment.centerRight,
+                          children: [
+                            CupertinoTextField(
                             controller: myControllers[index],
                             focusNode: myFocusNodes[index],
-//      onChanged:  (newDesc) => widget.inputChanged(newDesc),
-                            ///変更したらtagTitle更新
-//                        onChanged: (newTagTitle)=>updateTagTile(context,newTagTitle),
                             maxLines: null,
-                          )
+                          ),
+                            _selectedIndex == index && isDisplayIcon
+//                              myFocusNodes[index].hasFocus
+                            ?IconButton(
+                              icon: const Icon(
+                                Icons.remove_circle_outline,
+                                color: Colors.grey,
+                                size: 24,
+                              ),
+                              onPressed: (){},
+                            )
+                                :Container(),
+                        ]
+                        )
 
-//                      EditTagTitle(
-//                        tagTitle: testTagChart[index].tagTitle,
-//                        selectTagIdList: selectTagIdList,
-//                        myFocusNode: myFocusNode,
-//                      )
-                          :Text(testTagChart[index].tagTitle),
-                          subtitle:Text('アイテム数:${testTagChart[index].tagAmount}'),
-                          onTap: (){
-                            print('ListTileのリスト onTap!');
-                            setState(() {
-                              _selectedIndex = index;
-                              myFocusNodes[index].requestFocus();
-                              // _selected[index]の変更＆変更後はfalseに戻さない
-//                          if(_selected[index]== false) {
-//                            _selected[index] = !_selected[index];
-//                          }
-//                          print('selected]$_selected');
-                            });
-                          },
-                          //ListTileThemeいじる時、今のflutter versionだと文字色しかいじれない
-//                      selected: index == _selectedIndex,
-                        ),
+                        :Text(testTagChart[index].tagTitle),
+                        subtitle:Text('アイテム数:${testTagChart[index].tagAmount}'),
+                        onTap: (){
+                          print('ListTileのリスト onTap!');
+                          setState(() {
+                            _selectedIndex = index;
+                            myFocusNodes[index].requestFocus();
+                            isDisplayIcon = true;
+                            isReturnText = true;
+                            is2ndReturnText =false;
+                          });
+                        },
+
                       ),
                     );
-//                  TagList(
 
-//                  tagAmount: testTagChart[index].tagAmount,
-//                );
+                  }),
+              const SizedBox(height: 16,),
+              const Text('ListView/ListTileテスト2'),
+              ListView.builder(
+                  itemCount: test2ndTagChart.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index){
+                    return Container(
+                      decoration: BoxDecoration(
+                        color:
+                        _selectedIndex == index && is2ndReturnText
+                            ?Colors.grey[400]
+                            :Colors.transparent,
+                      ),
+                        child: ListTile(
+                          title: _selectedIndex == index && is2ndReturnText
+                              ?  Stack(
+                              alignment: Alignment.centerRight,
+                              children: [
+                                CupertinoTextField(
+                                  controller: my2ndControllers[index],
+                                  focusNode:
+                                  my2ndFocusNodes[index],
+                                  maxLines: null,
+                                ),
+                                ///hasFocus使うと初回でてこないので、isDisplayIcon設定
+                        _selectedIndex == index && is2ndDisplayIcon
+//                            || my2ndFocusNodes[index].hasFocus
+                                    ?IconButton(
+                                  icon: const Icon(
+                                    Icons.remove_circle_outline,
+                                    color: Colors.grey,
+                                    size: 24,
+                                  ),
+                                  //ここではvoidCallbackでindexのみ渡して具体的なロジックはDescFormAndButtonで
+                                  onPressed: (){},
+                                )
+                                    :Container(),
+                              ]
+                          )
+                              :Text(test2ndTagChart[index].tagTitle),
+                          subtitle:Text('アイテム数:${test2ndTagChart[index].tagAmount}'),
+                          onTap: (){
+                            print('ListTile2ndのリストonTap!:_selectedIndex:$_selectedIndex,isReturnText:$isReturnText,is2ndReturnText:$is2ndReturnText');
+                            setState(() {
+                              _selectedIndex = index;
+                              my2ndFocusNodes[index].requestFocus();
+                              is2ndDisplayIcon = true;
+                              isReturnText = false;
+                              is2ndReturnText = true;
+                            });
+                          },
+
+                        ),
+                    );
                   }),
 
             ],),

@@ -20,6 +20,10 @@ class CompareViewModel extends ChangeNotifier {
   List<Way1Merit> get way1MeritList => _way1MeritList;
   List<Way2Merit> _way2MeritList = <Way2Merit>[];
   List<Way2Merit> get way2MeritList => _way2MeritList;
+  List<Way1Demerit> _way1DemeritList = <Way1Demerit>[];
+  List<Way1Demerit> get way1DemeritList => _way1DemeritList;
+  List<Way2Demerit> _way2DemeritList = <Way2Demerit>[];
+  List<Way2Demerit> get way2DemeritList => _way2DemeritList;
 
 //textFieldからviewModelへの変更値登録があるのでカプセル化しない
   String itemTitle = '';
@@ -75,7 +79,19 @@ class CompareViewModel extends ChangeNotifier {
   bool tagEditMode = true; //初期設定は通常モード
 //  bool editFocus = false; //初期設定はタイトルのみ
   int selectedIndex;//tagPageでのListTile選択
-
+  int selectedDescListIndex;//DescFromAndButtonでのListTIle選択
+  bool isWay1MeritDeleteIcon =false;//AccordionPart=>DescFormのIconButton表示有無
+  bool isWay1DemeritDeleteIcon =false;
+  bool isWay2MeritDeleteIcon =false;
+  bool isWay2DemeritDeleteIcon =false;
+  bool isWay3MeritDeleteIcon =false;
+  bool isWay3DemeritDeleteIcon =false;
+  bool isWay1MeritFocusList = true;//settingPageでやったisReturnText
+  bool isWay1DemeritFocusList = true;
+  bool isWay2MeritFocusList = true;
+  bool isWay2DemeritFocusList = true;
+  bool isWay3MeritFocusList = true;
+  bool isWay3DemeritFocusList = true;
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
   Future<void> getOverview(String comparisonItemId) async {
@@ -107,56 +123,69 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   ///AddScreen/InputPartでComparisonOverview新規登録：ComparisonOverview=>ComparisonOverviewRecordでDB登録
-  Future<void> createComparisonOverview(
-      ComparisonOverview comparisonOverview) async {
-    await _compareRepository.createComparisonOverview(comparisonOverview);
-//    notifyListeners();
-  }
+  ///createNewItemに変更
+//  Future<void> createComparisonOverview(
+//      ComparisonOverview comparisonOverview) async {
+//    await _compareRepository.createComparisonOverview(comparisonOverview);
+////    notifyListeners();
+//  }
   ///AddScreen/InputPartでComparisonOverview更新：itemTitle,way1Title,way2Titleのみ変更
-  Future<void> updateComparisonOverView({
-      ComparisonOverview updateOverview,
-//    String tagTitle,
-//    ItemTitleEditMode itemTitleEditMode,
-  }) async {
-    //更新するプロパティだけ入れてrepositoryでCompanion作成=>更新
-//    final updateOverview = ComparisonOverview(
-//      comparisonItemId: comparisonOverview.comparisonItemId,
-//      itemTitle: itemTitle,
-//      way1Title: way1Title,
-//      way2Title: way2Title,
-//      createdAt: DateTime.now(),
-//    );
-    await _compareRepository.updateComparisonOverView(updateOverview);
-  print('comparisonOverviewのタイトル類を更新');
-
-//  if(itemTitleEditMode ==ItemTitleEditMode.select){
+  ///updateItem
+//  Future<void> updateComparisonOverView({
+//      ComparisonOverview updateOverview,
+////    String tagTitle,
+////    ItemTitleEditMode itemTitleEditMode,
+//  }) async {
+//    //更新するプロパティだけ入れてrepositoryでCompanion作成=>更新
+////    final updateOverview = ComparisonOverview(
+////      comparisonItemId: comparisonOverview.comparisonItemId,
+////      itemTitle: itemTitle,
+////      way1Title: way1Title,
+////      way2Title: way2Title,
+////      createdAt: DateTime.now(),
+////    );
+//    await _compareRepository.updateComparisonOverView(updateOverview);
+//  print('comparisonOverviewのタイトル類を更新');
+//
+////  if(itemTitleEditMode ==ItemTitleEditMode.select){
+////    print('viewModel.updateComparison/onSelectTagする前:$tagTitle');
+////    //todo 名前付引数でtagTitleを設定=>selectTagPage側から編集の場合はtagTitleを渡し、onSelectTagすることで、selectTagPageはSelectorのみでいいかも
+////     return onSelectTag(tagTitle);//todo selectTagTitleでいいのではないか説
+////  }else{
 //    print('viewModel.updateComparison/onSelectTagする前:$tagTitle');
-//    //todo 名前付引数でtagTitleを設定=>selectTagPage側から編集の場合はtagTitleを渡し、onSelectTagすることで、selectTagPageはSelectorのみでいいかも
-//     return onSelectTag(tagTitle);//todo selectTagTitleでいいのではないか説
-//  }else{
-    print('viewModel.updateComparison/onSelectTagする前:$tagTitle');
-    await onSelectTag(selectTagTitle);
+//    await onSelectTag(selectTagTitle);
+////  }
+//
+//    notifyListeners();
 //  }
 
-    notifyListeners();
-  }
-
+  //todo way1,way2,way3入力
   ///AddScreen/InputPartでWay1Merit,Way2Meritリストを新規登録
   //way1Merit,way2Meritのリストを作って保存
   //todo list.add=>DB登録=>list空の流れではなく、
   // initWay1MeritをリストにしてcreateDescListに渡す方がすっきり書ける
   Future<void> createDesc(Way1Merit initWay1Merit,
-      Way2Merit initWay2Merit,) async {
+      Way2Merit initWay2Merit, Way1Demerit initWay1Demerit,
+      Way2Demerit initWay2Demerit,) async {
     _way1MeritList = [initWay1Merit];
     _way2MeritList = [initWay2Merit];
+    //todo _way3MeritList = [initWay3Merit];
+    _way1DemeritList = [initWay1Demerit];
+    _way2DemeritList = [initWay2Demerit];
+    //todo _way3DemeritList = [initWay3Demerit];
+
     //ここでaddしていくと古いものがだぶる
 ///既存のoverviewでway1リスト追加=>新規でoverview,way1リスト作成,DB登録=>既存のoverviewが重複して登録されてしまう
 //    _way1MeritList.add(initWay1Merit);
 //    print('compareViewModel/createDesc/way1MeritList.add$_way1MeritList');
 //    _way2MeritList.add(initWay2Merit);
-    await _compareRepository.createDescList(_way1MeritList,_way2MeritList);
+    //todo way3追加
+    await _compareRepository.createDescList(
+        _way1MeritList,_way2MeritList,_way1DemeritList,_way2DemeritList);
     _way1MeritList = <Way1Merit>[];
     _way2MeritList = <Way2Merit>[];
+    _way1DemeritList = <Way1Demerit>[];
+    _way2DemeritList = <Way2Demerit>[];
   }
 
   ///List<ComparisonOverview>ではなく、comparisonItemIdからComparisonOverview１行だけ取ってくる
@@ -175,6 +204,12 @@ class CompareViewModel extends ChangeNotifier {
   }
   Future<void> setWay2DemeritNewValue(int newValue) async {
     _way2DemeritEvaluate = newValue;
+  }
+  Future<void> setWay3MeritNewValue(int newValue) async {
+    _way3MeritEvaluate = newValue;
+  }
+  Future<void> setWay3DemeritNewValue(int newValue) async {
+    _way3DemeritEvaluate = newValue;
   }
   Future<void> setConclusion(String newConclusion) async {
     conclusion = newConclusion;
@@ -228,6 +263,33 @@ class CompareViewModel extends ChangeNotifier {
           _way2MeritList = await _compareRepository.getWay2MeritList(
               comparisonOverview.comparisonItemId);
           break;
+      case DisplayList.way1Demerit:
+      ///変更行作成=>DB更新は変更した行のみ
+        final changeWay1Demerit = Way1Demerit(
+          way1DemeritId: _way1DemeritList[index].way1DemeritId,
+          comparisonItemId: _way1DemeritList[index].comparisonItemId,
+          way1DemeritDesc: newDesc,
+        );
+        await _compareRepository.setWay1DemeritDesc(changeWay1Demerit, index);
+        _way1DemeritList = await _compareRepository.getWay1DemeritList(
+            comparisonOverview.comparisonItemId);
+        break;
+      case DisplayList.way2Demerit:
+      ///変更行作成=>DB更新は変更した行のみ
+        final changeWay2Demerit = Way2Demerit(
+          way2DemeritId: _way2DemeritList[index].way2DemeritId,
+          comparisonItemId: _way2DemeritList[index].comparisonItemId,
+          way2DemeritDesc: newDesc,
+        );
+        await _compareRepository.setWay2DemeritDesc(changeWay2Demerit, index);
+        _way2DemeritList = await _compareRepository.getWay2DemeritList(
+            comparisonOverview.comparisonItemId);
+        break;
+        //todo way3入力
+      case DisplayList.way3Merit:
+        break;
+      case DisplayList.way3Demerit:
+        break;
     }
 
     notifyListeners();
@@ -262,6 +324,28 @@ class CompareViewModel extends ChangeNotifier {
             _way2MeritList = await _compareRepository.getWay2MeritList(
                 comparisonOverview.comparisonItemId);
             break;
+      case DisplayList.way1Demerit:
+        final initWay1Demerit = Way1Demerit(
+          comparisonItemId: comparisonOverview.comparisonItemId,
+          way1DemeritDesc: '',
+        );
+        await _compareRepository.addWay1Demerit(initWay1Demerit);
+        _way1DemeritList = await _compareRepository.getWay1DemeritList(
+            comparisonOverview.comparisonItemId);
+        break;
+      case DisplayList.way2Demerit:
+        final initWay2Demerit = Way2Demerit(
+          comparisonItemId: comparisonOverview.comparisonItemId,
+          way2DemeritDesc: '',
+        );
+        await _compareRepository.addWay2Demerit(initWay2Demerit);
+        _way2DemeritList = await _compareRepository.getWay2DemeritList(
+            comparisonOverview.comparisonItemId);
+        break;
+        //todo way3入力
+      case DisplayList.way3Merit:
+      case DisplayList.way3Demerit:
+
     }
     notifyListeners();
   }
@@ -285,6 +369,23 @@ class CompareViewModel extends ChangeNotifier {
         _way2MeritList = await _compareRepository.getWay2MeritList(
             comparisonOverview.comparisonItemId);
         break;
+      case DisplayList.way1Demerit:
+        final deleteWay1DemeritId =
+            _way1DemeritList[accordionIdIndex].way1DemeritId;
+        await _compareRepository.deleteWay1Demerit(deleteWay1DemeritId);
+        _way1DemeritList = await _compareRepository.getWay1DemeritList(
+            comparisonOverview.comparisonItemId);
+        break;
+      case DisplayList.way2Demerit:
+        final deleteWay2DemeritId =
+            _way2DemeritList[accordionIdIndex].way2DemeritId;
+        await _compareRepository.deleteWay2Demerit(deleteWay2DemeritId);
+        _way2DemeritList = await _compareRepository.getWay2DemeritList(
+            comparisonOverview.comparisonItemId);
+        break;
+    //todo way3入力
+      case DisplayList.way3Merit:
+      case DisplayList.way3Demerit:
     }
 
 //    notifyListeners();
@@ -356,6 +457,7 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  //todo way3追加
   Future<void> setOverview(ComparisonOverview comparisonOverview) async {
     itemTitle = comparisonOverview.itemTitle;
     way1Title = comparisonOverview.way1Title;
@@ -376,9 +478,15 @@ class CompareViewModel extends ChangeNotifier {
     await _compareRepository.getWay1MeritList(comparisonItemId);
     _way2MeritList =
     await _compareRepository.getWay2MeritList(comparisonItemId);
+    _way1DemeritList =
+    await _compareRepository.getWay1DemeritList(comparisonItemId);
+    _way2DemeritList =
+    await _compareRepository.getWay2DemeritList(comparisonItemId);
+    //todo way3入力
     print('getWay1/Way2MeritList/notifyListeners');
     notifyListeners();
   }
+
 
   ///List<Way1Merit>取得(FutureBuilder用)
   Future<List<Way1Merit>> getWay1MeritDesc(String comparisonItemId) async {
@@ -386,24 +494,25 @@ class CompareViewModel extends ChangeNotifier {
       return _way1MeritList =
       await _compareRepository.getWay1MeritList(comparisonItemId);
   }
-
-
   ///List<Way1Mer2t>取得(FutureBuilder用)
   Future<List<Way2Merit>> getWay2MeritDesc(String comparisonItemId) async {
     return _way2MeritList =
     await _compareRepository.getWay2MeritList(comparisonItemId);
   }
-
-  Future<void> deleteWay2Merit(int way2MeritIdIndex,
-      ComparisonOverview comparisonOverview) async{
-    print('Way2Meritの選択したものを削除');
-//    final deleteWay2MeritId = _way2MeritList[way2MeritIdIndex].way2MeritId;
-//    await _compareRepository.deleteWay1Merit(deleteWay2MeritId);
-//    //再取得しないとDescFormAndButtonでのListViewの認識している長さと削除するindexが異なりエラー
-//    _way1MeritList = await _compareRepository.getWay2MeritList(
-//        comparisonOverview.comparisonItemId);
-//    notifyListeners();
+  ///List<Way1Demerit>取得(FutureBuilder用)
+  Future<List<Way1Demerit>> getWay1DemeritDesc(String comparisonItemId) async {
+    print('FutureBuilderでDBからList<Way1Demerit> _way1DemeritList取得');
+    return _way1DemeritList =
+    await _compareRepository.getWay1DemeritList(comparisonItemId);
   }
+  ///List<Way2Demerit>取得(FutureBuilder用)
+  Future<List<Way2Demerit>> getWay2DemeritDesc(String comparisonItemId) async {
+//    print('FutureBuilderでDBからList<Way1Merit> _way1MeritList取得');
+    return _way2DemeritList =
+    await _compareRepository.getWay2DemeritList(comparisonItemId);
+  }
+  //todo way3追加
+
 
  ///tagDialogPageでList<tag>を新規登録
   ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
@@ -631,6 +740,7 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  //todo way3追加
   Future<void> updateItem(ComparisonOverview comparisonOverview) async{
     //compareScreenのSelectorまわすので入力
     itemTitle = _titleController.text;
@@ -679,10 +789,72 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  //way1MeritListをtapしたら他のリストのTextFieldはTextに戻る
+  void focusWay1MeritList() {
+    isWay1MeritDeleteIcon  = true;
+    isWay1MeritFocusList = true;
+    //isWay1MeritFocusList以外false
+    isWay1DemeritFocusList = false;
+    isWay2MeritFocusList = false;
+    isWay2DemeritFocusList = false;
+    isWay3MeritFocusList = false;
+    isWay3DemeritFocusList = false;
+    notifyListeners();
+  }
+  void focusWay2MeritList() {
+    isWay2MeritDeleteIcon = true;
+    isWay2MeritFocusList = true;
+    //isWay2MeritFocusList以外false
+    isWay1MeritFocusList = false;
+    isWay1DemeritFocusList = false;
+    isWay2DemeritFocusList = false;
+    isWay3MeritFocusList = false;
+    isWay3DemeritFocusList = false;
+    notifyListeners();
+  }
+  void focusWay1DemeritList() {
+    isWay1DemeritDeleteIcon  = true;
+    isWay1DemeritFocusList = true;
+    //isWay1MeritFocusList以外false
+    isWay1MeritFocusList = false;
+    isWay2MeritFocusList = false;
+    isWay2DemeritFocusList = false;
+    isWay3MeritFocusList = false;
+    isWay3DemeritFocusList = false;
+    notifyListeners();
+  }
+  void focusWay2DemeritList() {
+    isWay2DemeritDeleteIcon  = true;
+    isWay2DemeritFocusList = true;
+    //isWay1MeritFocusList以外false
+    isWay1MeritFocusList = false;
+    isWay1DemeritFocusList = false;
+    isWay2MeritFocusList = false;
+    isWay3MeritFocusList = false;
+    isWay3DemeritFocusList = false;
+    notifyListeners();
+  }
+  void focusWay3MeritList() {
+    isWay3MeritDeleteIcon  = true;
+    isWay3MeritFocusList = true;
+    //isWay3MeritFocusList以外false
+    isWay1MeritFocusList = false;
+    isWay1DemeritFocusList = false;
+    isWay2MeritFocusList = false;
+    isWay2DemeritFocusList = false;
+    isWay3DemeritFocusList = false;
+    notifyListeners();
+  }
+  void focusWay3DemeritList() {
+    isWay3DemeritDeleteIcon  = true;
+    isWay3DemeritFocusList = true;
+    //isWay3DemeritFocusList以外false
+    isWay1MeritFocusList = false;
+    isWay1DemeritFocusList = false;
+    isWay2MeritFocusList = false;
+    isWay2DemeritFocusList = false;
+    isWay3MeritFocusList = false;
+    notifyListeners();
+  }
 
-
-
-
-
-//todo textControllerを破棄
 }
