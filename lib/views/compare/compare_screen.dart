@@ -27,18 +27,6 @@ class CompareScreen extends StatelessWidget {
   final String tagTitle;
   final ScreenEditMode screenEditMode;
 
-
-  //todo itemsはList<Merit>に変更
-  static List<String> items = [
-    'Content 1',
-    'Content 2',
-    'Content 3',
-  ];
-  static final List<TextEditingController> _controllers =
-      List.generate(items.length, (i) => TextEditingController(text: items[i]));
-
-
-
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;

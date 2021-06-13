@@ -513,16 +513,6 @@ class CompareViewModel extends ChangeNotifier {
   }
   //todo way3追加
 
-//  Future<void> deleteWay2Merit(int way2MeritIdIndex,
-//      ComparisonOverview comparisonOverview) async{
-//    print('Way2Meritの選択したものを削除');
-//    final deleteWay2MeritId = _way2MeritList[way2MeritIdIndex].way2MeritId;
-//    await _compareRepository.deleteWay1Merit(deleteWay2MeritId);
-  //再取得しないとDescFormAndButtonでのListViewの認識している長さと削除するindexが異なりエラー
-//    _way1MeritList = await _compareRepository.getWay2MeritList(
-//        comparisonOverview.comparisonItemId);
-//    notifyListeners();
-//  }
 
  ///tagDialogPageでList<tag>を新規登録
   ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
