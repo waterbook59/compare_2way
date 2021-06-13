@@ -96,14 +96,21 @@ class CompareScreen extends StatelessWidget {
           onTap: () {
 //            print('GestureDetectorをonTap!isDisplayIcon:${viewModel.isDisplayIcon}');
             ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
-            //todo way1,2,3Merit,Demerit分作成
             FocusScope.of(context).unfocus();
             //accordionpart=>descFormのiconButtonの非表示
             viewModel
                 ..isWay1MeritDeleteIcon  = false
                 ..isWay2MeritDeleteIcon  = false
+              ..isWay1DemeritDeleteIcon  = false
+              ..isWay2DemeritDeleteIcon  = false
+              ..isWay3MeritDeleteIcon  = false
+              ..isWay3DemeritDeleteIcon  = false
                 ..isWay1MeritFocusList = false//settingPageでやったisReturnText
-                ..isWay2MeritFocusList = false;
+                ..isWay2MeritFocusList = false
+            ..isWay1DemeritFocusList = false
+            ..isWay2DemeritFocusList = false
+            ..isWay3MeritFocusList = false
+            ..isWay3DemeritFocusList = false;
           },
           child: SingleChildScrollView(
             child: Column(
@@ -130,7 +137,7 @@ class CompareScreen extends StatelessWidget {
                   iconColor: accentColor,
                 ),
              ///リストのDeleteIconの表示をリスト跨ぎで再ビルドが必要なので、Selector=>Consumer
-            Consumer<CompareViewModel>(
+                Consumer<CompareViewModel>(
 //                Selector<CompareViewModel, String>(
 //                    selector: (context, viewModel) => viewModel.way1Title,
                     builder: (context, viewModel, child) {
@@ -207,51 +214,66 @@ class CompareScreen extends StatelessWidget {
                   iconColor: accentColor,
                 ),
               ///way1 デメリット
-                Selector<CompareViewModel, String>(
-                  selector: (context, viewModel) => viewModel.way1Title,
-                  builder: (context, way1Title, child) {
-                    return GFAccordion(
-                      title: way1Title,
-                      titleBorderRadius: accordionTopBorderRadius,
-                      contentBorderRadius: accordionBottomBorderRadius,
-                      showAccordion: false,
-                      collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
-                      contentChild: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _controllers.length,
-                          itemBuilder: (context, index) {
-                            return CupertinoTextField(
-                              placeholder: 'メリットを入力してください',
-                              controller: _controllers[index],
-                              style: const TextStyle(color: Colors.black),
-                            );
-                          }),
+                Consumer<CompareViewModel>(
+                  builder: (context, viewModel, child) {
+                    return FutureBuilder(
+                      future:
+                      viewModel.getWay1DemeritDesc(
+                          comparisonOverview.comparisonItemId),
+                      builder:
+                          (context, AsyncSnapshot<List<Way1Demerit>> snapshot) {
+                        return snapshot.hasData && snapshot.data.isNotEmpty
+                            ?
+                        AccordionPart(
+                          title: viewModel.way1Title,
+                          displayList: DisplayList.way1Demerit,
+                          inputChanged: (newDesc, index) =>
+                              _accordionInputChange(
+                                  context,DisplayList.way1Demerit,
+                                  newDesc, index,comparisonOverview),
+                          way1DemeritList: snapshot.data,
+                          addList: () =>
+                              _accordionAddList(context,
+                                  DisplayList.way1Demerit,comparisonOverview),
+                          deleteList: (way1DemeritIdIndex)=>
+                              _accordionDeleteList(context,
+                                  DisplayList.way1Demerit,
+                                  way1DemeritIdIndex,comparisonOverview),
+                        )
+                            : Container();
+                      },
                     );
                   },
                 ),
               ///way2 デメリット
-                Selector<CompareViewModel, String>(
-                  selector: (context, viewModel) => viewModel.way2Title,
-                  builder: (context, way2Title, child) {
-                    return GFAccordion(
-                      title: way2Title,
-                      titleBorderRadius: accordionTopBorderRadius,
-                      contentBorderRadius: accordionBottomBorderRadius,
-                      collapsedTitleBackgroundColor: const Color(0xFFE0E0E0),
-                      showAccordion: false,
-                      contentChild: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: _controllers.length,
-                          itemBuilder: (context, index) {
-//              textItems.add(new TextEditingController());
-                            return CupertinoTextField(
-                              placeholder: 'メリットを入力してください',
-                              controller: _controllers[index],
-                              style: const TextStyle(color: Colors.black),
-                            );
-                          }),
+                Consumer<CompareViewModel>(
+                  builder: (context, viewModel, child) {
+                    return FutureBuilder(
+                      future:
+                      viewModel.getWay2DemeritDesc(
+                          comparisonOverview.comparisonItemId),
+                      builder:
+                          (context, AsyncSnapshot<List<Way2Demerit>> snapshot) {
+                        return snapshot.hasData && snapshot.data.isNotEmpty
+                            ?
+                        AccordionPart(
+                          title: viewModel.way2Title,
+                          displayList: DisplayList.way2Demerit,
+                          inputChanged: (newDesc, index) =>
+                              _accordionInputChange(
+                                  context,DisplayList.way2Demerit,
+                                  newDesc, index,comparisonOverview),
+                          way2DemeritList: snapshot.data,
+                          addList: () =>
+                              _accordionAddList(context,
+                                  DisplayList.way2Demerit,comparisonOverview),
+                          deleteList: (way1DemeritIdIndex)=>
+                              _accordionDeleteList(context,
+                                  DisplayList.way2Demerit,
+                                  way1DemeritIdIndex,comparisonOverview),
+                        )
+                            : Container();
+                      },
                     );
                   },
                 ),

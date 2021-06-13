@@ -37,7 +37,7 @@ class _DescFormState extends State<DescForm> {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
-//todo way1,2,3Merit,Demerit分作成
+//todo way3Merit,Demerit追加
     switch(widget.displayList){
       case DisplayList.way1Merit:
         return Stack(
@@ -115,6 +115,72 @@ class _DescFormState extends State<DescForm> {
                     icon: const Icon(Icons.remove_circle_outline,
                     color: Colors.grey,
                     size: 24,
+              ),
+              //ここではvoidCallbackでindexのみ渡して具体的なロジックはDescFormAndButtonで
+              onPressed: () => widget.deleteList(widget.index),
+            )
+                :Container(),
+          ],
+        );
+        break;
+      case DisplayList.way1Demerit:
+        return Stack(
+          alignment: Alignment.centerRight,
+          children: [
+            CupertinoTextField(
+              controller: widget.controllers[widget.index],
+              onChanged: (newDesc) => widget.inputChanged(newDesc),
+              style: const TextStyle(color: Colors.black),
+              maxLines: null,
+              suffix: const SizedBox(width: 24,),//IconButton分(24)隙間あける
+              focusNode: widget.focusNode,
+              placeholder: 'メリットを入力',
+              decoration:
+              const BoxDecoration(
+                border: Border(bottom:BorderSide(color: Colors.grey)),
+              ),
+            ),
+
+            viewModel.isWay1DemeritDeleteIcon
+                ?//GestureDetector _selectedIndex ==index 且つfocus当たってるとき
+            IconButton(
+              icon: const Icon(
+                Icons.remove_circle_outline,
+                color: Colors.grey,
+                size: 24,
+              ),
+              //ここではvoidCallbackでindexのみ渡して具体的なロジックはDescFormAndButtonで
+              onPressed: () => widget.deleteList(widget.index),
+            )
+                :Container(),
+          ],
+        );
+        break;
+      case DisplayList.way2Demerit:
+        return Stack(
+          alignment: Alignment.centerRight,
+          children: [
+            CupertinoTextField(
+              controller: widget.controllers[widget.index],
+              onChanged: (newDesc) => widget.inputChanged(newDesc),
+              style: const TextStyle(color: Colors.black),
+              maxLines: null,
+              suffix: const SizedBox(width: 24,),//IconButton分(24)隙間あける
+              focusNode: widget.focusNode,
+              placeholder: 'メリットを入力',
+              decoration:
+              const BoxDecoration(
+                border: Border(bottom:BorderSide(color: Colors.grey)),
+              ),
+            ),
+
+            viewModel.isWay2DemeritDeleteIcon
+                ?//GestureDetector _selectedIndex ==index 且つfocus当たってるとき
+            IconButton(
+              icon: const Icon(
+                Icons.remove_circle_outline,
+                color: Colors.grey,
+                size: 24,
               ),
               //ここではvoidCallbackでindexのみ渡して具体的なロジックはDescFormAndButtonで
               onPressed: () => widget.deleteList(widget.index),

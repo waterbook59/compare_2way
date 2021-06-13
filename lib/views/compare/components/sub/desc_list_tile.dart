@@ -27,7 +27,7 @@ class DescListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
-    //todo way1,2,3Merit,Demerit分作成
+    //todo way3Merit,Demerit分作成
     switch (displayList) {
       case DisplayList.way1Merit:
         return viewModel.selectedDescListIndex == index &&
@@ -68,6 +68,46 @@ class DescListTile extends StatelessWidget {
                     description: 'メリットを入力',
                     textColor: Colors.grey,
                   );
+        break;
+      case DisplayList.way1Demerit:
+        return viewModel.selectedDescListIndex == index &&
+            viewModel.isWay1DemeritFocusList
+            ? DescForm(
+          inputChanged: inputChanged,
+          controllers: controllers,
+          index: index,
+          deleteList: deleteList,
+          focusNode: focusNode,
+          displayList: displayList,
+        )
+            : controllers[index].text.isNotEmpty
+            ? DescDisplay(
+          description: '${controllers[index].text}',
+        )
+            : const DescDisplay(
+          description: 'メリットを入力',
+          textColor: Colors.grey,
+        );
+        break;
+      case DisplayList.way2Demerit:
+        return viewModel.selectedDescListIndex == index &&
+            viewModel.isWay2DemeritFocusList
+            ? DescForm(
+          inputChanged: inputChanged,
+          controllers: controllers,
+          index: index,
+          deleteList: deleteList,
+          focusNode: focusNode,
+          displayList: displayList,
+        )
+            : controllers[index].text.isNotEmpty
+            ? DescDisplay(
+          description: '${controllers[index].text}',
+        )
+            : const DescDisplay(
+          description: 'メリットを入力',
+          textColor: Colors.grey,
+        );
         break;
     }
   }

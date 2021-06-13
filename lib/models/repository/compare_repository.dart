@@ -18,8 +18,9 @@ class CompareRepository {
   ComparisonOverview _overviewResult;
   List<Way1Merit> _way1MeritList = <Way1Merit>[];
   List<Way2Merit> _way2MeritList = <Way2Merit>[];
+  List<Way1Demerit> _way1DemeritList = <Way1Demerit>[];
+  List<Way2Demerit> _way2DemeritList = <Way2Demerit>[];
   List<Tag> _tagList = <Tag>[];
-  //todo _tagListに統一しても不具合がないか？？
   List<Tag> _selectTagList = <Tag>[];
 
 
@@ -77,7 +78,7 @@ class CompareRepository {
       final comparisonOverviewRecord =
           updateOverview.toComparisonOverviewRecord(updateOverview);
 
-      //todo extensionsの中で一気にやる
+      //todo extensionsの中で一気にやる,way3・お気に入り追加
       ///ComparisonOverviewRecord=>ComparisonOverviewRecordsCompanion
       final overviewCompanion = ComparisonOverviewRecordsCompanion(
         //アップデート要素がないものを入れるとnullでエラー(Companionに入れるのは値が更新できるものだけ)
@@ -121,19 +122,22 @@ class CompareRepository {
 
   ///Delete
   Future<void> deleteList(String comparisonItemId) async {
-
-//    //todo Merit/Dmeritも同時に削除必要(transaction)
+  // Merit/Demeritも同時に削除必要(transaction)
 //    await _comparisonItemDao.deleteListAll(comparisonItemId);
     await _comparisonItemDao.deleteList(comparisonItemId);
     await _comparisonItemDao.deleteWay1MeritList(comparisonItemId);
     await _comparisonItemDao.deleteWay2MeritList(comparisonItemId);
+    await _comparisonItemDao.deleteWay1DemeritList(comparisonItemId);
+    await _comparisonItemDao.deleteWay2DemeritList(comparisonItemId);
+    //todo way3List削除
+//    await _comparisonItemDao.deleteWay3MeritList(comparisonItemId);
+//    await _comparisonItemDao.deleteWay3DemeritList(comparisonItemId);
     await _comparisonItemDao.deleteAllTagList(comparisonItemId);
     print('データ削除完了');
   }
 
   ///List<ComparisonOverview>ではなく、comparisonItemIdからComparisonOverview１行だけ取ってくる
   Future<ComparisonOverview> getComparisonOverview(
-
       String comparisonItemId) async {
     final comparisonOverviewRecord =
         await _comparisonItemDao.getComparisonOverview(comparisonItemId);
@@ -146,10 +150,12 @@ class CompareRepository {
 
   ///ComparisonItem=>ComparisonOverviewRecord,List<Way1Merit>に分解登録
 
-  //todo createComparisonOverviewと結合
+  //todo createComparisonOverviewと結合,way3List追加
   ///新規作成 way1MeritList,way2MeritList
   Future<void> createDescList(
-      List<Way1Merit> way1MeritList, List<Way2Merit> way2MeritList) async {
+      List<Way1Merit> way1MeritList, List<Way2Merit> way2MeritList,
+      List<Way1Demerit> way1DemeritList, List<Way2Demerit> way2DemeritList,)
+  async {
     try {
       ///way1Merit 1行の場合
 //      final way1MeritRecord = way1Merit.toWay1MeritRecord(way1Merit);
@@ -158,9 +164,25 @@ class CompareRepository {
           way1MeritList.toWay1InitMeritRecordList(way1MeritList);
       final way2MeritItemRecords =
       way2MeritList.toWay2InitMeritRecordList(way2MeritList);
+//      final way3MeritItemRecords =
+//      way3MeritList.toWay3InitMeritRecordList(way3MeritList);
+      final way1DemeritItemRecords =
+      way1DemeritList.toWay1InitDemeritRecordList(way1DemeritList);
+      final way2DemeritItemRecords =
+      way2DemeritList.toWay2InitDemeritRecordList(way2DemeritList);
+//      final way3DemeritItemRecords =
+//      way3DemeritList.toWay3InitDemeritRecordList(way3DemeritList);
 
       await _comparisonItemDao.insertWay1MeritRecordDB(way1MeritItemRecords);
       await _comparisonItemDao.insertWay2MeritRecordDB(way2MeritItemRecords);
+//    await _comparisonItemDao.insertWay3MeritRecordDB(way3MeritItemRecords);
+      await _comparisonItemDao.insertWay1DemeritRecordDB(
+          way1DemeritItemRecords);
+      await _comparisonItemDao.insertWay2DemeritRecordDB(
+          way2DemeritItemRecords);
+//    await _comparisonItemDao.insertWay3DemeritRecordDB(
+//          way3DemeritItemRecords);
+
       print('List<Way1Merit>を新規登録');
     } on SqliteException catch (e) {
       print('repositoryエラー:${e.toString()}');
@@ -182,6 +204,35 @@ class CompareRepository {
     return _way2MeritList =
         way2MeritRecordList.toWay2MeritList(way2MeritRecordList);
   }
+  ///Read List<Way3Merit>
+//  Future<List<Way3Merit>> getWay3MeritList(String comparisonItemId) async {
+//    final way3MeritRecordList =
+//    await _comparisonItemDao.getWay3MeritList(comparisonItemId);
+//    return _way3MeritList =
+//        way3MeritRecordList.toWay3MeritList(way3MeritRecordList);
+//  }
+  ///Read List<Way1DeMerit>
+  Future<List<Way1Demerit>> getWay1DemeritList(String comparisonItemId) async {
+    final way1DemeritRecordList =
+    await _comparisonItemDao.getWay1DemeritList(comparisonItemId);
+    return _way1DemeritList =
+        way1DemeritRecordList.toWay1DemeritList(way1DemeritRecordList);
+  }
+  ///Read List<Way2DeMerit>
+  Future<List<Way2Demerit>> getWay2DemeritList(String comparisonItemId) async {
+    final way2DemeritRecordList =
+    await _comparisonItemDao.getWay2DemeritList(comparisonItemId);
+    return _way2DemeritList =
+        way2DemeritRecordList.toWay2DemeritList(way2DemeritRecordList);
+  }
+  ///Read List<Way3DeMerit>
+//  Future<List<Way3Demerit>> getWay3DemeritList(String comparisonItemId) async {
+//    final way3DemeritRecordList =
+//    await _comparisonItemDao.getWay3DemeritList(comparisonItemId);
+//    return _way3DemeritList =
+//        way1DemeritRecordList.toWay1DemeritList(way3DemeritRecordList);
+//  }
+
 
   ///保存 変更したWay1Merit=>変更したWay1Meritだけ更新
   //変更前：List<Way1Merit>=>変更したWay1Meritだけ更新
@@ -200,7 +251,6 @@ class CompareRepository {
       print('repositoryエラー:${e.toString()}');
     }
   }
-
   ///保存 Way2Merit一部変更=>変更行だけ更新
   Future<void> setWay2MeritDesc(Way2Merit updateWay2Merit, int index) async{
     try{
@@ -212,6 +262,54 @@ class CompareRepository {
       print('repository/setWay2MeritDescエラー:${e.toString()}');
     }
   }
+  ///保存 Way3Merit一部変更=>変更行だけ更新
+//  Future<void> setWay3MeritDesc(Way3Merit updateWay3Merit, int index) async{
+//    try{
+//      final way3MeritRecord =
+//      updateWay3Merit.toUpdateWay3MeritRecord(updateWay3Merit);
+//      await _comparisonItemDao.updateWay3MeritRecordDB(
+//          way3MeritRecord);
+//    }on SqliteException catch (e) {
+//      print('repository/setWay2MeritDescエラー:${e.toString()}');
+//    }
+//  }
+  ///保存 Way1Demerit一部変更=>変更行だけ更新
+  Future<void> setWay1DemeritDesc(Way1Demerit updateWay1Demerit, int index)
+  async {
+    try {
+      final way1DemeritRecord =
+      updateWay1Demerit.toUpdateWay1DemeritRecord(updateWay1Demerit);
+      await _comparisonItemDao.updateWay1DemeritRecordDB(
+          way1DemeritRecord);
+    } on SqliteException catch (e) {
+      print('repositoryエラー:${e.toString()}');
+    }
+  }
+  ///保存 Way2Demerit一部変更=>変更行だけ更新
+  Future<void> setWay2DemeritDesc(Way2Demerit updateWay2Demerit, int index)
+  async {
+    try {
+      final way2DemeritRecord =
+      updateWay2Demerit.toUpdateWay2DemeritRecord(updateWay2Demerit);
+      await _comparisonItemDao.updateWay2DemeritRecordDB(
+          way2DemeritRecord);
+    } on SqliteException catch (e) {
+      print('repositoryエラー:${e.toString()}');
+    }
+  }
+  ///保存 Way3Demerit一部変更=>変更行だけ更新
+//  Future<void> setWay3DemeritDesc(Way3Demerit updateWay3Demerit, int index)
+//  async {
+//    try {
+//      final way3DemeritRecord =
+//      updateWay3Demerit.toUpdateWay3DemeritRecord(updateWay3Demerit);
+//      await _comparisonItemDao.updateWay3DemeritRecordDB(
+//          way3DemeritRecord);
+//    } on SqliteException catch (e) {
+//      print('repositoryエラー:${e.toString()}');
+//    }
+//  }
+
 
   ///リスト１行追加：Way1Merit
   Future<void> addWay1Merit(Way1Merit initWay1Merit) async {
@@ -236,6 +334,55 @@ class CompareRepository {
       print('Way2Merit追加エラー:${e.toString()}');
     }
   }
+  ///リスト１行追加：Way3Merit
+//  Future<void> addWay3Merit(Way3Merit initWay3Merit) async {
+//    try {
+//      final way3MeritRecord =
+//      initWay3Merit.toCreateWay3MeritRecord(initWay3Merit);
+//      await _comparisonItemDao.insertWay3MeritRecordSingle(way3MeritRecord);
+//      print('repository:リストWay2Merit１行新規追加');
+//    } on SqliteException catch (e) {
+//      print('Way3Merit追加エラー:${e.toString()}');
+//    }
+//  }
+  ///リスト１行追加：Way1Demerit
+  Future<void> addWay1Demerit(Way1Demerit initWay1Demerit) async {
+    //1行だけ差し込めるか
+    try {
+      final way1DemeritRecord =
+      initWay1Demerit.toCreateWay1DemeritRecord(initWay1Demerit);
+      await _comparisonItemDao.insertWay1DemeritRecordSingle(way1DemeritRecord);
+      print('repository:リスト１行新規追加');
+    } on SqliteException catch (e) {
+      print('Way1Demerit追加エラー:${e.toString()}');
+    }
+  }
+  ///リスト１行追加：Way2Demerit
+  Future<void> addWay2Demerit(Way2Demerit initWay2Demerit) async {
+    //1行だけ差し込めるか
+    try {
+      final way2DemeritRecord =
+      initWay2Demerit.toCreateWay2DemeritRecord(initWay2Demerit);
+      await _comparisonItemDao.insertWay2DemeritRecordSingle(way2DemeritRecord);
+      print('repository:リスト１行新規追加');
+    } on SqliteException catch (e) {
+      print('Way3Demerit追加エラー:${e.toString()}');
+    }
+  }
+  ///リスト１行追加：Way3Demerit
+//  Future<void> addWay3Demerit(Way3Demerit initWay3Demerit) async {
+//    //1行だけ差し込めるか
+//    try {
+//      final way3DemeritRecord =
+//      initWay3Demerit.toCreateWay3DemeritRecord(initWay3Demerit);
+//      await _comparisonItemDao.insertWay3DemeritRecordSingle(way3DemeritRecord);
+//      print('repository:リスト１行新規追加');
+//    } on SqliteException catch (e) {
+//      print('Way3Demerit追加エラー:${e.toString()}');
+//    }
+//  }
+
+  //todo way1~3追加
 
   ///リスト1行削除:Way1Merit
   Future<void> deleteWay1Merit(int way1MeritId) async {
@@ -245,6 +392,23 @@ class CompareRepository {
   Future<void> deleteWay2Merit(int way2MeritId) async {
     await _comparisonItemDao.deleteWay2Merit(way2MeritId);
   }
+  ///リスト1行削除:Way3Merit
+//  Future<void> deleteWay3Merit(int way3MeritId) async {
+//    await _comparisonItemDao.deleteWay3Merit(way3MeritId);
+//  }
+  ///リスト1行削除:Way1Demerit
+  Future<void> deleteWay1Demerit(int way1DemeritId) async {
+    await _comparisonItemDao.deleteWay1Demerit(way1DemeritId);
+  }
+  ///リスト1行削除:Way2Merit
+  Future<void> deleteWay2Demerit(int way2DemeritId) async {
+    await _comparisonItemDao.deleteWay2Demerit(way2DemeritId);
+  }
+  ///リスト1行削除:Way3Demerit
+//  Future<void> deleteWay3Demerit(int way3MeritId) async {
+//    await _comparisonItemDao.deleteWay3Demerit(way3DemeritId);
+//  }
+
 
   ///新規作成 List<Tag>
   //todo タグ追加したらcreatedAt変更

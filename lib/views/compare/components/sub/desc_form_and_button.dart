@@ -11,6 +11,11 @@ class DescFormAndButton extends StatefulWidget {
     this.displayList,
     this.way1MeritList,
     this.way2MeritList,
+    this.way1DemeritList,
+    this.way2DemeritList,
+    //todo
+//    this.way3MeritList,
+//    this.way3DemeritList,
     this.inputChanged,
     this.addList,
     this.deleteList,
@@ -19,6 +24,8 @@ class DescFormAndButton extends StatefulWidget {
   final DisplayList displayList;
   final List<Way1Merit> way1MeritList;
   final List<Way2Merit> way2MeritList;
+  final List<Way1Demerit> way1DemeritList;
+  final List<Way2Demerit> way2DemeritList;
   final Function(String, int) inputChanged;
   final Function() addList;
   final Function(int) deleteList;
@@ -35,7 +42,7 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
 
   @override
   void initState() {
-    //todo way1,2,3Merit,Demerit分作成
+    //todo way3Merit,Demerit分作成
     switch (widget.displayList) {
       case DisplayList.way1Merit:
         widget.way1MeritList.isNotEmpty
@@ -53,6 +60,18 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
 //        }).toList()
             : controllers = [];
         break;
+      case DisplayList.way1Demerit:
+        widget.way1DemeritList.isNotEmpty
+            ? createWay1DemeritList()
+            : controllers = [];
+        break;
+      case DisplayList.way2Demerit:
+        widget.way2DemeritList.isNotEmpty
+            ? createWay2DemeritList()
+            : controllers = [];
+        break;
+
+
     }
     super.initState();
   }
@@ -87,13 +106,20 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
                         '${viewModel.selectedDescListIndex}');
                     focusNodes[index].requestFocus();
                     //isDisplayIconをviewModelにもたせる
-                    //todo way1,2,3Merit,Demerit分作成
+                    //todo way3Merit,Demerit分作成
                     switch (widget.displayList) {
                       case DisplayList.way1Merit:
                         viewModel.focusWay1MeritList();
                         break;
                       case DisplayList.way2Merit:
                         viewModel.focusWay2MeritList();
+                        break;
+                      case DisplayList.way1Demerit:
+                        viewModel.focusWay1DemeritList();
+                        break;
+                      case DisplayList.way2Demerit:
+                        viewModel.focusWay2DemeritList();
+                        break;
                     }
 
                     print('DescFormAndButton/Listの１つをonTap!');
@@ -147,7 +173,7 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
     }
   }
 
-  //todo way1,2,3Merit,Demerit分作成
+  //todo way3Merit,Demerit分作成
   void createWay1MeritList() {
     controllers = widget.way1MeritList.map((item) {
       return TextEditingController(text: item.way1MeritDesc);
@@ -160,5 +186,17 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
       return TextEditingController(text: item.way2MeritDesc);
     }).toList();
     focusNodes = widget.way2MeritList.map((item) => FocusNode()).toList();
+  }
+  void createWay1DemeritList() {
+    controllers = widget.way1DemeritList.map((item) {
+      return TextEditingController(text: item.way1DemeritDesc);
+    }).toList();
+    focusNodes = widget.way1DemeritList.map((item) => FocusNode()).toList();
+  }
+  void createWay2DemeritList() {
+    controllers = widget.way2DemeritList.map((item) {
+      return TextEditingController(text: item.way2DemeritDesc);
+    }).toList();
+    focusNodes = widget.way2DemeritList.map((item) => FocusNode()).toList();
   }
 }

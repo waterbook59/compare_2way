@@ -115,12 +115,22 @@ class InputPart extends StatelessWidget {
       comparisonItemId: newComparisonOverview.comparisonItemId,
       way2MeritDesc: '',
     );
+    final initWay1Demerit = Way1Demerit(
+      comparisonItemId: newComparisonOverview.comparisonItemId,
+      way1DemeritDesc: '',
+    );
+    final initWay2Demerit = Way2Demerit(
+      comparisonItemId: newComparisonOverview.comparisonItemId,
+      way2DemeritDesc: '',
+    );
+    //todo way3追加
 
     ///DB登録
     ///viewModel側でcontroller.textを入力してDB登録
    await viewModel.createNewItem(newComparisonOverview);
     //DB登録 Merit/Demeritの1行だけをUuidでつけたComparisonIdを入れて登録する
-    await viewModel.createDesc(initWay1Merit, initWay2Merit);
+    await viewModel.createDesc(
+        initWay1Merit, initWay2Merit,initWay1Demerit,initWay2Demerit);
 
     //DBからUuidでつけたComparisonIdを元に1行だけ読込(overviewDBへ格納)=>compareScreenへ渡す
     ///Merit/DemeritのリストはCompareScreenでFutureBuilderから読込のでviewModel側への格納はなし
