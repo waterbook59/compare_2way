@@ -7,25 +7,19 @@ class ChoiceTag extends StatelessWidget {
     this.title,
     this.tagAmount,
     this.createdAt,
-//    this.onDelete,
     this.onTap,
     this.selectTagIdList,
     this.listNumber,
-//  this.myFocusNode,
   });
 
   final String title;
   final int tagAmount;
   final String createdAt;
-
-//  final VoidCallback onDelete;
   final VoidCallback onTap;
-
-//  final Function(FocusNode) onTap;
   final List<String> selectTagIdList; //tagTitle編集時に更新するIDリスト
   final int listNumber;
 
-//  final FocusNode myFocusNode;
+
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +29,6 @@ class ChoiceTag extends StatelessWidget {
         getTitle(context, onTap, listNumber);
       },
       child: Container(
-//          decoration: const BoxDecoration(
-//              border: Border(bottom: BorderSide(color: Colors.grey))),
         padding: const EdgeInsets.only(left: 8, top: 8),
         child: Column(
           children: [
@@ -61,7 +53,6 @@ class ChoiceTag extends StatelessWidget {
                 )),
               ],
             ),
-//              const SizedBox(height: 8,),
             const Divider(
               color: Colors.grey,
               height: 16,
@@ -72,17 +63,6 @@ class ChoiceTag extends StatelessWidget {
       ),
     );
 
-//      ListTile(
-//      leading: Icon(CupertinoIcons.tag_solid,
-//        size: 24,color: primaryColor,),
-//      title: Text(title),//tagTitleの編集
-//      ///getTagTitleIdしつlistTileのonTapでfocusNode設定(tagEditModeで場合わけ)
-//      ///ListTileだけを再ビルドしても反映されない(notifyListenersしてListView含め再ビルド)
-//      onTap:(){
-//        getTitle(context,onTap,listNumber);
-//      },
-//      //          isThreeLine: true,
-//    );
   }
 
   Future<void> getTitle(
