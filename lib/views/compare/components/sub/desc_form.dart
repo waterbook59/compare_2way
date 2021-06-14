@@ -93,6 +93,7 @@ class _DescFormState extends State<DescForm> {
         );
         break;
       case DisplayList.way2Merit:
+        //todo cupertinoTextFieldに統一
         return Stack(
           //material
           alignment: Alignment.centerRight,

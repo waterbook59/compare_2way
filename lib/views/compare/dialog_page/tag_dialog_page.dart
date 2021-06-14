@@ -103,10 +103,11 @@ class TagDialogPage extends StatelessWidget {
                   shrinkWrap: true,
                   //リストが縦方向にスクロールできるようになる
                   physics: const NeverScrollableScrollPhysics(),
+//                  separatorBuilder: (BuildContext context, int index) => Divider(color: Colors.grey,),
                   itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext context, int index) {
                       final overview = snapshot.data[index];
-
+                      ///ListTileのスペースがいまいちなのでDescDisplay参照
                       return ChoiceTag(
                         title: overview.tagTitle,
                         selectTagIdList: overview.itemIdList,
