@@ -734,6 +734,26 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  ///TagDialogPageで候補タグを表示(FutureBuilder用)
+  Future<List<String>> getCandidateTagList() async{
+    //全タグリストから選択されたタグリストを比較して重複を削除
+    _allTagList = await _compareRepository.getAllTagList();
+    final tagAllTitleList = <String>{};
+      _allTagList.map((tag) {
+      return tagAllTitleList.add(tag.tagTitle);
+    }).toSet();
+    final choiceTitleList=  <String>{};
+      tagList.map((tag) {
+      return choiceTitleList.add(tag.tagTitle);
+    }).toSet();
+//    print('allTag:$tagAllTitleList,choiceTag:$choiceTitleList');
+    ///removeAll使うにはListはダメでSetを用いる
+     tagAllTitleList.removeAll(choiceTitleList);
+//    print('candidateTag:$tagAllTitleList');
+    return tagAllTitleList.toList();
+  }
+
+
   ///AddScreen/InputPartでComparisonOverview新規登録：ComparisonOverview=>ComparisonOverviewRecordでDB登録
   Future<void> createNewItem(ComparisonOverview newComparisonOverview) async {
     await _compareRepository.createComparisonOverview(newComparisonOverview);

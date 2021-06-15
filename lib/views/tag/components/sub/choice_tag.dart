@@ -5,18 +5,18 @@ import 'package:flutter/cupertino.dart';
 class ChoiceTag extends StatelessWidget {
   const ChoiceTag({
     this.title,
-    this.tagAmount,
-    this.createdAt,
+//    this.tagAmount,
+//    this.createdAt,
     this.onTap,
-    this.selectTagIdList,
+//    this.selectTagIdList,
     this.listNumber,
   });
 
   final String title;
-  final int tagAmount;
-  final String createdAt;
+//  final int tagAmount;
+//  final String createdAt;
   final VoidCallback onTap;
-  final List<String> selectTagIdList; //tagTitle編集時に更新するIDリスト
+//  final List<String> selectTagIdList; //tagTitle編集時に更新するIDリスト
   final int listNumber;
 
 

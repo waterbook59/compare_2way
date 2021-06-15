@@ -59,12 +59,7 @@ class TagDialogPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Text(
-                    'タグ',
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-
+                  child: Text('タグ', textAlign: TextAlign.left,),),
                 //TagChips以外のところを押すとキーボード下げる
                 TagChips(
                   tagList: viewModel.tagList,
@@ -86,8 +81,8 @@ class TagDialogPage extends StatelessWidget {
                   color: Colors.black,
                 ),
                 FutureBuilder(
-                  future:viewModel.getAllTagList(),
-                  builder:  (context, AsyncSnapshot<List<TagChart>> snapshot) {
+                  future:viewModel.getCandidateTagList(),
+                  builder:  (context, AsyncSnapshot<List<String>> snapshot) {
                   if (snapshot.data == null) {
                   print('AsyncSnapshot<List<Tag>> snapshotがnull');
                   return Container();
@@ -97,7 +92,7 @@ class TagDialogPage extends StatelessWidget {
                   //todo 中央に位置変更 listPage参考
                   return Container(
                   child:
-                  const Center(child: Text('タグづけされたリストはありません')));
+                   const Center(child: Text('タグづけされたリストはありません')));
                   } else {
                   return ListView.builder(
                   shrinkWrap: true,
@@ -109,10 +104,8 @@ class TagDialogPage extends StatelessWidget {
                       final overview = snapshot.data[index];
                       ///ListTileのスペースがいまいちなのでDescDisplay参照
                       return ChoiceTag(
-                        title: overview.tagTitle,
-                        selectTagIdList: overview.itemIdList,
-                        tagAmount: overview.tagAmount,
-                        createdAt: '登録時間',
+                        title: overview,
+//                        createdAt: '登録時間',
 //                        onTap: ()=>_onSelectTag(
 //                            context,overview.tagTitle,overview.myFocusNode),
                         listNumber: index,
