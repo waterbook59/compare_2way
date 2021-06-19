@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 //tagDialogPageの下のタブ候補
-class ChoiceTag extends StatelessWidget {
-  const ChoiceTag({
+class CandidateTag extends StatelessWidget {
+  const CandidateTag({
     this.title,
 //    this.tagAmount,
 //    this.createdAt,
@@ -15,7 +15,8 @@ class ChoiceTag extends StatelessWidget {
   final String title;
 //  final int tagAmount;
 //  final String createdAt;
-  final VoidCallback onTap;
+//  final VoidCallback onTapAddTag;
+  final ValueChanged<String> onTap;
 //  final List<String> selectTagIdList; //tagTitle編集時に更新するIDリスト
   final int listNumber;
 
@@ -26,7 +27,7 @@ class ChoiceTag extends StatelessWidget {
     final primaryColor = Theme.of(context).primaryColor;
     return GestureDetector(
       onTap: () {
-        getTitle(context, onTap, listNumber);
+        getTitle(context,listNumber);
       },
       child: Container(
         padding: const EdgeInsets.only(left: 8, top: 8),
@@ -66,7 +67,8 @@ class ChoiceTag extends StatelessWidget {
   }
 
   Future<void> getTitle(
-      BuildContext context, VoidCallback onTap, int listNumber) async {
-    print('getTitle!:$title');
+      BuildContext context, int listNumber) async {
+    onTap(title);
+    //選択タグへ追加したら表示から削除(tagAllTitleListから選択したもの削除)
   }
 }

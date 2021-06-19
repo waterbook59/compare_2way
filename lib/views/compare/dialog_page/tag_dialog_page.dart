@@ -1,8 +1,10 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/sub/tag_chips.dart';
-import 'package:compare_2way/views/tag/components/sub/choice_tag.dart';
+import 'package:compare_2way/views/compare/components/sub/candidate_tag.dart';
+import 'package:compare_2way/views/compare/components/sub/tag_chips_stateless.dart';
 import 'package:compare_2way/views/tag/components/tag_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,6 +19,17 @@ class TagDialogPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    ///初回TagChipPart=>TagDialogPageの時だけ,initState的にDB登録してあるtagListをtempoTagNameListへ変換したい
+
+//    Future(()async{
+//      await viewModel.getCandidateTagList();
+//      //todo tagChipsStateless使用しないなら削除
+//      await viewModel.setTempoSelectList();
+//    });
+
+    ///それ以外のSelectChip表示の追加(CandidateTag,TagInputChip)や削除(SelectChipのonDelete)はviewModelのtempoTagNameListに直接追加・削除すれば良い
+
+
     return  CupertinoPageScaffold(
       //todo navBarのUI調整
       navigationBar: CupertinoNavigationBar(
@@ -40,7 +53,9 @@ class TagDialogPage extends StatelessWidget {
 //              print('tagDialogPageの完了ボタン！');
                 await viewModel.createTag(comparisonOverview);
                 await viewModel.deleteTag();
+                //TagPage側更新
                 await viewModel.updateSelectTagPage();
+                //tagChipPart更新
                 await viewModel.getTagList(comparisonOverview.comparisonItemId);
               Navigator.of(context).pop();
             },
@@ -61,58 +76,125 @@ class TagDialogPage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 8),
                   child: Text('タグ', textAlign: TextAlign.left,),),
                 //TagChips以外のところを押すとキーボード下げる
-                TagChips(
-                  tagList: viewModel.tagList,
-                  onSubmitted: (tagNameList){
-                    print('TagInputChip=>TagDialogへのtagNameList:$tagNameList');
-                    //tagNameListをviewModelへset
-                            viewModel.setTagNameList(tagNameList);
-                      },
-                  onDeleted: (tempoDeleteLabels){
-                    print('tagDialogPage/tempoDeleteLabels:$tempoDeleteLabels');
-                    //削除項目抽出：viewModelにsetしてある
-                    // _tagNameListとtempoDeleteLabels比較し、重複しているものだけを抜き出す
-                    viewModel.createDeleteList(
-                        tempoDeleteLabels,comparisonOverview.comparisonItemId);
-                  },
-                ),
+                //todo ChoiceTagのonTapするとtagListを更新する,Selector設定(viewModel.tempoSelctList)
+//              Consumer<CompareViewModel>(
+//                Selector<CompareViewModel, List<String>>(
+//                  selector: (context, viewModel) => viewModel.tempoSelectList,
+//                  builder: (context,tempoSelectList, child) {
+//                   return
+          ///Selector=>TagChipsStateless
+//                     TagChipsStateless(
+//                       tempoSelectList: tempoSelectList,
+//                       onSubmitted:(input)async{
+//                         print('TagChipsStateless:$input');
+//                         await viewModel.inputTagName(input);
+//                        },
+//                         onDeleted: (index)
+//                       {
+////                           print('tagDialogPage/TagChipsStateless/onDelete:$input:$tempoDeleteLabels');
+//                          viewModel.onDeleteSelectChip(index);
+//                           // _tagNameListとtempoDeleteLabels比較し、重複しているものだけを抜き出す
+//                           viewModel.createDeleteList(comparisonOverview.comparisonItemId);
+//                       },
+//                     );
+            ///Consumer=>TagChips
+//                     TagChips(
+//                      tagList: compareViewModel.tagList,
+//                      onSubmitted: (tagNameList){
+//                        print('TagInputChip=>TagDialogへのtagNameList:$tagNameList');
+//                        //tagNameListをviewModelへset
+//                        viewModel.setTagNameList(tagNameList);
+//                      },
+//                      onDeleted: (tempoDeleteLabels){
+//                        print('tagDialogPage/tempoDeleteLabels:$tempoDeleteLabels');
+//                        //削除項目抽出：viewModelにsetしてある
+//                        // _tagNameListとtempoDeleteLabels比較し、重複しているものだけを抜き出す
+//                        viewModel.createDeleteList(
+//                            tempoDeleteLabels,comparisonOverview.comparisonItemId);
+//                      },
+//                     addTagTitle: compareViewModel.addTagTitle,
+//                    );
 
-                const Divider(
-                  color: Colors.black,
-                ),
-                FutureBuilder(
-                  future:viewModel.getCandidateTagList(),
-                  builder:  (context, AsyncSnapshot<List<String>> snapshot) {
-                  if (snapshot.data == null) {
-                  print('AsyncSnapshot<List<Tag>> snapshotがnull');
-                  return Container();
-                  }
-                  if (snapshot.hasData && snapshot.data.isEmpty) {
-                  print('EmptyView側通って描画');
-                  //todo 中央に位置変更 listPage参考
-                  return Container(
-                  child:
-                   const Center(child: Text('タグづけされたリストはありません')));
-                  } else {
-                  return ListView.builder(
-                  shrinkWrap: true,
-                  //リストが縦方向にスクロールできるようになる
-                  physics: const NeverScrollableScrollPhysics(),
-//                  separatorBuilder: (BuildContext context, int index) => Divider(color: Colors.grey,),
-                  itemCount: snapshot.data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final overview = snapshot.data[index];
-                      ///ListTileのスペースがいまいちなのでDescDisplay参照
-                      return ChoiceTag(
-                        title: overview,
-//                        createdAt: '登録時間',
-//                        onTap: ()=>_onSelectTag(
-//                            context,overview.tagTitle,overview.myFocusNode),
-                        listNumber: index,
-                      );
-                    },
-                  );
-                  }}),
+//    }
+///TagChips内をStatefulで完結:文頭のFutureで取るのではなく、FutureBuilderで初回ビルド時のnull回避?
+
+              //viewModelのtagListとtagNameListにはcomparisonItemIdに紐づいたDBからの選択タグが格納されている
+//                  FutureBuilder(
+//                    future: viewModel.getCandidateTagList(),
+//                    builder: (context,AsyncSnapshot<List<String>> snapshot){
+//                      if(snapshot.data == null) {
+//       print('AsyncSnapshot<List<String>> viewModel.candidateTagNameListがnull');
+//                        return Container();
+//                      }
+//                      if (snapshot.hasData && snapshot.data.isEmpty) {
+//                      print('候補タグリストなし');
+//                      return Container();
+//                  //todo 中央に位置変更 listPage参考
+//                  return Container();
+//                    }else{
+//                        return
+                          TagChips(
+                          tagNameList: viewModel.tagNameList,
+                          onSubmitted: (tempoDisplayList){
+                            print('TagInputChip=>TagDialogへのtagNameList:$tempoDisplayList');
+                            //_tempoDisplayListをviewModelへset
+                            viewModel.setTagNameList(tempoDisplayList);
+                          },
+                          onDeleted: (tempoDeleteLabels){
+                            print('tagDialogPage/tempoDeleteLabels:$tempoDeleteLabels');
+                            //削除項目抽出：viewModelにsetしてある
+                            // _tagNameListとtempoDeleteLabels比較し、重複しているものだけを抜き出す
+                            viewModel.createDeleteList(
+                                tempoDeleteLabels,comparisonOverview.comparisonItemId);
+                          },
+                          //TagDialogPageの冒頭getCandidateTagListで取得したviewModel.candidateTagNameListを渡して、
+                          //Container or ListView.builderで場合わけ
+                            candidateTagNameList: viewModel.candidateTagNameList,
+                        ),
+
+//                      }
+//                    },
+//
+//                  ),
+
+//                ),
+                ///Divider
+//                const Divider(
+//                  color: Colors.black,
+//                ),
+              ///FutureBuilder CandidateTag
+//                FutureBuilder(
+//                  future:viewModel.getCandidateTagList(),
+//                  builder:  (context, AsyncSnapshot<List<String>> snapshot) {
+//                  if (snapshot.data == null) {
+//                  print('AsyncSnapshot<List<Tag>> snapshotがnull');
+//                  return Container();
+//                  }
+//                  if (snapshot.hasData && snapshot.data.isEmpty) {
+//                  print('EmptyView側通って描画');
+//                  //todo 中央に位置変更 listPage参考
+//                  return Container(
+//                  child:
+//                   const Center(child: Text('タグづけされたリストはありません')));
+//                  } else {
+//                  return ListView.builder(
+//                  shrinkWrap: true,
+//                  //リストが縦方向にスクロールできるようになる
+//                  physics: const NeverScrollableScrollPhysics(),
+////                  separatorBuilder: (BuildContext context, int index) => Divider(color: Colors.grey,),
+//                  itemCount: snapshot.data.length,
+//                    itemBuilder: (BuildContext context, int index) {
+//                      final overview = snapshot.data[index];
+//                      ///ListTileのスペースがいまいちなのでDescDisplay参照
+//                      return CandidateTag(
+//                        title: overview,
+////                        createdAt: '登録時間',
+//                        onTap: (title)=>_onAddTag(context,title),
+//                        listNumber: index,
+//                      );
+//                    },
+//                  );
+//                  }}),
 
 
 
@@ -124,5 +206,11 @@ class TagDialogPage extends StatelessWidget {
 
 
     );
+  }
+
+  Future<void> _onAddTag(BuildContext context, String title) async{
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    //viewModelの_tagNameListに追加するだけでいいかも
+    await viewModel.onAddTag(title);
   }
 }

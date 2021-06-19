@@ -56,7 +56,16 @@ class CompareViewModel extends ChangeNotifier {
 
   //textFieldからviewModelへの変更値登録があるのでカプセル化しない
   String tagTitle= '';
+  String addTagTitle;
+  //todo tempoSelectList作成tagDialogPageでの仮表示用
+  List<String> tempoSelectList = <String>[];
+  List<String> tempoDeleteLabels =<String>[];
+
+  List<String> _candidateTagNameList = <String>[];
+  List<String> get candidateTagNameList =>_candidateTagNameList;
   List<String> _tagNameList = <String>[];
+  List<String> get tagNameList =>_tagNameList;
+  Set<String>  tagNameListSet= <String>{};
   List<Tag> _tagList = <Tag>[];
   List<Tag> get tagList => _tagList;
   List<Tag> _allTagList = <Tag>[];
@@ -550,12 +559,35 @@ class CompareViewModel extends ChangeNotifier {
 
     //ここでSelectTaPage更新するとComPareScreenへ映る毎に読み込まれてしまうのでやめる
 //    await onSelectTag(selectTagTitle);
+//    notifyListeners();
+  }
+
+
+
+
+  Future<void> onDeleteTag(String tagTitle) async{
+    //tagTitleで紐づけて削除するのでcomparisonItemIdいらない
+    //一応Tag形式にしてやりとりしてるが、tagTitleだけあれば削除可能(のはず)
+    final deleteTag = Tag(tagTitle: tagTitle);
+    await _compareRepository.onDeleteTag(deleteTag);
+    //削除してtagPage更新
+    notifyListeners();
+  }
+
+  ///SelectChipでtempoDeleteLabelsを作成=>createDeleteListへ
+  //todo tagChipsStateless使用しないなら削除
+  void onDeleteSelectChip(int index) {
+    tempoDeleteLabels.add(tempoSelectList[index]);
+    print('チップ削除後_tempoDeleteLabels:$tempoDeleteLabels');
+    tempoSelectList.removeAt(index);
+    print('チップ削除後widget.tempoSelectList:$tempoSelectList');
     notifyListeners();
   }
 
   ///tagChipsで削除するTagを登録
   Future<void> createDeleteList(
-      List<String> tempoDeleteLabels, String comparisonItemId) async{
+      List<String> tempoDeleteLabels,
+      String comparisonItemId) async{
     final joinList = [...tempoDeleteLabels,..._tagNameList];
 //  final joinList= List<String>.from(tempoDeleteLabels)..addAll(_tagNameList);
     //削除する項目(tempoDeleteLabels)とDB登録してある項目(_tagNameList)を結合して
@@ -725,32 +757,73 @@ class CompareViewModel extends ChangeNotifier {
 
   }
 
-  Future<void> onDeleteTag(String tagTitle) async{
-    //tagTitleで紐づけて削除するのでcomparisonItemIdいらない
-    //一応Tag形式にしてやりとりしてるが、tagTitleだけあれば削除可能(のはず)
-    final deleteTag = Tag(tagTitle: tagTitle);
-    await _compareRepository.onDeleteTag(deleteTag);
-    //削除してtagPage更新
-    notifyListeners();
-  }
 
-  ///TagDialogPageで候補タグを表示(FutureBuilder用)
-  Future<List<String>> getCandidateTagList() async{
+
+  ///CompareScreen文頭で候補タグ格納(全タグから選択タグを削除)
+  //todo tagChipsStateless使用しないなら削除
+  Future<void> getCandidateTagList() async{
     //全タグリストから選択されたタグリストを比較して重複を削除
     _allTagList = await _compareRepository.getAllTagList();
-    final tagAllTitleList = <String>{};
+    final candidateTitleSet = <String>{};
       _allTagList.map((tag) {
-      return tagAllTitleList.add(tag.tagTitle);
+      return candidateTitleSet.add(tag.tagTitle);
     }).toSet();
-    final choiceTitleList=  <String>{};
+    final choiceTitleSet=  <String>{};
       tagList.map((tag) {
-      return choiceTitleList.add(tag.tagTitle);
+      return choiceTitleSet.add(tag.tagTitle);
     }).toSet();
 //    print('allTag:$tagAllTitleList,choiceTag:$choiceTitleList');
     ///removeAll使うにはListはダメでSetを用いる
-     tagAllTitleList.removeAll(choiceTitleList);
+    candidateTitleSet.removeAll(choiceTitleSet);
 //    print('candidateTag:$tagAllTitleList');
-    return tagAllTitleList.toList();
+     _candidateTagNameList = candidateTitleSet.toList();
+    notifyListeners();
+  }
+  ///DBからのtagListのタイトルをtempoSelectListに格納(初回TagChipPart=>TagDialogPageの時だけ)
+  //todo tagChipsStateless使用しないなら削除
+  Future<void> setTempoSelectList() {
+     tagNameListSet =tagList.map<String>(
+            (tag)=>tag.tagTitle).toSet() ;
+    tempoSelectList  = tagNameListSet.toList();
+
+  }
+ ///TagInputChipからの入力
+  Future<void> inputTagName(String input) async{
+    print('viewModel/inputTagName/input:$input');
+    ///inputが既存の仮tagクラス内またはDB内に存在しないのかvalidation
+    //todo スペースは登録されないようvalidation
+    ///リスト内に重複がないかのvalidation
+    //まずは入力値を文字リストに入れる
+    final tempoLabels =<String>[]..add(input);
+    //set型に変換しないと重複削除できないので、toSet
+    final tempoLabelSet =tempoLabels.toSet();
+    //addAllで重複削除：_tagNameList内にinputあるかどうか
+    //DBからのtanNameListをSet化したものにaddAll
+    tagNameListSet.addAll(tempoLabelSet);
+    //tempoLabelsクリア(しないと編集中に消したものが再度出てくる)
+//    tempoLabels =[];
+    //Listへ戻す
+    tempoSelectList = tagNameListSet.toList();
+    print('chipLabels.addAll$tempoSelectList');
+    //todo notifyListenersいる?
+    notifyListeners();
+
+  }
+
+  ///候補タグをonTapで選択タグへ追加
+  Future<void> onAddTag(String tagTitle) async{
+//    print( 'viewModel._tagNameList:${_tagNameList.map((e) => e)}');
+    //id追加必要
+//    final addTag= Tag(tagTitle: tagTitle);
+//    tagList.add(addTag);
+    ///viewModelのtagNameListとTagChips内のtagNameListは別物
+    //_tagNameList.add(tagTitle);
+    addTagTitle = tagTitle;
+    tempoSelectList.add(tagTitle);
+    //まず表示変更(DB登録なし)、完了おしたらDB登録
+//    print( 'viewModel._tagNameList:${_tagNameList.map((e) => e)}');
+    //たぶんnotifyListenerかonSelectTagでTagChipPartの再ビルド必要
+    notifyListeners();
   }
 
 
@@ -876,5 +949,11 @@ class CompareViewModel extends ChangeNotifier {
     isWay3MeritFocusList = false;
     notifyListeners();
   }
+
+
+
+
+
+
 
 }
