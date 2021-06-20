@@ -18,11 +18,6 @@ class TagDialogPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
-    //TagDialogPageに以降時に候補タグを毎度取得するのがいい(CompareScreenの文頭だと、TagDialogPage複数回行き来すると表示されない)
-//    Future(() async {
-//      await viewModel.getCandidateTagList(); //notifyListenersあり
-//    });
-
     return CupertinoPageScaffold(
       //todo navBarのUI調整
       navigationBar: CupertinoNavigationBar(
@@ -73,30 +68,6 @@ class TagDialogPage extends StatelessWidget {
                     textAlign: TextAlign.left,
                   ),
                 ),
-                //todo 文頭のnotifyListenersに呼応する形でSelector(候補タグ更新するためにviewModel.candidateTagNameListで再ビルドする)
-                //Selector使いたくないならTagDialogPageのキャンセル時に viewModel.getCandidateTagList()するか...
-                ///Selector(viewModel.candidateTagNameList)=>TagChips
-//                Selector<CompareViewModel, List<String>>(
-//                  selector: (context, viewModel) => viewModel.candidateTagNameList,
-//    builder: (context, candidateTagNameList, child) {
-//                  return                   TagChips(
-//                    tagNameList: viewModel.tagNameList,
-//                    onSubmitted: (tempoDisplayList) {
-//                      //_tempoDisplayListをviewModelへset
-//                      viewModel.setTagNameList(tempoDisplayList);
-//                    },
-//                    onDeleted: (tempoDeleteLabels) {
-//                      //削除項目抽出：viewModelにsetしてある
-//                      // _tagNameListとtempoDeleteLabels比較し、重複しているものだけを抜き出す
-//                      viewModel.createDeleteList(
-//                          tempoDeleteLabels, comparisonOverview.comparisonItemId);
-//                    },
-//                    //TagDialogPageの冒頭getCandidateTagListで取得したviewModel.candidateTagNameListを渡して、
-//                    //Container or ListView.builderで場合わけ
-//                    candidateTagNameList: candidateTagNameList,
-//                  );
-//    }
-//                ),
                 ///FutureBuilder=>TagChips
                 FutureBuilder(
                     future: viewModel.getCandidateTagList(),
