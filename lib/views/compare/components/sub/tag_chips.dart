@@ -51,9 +51,16 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
 
     _tempoCandidateLabels = widget.candidateTagNameList;
 
-    print('tagChips/tagNameList:$tagNameListSet, candidateTagNameList:$_tempoCandidateLabels' );
+    print('tagChips/tagNameList:$tagNameListSet, candidateTagNameList:${widget.candidateTagNameList}' );
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _tempoCandidateLabels = [];
+    print('tagChips/dispose_tempoCandidateLabels:$_tempoCandidateLabels');
+    super.dispose();
   }
 
   @override

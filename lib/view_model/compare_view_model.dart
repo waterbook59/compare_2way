@@ -59,8 +59,8 @@ class CompareViewModel extends ChangeNotifier {
   String addTagTitle;
 
 
-  List<String> _candidateTagNameList = <String>[];
-  List<String> get candidateTagNameList =>_candidateTagNameList;
+  List<String> candidateTagNameList = <String>[];
+//  List<String> get candidateTagNameList =>_candidateTagNameList;
   List<String> _tagNameList = <String>[];
   List<String> get tagNameList =>_tagNameList;
   List<Tag> _tagList = <Tag>[];
@@ -749,7 +749,7 @@ class CompareViewModel extends ChangeNotifier {
 
   ///CompareScreen文頭で候補タグ格納(全タグから選択タグを削除)
   //todo tagChipsStateless使用しないなら削除
-  Future<void> getCandidateTagList() async{
+  Future<List<String>> getCandidateTagList() async{
     //全タグリストから選択されたタグリストを比較して重複を削除
     _allTagList = await _compareRepository.getAllTagList();
     final candidateTitleSet = <String>{};
@@ -764,8 +764,8 @@ class CompareViewModel extends ChangeNotifier {
     ///removeAll使うにはListはダメでSetを用いる
     candidateTitleSet.removeAll(choiceTitleSet);
 //    print('candidateTag:$tagAllTitleList');
-     _candidateTagNameList = candidateTitleSet.toList();
-    notifyListeners();
+    return candidateTagNameList = candidateTitleSet.toList();
+//    notifyListeners();
   }
 
   ///候補タグをonTapで選択タグへ追加
