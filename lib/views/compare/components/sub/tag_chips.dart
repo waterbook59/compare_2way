@@ -52,12 +52,7 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
     _tempoCandidateLabels = widget.candidateTagNameList;
 
     print('tagChips/tagNameList:$tagNameListSet, candidateTagNameList:$_tempoCandidateLabels' );
-    ///_tempoChipsのList<ChoiceChip>への変換はinitState内ではなく、Wrap内で行わないと
-    ///selectedが反映されない
-//    print('addTagTitle:${widget.addTagTitle}');
-//    if(widget.addTagTitle !=null){
-//      _tagNameList.add(widget.addTagTitle);
-//    }
+
     super.initState();
   }
 
