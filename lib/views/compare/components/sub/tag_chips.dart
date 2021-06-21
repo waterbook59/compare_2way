@@ -13,7 +13,7 @@ class TagChips extends StatefulWidget {
     this.addTagTitle,
     this.candidateTagNameList,
   });
-  final List<String> tagNameList;
+  final List<String> tagNameList;//DBからのtagTitleのリスト
   final ValueChanged<List<String>> onSubmitted;
   final ValueChanged<List<String>> onDeleted;
   final String addTagTitle;
@@ -25,8 +25,8 @@ class TagChips extends StatefulWidget {
 
 class _TagChipsState extends State<TagChips> {
 
-  List<String> _tempoDisplayList =<String>[];//DBからのtagTitleのリスト
-  Set<String>  tagNameListSet= <String>{};
+  List<String> _tempoDisplayList =<String>[];//メインとなる選択タグの表示用リスト
+  Set<String>  tagNameListSet= <String>{};//DBからのtagTitleのリストのset型(削除時等加工用)
   List<String> _tempoLabels = <String>[];
   List<String> _tempoDeleteLabels =<String>[];
   List<String> _tempoCandidateLabels = <String>[];
@@ -48,10 +48,11 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
 }else{
   isCandidate = true;
 }
-
+    // ignore: lines_longer_than_80_chars
+    //candidateTagNameListから選択したもの消したいので、widget.candidateTagNameList=>_tempoCandidateLabelsへinitStateで変換
     _tempoCandidateLabels = widget.candidateTagNameList;
 
-    print('tagChips/tagNameList:$tagNameListSet, candidateTagNameList:${widget.candidateTagNameList}' );
+    print('tagChips/initState/tagNameListSet:$tagNameListSet, candidateTagNameList:${widget.candidateTagNameList}' );
 
     super.initState();
   }
@@ -96,14 +97,20 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                     onDeleted: value == index
                     ///仮でtagNameListから選択したindex番目タイトル削除
                         ?()=> setState(() {
+                      /// 削除ボタン押したらcandidateTagに追加(再度候補タグとして表示)
+                      _tempoCandidateLabels.add(_tempoDisplayList[index]);
                       _tempoDeleteLabels.add(_tempoDisplayList[index]);
                       print('チップ削除後_tempoDeleteLabels:$_tempoDeleteLabels');
                       _tempoDisplayList.removeAt(index);
-                        print('チップ削除後_tagNameList:$_tempoDisplayList');
+                        print('チップ削除後_tempoDisplayList:$_tempoDisplayList');
+                      // ignore: lines_longer_than_80_chars
+                      //DB由来のタイトルから削除タイトル抜かないと1回削除して再度TagInputChipで同じものを入力しようとしても重複タグ扱いになって登録されない
                         tagNameListSet = _tempoDisplayList.toSet();
+                      print('InputChip/onDeleted/tagNameListSet:$tagNameListSet');
                         widget.onDeleted(_tempoDeleteLabels);
                       //tempoDeleteLabelsクリア(しないとviewModelのDeleteLabelsに重複して登録されていく)
                         _tempoDeleteLabels = [];
+
 
                       })
                         :null,
@@ -117,11 +124,13 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                   );
                 }).toList(),),
 
+                  // ignore: lines_longer_than_80_chars
+                  //input追加時はDB由来のtagNameListと重複したタグが作られないようvalidationして表示リスト全てをviewModelへ格納
                   TagInputChip(
                     onSubmitted: (input){
                       ///inputが既存の仮tagクラス内またはDB内に存在しないのかvalidation
                       //todo スペースは登録されないようvalidation
-                      ///リスト内に重複がないかのvalidation
+                      ///tagNameList内に重複がないかのvalidation
                       //まずは入力値を文字リストに入れる
                       _tempoLabels.add(input);
                       //set型に変換しないと重複削除できないので、toSet
@@ -132,9 +141,9 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                       _tempoLabels =[];
                       //Listへ戻す
                       _tempoDisplayList = tagNameListSet.toList();
-                      print('_chipLabels.addAll$_tempoDisplayList');
-
-                      //tag_dialog_pageへタグタイトルのリスト上げる
+                      print('InputChip/TagInputChip/onSubmitted/_tempoDisplayList:$_tempoDisplayList');
+                      print('InputChip/TagInputChip/onSubmitted/tagNameListSet:$tagNameListSet');
+                      //tag_dialog_pageへタグタイトルのリスト上げてviewModelに格納
                         widget.onSubmitted(_tempoDisplayList);
 
                       setState(() {//tag_input_chipのcontroller破棄
@@ -159,9 +168,9 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
     onTap: (title){
       setState(() {
         _tempoDisplayList.add(title);
-        //candidateTagNameListから選択したもの消したいので、widget.candidateTagNameList=>_tempoCandidateLabelsへinitStateで変換
         _tempoCandidateLabels.removeAt(index);
-
+        //tag_dialog_pageへタグタイトルのリスト上げてviewModelに格納
+        widget.onSubmitted(_tempoDisplayList);
       });
     },
     listNumber: index,

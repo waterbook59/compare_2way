@@ -507,7 +507,7 @@ class CompareViewModel extends ChangeNotifier {
   }
   ///List<Way1Demerit>取得(FutureBuilder用)
   Future<List<Way1Demerit>> getWay1DemeritDesc(String comparisonItemId) async {
-    print('FutureBuilderでDBからList<Way1Demerit> _way1DemeritList取得');
+//    print('FutureBuilderでDBからList<Way1Demerit> _way1DemeritList取得');
     return _way1DemeritList =
     await _compareRepository.getWay1DemeritList(comparisonItemId);
   }
@@ -760,12 +760,9 @@ class CompareViewModel extends ChangeNotifier {
       tagList.map((tag) {
       return choiceTitleSet.add(tag.tagTitle);
     }).toSet();
-//    print('allTag:$tagAllTitleList,choiceTag:$choiceTitleList');
     ///removeAll使うにはListはダメでSetを用いる
     candidateTitleSet.removeAll(choiceTitleSet);
-//    print('candidateTag:$tagAllTitleList');
     return candidateTagNameList = candidateTitleSet.toList();
-//    notifyListeners();
   }
 
   ///候補タグをonTapで選択タグへ追加
