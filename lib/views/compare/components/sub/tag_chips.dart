@@ -137,6 +137,10 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                       final tempoLabelSet =_tempoLabels.toSet();
                       //addAllで重複削除：_tagNameList内にinputあるかどうか
                       tagNameListSet.addAll(tempoLabelSet);
+                      ///tempoDisplayList内にinputがあれば削除
+    if( _tempoCandidateLabels.contains(input)){
+      _tempoCandidateLabels.remove(input);
+    }
                       //tempoLabelsクリア(しないと編集中に消したものが再度出てくる)
                       _tempoLabels =[];
                       //Listへ戻す
@@ -145,7 +149,7 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                       print('InputChip/TagInputChip/onSubmitted/tagNameListSet:$tagNameListSet');
                       //tag_dialog_pageへタグタイトルのリスト上げてviewModelに格納
                         widget.onSubmitted(_tempoDisplayList);
-
+                      //todo _tempoCandidateLabelsと同じものを入力したら_tempoCandidateLabelsから削除
                       setState(() {//tag_input_chipのcontroller破棄
                       },);
                     }),
@@ -157,16 +161,15 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
     shrinkWrap: true,
     //リストが縦方向にスクロールできるようになる
     physics: const NeverScrollableScrollPhysics(),
-//                  separatorBuilder: (BuildContext context, int index) => Divider(color: Colors.grey,),
     itemCount: _tempoCandidateLabels.length,
     itemBuilder: (BuildContext context, int index) {
     final tagTitle= _tempoCandidateLabels[index];
     ///ListTileのスペースがいまいちなのでDescDisplay参照
     return CandidateTag(
     title: tagTitle,
-//                        createdAt: '登録時間',
     onTap: (title){
       setState(() {
+        //todo tagNameList内に重複がないかのvalidation(既にinputChipで同じもの入力してたら重複入力できないように)
         _tempoDisplayList.add(title);
         _tempoCandidateLabels.removeAt(index);
         //tag_dialog_pageへタグタイトルのリスト上げてviewModelに格納
