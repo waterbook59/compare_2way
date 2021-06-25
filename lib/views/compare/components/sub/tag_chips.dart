@@ -35,6 +35,7 @@ class _TagChipsState extends State<TagChips> {
 
   int value;
   bool isCandidate;
+  bool isFocus = false;
 
   @override
   void initState() {
@@ -129,6 +130,12 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                   // ignore: lines_longer_than_80_chars
                   //input追加時はDB由来のtagNameListと重複したタグが作られないようvalidationして表示リスト全てをviewModelへ格納
                   TagInputChip(
+                    //tagInputChipのautoFocus外して入力モードになったら+create'...'ボタン出す
+                    onFocusChange: (focus){
+                      setState(() {
+                        isFocus = focus.hasFocus;
+                      });
+                    },
                     setTempoInput: (tempoInput){
                       widget.setTempoInput(tempoInput);
                     },
@@ -137,7 +144,6 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                       //入力なしは登録されないようvalidation(input =''の時登録なし)
                       if(input == ''){
                       }else{
-                        //todo 入力モードになったら+createボタン出す
                         ///tagNameList内に重複がないかのvalidation
                         //まずは入力値を文字リストに入れる
                         _tempoLabels.add(input);
@@ -165,7 +171,10 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
         ],
       ),
       const Divider(color: Colors.black,),
-      isCandidate
+      isFocus
+      //input入力時
+      ?const Text('+createTag表示')
+      : isCandidate
     ? ListView.builder(
     shrinkWrap: true,
     //リストが縦方向にスクロールできるようになる
