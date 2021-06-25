@@ -1,5 +1,6 @@
 import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/views/compare/components/sub/candidate_tag.dart';
+import 'package:compare_2way/views/compare/components/sub/create_tag.dart';
 import 'package:compare_2way/views/compare/components/sub/tag_input_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,6 +37,7 @@ class _TagChipsState extends State<TagChips> {
   int value;
   bool isCandidate;
   bool isFocus = false;
+  String _tempoInput ='';
 
   @override
   void initState() {
@@ -69,6 +71,8 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
 
   @override
   Widget build(BuildContext context) {
+
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -132,11 +136,11 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                   TagInputChip(
                     //tagInputChipのautoFocus外して入力モードになったら+create'...'ボタン出す
                     onFocusChange: (focus){
-                      setState(() {
-                        isFocus = focus.hasFocus;
-                      });
+                      setState(() {isFocus = focus.hasFocus;});
                     },
                     setTempoInput: (tempoInput){
+                      //createTag表示用(リアルタイムで)
+                      setState(() {_tempoInput =tempoInput;});
                       widget.setTempoInput(tempoInput);
                     },
                     onSubmitted: (input){
@@ -163,6 +167,8 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                         print('InputChip/TagInputChip/onSubmitted/tagNameListSet:$tagNameListSet');
                         //tag_dialog_pageへタグタイトルのリスト上げてviewModelに格納
                         widget.onSubmitted(_tempoDisplayList);
+                        //createTag表示をリセット
+                        _tempoInput ='';
                       }
 
                       setState(() {//tag_input_chipのcontroller破棄
@@ -171,9 +177,21 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
         ],
       ),
       const Divider(color: Colors.black,),
-      isFocus
+      isFocus && (_tempoInput !='')
       //input入力時
-      ?const Text('+createTag表示')
+      ? CreateTag(
+        title: _tempoInput,
+        onTapAddTag: (){
+          //todo 追加時フォーカス外しつつ、TagInputChip入力文字クリア
+          FocusScope.of(context).unfocus();
+          setState(() {
+            //todo 重複バリデーションしないと同じタグ名追加できてしまう
+            _tempoDisplayList.add(_tempoInput);
+          });
+
+        },
+      )
+//      Text('＋ タグを追加"$_tempoInput"')
       : isCandidate
     ? ListView.builder(
     shrinkWrap: true,
