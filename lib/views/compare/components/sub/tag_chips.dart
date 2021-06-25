@@ -12,12 +12,14 @@ class TagChips extends StatefulWidget {
     this.onDeleted,
     this.addTagTitle,
     this.candidateTagNameList,
+    this.setTempoInput,
   });
   final List<String> tagNameList;//DBからのtagTitleのリスト
   final ValueChanged<List<String>> onSubmitted;
   final ValueChanged<List<String>> onDeleted;
   final String addTagTitle;
   final List<String> candidateTagNameList;
+  final ValueChanged<String> setTempoInput;
 
   @override
   _TagChipsState createState() => _TagChipsState();
@@ -127,12 +129,15 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                   // ignore: lines_longer_than_80_chars
                   //input追加時はDB由来のtagNameListと重複したタグが作られないようvalidationして表示リスト全てをviewModelへ格納
                   TagInputChip(
+                    setTempoInput: (tempoInput){
+                      widget.setTempoInput(tempoInput);
+                    },
                     onSubmitted: (input){
                       ///inputが既存の仮tagクラス内またはDB内に存在しないのかvalidation
                       //入力なしは登録されないようvalidation(input =''の時登録なし)
                       if(input == ''){
-
                       }else{
+                        //todo 入力モードになったら+createボタン出す
                         ///tagNameList内に重複がないかのvalidation
                         //まずは入力値を文字リストに入れる
                         _tempoLabels.add(input);

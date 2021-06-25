@@ -61,6 +61,7 @@ class CompareViewModel extends ChangeNotifier {
 
   List<String> candidateTagNameList = <String>[];
 //  List<String> get candidateTagNameList =>_candidateTagNameList;
+  String _tempoInput;
   List<String> _tagNameList = <String>[];
   List<String> get tagNameList =>_tagNameList;
   List<Tag> _tagList = <Tag>[];
@@ -527,6 +528,10 @@ class CompareViewModel extends ChangeNotifier {
     //完了を押したらinput内容(List<String>)とcomparisonIdを基にList<Tag>クラスをDB登録
     //List<Tag>作成はDBでの重複削除リスト作成後にrepositoryで行う
 
+    ///TagDialogPageで完了ボタン押した時に入力中のタグも登録
+    if(_tempoInput !=''){
+      _tagNameList.add(_tempoInput);
+    }
     //_tagNameListをrepositoryへ
     await _compareRepository.createTag(
         _tagNameList,comparisonOverview.comparisonItemId);
@@ -540,6 +545,16 @@ class CompareViewModel extends ChangeNotifier {
 //        '${_tagNameList.map((tagName) => print('$tagName')).toList()}');
     print('compareViewModelへtagNameListをset:$_tagNameList');
   }
+
+  ///TagInputChipで仮入力したものをset
+  void setTempoInput(String tempoInput ){
+    if(tempoInput ==''){
+    }else{
+      _tempoInput= tempoInput;
+    }
+  }
+
+
  ///List<Tag>取得(文頭取得用)
   Future<void> getTagList(String comparisonItemId) async{
     _tagList = await _compareRepository.getTagList(comparisonItemId);

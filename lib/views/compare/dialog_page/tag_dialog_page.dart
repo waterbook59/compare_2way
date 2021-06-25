@@ -39,6 +39,7 @@ class TagDialogPage extends StatelessWidget {
               //todo 完了時createdAtを更新
               ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
 //              print('tagDialogPageの完了ボタン！');
+            //tempoInputTagに入力がある場合はviewModelの_tagNameListに追加
               await viewModel.createTag(comparisonOverview);
               await viewModel.deleteTag();
               //TagPage側更新
@@ -83,6 +84,9 @@ class TagDialogPage extends StatelessWidget {
                       } else {
                         return TagChips(
                           tagNameList: viewModel.tagNameList,
+                          setTempoInput: (tempoInput){
+                            viewModel.setTempoInput(tempoInput);
+                          },
                           onSubmitted: (tempoDisplayList) {
                             //_tempoDisplayListをviewModelへset
                             viewModel.setTagNameList(tempoDisplayList);

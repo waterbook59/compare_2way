@@ -6,9 +6,10 @@ import 'package:provider/provider.dart';
 
 class TagInputChip extends StatefulWidget {
 
-  const TagInputChip({this.onSubmitted});
+  const TagInputChip({this.onSubmitted,this.setTempoInput});
   //入力値をtagChipsへ上げる
   final ValueChanged<String> onSubmitted;
+  final ValueChanged<String> setTempoInput;
 
   @override
   _TagInputChipState createState() => _TagInputChipState();
@@ -49,6 +50,11 @@ class _TagInputChipState extends State<TagInputChip> {
 //              placeholder: 'タグを追加',
 //            ),
         TextField(
+          // ignore: lines_longer_than_80_chars
+          // onChangedでviewModelのtempoInputTagに一旦setし、tagDialogPageで完了をおしたら入力有無のvalidationしつつ_tagNameListに追加&登録
+          onChanged: (tempoInput){
+            widget.setTempoInput(tempoInput);
+          },
             onSubmitted: (input){
               //入力完了したらDB登録し、chipsのリスト内に入れて、入力chipの左に並べて表示
               _onSubmitted(context,input);
