@@ -38,7 +38,8 @@ class _TagInputChipState extends State<TagInputChip> {
     Chip(
       avatar: const Icon(Icons.add_circle_outline),
       backgroundColor: Colors.blue[100],
-      label: Container(
+      label:
+     SizedBox(
         width: MediaQuery.of(context).size.width*0.3,
         child:
 //            CupertinoTextField(
@@ -67,8 +68,8 @@ class _TagInputChipState extends State<TagInputChip> {
             ),
 
         ),
-
       ),
+
     );
 
 

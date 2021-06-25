@@ -129,27 +129,31 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                   TagInputChip(
                     onSubmitted: (input){
                       ///inputが既存の仮tagクラス内またはDB内に存在しないのかvalidation
-                      //todo スペースは登録されないようvalidation
-                      ///tagNameList内に重複がないかのvalidation
-                      //まずは入力値を文字リストに入れる
-                      _tempoLabels.add(input);
-                      //set型に変換しないと重複削除できないので、toSet
-                      final tempoLabelSet =_tempoLabels.toSet();
-                      //addAllで重複削除：_tagNameList内にinputあるかどうか
-                      tagNameListSet.addAll(tempoLabelSet);
-                      ///tempoDisplayList内にinputがあれば削除
-    if( _tempoCandidateLabels.contains(input)){
-      _tempoCandidateLabels.remove(input);
-    }
-                      //tempoLabelsクリア(しないと編集中に消したものが再度出てくる)
-                      _tempoLabels =[];
-                      //Listへ戻す
-                      _tempoDisplayList = tagNameListSet.toList();
-                      print('InputChip/TagInputChip/onSubmitted/_tempoDisplayList:$_tempoDisplayList');
-                      print('InputChip/TagInputChip/onSubmitted/tagNameListSet:$tagNameListSet');
-                      //tag_dialog_pageへタグタイトルのリスト上げてviewModelに格納
+                      //入力なしは登録されないようvalidation(input =''の時登録なし)
+                      if(input == ''){
+
+                      }else{
+                        ///tagNameList内に重複がないかのvalidation
+                        //まずは入力値を文字リストに入れる
+                        _tempoLabels.add(input);
+                        //set型に変換しないと重複削除できないので、toSet
+                        final tempoLabelSet =_tempoLabels.toSet();
+                        //addAllで重複削除：_tagNameList内にinputあるかどうか
+                        tagNameListSet.addAll(tempoLabelSet);
+                        /// _tempoCandidateLabels内にinput要素があれば削除
+                        if( _tempoCandidateLabels.contains(input)){
+                          _tempoCandidateLabels.remove(input);
+                        }
+                        //tempoLabelsクリア(しないと編集中に消したものが再度出てくる)
+                        _tempoLabels =[];
+                        //Listへ戻す
+                        _tempoDisplayList = tagNameListSet.toList();
+                        print('InputChip/TagInputChip/onSubmitted/_tempoDisplayList:$_tempoDisplayList');
+                        print('InputChip/TagInputChip/onSubmitted/tagNameListSet:$tagNameListSet');
+                        //tag_dialog_pageへタグタイトルのリスト上げてviewModelに格納
                         widget.onSubmitted(_tempoDisplayList);
-                      //todo _tempoCandidateLabelsと同じものを入力したら_tempoCandidateLabelsから削除
+                      }
+
                       setState(() {//tag_input_chipのcontroller破棄
                       },);
                     }),
@@ -169,7 +173,8 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
     title: tagTitle,
     onTap: (title){
       setState(() {
-        //todo tagNameList内に重複がないかのvalidation(既にinputChipで同じもの入力してたら重複入力できないように)
+        // ignore: lines_longer_than_80_chars
+        // _tempoDisplayList内に重複がないかのvalidation(既にinputChipで同じもの入力してたら重複入力できないように)は、inputChip入力時に重複タグタイトルを候補タグから削除しているので必要なし
         _tempoDisplayList.add(title);
         _tempoCandidateLabels.removeAt(index);
         //tag_dialog_pageへタグタイトルのリスト上げてviewModelに格納
