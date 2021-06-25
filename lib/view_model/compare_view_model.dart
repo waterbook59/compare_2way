@@ -780,21 +780,6 @@ class CompareViewModel extends ChangeNotifier {
     return candidateTagNameList = candidateTitleSet.toList();
   }
 
-  ///候補タグをonTapで選択タグへ追加
-  Future<void> onAddTag(String tagTitle) async{
-//    print( 'viewModel._tagNameList:${_tagNameList.map((e) => e)}');
-    //id追加必要
-//    final addTag= Tag(tagTitle: tagTitle);
-//    tagList.add(addTag);
-    ///viewModelのtagNameListとTagChips内のtagNameListは別物
-    //_tagNameList.add(tagTitle);
-    addTagTitle = tagTitle;
-//    tempoSelectList.add(tagTitle);
-    //まず表示変更(DB登録なし)、完了おしたらDB登録
-//    print( 'viewModel._tagNameList:${_tagNameList.map((e) => e)}');
-    //たぶんnotifyListenerかonSelectTagでTagChipPartの再ビルド必要
-    notifyListeners();
-  }
 
 
   ///AddScreen/InputPartでComparisonOverview新規登録：ComparisonOverview=>ComparisonOverviewRecordでDB登録

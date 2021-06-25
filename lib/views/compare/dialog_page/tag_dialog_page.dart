@@ -110,9 +110,4 @@ class TagDialogPage extends StatelessWidget {
     );
   }
 
-  Future<void> _onAddTag(BuildContext context, String title) async {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    //viewModelの_tagNameListに追加するだけでいいかも
-    await viewModel.onAddTag(title);
-  }
 }
