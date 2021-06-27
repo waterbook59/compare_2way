@@ -524,14 +524,18 @@ class CompareViewModel extends ChangeNotifier {
  ///tagDialogPageでList<tag>を新規登録
   ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
   Future<void> createTag(ComparisonOverview comparisonOverview) async{
-    print('vieModel/createTag:$_tagNameList&Id:${comparisonOverview.comparisonItemId}');
+//    print('vieModel/createTag:$_tagNameList&Id:${comparisonOverview.comparisonItemId}');
     //完了を押したらinput内容(List<String>)とcomparisonIdを基にList<Tag>クラスをDB登録
     //List<Tag>作成はDBでの重複削除リスト作成後にrepositoryで行う
-
+    print('viewModel.createTag/_tempoInput:$_tempoInput');
     ///TagDialogPageで完了ボタン押した時に入力中のタグも登録
-    if(_tempoInput !=''){
+    print('viewModel.createTag/tagNameList追加前:$_tagNameList');
+    if(_tempoInput =='' || _tempoInput == null || _tempoInput == ' '){
+    }else{
       _tagNameList.add(_tempoInput);
     }
+    //todo tagNameListになぜか_tempoInput=nullが足されている
+    print('viewModel.createTag/tagを作る前の_tagNameList(追加後):${_tagNameList.map((e) => e)}');
     //_tagNameListをrepositoryへ
     await _compareRepository.createTag(
         _tagNameList,comparisonOverview.comparisonItemId);

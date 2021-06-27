@@ -146,7 +146,7 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                     onSubmitted: (input){
                       ///inputが既存の仮tagクラス内またはDB内に存在しないのかvalidation
                       //入力なしは登録されないようvalidation(input =''の時登録なし)
-                      if(input == ''){
+                      if(input == ''||input == ' '||input ==null ){
                       }else{
                         ///tagNameList内に重複がないかのvalidation
                         //まずは入力値を文字リストに入れる
@@ -182,11 +182,23 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
       ? CreateTag(
         title: _tempoInput,
         onTapAddTag: (){
-          //todo 追加時フォーカス外しつつ、TagInputChip入力文字クリア
+          //追加時フォーカス外す
           FocusScope.of(context).unfocus();
+          //todo TagInputChipの入力文字クリア
           setState(() {
-            //todo 重複バリデーションしないと同じタグ名追加できてしまう
-            _tempoDisplayList.add(_tempoInput);
+            //重複バリデーション
+            _tempoLabels.add(_tempoInput);
+            final tempoLabelSet =_tempoLabels.toSet();
+            tagNameListSet.addAll(tempoLabelSet);
+            if( _tempoCandidateLabels.contains(_tempoInput)){
+              _tempoCandidateLabels.remove(_tempoInput);
+            }
+            _tempoLabels =[];
+//            final tempoDisplaySet = _tempoDisplayList.toSet().addAll(tempoLabelSet);
+//            _tempoDisplayList = tempoDisplaySet.toList();
+            _tempoDisplayList = tagNameListSet.toList();
+            widget.onSubmitted(_tempoDisplayList);
+            _tempoInput ='';
           });
 
         },
