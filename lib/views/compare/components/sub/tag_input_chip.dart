@@ -1,8 +1,5 @@
-import 'package:compare_2way/data_models/comparison_overview.dart';
-import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 
 class TagInputChip extends StatefulWidget {
 
@@ -44,13 +41,11 @@ class _TagInputChipState extends State<TagInputChip> {
   Widget build(BuildContext context) {
     return
       //todo 入力に合わせてChipのばしたい
-//      _focus.hasFocus
-  isInput
+   isInput
       //フォーカスしてる時はプラスアイコンなしのTextField
     ?Chip(
         backgroundColor: Colors.blue[100],
         label:SizedBox(
-          //todo focus時プラスアイコンの残像がでる
         width:
         MediaQuery.of(context).size.width*0.3,
         child:
@@ -61,16 +56,14 @@ class _TagInputChipState extends State<TagInputChip> {
 //              controller: _tagTitleController,
 //              placeholder: 'タグを追加',
 //            ),
-        TextField(
+         TextField(
           // ignore: lines_longer_than_80_chars
           // onChangedでviewModelのtempoInputTagに一旦setし、tagDialogPageで完了をおしたら入力有無のvalidationしつつ_tagNameListに追加&登録
           onChanged: (tempoInput){
-            print('tagInputChip/onChanged/tempoInput:$tempoInput');
             widget.setTempoInput(tempoInput);
           },
           focusNode: _focus,
           onSubmitted: (input){
-            print('tagInputChip/onSubmitted/input:$input');
             //入力完了したらDB登録し、chipsのリスト内に入れて、入力chipの左に並べて表示
             _onSubmitted(context,input);
           },
@@ -99,60 +92,13 @@ class _TagInputChipState extends State<TagInputChip> {
             isInput = true;
           });
         }
-//        =>_onTapFocused(context, isInput),
       );
-//      Chip(
-//      avatar: const Icon(Icons.add_circle_outline),
-//      backgroundColor: Colors.blue[100],
-//      label:
-//          //todo focusで場合わけしたのでtetFieldいらん
-//     SizedBox(
-//        width: MediaQuery.of(context).size.width*0.3,
-//       //todo CupertinoTextFIeldへ変更
-//        child:TextField(
-//          // ignore: lines_longer_than_80_chars
-//          // onChangedでviewModelのtempoInputTagに一旦setし、tagDialogPageで完了をおしたら入力有無のvalidationしつつ_tagNameListに追加&登録
-//          onChanged: (tempoInput){
-//            widget.setTempoInput(tempoInput);
-//          },
-//          focusNode: _focus,
-//            onSubmitted: (input){
-//              //入力完了したらDB登録し、chipsのリスト内に入れて、入力chipの左に並べて表示
-//              _onSubmitted(context,input);
-//            },
-//            maxLines: 1,
-//            controller: _tagTitleController,
-//            //decorationをnullにするとpadding含め余計な装飾は全てなくなる
-//            decoration:
-//            const InputDecoration(
-//              hintText: 'タグを追加',
-//              border: InputBorder.none,
-//              //isDenseで少し幅狭くなる
-//              isDense:true,
-////              contentPadding: EdgeInsets.all(8),
-//            ),
-//
-//        ),
-//      ),
-//
-//    );
 
 
-  }
-
-  //todo 削除
-  ///ここではviewModelへのセットは行わず、AppBarの完了ボタンでセットする
-  //直接入力値をセットする場合のみinitStateでメソッドをAddListener登録する
-  void _onCaptionUpdated(){
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-      ..tagTitle = _tagTitleController.text;
   }
 
   void _onSubmitted(
     BuildContext context, String input,){
-//    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-//    ..createTag(input,comparisonOverview);
-    print('tagInputChip/_onSubmitted:$input');
   widget.onSubmitted(input);
   _tagTitleController.text ='';
   //controller破棄してリフレッシュ
@@ -165,11 +111,5 @@ class _TagInputChipState extends State<TagInputChip> {
     widget.onFocusChange(_focus);
   }
 
-//  void _onTapFocused(BuildContext context, bool isInput) {
-////    FocusScope.of(context).requestFocus(_focus);
-//       setState(() {
-//         isInput = !isInput;
-//       });
-//  }
 }
 

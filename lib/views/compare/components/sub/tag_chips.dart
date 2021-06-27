@@ -1,4 +1,3 @@
-import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/views/compare/components/sub/candidate_tag.dart';
 import 'package:compare_2way/views/compare/components/sub/create_tag.dart';
 import 'package:compare_2way/views/compare/components/sub/tag_input_chip.dart';
@@ -45,7 +44,7 @@ class _TagChipsState extends State<TagChips> {
     //型推論に失敗する時はmapの後ろに型を明示
     tagNameListSet =widget.tagNameList.map<String>(
       (tagTitle)=>tagTitle).toSet() ;//toListではなく、toSetに変更で一気に変換
-    print('TagChips/initState/tagTitles(Set):$tagNameListSet');
+//    print('TagChips/initState/tagTitles(Set):$tagNameListSet');
     _tempoDisplayList  = tagNameListSet.toList();
 
 if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
@@ -57,7 +56,7 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
     //candidateTagNameListから選択したもの消したいので、widget.candidateTagNameList=>_tempoCandidateLabelsへinitStateで変換
     _tempoCandidateLabels = widget.candidateTagNameList;
 
-    print('tagChips/initState/tagNameListSet:$tagNameListSet, candidateTagNameList:${widget.candidateTagNameList}' );
+//    print('tagChips/initState/tagNameListSet:$tagNameListSet, candidateTagNameList:${widget.candidateTagNameList}' );
 
     super.initState();
   }
@@ -65,7 +64,7 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
   @override
   void dispose() {
     _tempoCandidateLabels = [];
-    print('tagChips/dispose_tempoCandidateLabels:$_tempoCandidateLabels');
+//    print('tagChips/dispose_tempoCandidateLabels:$_tempoCandidateLabels');
     super.dispose();
   }
 
@@ -107,13 +106,13 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                       /// 削除ボタン押したらcandidateTagに追加(再度候補タグとして表示)
                       _tempoCandidateLabels.add(_tempoDisplayList[index]);
                       _tempoDeleteLabels.add(_tempoDisplayList[index]);
-                      print('チップ削除後_tempoDeleteLabels:$_tempoDeleteLabels');
+//                      print('チップ削除後_tempoDeleteLabels:$_tempoDeleteLabels');
                       _tempoDisplayList.removeAt(index);
-                        print('チップ削除後_tempoDisplayList:$_tempoDisplayList');
+//                        print('チップ削除後_tempoDisplayList:$_tempoDisplayList');
                       // ignore: lines_longer_than_80_chars
                       //DB由来のタイトルから削除タイトル抜かないと1回削除して再度TagInputChipで同じものを入力しようとしても重複タグ扱いになって登録されない
                         tagNameListSet = _tempoDisplayList.toSet();
-                      print('InputChip/onDeleted/tagNameListSet:$tagNameListSet');
+//                      print('InputChip/onDeleted/tagNameListSet:$tagNameListSet');
                         widget.onDeleted(_tempoDeleteLabels);
                       //tempoDeleteLabelsクリア(しないとviewModelのDeleteLabelsに重複して登録されていく)
                         _tempoDeleteLabels = [];
@@ -163,8 +162,6 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                         _tempoLabels =[];
                         //Listへ戻す
                         _tempoDisplayList = tagNameListSet.toList();
-                        print('InputChip/TagInputChip/onSubmitted/_tempoDisplayList:$_tempoDisplayList');
-                        print('InputChip/TagInputChip/onSubmitted/tagNameListSet:$tagNameListSet');
                         //tag_dialog_pageへタグタイトルのリスト上げてviewModelに格納
                         widget.onSubmitted(_tempoDisplayList);
                         //createTag表示をリセット
