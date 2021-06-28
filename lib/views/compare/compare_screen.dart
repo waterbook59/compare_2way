@@ -61,11 +61,10 @@ class CompareScreen extends StatelessWidget {
             ?  Selector<CompareViewModel, String>(
           selector: (context, viewModel) => viewModel.itemTitle,
           builder: (context, itemTitle, child) {
-            return Center(
-                child: Text(
+            return Text(
                   itemTitle,
                   style: middleTextStyle,
-                ));
+                );
           },
         )
 //        const Text('Compare List', style: middleTextStyle,)
