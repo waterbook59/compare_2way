@@ -52,24 +52,11 @@ class CompareScreen extends StatelessWidget {
 ///リストの中身を見るのにtoSet使うと良いかも（map((e)=>print).toListが確実）
 
     return CupertinoPageScaffold(
-      //todo ListPageに戻るとtrailing位置の編集に黄色下線出る
-      //参考https://qiita.com/kurararara/items/2afd7f93f2676c5cee34
       navigationBar: CupertinoNavigationBar(
 
         backgroundColor: primaryColor,
         ///leadingの戻るアイコンの色を変更するだけならこれでOK
         actionsForegroundColor: Colors.white,
-
-//        leading:
-//        Icon(CupertinoIcons.back,color: Colors.white,),
-//CupertinoButton
-//        CupertinoButton(
-//          padding: EdgeInsets.all(0),
-//          child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
-//        onPressed: ()=> _backListPage(context),),
-//GestureDetector
-//        GestureDetector(child: const Icon(Icons.arrow_back_ios),
-//    onTap: ()=> _backListPage(context)),
         middle:
         screenEditMode ==ScreenEditMode.fromListPage
             ? const Text('Compare List', style: middleTextStyle,)
