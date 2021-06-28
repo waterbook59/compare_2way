@@ -23,6 +23,7 @@ class SelectTagPage extends StatelessWidget {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        actionsForegroundColor: Colors.white,
         backgroundColor: primaryColor,
         middle: Text(
           tagTitle,
