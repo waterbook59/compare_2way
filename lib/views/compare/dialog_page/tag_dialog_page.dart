@@ -23,6 +23,13 @@ class TagDialogPage extends StatelessWidget {
       //todo navBarのUI調整
       navigationBar: CupertinoNavigationBar(
           backgroundColor: const Color(0xFF363A44),
+          leading: GestureDetector(
+              child: const Icon(
+                CupertinoIcons.clear_thick_circled,
+                color: Colors.white,
+              ),
+              onTap: () =>Navigator.pop(context)
+          ),
           middle: const Text('タグの追加・編集',style: middleTextStyle),
 //todo leadingはxボタンに変更
 //          leading: CupertinoButton(

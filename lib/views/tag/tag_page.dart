@@ -35,6 +35,7 @@ class TagPage extends StatelessWidget {
           selector: (context, viewModel) => viewModel.tagEditMode,
           builder:(context, tagEditMode, child){
             return tagEditMode
+            //todo CupertinoButtonに変更すると黄色二十線出ない??
                 ? const Text('タグ名編集', style: trailingTextStyle)
                 : const Text('完了', style: trailingTextStyle);
           },
