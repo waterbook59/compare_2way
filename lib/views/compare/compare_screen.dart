@@ -97,8 +97,10 @@ class CompareScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: 16),
                 // FutureBuilderいらない(compareOverviewをそのまま表示)
-              ///タイトル:itemTitleに変更があったときだけrebuildされるはず
-                Selector<CompareViewModel, String>(
+              ///タイトル:itemTitleに変更があったときだけrebuildされる
+                screenEditMode ==ScreenEditMode.fromListPage
+                ? Container()
+                :Selector<CompareViewModel, String>(
                   selector: (context, viewModel) => viewModel.itemTitle,
                   builder: (context, itemTitle, child) {
                     return Center(
