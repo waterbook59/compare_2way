@@ -53,14 +53,23 @@ class CompareScreen extends StatelessWidget {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-
         backgroundColor: primaryColor,
         ///leadingの戻るアイコンの色を変更するだけならこれでOK
         actionsForegroundColor: Colors.white,
         middle:
         screenEditMode ==ScreenEditMode.fromListPage
-            ? const Text('Compare List', style: middleTextStyle,)
-            : Text(tagTitle),
+            ?  Selector<CompareViewModel, String>(
+          selector: (context, viewModel) => viewModel.itemTitle,
+          builder: (context, itemTitle, child) {
+            return Center(
+                child: Text(
+                  itemTitle,
+                  style: middleTextStyle,
+                ));
+          },
+        )
+//        const Text('Compare List', style: middleTextStyle,)
+            : Text(tagTitle,style: middleTextStyle,),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
           ///保存完了ボタン //todo 保存完了ボタンWidget分割
           GestureDetector(
