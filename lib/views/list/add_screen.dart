@@ -33,7 +33,6 @@ class AddScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         //todo Androidでの端末下の戻るボタン無効:WillPopScopeのonWillPopをfalse
-        //todo leading新規作成時はキャンセルボタン、編集時はleadingの表示なし
 //        automaticallyImplyLeading: false,
       leading: displayMode == AddScreenMode.add
       //新規追加時キャンセル
@@ -60,13 +59,18 @@ class AddScreen extends StatelessWidget {
         )
         :const Text('名称編集',style: middleTextStyle,),
         /// 下から出てくる場合は右上に比較ボタンでもいいかも
-        trailing:displayMode == AddScreenMode.add
-        //todo  onPressedでDBに項目登録して比較画面に遷移
-        ? const Text(
-          '作成',
-          style: trailingTextStyle,
-        )
-      :const Text('更新',style: middleTextStyle,),
+
+//        trailing:displayMode == AddScreenMode.add
+//        //todo  onPressedでDBに項目登録して比較画面に遷移
+//        ? const Text(
+//          '作成',
+//          style: trailingTextStyle,
+//        )
+//      :
+      //todo Containerにするとmiddle文字まで消える
+//        Container(),
+//        const Text('更新',style: middleTextStyle,),
+
       ),
       child: Scaffold(
         backgroundColor: CupertinoTheme

@@ -56,7 +56,14 @@ class CompareViewModel extends ChangeNotifier {
 
   //textFieldからviewModelへの変更値登録があるのでカプセル化しない
   String tagTitle= '';
+  String addTagTitle;
+
+
+  List<String> candidateTagNameList = <String>[];
+//  List<String> get candidateTagNameList =>_candidateTagNameList;
+  String _tempoInput;
   List<String> _tagNameList = <String>[];
+  List<String> get tagNameList =>_tagNameList;
   List<Tag> _tagList = <Tag>[];
   List<Tag> get tagList => _tagList;
   List<Tag> _allTagList = <Tag>[];
@@ -501,7 +508,7 @@ class CompareViewModel extends ChangeNotifier {
   }
   ///List<Way1Demerit>取得(FutureBuilder用)
   Future<List<Way1Demerit>> getWay1DemeritDesc(String comparisonItemId) async {
-    print('FutureBuilderでDBからList<Way1Demerit> _way1DemeritList取得');
+//    print('FutureBuilderでDBからList<Way1Demerit> _way1DemeritList取得');
     return _way1DemeritList =
     await _compareRepository.getWay1DemeritList(comparisonItemId);
   }
@@ -517,10 +524,15 @@ class CompareViewModel extends ChangeNotifier {
  ///tagDialogPageでList<tag>を新規登録
   ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
   Future<void> createTag(ComparisonOverview comparisonOverview) async{
-    print('vieModel/createTag:$_tagNameList&Id:${comparisonOverview.comparisonItemId}');
     //完了を押したらinput内容(List<String>)とcomparisonIdを基にList<Tag>クラスをDB登録
     //List<Tag>作成はDBでの重複削除リスト作成後にrepositoryで行う
 
+    ///TagDialogPageで完了ボタン押した時に入力中のタグも登録
+    if(_tempoInput =='' || _tempoInput == null || _tempoInput == ' '){
+    }else{
+      _tagNameList.add(_tempoInput);
+    }
+//    print('viewModel.createTag/tagを作る前の_tagNameList(追加後):${_tagNameList.map((e) => e)}');
     //_tagNameListをrepositoryへ
     await _compareRepository.createTag(
         _tagNameList,comparisonOverview.comparisonItemId);
@@ -534,6 +546,16 @@ class CompareViewModel extends ChangeNotifier {
 //        '${_tagNameList.map((tagName) => print('$tagName')).toList()}');
     print('compareViewModelへtagNameListをset:$_tagNameList');
   }
+
+  ///TagInputChipで仮入力したものをset
+  void setTempoInput(String tempoInput ){
+    if(tempoInput ==''){
+    }else{
+      _tempoInput= tempoInput;
+    }
+  }
+
+
  ///List<Tag>取得(文頭取得用)
   Future<void> getTagList(String comparisonItemId) async{
     _tagList = await _compareRepository.getTagList(comparisonItemId);
@@ -553,9 +575,23 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+
+
+
+  Future<void> onDeleteTag(String tagTitle) async{
+    //tagTitleで紐づけて削除するのでcomparisonItemIdいらない
+    //一応Tag形式にしてやりとりしてるが、tagTitleだけあれば削除可能(のはず)
+    final deleteTag = Tag(tagTitle: tagTitle);
+    await _compareRepository.onDeleteTag(deleteTag);
+    //削除してtagPage更新
+    notifyListeners();
+  }
+
+
   ///tagChipsで削除するTagを登録
   Future<void> createDeleteList(
-      List<String> tempoDeleteLabels, String comparisonItemId) async{
+      List<String> tempoDeleteLabels,
+      String comparisonItemId) async{
     final joinList = [...tempoDeleteLabels,..._tagNameList];
 //  final joinList= List<String>.from(tempoDeleteLabels)..addAll(_tagNameList);
     //削除する項目(tempoDeleteLabels)とDB登録してある項目(_tagNameList)を結合して
@@ -725,14 +761,27 @@ class CompareViewModel extends ChangeNotifier {
 
   }
 
-  Future<void> onDeleteTag(String tagTitle) async{
-    //tagTitleで紐づけて削除するのでcomparisonItemIdいらない
-    //一応Tag形式にしてやりとりしてるが、tagTitleだけあれば削除可能(のはず)
-    final deleteTag = Tag(tagTitle: tagTitle);
-    await _compareRepository.onDeleteTag(deleteTag);
-    //削除してtagPage更新
-    notifyListeners();
+
+
+  ///CompareScreen文頭で候補タグ格納(全タグから選択タグを削除)
+  //todo tagChipsStateless使用しないなら削除
+  Future<List<String>> getCandidateTagList() async{
+    //全タグリストから選択されたタグリストを比較して重複を削除
+    _allTagList = await _compareRepository.getAllTagList();
+    final candidateTitleSet = <String>{};
+      _allTagList.map((tag) {
+      return candidateTitleSet.add(tag.tagTitle);
+    }).toSet();
+    final choiceTitleSet=  <String>{};
+      tagList.map((tag) {
+      return choiceTitleSet.add(tag.tagTitle);
+    }).toSet();
+    ///removeAll使うにはListはダメでSetを用いる
+    candidateTitleSet.removeAll(choiceTitleSet);
+    return candidateTagNameList = candidateTitleSet.toList();
   }
+
+
 
   ///AddScreen/InputPartでComparisonOverview新規登録：ComparisonOverview=>ComparisonOverviewRecordでDB登録
   Future<void> createNewItem(ComparisonOverview newComparisonOverview) async {
@@ -856,5 +905,11 @@ class CompareViewModel extends ChangeNotifier {
     isWay3MeritFocusList = false;
     notifyListeners();
   }
+
+
+
+
+
+
 
 }

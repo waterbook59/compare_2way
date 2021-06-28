@@ -72,7 +72,7 @@ class InputPart extends StatelessWidget {
         builder: (context, compareViewModel, child) {
           return RaisedButton(
               child: displayMode == AddScreenMode.add
-              ?const Text('比較')
+              ?const Text('作成')
               :const Text('更新'),
               color: accentColor,
               shape:

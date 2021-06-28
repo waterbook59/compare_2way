@@ -441,10 +441,7 @@ class CompareRepository {
       //最終的に登録するList<Tag>ができたらList<TagRecord>へ変換する
       final tagRecordList = tagList.toTagRecordList(tagList);
 
-
-
       //2つのリストを比較しようとしてforEach内でforEachしようとしたけど、動かない
-
       ///(別のリストのタグにも使うのでtagTitleの重複登録は必要)
       //primaryKeyで弾かれるものも含めての登録は、insertよりも
       // insertOnConflictUpdateが良い(毎回UNIQUE constraint failedエラー発生するので)

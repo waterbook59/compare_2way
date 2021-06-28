@@ -29,13 +29,17 @@ class TagPage extends StatelessWidget {
         trailing:
         //todo タグ名編集時にキーボードunFocusできるアイコン追加
         //編集モード(true)の時はリストをタップするとTagListのtagTitle部を編集する形に
+        //todo CupertinoButtonを2つにしてonPressedで_changeEditに変更
         GestureDetector(
           onTap: () => _changeEdit(context),
           child:Selector<CompareViewModel,bool>(
           selector: (context, viewModel) => viewModel.tagEditMode,
           builder:(context, tagEditMode, child){
             return tagEditMode
-                ? const Text('編集', style: trailingTextStyle)
+            ///CupertinoButtonに変更すると黄色二十線出ない
+                ? const CupertinoButton(child: Text('タグ名編集',
+                style: trailingTextStyle),
+            padding: EdgeInsets.all(8),)
                 : const Text('完了', style: trailingTextStyle);
           },
 //         const Text('編集', style: trailingTextStyle,
@@ -43,6 +47,7 @@ class TagPage extends StatelessWidget {
         ),
       ),
 
+      //todo タグ名編集時タイトルの枠を出す
       ///Scaffoldで全く問題なし
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
@@ -87,7 +92,6 @@ class TagPage extends StatelessWidget {
 //                            print('tagPage/itemIdList:$overview');
                             //DateTime=>String変換
                             //todo 1つめのリストの上にDivider的な線が必要
-                            //todo slidableでアイテムから削除実行
                             return TagList(
                             title: overview.tagTitle,
                             selectTagIdList: overview.itemIdList,

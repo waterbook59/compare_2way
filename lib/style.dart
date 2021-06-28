@@ -16,7 +16,7 @@ const middleJaTextStyle =
 
 //NavigationTrailing
 const trailingTextStyle =
-    TextStyle(fontFamily: regularFontJa, fontSize: 14, color: Colors.white);
+    TextStyle(fontFamily: regularFontJa, fontSize: 16, color: Colors.white);
 
 //CupertinoActionSheetの文字
 const actionSheetTextStyle =

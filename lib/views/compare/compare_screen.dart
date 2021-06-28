@@ -44,22 +44,31 @@ class CompareScreen extends StatelessWidget {
         await viewModel.getAccordionList(comparisonOverview.comparisonItemId);
         //viewModelにcomparisonIdを元に取って来たtagListを格納
         await viewModel.getTagList(comparisonOverview.comparisonItemId);
+        //最後getCandidateでnotifyListenersする
+//        await viewModel.getCandidateTagList();
       });
       viewModel.compareScreenStatus = CompareScreenStatus.update;
     }
 ///リストの中身を見るのにtoSet使うと良いかも（map((e)=>print).toListが確実）
 
     return CupertinoPageScaffold(
-      //todo ListPageに戻るとtrailing位置の編集に黄色下線出る
-      //参考https://qiita.com/kurararara/items/2afd7f93f2676c5cee34
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
-//        leading: GestureDetector(child: const Icon(Icons.arrow_back_ios),
-//    onTap: ()=> _backListPage(context)),
+        ///leadingの戻るアイコンの色を変更するだけならこれでOK
+        actionsForegroundColor: Colors.white,
         middle:
         screenEditMode ==ScreenEditMode.fromListPage
-            ? const Text('Compare List', style: middleTextStyle,)
-            : Text(tagTitle),
+            ?  Selector<CompareViewModel, String>(
+          selector: (context, viewModel) => viewModel.itemTitle,
+          builder: (context, itemTitle, child) {
+            return Text(
+                  itemTitle,
+                  style: middleTextStyle,
+                );
+          },
+        )
+//        const Text('Compare List', style: middleTextStyle,)
+            : Text(tagTitle,style: middleTextStyle,),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
           ///保存完了ボタン //todo 保存完了ボタンWidget分割
           GestureDetector(
@@ -73,8 +82,6 @@ class CompareScreen extends StatelessWidget {
           ),
           const SizedBox(width: 8,),
           ///編集ボタン
-          //todo iphoneだと編集の下が切れてる
-          //todo タイトル編集=>addScreenは下から遷移
           EditBottomAction(comparisonOverview: comparisonOverview,),
         ]),
       ),
@@ -82,23 +89,7 @@ class CompareScreen extends StatelessWidget {
       child: Scaffold(
         body: GestureDetector(
           onTap: () {
-//            print('GestureDetectorをonTap!isDisplayIcon:${viewModel.isDisplayIcon}');
-            ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
-            FocusScope.of(context).unfocus();
-            //accordionpart=>descFormのiconButtonの非表示
-            viewModel
-                ..isWay1MeritDeleteIcon  = false
-                ..isWay2MeritDeleteIcon  = false
-              ..isWay1DemeritDeleteIcon  = false
-              ..isWay2DemeritDeleteIcon  = false
-              ..isWay3MeritDeleteIcon  = false
-              ..isWay3DemeritDeleteIcon  = false
-                ..isWay1MeritFocusList = false//settingPageでやったisReturnText
-                ..isWay2MeritFocusList = false
-            ..isWay1DemeritFocusList = false
-            ..isWay2DemeritFocusList = false
-            ..isWay3MeritFocusList = false
-            ..isWay3DemeritFocusList = false;
+            _onTapUnFocus(context);
           },
           child: SingleChildScrollView(
             child: Column(
@@ -106,8 +97,10 @@ class CompareScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: 16),
                 // FutureBuilderいらない(compareOverviewをそのまま表示)
-              ///タイトル:itemTitleに変更があったときだけrebuildされるはず
-                Selector<CompareViewModel, String>(
+              ///タイトル:itemTitleに変更があったときだけrebuildされる
+                screenEditMode ==ScreenEditMode.fromListPage
+                ? Container()
+                :Selector<CompareViewModel, String>(
                   selector: (context, viewModel) => viewModel.itemTitle,
                   builder: (context, itemTitle, child) {
                     return Center(
@@ -404,6 +397,28 @@ class CompareScreen extends StatelessWidget {
     await viewModel.accordionDeleteList(
         displayList,accordionIdIndex,comparisonOverview);
   }
+
+  void _onTapUnFocus(BuildContext context) {
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    //print('GestureDetectorをonTap!isDisplayIcon:${viewModel.isDisplayIcon}');
+    ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
+    FocusScope.of(context).unfocus();
+    //accordionpart=>descFormのiconButtonの非表示
+    viewModel
+      ..isWay1MeritDeleteIcon  = false
+      ..isWay2MeritDeleteIcon  = false
+      ..isWay1DemeritDeleteIcon  = false
+      ..isWay2DemeritDeleteIcon  = false
+      ..isWay3MeritDeleteIcon  = false
+      ..isWay3DemeritDeleteIcon  = false
+      ..isWay1MeritFocusList = false//settingPageでやったisReturnText
+      ..isWay2MeritFocusList = false
+      ..isWay1DemeritFocusList = false
+      ..isWay2DemeritFocusList = false
+      ..isWay3MeritFocusList = false
+      ..isWay3DemeritFocusList = false;
+  }
+
 
 
   }

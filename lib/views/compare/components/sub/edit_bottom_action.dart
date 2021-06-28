@@ -24,6 +24,7 @@ class EditBottomAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
+      padding: const EdgeInsets.all(8),
       child: const Text(
         '編集',
         style: trailingTextStyle,
