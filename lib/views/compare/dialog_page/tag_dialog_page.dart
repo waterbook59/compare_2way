@@ -1,6 +1,7 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
+import 'package:compare_2way/style.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/sub/tag_chips.dart';
 import 'package:compare_2way/views/compare/components/sub/candidate_tag.dart';
@@ -22,7 +23,7 @@ class TagDialogPage extends StatelessWidget {
       //todo navBarのUI調整
       navigationBar: CupertinoNavigationBar(
           backgroundColor: const Color(0xFF363A44),
-          middle: const Text('タグの追加・編集'),
+          middle: const Text('タグの追加・編集',style: middleTextStyle),
 //todo leadingはxボタンに変更
 //          leading: CupertinoButton(
 //            child:const Text('キャンセル'),
@@ -33,7 +34,8 @@ class TagDialogPage extends StatelessWidget {
           //todo iPhoneだとtrailingの'完了'の下が切れてる..
           //todo 完了ボタン押した時にTagInputChip入力中の項目も追加されるように(キーボード完了よりこっちをおしてしまう)
           trailing: CupertinoButton(
-            child: const Text('完了'),
+            padding: const EdgeInsets.all(8),
+            child: const Text('完了',style: trailingTextStyle,),
             onPressed: () async {
               //完了を押したらinput内容(List<String>)とcomparisonIdを基にtagクラスをDB登録
               //todo 完了時createdAtを更新
