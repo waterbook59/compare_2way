@@ -29,25 +29,26 @@ class TagPage extends StatelessWidget {
         trailing:
         //todo タグ名編集時にキーボードunFocusできるアイコン追加
         //編集モード(true)の時はリストをタップするとTagListのtagTitle部を編集する形に
-        //todo CupertinoButtonを2つにしてonPressedで_changeEditに変更
-        GestureDetector(
-          onTap: () => _changeEdit(context),
-          child:Selector<CompareViewModel,bool>(
-          selector: (context, viewModel) => viewModel.tagEditMode,
-          builder:(context, tagEditMode, child){
-            return tagEditMode
-            ///CupertinoButtonに変更すると黄色二十線出ない
-                ? const CupertinoButton(child: Text('タグ名編集',
-                style: trailingTextStyle),
-            padding: EdgeInsets.all(8),)
-                : const Text('完了', style: trailingTextStyle);
-          },
+        Selector<CompareViewModel,bool>(
+        selector: (context, viewModel) => viewModel.tagEditMode,
+        builder:(context, tagEditMode, child){
+          return tagEditMode
+          ///CupertinoButtonに変更すると黄色二十線出ない
+              ?  CupertinoButton(
+            child: const Text('タグ名編集',
+              style: trailingTextStyle),
+          onPressed: ()=>_changeEdit(context),
+          padding: const EdgeInsets.all(8),)
+              : CupertinoButton(
+              child: const Text('完了', style: trailingTextStyle),
+          onPressed: ()=>_changeEdit(context),
+            padding: const EdgeInsets.all(8),);
+        },
 //         const Text('編集', style: trailingTextStyle,
-        ),
         ),
       ),
 
-      //todo タグ名編集時タイトルの枠を出す
+      //todo タグ名編集時リスト右側の>を消す
       ///Scaffoldで全く問題なし
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
