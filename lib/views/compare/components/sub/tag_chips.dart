@@ -37,6 +37,7 @@ class _TagChipsState extends State<TagChips> {
   bool isCandidate;
   bool isFocus = false;
   String _tempoInput ='';
+  bool isInput= false;//TagInputChipの入力表示(true)とActionChip(false)
 
   @override
   void initState() {
@@ -64,7 +65,8 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
   @override
   void dispose() {
     _tempoCandidateLabels = [];
-//    print('tagChips/dispose_tempoCandidateLabels:$_tempoCandidateLabels');
+    _tempoDisplayList = [];
+    print('tagChips/dispose_tempoDisplayList :$_tempoDisplayList');
     super.dispose();
   }
 
@@ -133,6 +135,12 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                   // ignore: lines_longer_than_80_chars
                   //input追加時はDB由来のtagNameListと重複したタグが作られないようvalidationして表示リスト全てをviewModelへ格納
                   TagInputChip(
+                    isInput: isInput,
+                    onChangeInputMode: (){
+                      setState(() {   //TagInputChip表示をTextFieldへ変更
+                        isInput = true;
+                      });
+                    },
                     //tagInputChipのautoFocus外して入力モードになったら+create'...'ボタン出す
                     onFocusChange: (focus){
                       setState(() {isFocus = focus.hasFocus;});
@@ -166,6 +174,8 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                         widget.onSubmitted(_tempoDisplayList);
                         //createTag表示をリセット
                         _tempoInput ='';
+                        //TagInputChip表示をActionChipへ戻す
+                        isInput = false;
                       }
 
                       setState(() {//tag_input_chipのcontroller破棄
@@ -181,7 +191,7 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
         onTapAddTag: (){
           //追加時フォーカス外す
           FocusScope.of(context).unfocus();
-          //todo TagInputChipの入力文字クリア
+          //todo TagInputChipの入力文字クリア:tagInputChipの表示空またはdisposeするには?
           setState(() {
             //重複バリデーション
             _tempoLabels.add(_tempoInput);
@@ -196,6 +206,8 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
             _tempoDisplayList = tagNameListSet.toList();
             widget.onSubmitted(_tempoDisplayList);
             _tempoInput ='';
+            //TagInputChip表示をActionChipへ戻す
+            isInput = false;
           });
 
         },

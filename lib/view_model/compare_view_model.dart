@@ -58,21 +58,23 @@ class CompareViewModel extends ChangeNotifier {
   String tagTitle= '';
   String addTagTitle;
 
-
+ ///CompareScreenで使用
   List<String> candidateTagNameList = <String>[];
 //  List<String> get candidateTagNameList =>_candidateTagNameList;
-  String _tempoInput;
-  List<String> _tagNameList = <String>[];
-  List<String> get tagNameList =>_tagNameList;
-  List<Tag> _tagList = <Tag>[];
+  List<Tag> _tagList = <Tag>[];//CompareScreenでのIDに紐づく選択済リスト
   List<Tag> get tagList => _tagList;
-  List<Tag> _allTagList = <Tag>[];
-  List<Tag> get allTagList => _tagList;
-  List<Chip> _displayChipList = <Chip>[];
+  List<String> _tagNameList = <String>[];//TagDialogPageでのIDに紐づくDBへの登録用リスト
+  List<String> get tagNameList =>_tagNameList;
+  List<String> _tempoDisplayList =<String>[];//TagDialogPageでのDB登録前の表示リスト
+  String _tempoInput;//TagInputChipに仮入力してるもの
+  List<Chip> _displayChipList = <Chip>[];//CompareScreen表示用
   List<Chip> get displayChipList =>_displayChipList;
   List<Tag> _deleteTagList = <Tag>[];
   List<Tag> get deleteTagList => _deleteTagList;
-  List<Tag> _selectTagList = <Tag>[];
+  ///TagPageで使用
+  List<Tag> _allTagList = <Tag>[];//TagPageでの表示用全タグリスト
+  List<Tag> get allTagList => _tagList;
+  List<Tag> _selectTagList = <Tag>[];//TagPage=>SelectTagPageへtagTitleで紐づいたタグリスト
   List<Tag> get selectTagList => _selectTagList;
   List<ComparisonOverview> _selectOverviews = <ComparisonOverview>[];
   List<ComparisonOverview> get selectOverviews => _selectOverviews;
@@ -527,11 +529,14 @@ class CompareViewModel extends ChangeNotifier {
     //完了を押したらinput内容(List<String>)とcomparisonIdを基にList<Tag>クラスをDB登録
     //List<Tag>作成はDBでの重複削除リスト作成後にrepositoryで行う
 
+    //表示用リストだったものを本登録
+    _tagNameList = _tempoDisplayList;
     ///TagDialogPageで完了ボタン押した時に入力中のタグも登録
     if(_tempoInput =='' || _tempoInput == null || _tempoInput == ' '){
     }else{
       _tagNameList.add(_tempoInput);
     }
+
 //    print('viewModel.createTag/tagを作る前の_tagNameList(追加後):${_tagNameList.map((e) => e)}');
     //_tagNameListをrepositoryへ
     await _compareRepository.createTag(
@@ -539,12 +544,11 @@ class CompareViewModel extends ChangeNotifier {
     //新規作成のときはnotifyListenersいらない？取得の時のみ？
   }
 
-  ///tagChipsでtextField入力内容をviewModelへset
-  Future<void> setTagNameList(List<String> tagNameList)async{
-    _tagNameList = tagNameList;
-//    print('compareViewModelへtagNameListをset:'
-//        '${_tagNameList.map((tagName) => print('$tagName')).toList()}');
-    print('compareViewModelへtagNameListをset:$_tagNameList');
+
+  ///TagDialogPageでの登録完了(createTag)前の表示用リスト
+  //tagChipsでtextField入力内容をviewModelへset
+  Future<void> setTempoDisplayList(List<String> tempoDisplayList)async{
+    _tempoDisplayList = tempoDisplayList;
   }
 
   ///TagInputChipで仮入力したものをset
@@ -556,7 +560,7 @@ class CompareViewModel extends ChangeNotifier {
   }
 
 
- ///List<Tag>取得(文頭取得用)
+ ///CompareScreenでのList<Tag>取得(文頭取得用)
   Future<void> getTagList(String comparisonItemId) async{
     _tagList = await _compareRepository.getTagList(comparisonItemId);
 //    print('viewModel.getTagList:${_tagList.map((e) => e.tagTitle)}');
