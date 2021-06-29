@@ -94,9 +94,6 @@ class _TagInputChipState extends State<TagInputChip> {
           //TagInputChip表示をTextFieldへ変更
           widget.onChangeInputMode();
           _tagTitleController.text = '';
-//          setState(() {
-//            isInput = true;
-//          });
         }
       );
 
@@ -107,9 +104,6 @@ class _TagInputChipState extends State<TagInputChip> {
     BuildContext context, String input,){
   widget.onSubmitted(input);
   _tagTitleController.text ='';
-  //controller破棄してリフレッシュ
-//  setState(() {
-//  });
   }
 
   //tagInputChipのautoFocus外して入力モードになったら+create'...'ボタン出す
