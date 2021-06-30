@@ -52,7 +52,7 @@ class TagList extends StatelessWidget {
           color: viewModel.tagEditMode
               ? Colors.transparent
               : viewModel.selectedIndex == listNumber
-                  ? Colors.grey[400]
+                  ? Colors.grey[300]
                   : const Color(0xFFFBE9E7),
           border:
               const Border(bottom: BorderSide(width: 0.5, color: Colors.grey)),
