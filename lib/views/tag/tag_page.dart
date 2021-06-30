@@ -20,13 +20,13 @@ class TagPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor = CupertinoTheme.of(context).primaryContrastingColor;
-//    final viewModel = Provider.of<TagViewModel>(context, listen: false);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
         middle: const Text('タグ', style: middleTextStyle,),
         trailing:
+            //todo 編集ボタンをタグ名編集・タグ削除に変更
         //todo タグ名編集時にキーボードunFocusできるアイコン追加
         //編集モード(true)の時はリストをタップするとTagListのtagTitle部を編集する形に
         Selector<CompareViewModel,bool>(
