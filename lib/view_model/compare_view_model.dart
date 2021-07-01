@@ -85,7 +85,7 @@ class CompareViewModel extends ChangeNotifier {
 
 
   ListEditMode editStatus = ListEditMode.display;
-  bool tagEditMode = true; //初期設定は通常モード
+  TagEditMode tagEditMode = TagEditMode.normal; //初期設定は通常モード
 //  bool editFocus = false; //初期設定はタイトルのみ
   int selectedIndex;//tagPageでのListTile選択
   int selectedDescListIndex;//DescFromAndButtonでのListTIle選択
@@ -718,12 +718,31 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   //TagPageでの通常モード(編集)<=>編集モード(完了)の切替
-  Future<void> changeTagEditMode() {
-     tagEditMode = !tagEditMode;
-     ///"完了"押した時に_selectedIndexをデフォルトに(次に編集押した時に前の選択状態にならないようにする)
-       selectedIndex =null;
+//  Future<void> changeTagEditMode() {
+//     tagEditMode = !tagEditMode;
+//     ///"完了"押した時に_selectedIndexをデフォルトに(次に編集押した時に前の選択状態にならないようにする)
+//       selectedIndex =null;
+//    notifyListeners();
+//  }
+
+  Future<void> changeToTagTitleEdit() {
+    tagEditMode = TagEditMode.tagTitleEdit;
+    ///"完了"押した時に_selectedIndexをデフォルトに(次に編集押した時に前の選択状態にならないようにする)
+    selectedIndex =null;
     notifyListeners();
   }
+
+  Future<void> changeToTagDelete() {
+    tagEditMode = TagEditMode.tagDelete;
+    ///"完了"押した時に_selectedIndexをデフォルトに(次に編集押した時に前の選択状態にならないようにする)
+    selectedIndex =null;
+    notifyListeners();
+  }
+  Future<void> changeToNomal() {
+    tagEditMode = TagEditMode.normal;
+    notifyListeners();
+  }
+
 
   //TagListでの通常モード(タイトル)<=>フォーカスモードの切替
   Future<void> changeEditFocus( int listNumber ) {

@@ -1,3 +1,4 @@
+import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/tag/components/sub/edit_tag_title.dart';
 import 'package:flutter/material.dart';
@@ -49,11 +50,30 @@ class TagList extends StatelessWidget {
       ],
       child: Container(//flutterのverが低いのでListTileのtileColorなし
         decoration: BoxDecoration(
-          color: viewModel.tagEditMode
-              ? Colors.transparent
-              : viewModel.selectedIndex == listNumber
+          color://ここでswitch使えない=>即時関数:https://yumanoblog.com/flutter-if-switch/
+          ((){
+            switch(viewModel.tagEditMode){
+              case TagEditMode.normal:
+                return Colors.transparent;
+              break;
+              case TagEditMode.tagTitleEdit:
+             return    viewModel.selectedIndex == listNumber
+            ? Colors.grey[300]
+                : const Color(0xFFFBE9E7);
+            break;
+            case TagEditMode.tagDelete:
+              return    viewModel.selectedIndex == listNumber
                   ? Colors.grey[300]
-                  : const Color(0xFFFBE9E7),
+                  : const Color(0xFFFBE9E7);
+              break;
+            }
+          })(),
+
+//          viewModel.tagEditMode
+//              ? Colors.transparent
+//              : viewModel.selectedIndex == listNumber
+//                  ? Colors.grey[300]
+//                  : const Color(0xFFFBE9E7),
           border:
               const Border(bottom: BorderSide(width: 0.5, color: Colors.grey)),
         ),
@@ -63,15 +83,39 @@ class TagList extends StatelessWidget {
             size: 40,
             color: primaryColor,
           ),
-          title: viewModel.tagEditMode
-              ? Text(title)
-              : viewModel.selectedIndex == listNumber
-                  ? EditTagTitle(
-                      tagTitle: title,
-                      selectTagIdList: selectTagIdList,
-                      myFocusNode: myFocusNode,
-                    )
-                  : Text(title),
+          title:
+    ((){
+    switch(viewModel.tagEditMode){
+      case TagEditMode.normal:
+        return Text(title);
+        break;
+      case TagEditMode.tagTitleEdit:
+        return    viewModel.selectedIndex == listNumber
+            ? EditTagTitle(
+          tagTitle: title,
+          selectTagIdList: selectTagIdList,
+          myFocusNode: myFocusNode,
+        )
+            : Text(title);
+      case TagEditMode.tagDelete:
+        return    viewModel.selectedIndex == listNumber
+            ? EditTagTitle(
+          tagTitle: title,
+          selectTagIdList: selectTagIdList,
+          myFocusNode: myFocusNode,
+        )
+            : Text(title);
+      }
+    })(),
+//          viewModel.tagEditMode
+//              ? Text(title)
+//              : viewModel.selectedIndex == listNumber
+//                  ? EditTagTitle(
+//                      tagTitle: title,
+//                      selectTagIdList: selectTagIdList,
+//                      myFocusNode: myFocusNode,
+//                    )
+//                  : Text(title),
           //tagTitleの編集
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,9 +123,22 @@ class TagList extends StatelessWidget {
               Text('アイテム数：$tagAmountアイテム'),
             ],
           ),
-          trailing: viewModel.tagEditMode
-              ? const Icon(Icons.arrow_forward_ios)
-              : Container(width: 24,),//編集時>出さない
+          trailing:
+    ((){
+    switch(viewModel.tagEditMode){
+      case TagEditMode.normal:
+        return const Icon(Icons.arrow_forward_ios);
+        break;
+      case TagEditMode.tagTitleEdit:
+        return Container(width: 24,);
+        break;
+      case TagEditMode.tagDelete:
+        return Container(width: 24,);
+    }
+    })(),
+//          viewModel.tagEditMode
+//              ? const Icon(Icons.arrow_forward_ios)
+//              : Container(width: 24,),//編集時>出さない
 
           ///getTagTitleIdしつlistTileのonTapでfocusNode設定(tagEditModeで場合わけ)
           ///ListTileだけを再ビルドしても反映されない(notifyListenersしてListView含め再ビルド)
