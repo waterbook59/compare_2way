@@ -48,24 +48,25 @@ class TagList extends StatelessWidget {
           },
         )
       ],
-      child: Container(//flutterのverが低いのでListTileのtileColorなし
+      child: Container(
+        //flutterのverが低いのでListTileのtileColorなし
         decoration: BoxDecoration(
-          color://ここでswitch使えない=>即時関数:https://yumanoblog.com/flutter-if-switch/
-          ((){
-            switch(viewModel.tagEditMode){
+          color: //ここでswitch使えない=>即時関数:https://yumanoblog.com/flutter-if-switch/
+              (() {
+            switch (viewModel.tagEditMode) {
               case TagEditMode.normal:
                 return Colors.transparent;
-              break;
+                break;
               case TagEditMode.tagTitleEdit:
-             return    viewModel.selectedIndex == listNumber
-            ? Colors.grey[300]
-                : const Color(0xFFFBE9E7);
-            break;
-            case TagEditMode.tagDelete:
-              return    viewModel.selectedIndex == listNumber
-                  ? Colors.grey[300]
-                  : const Color(0xFFFBE9E7);
-              break;
+                return viewModel.selectedIndex == listNumber
+                    ? Colors.grey[300]
+                    : const Color(0xFFFBE9E7);
+                break;
+              case TagEditMode.tagDelete:
+                return viewModel.selectedIndex == listNumber
+                    ? Colors.grey[300]
+                    : const Color(0xFFFBE9E7);
+                break;
             }
           })(),
 
@@ -83,30 +84,24 @@ class TagList extends StatelessWidget {
             size: 40,
             color: primaryColor,
           ),
-          title:
-    ((){
-    switch(viewModel.tagEditMode){
-      case TagEditMode.normal:
-        return Text(title);
-        break;
-      case TagEditMode.tagTitleEdit:
-        return    viewModel.selectedIndex == listNumber
-            ? EditTagTitle(
-          tagTitle: title,
-          selectTagIdList: selectTagIdList,
-          myFocusNode: myFocusNode,
-        )
-            : Text(title);
-      case TagEditMode.tagDelete:
-        return    viewModel.selectedIndex == listNumber
-            ? EditTagTitle(
-          tagTitle: title,
-          selectTagIdList: selectTagIdList,
-          myFocusNode: myFocusNode,
-        )
-            : Text(title);
-      }
-    })(),
+          title: (() {
+            switch (viewModel.tagEditMode) {
+              case TagEditMode.normal:
+                return Text(title);
+                break;
+              case TagEditMode.tagTitleEdit:
+                return viewModel.selectedIndex == listNumber
+                    ? EditTagTitle(
+                        tagTitle: title,
+                        selectTagIdList: selectTagIdList,
+                        myFocusNode: myFocusNode,
+                      )
+                    : Text(title);
+              case TagEditMode.tagDelete:
+              ///編集必要ないので、Text(title)に変更
+              return Text(title);
+            }
+          })(),
 //          viewModel.tagEditMode
 //              ? Text(title)
 //              : viewModel.selectedIndex == listNumber
@@ -123,19 +118,22 @@ class TagList extends StatelessWidget {
               Text('アイテム数：$tagAmountアイテム'),
             ],
           ),
-          trailing:
-    ((){
-    switch(viewModel.tagEditMode){
-      case TagEditMode.normal:
-        return const Icon(Icons.arrow_forward_ios);
-        break;
-      case TagEditMode.tagTitleEdit:
-        return Container(width: 24,);
-        break;
-      case TagEditMode.tagDelete:
-        return Container(width: 24,);
-    }
-    })(),
+          trailing: (() {
+            switch (viewModel.tagEditMode) {
+              case TagEditMode.normal:
+                return const Icon(Icons.arrow_forward_ios);
+                break;
+              case TagEditMode.tagTitleEdit:
+                return Container(
+                  width: 24,
+                );
+                break;
+              case TagEditMode.tagDelete:
+                return Container(
+                  width: 24,
+                );
+            }
+          })(),
 //          viewModel.tagEditMode
 //              ? const Icon(Icons.arrow_forward_ios)
 //              : Container(width: 24,),//編集時>出さない

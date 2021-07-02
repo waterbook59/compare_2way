@@ -31,6 +31,7 @@ class TagEditBottomAction extends StatelessWidget {
       builder:(context, tagEditMode, child){
             switch(tagEditMode){
               case TagEditMode.normal:
+              //CupertinoButtonに変更すると黄色二十線出ない
                return  CupertinoButton(
                   child: const Text('編集',
                       style: trailingTextStyle),
@@ -87,7 +88,9 @@ class TagEditBottomAction extends StatelessWidget {
                   padding: const EdgeInsets.all(8),);
                 break;
             }
-          ///CupertinoButtonに変更すると黄色二十線出ない
+            return null;//null safety有効にするとエラー出ない
+        ///https://zenn.dev/mono/articles/082dde5601ab4de858a1
+
 //              ?  CupertinoButton(
 //            child: const Text('編集',
 //              style: trailingTextStyle),
