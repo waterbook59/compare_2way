@@ -10,6 +10,7 @@ import 'package:compare_2way/views/tag/components/sub/tag_edit_bottom_action.dar
 import 'package:compare_2way/views/tag/select_tag_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import 'components/tag_list.dart';
@@ -26,6 +27,7 @@ class TagPage extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
+        //todo 編集:タグを編集、削除:タグを削除
         middle: const Text('タグ', style: middleTextStyle,),
         trailing:
             //todo 編集ボタンをタグ名編集・タグ削除に変更
@@ -54,7 +56,6 @@ class TagPage extends StatelessWidget {
 //        ),//Selector
       ),
 
-      //todo タグ名編集時リスト右側の>を消す
       ///Scaffoldで全く問題なし
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
@@ -151,11 +152,33 @@ class TagPage extends StatelessWidget {
         //tagTitleからcomparisonItemIdをviewModelへ格納する
         await viewModel.getTagTitleId(tagTitle);
         break;
-    //todo 削除モード追加
+    /// 削除モード タップでタグ削除
       case TagEditMode.tagDelete:
-        myFocusNode.requestFocus();
-        //tagTitleからcomparisonItemIdをviewModelへ格納する
-        await viewModel.getTagTitleId(tagTitle);
+        await showDialog<Widget>(
+            context: context,
+            builder: (context){
+              return CupertinoAlertDialog(
+                title: Text('「$tagTitle」タグ'),
+                content:const Text('削除してもいいですか？'),
+                actions: [
+                  CupertinoDialogAction(
+                    child: const Text('削除'),
+                    isDestructiveAction: true,
+                    onPressed: () {
+                        viewModel.onDeleteTag(tagTitle);
+                      Navigator.pop(context);
+                      Fluttertoast.showToast(
+                        msg: '削除完了',
+                      );
+                    },
+                  ),
+                  CupertinoDialogAction(
+                    child: const Text('キャンセル'),
+                    onPressed: ()=>Navigator.pop(context),
+                  ),
+                ],
+              );
+            });
         break;
     }
 

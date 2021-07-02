@@ -171,8 +171,8 @@ class TagEditBottomAction extends StatelessWidget {
   }
 
   void _changeEdit(BuildContext context) {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    viewModel.changeToNomal();
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+    ..changeToNormal();
   }
 
 

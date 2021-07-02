@@ -725,20 +725,20 @@ class CompareViewModel extends ChangeNotifier {
 //    notifyListeners();
 //  }
 
-  Future<void> changeToTagTitleEdit() {
+  void changeToTagTitleEdit() {
     tagEditMode = TagEditMode.tagTitleEdit;
     ///"完了"押した時に_selectedIndexをデフォルトに(次に編集押した時に前の選択状態にならないようにする)
     selectedIndex =null;
     notifyListeners();
   }
 
-  Future<void> changeToTagDelete() {
+  void changeToTagDelete() {
     tagEditMode = TagEditMode.tagDelete;
     ///"完了"押した時に_selectedIndexをデフォルトに(次に編集押した時に前の選択状態にならないようにする)
     selectedIndex =null;
     notifyListeners();
   }
-  Future<void> changeToNomal() {
+  void changeToNormal() {
     tagEditMode = TagEditMode.normal;
     notifyListeners();
   }
