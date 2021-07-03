@@ -106,6 +106,7 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                     ///仮でtagNameListから選択したindex番目タイトル削除
                         ?()=> setState(() {
                       /// 削除ボタン押したらcandidateTagに追加(再度候補タグとして表示)
+                      //todo 削除しても候補タグ出ない場合があり、その後全部消えずタグが_tagNameListに残る
                       _tempoCandidateLabels.add(_tempoDisplayList[index]);
                       _tempoDeleteLabels.add(_tempoDisplayList[index]);
 //                      print('チップ削除後_tempoDeleteLabels:$_tempoDeleteLabels');
@@ -186,6 +187,7 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
       const Divider(color: Colors.black,),
       isFocus && (_tempoInput !='')
       //input入力時
+      // todo TagChips onSubmittedと同じ方法で追加(candidateTagを選んだ後createTag追加すると、candidateTag消える)
       ? CreateTag(
         title: _tempoInput,
         onTapAddTag: (){
@@ -194,16 +196,27 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
           //todo TagInputChipの入力文字クリア:tagInputChipの表示空またはdisposeするには?
           setState(() {
             //重複バリデーション
+            print('createTag/_tempoDisplayList:追加前:$_tempoDisplayList');
+            print('createTag/tagNameListSet:追加前:$tagNameListSet');
+            print('createTag/_tempoLabels:追加前:$_tempoLabels');
             _tempoLabels.add(_tempoInput);
             final tempoLabelSet =_tempoLabels.toSet();
             tagNameListSet.addAll(tempoLabelSet);
+
+            print('createTag/_tempoDisplayList:addAll後:$_tempoDisplayList');
+            print('createTag/tagNameListSet:addAll後:$tagNameListSet');
+            print('createTag/_tempoLabels:addAll後:$_tempoLabels');
+
             if( _tempoCandidateLabels.contains(_tempoInput)){
               _tempoCandidateLabels.remove(_tempoInput);
             }
             _tempoLabels =[];
-//            final tempoDisplaySet = _tempoDisplayList.toSet().addAll(tempoLabelSet);
-//            _tempoDisplayList = tempoDisplaySet.toList();
-            _tempoDisplayList = tagNameListSet.toList();
+            //_tempoDisplayListに事前に入っているものとtempoLabelを合体
+            final tempoDisplaySet =_tempoDisplayList.toSet()
+                  ..addAll(tempoLabelSet);
+            _tempoDisplayList = tempoDisplaySet.toList();
+            print('createTag/_tempoDisplayListへtempoLabelsをaddAll後:$_tempoDisplayList');
+//            _tempoDisplayList = tagNameListSet.toList();//事前に追加されたcandidateTagが反映されない
             widget.onSubmitted(_tempoDisplayList);
             _tempoInput ='';
             //TagInputChip表示をActionChipへ戻す
