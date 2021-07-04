@@ -48,7 +48,7 @@ class _TagChipsState extends State<TagChips> {
 //    print('TagChips/initState/tagTitles(Set):$tagNameListSet');
     _tempoDisplayList  = tagNameListSet.toList();
 
-if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
+if(widget.candidateTagNameList==null){
   isCandidate =false;
 }else{
   isCandidate = true;
@@ -110,6 +110,7 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                       _tempoCandidateLabels.add(_tempoDisplayList[index]);
                       _tempoDeleteLabels.add(_tempoDisplayList[index]);
                       _tempoDisplayList.removeAt(index);
+                      print('onDelete/tempoDeleteLabels:$_tempoDeleteLabels');
  ///削除した状態をviewModelへset
                       widget.onSubmitted(_tempoDisplayList);
                       // ignore: lines_longer_than_80_chars
@@ -117,7 +118,7 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                         //tagNameListSet = _tempoDisplayList.toSet();//todo いらない？
 //                      print('InputChip/onDeleted/tagNameListSet:$tagNameListSet');
                         widget.onDeleted(_tempoDeleteLabels);
-                        print('onDelete/tempoDeleteLabels:$_tempoDeleteLabels');
+
                       //tempoDeleteLabelsクリア(しないとviewModelのDeleteLabelsに重複して登録されていく)
                         _tempoDeleteLabels = [];
 
