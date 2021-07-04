@@ -530,7 +530,6 @@ class CompareViewModel extends ChangeNotifier {
     //List<Tag>作成はDBでの重複削除リスト作成後にrepositoryで行う
 
     //表示用リストだったものを本登録
-//    _tagNameList = _tempoDisplayList;
     ///TagDialogPageで完了ボタン押した時に入力中のタグも登録
     if(_tempoInput =='' || _tempoInput == null || _tempoInput == ' '){
     }else{
@@ -538,8 +537,6 @@ class CompareViewModel extends ChangeNotifier {
     }
     print('viewModelのcreateTag時のtempoDisplayList:$_tempoDisplayList');
 
-//    print('viewModel.createTag/tagを作る前の_tagNameList(追加後):${_tagNameList.map((e) => e)}');
-    //_tagNameListをrepositoryへ
     await _compareRepository.createTag(
         _tempoDisplayList,comparisonOverview.comparisonItemId);
     ///タグを空にして完了おしてもTagがでてくるので追加
@@ -554,8 +551,10 @@ class CompareViewModel extends ChangeNotifier {
   //tagChipsでtextField入力内容をviewModelへset
   Future<void> setTempoDisplayList(List<String> tempoDisplayList)async{
     _tempoDisplayList = tempoDisplayList;
-    print('viewModel/setTempoDisplayList/タグ追加:_tagNameList:$_tagNameList');
-    print('viewModel/setTempoDisplayList/タグ追加:_tempoDisplayList:$_tempoDisplayList');
+    ///  _tempoInputに文字が残っていると消したのにcreateTag時に _tempoDisplayListにaddされてしまう
+    _tempoInput ='';
+//    print('viewModel.setTempoDisplayList/_tempoDisplayList:$_tempoDisplayList');
+//    print('viewModel.setTempoDisplayList/_tempoInput:$_tempoInput');
   }
 
   ///TagInputChipで仮入力したものをset
@@ -606,7 +605,7 @@ class CompareViewModel extends ChangeNotifier {
     final joinList = [...tempoDeleteLabels,..._tagNameList];
 //  final joinList= List<String>.from(tempoDeleteLabels)..addAll(_tagNameList);
     //削除する項目(tempoDeleteLabels)とDB登録してある項目(_tagNameList)を結合して
-    //todo 重複しているものだけを抜き出す（結合いらない、tempoDeleteLabelsと_tagNameListを直接比較 repository/createTag参照）
+    ///重複のみを抜き出す（重複削除はset化してremoveAllすれば良いが、重複抜出はリスト結合&if文しかない）
     print('viewModel.createDeleteList/joinList:$joinList');
     final lists =<String>[];
     joinList.map((title) {
