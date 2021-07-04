@@ -413,6 +413,7 @@ class CompareRepository {
   ///新規作成 List<Tag>
   //todo タグ追加したらcreatedAt変更
   ///同一comparisonItemId & 同一tagTitleは登録しないが、同一tagTitleは登録できるように変更
+  //todo tagNameListより意味的にtempoDisplayListの方がふさわしい
   Future<void> createTag(List<String> tagNameList, String comparisonItemId)
   async {
     try {

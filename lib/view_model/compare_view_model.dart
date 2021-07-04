@@ -530,17 +530,22 @@ class CompareViewModel extends ChangeNotifier {
     //List<Tag>作成はDBでの重複削除リスト作成後にrepositoryで行う
 
     //表示用リストだったものを本登録
-    _tagNameList = _tempoDisplayList;
+//    _tagNameList = _tempoDisplayList;
     ///TagDialogPageで完了ボタン押した時に入力中のタグも登録
     if(_tempoInput =='' || _tempoInput == null || _tempoInput == ' '){
     }else{
-      _tagNameList.add(_tempoInput);
+      _tempoDisplayList.add(_tempoInput);
     }
+    print('viewModelのcreateTag時のtempoDisplayList:$_tempoDisplayList');
 
 //    print('viewModel.createTag/tagを作る前の_tagNameList(追加後):${_tagNameList.map((e) => e)}');
     //_tagNameListをrepositoryへ
     await _compareRepository.createTag(
-        _tagNameList,comparisonOverview.comparisonItemId);
+        _tempoDisplayList,comparisonOverview.comparisonItemId);
+    ///タグを空にして完了おしてもTagがでてくるので追加
+    _tempoDisplayList = [];
+    ///残っているとtempoDisplayListにaddされ続けてしまう
+    _tempoInput ='';
     //新規作成のときはnotifyListenersいらない？取得の時のみ？
   }
 
@@ -549,6 +554,8 @@ class CompareViewModel extends ChangeNotifier {
   //tagChipsでtextField入力内容をviewModelへset
   Future<void> setTempoDisplayList(List<String> tempoDisplayList)async{
     _tempoDisplayList = tempoDisplayList;
+    print('viewModel/setTempoDisplayList/タグ追加:_tagNameList:$_tagNameList');
+    print('viewModel/setTempoDisplayList/タグ追加:_tempoDisplayList:$_tempoDisplayList');
   }
 
   ///TagInputChipで仮入力したものをset
@@ -786,8 +793,7 @@ class CompareViewModel extends ChangeNotifier {
 
 
 
-  ///CompareScreen文頭で候補タグ格納(全タグから選択タグを削除)
-  //todo tagChipsStateless使用しないなら削除
+  ///TagDialogPageのFutureBuilderで候補タグ格納(全タグから選択タグを削除)
   Future<List<String>> getCandidateTagList() async{
     //全タグリストから選択されたタグリストを比較して重複を削除
     _allTagList = await _compareRepository.getAllTagList();

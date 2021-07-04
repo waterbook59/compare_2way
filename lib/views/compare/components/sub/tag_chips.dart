@@ -55,9 +55,10 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
 }
     // ignore: lines_longer_than_80_chars
     //candidateTagNameListから選択したもの消したいので、widget.candidateTagNameList=>_tempoCandidateLabelsへinitStateで変換
+    //TagDialogPageのgetCandidateTagListでviewModelにcandidateTagNameList格納
     _tempoCandidateLabels = widget.candidateTagNameList;
 
-//    print('tagChips/initState/tagNameListSet:$tagNameListSet, candidateTagNameList:${widget.candidateTagNameList}' );
+    print('tagChips/initState/tagNameListSet:$tagNameListSet, candidateTagNameList:${widget.candidateTagNameList}' );
 
     super.initState();
   }
@@ -114,7 +115,7 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
 //                        print('チップ削除後_tempoDisplayList:$_tempoDisplayList');
                       // ignore: lines_longer_than_80_chars
                       //DB由来のタイトルから削除タイトル抜かないと1回削除して再度TagInputChipで同じものを入力しようとしても重複タグ扱いになって登録されない
-                        tagNameListSet = _tempoDisplayList.toSet();
+                        //tagNameListSet = _tempoDisplayList.toSet();//todo いらない？
 //                      print('InputChip/onDeleted/tagNameListSet:$tagNameListSet');
                         widget.onDeleted(_tempoDeleteLabels);
                       //tempoDeleteLabelsクリア(しないとviewModelのDeleteLabelsに重複して登録されていく)
@@ -161,8 +162,8 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                         _tempoLabels.add(input);
                         //set型に変換しないと重複削除できないので、toSet
                         final tempoLabelSet =_tempoLabels.toSet();
-                        //addAllで重複削除：_tagNameList内にinputあるかどうか
-                        tagNameListSet.addAll(tempoLabelSet);
+
+//                        tagNameListSet.addAll(tempoLabelSet);//todo 不具合なければ消す
                         /// _tempoCandidateLabels内にinput要素があれば削除
                         if( _tempoCandidateLabels.contains(input)){
                           _tempoCandidateLabels.remove(input);
@@ -170,7 +171,12 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                         //tempoLabelsクリア(しないと編集中に消したものが再度出てくる)
                         _tempoLabels =[];
                         //Listへ戻す
-                        _tempoDisplayList = tagNameListSet.toList();
+//                        _tempoDisplayList = tagNameListSet.toList();
+                        //addAllで重複削除：_tempoDisplayList内にinputあるかどうか
+                        //_tempoDisplayListに事前に入っているものとtempoLabelを合体
+                        final tempoDisplaySet =_tempoDisplayList.toSet()
+                          ..addAll(tempoLabelSet);
+                        _tempoDisplayList = tempoDisplaySet.toList();
                         //tag_dialog_pageへタグタイトルのリスト上げてviewModelに格納
                         widget.onSubmitted(_tempoDisplayList);
                         //createTag表示をリセット
@@ -201,7 +207,7 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
             print('createTag/_tempoLabels:追加前:$_tempoLabels');
             _tempoLabels.add(_tempoInput);
             final tempoLabelSet =_tempoLabels.toSet();
-            tagNameListSet.addAll(tempoLabelSet);
+//            tagNameListSet.addAll(tempoLabelSet);//todo 不具合なければ消す
 
             print('createTag/_tempoDisplayList:addAll後:$_tempoDisplayList');
             print('createTag/tagNameListSet:addAll後:$tagNameListSet');
