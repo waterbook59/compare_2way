@@ -92,7 +92,6 @@ class TagDialogPage extends StatelessWidget {
                           setTempoInput: (tempoInput){
                             viewModel.setTempoInput(tempoInput);
                           },
-                          //todo onSubmitted時にdeleteTagから重複しているタグを削除する(tempoDisplayListに上がっているものはdeleteTagListから抜く)
                           onSubmitted: (tempoDisplayList) {
     ///いきなりviewModel側のtagNameListにsetするとキャンセルしても残るので仮リストへset
                             //_tempoDisplayListをviewModelへset
@@ -101,8 +100,7 @@ class TagDialogPage extends StatelessWidget {
                           onDeleted: (tempoDeleteLabels) {
                       //削除項目抽出：viewModelにsetしてある_tagNameListと
                             // tempoDeleteLabels比較し、重複しているものだけを抜き出す
-                            viewModel.createDeleteList(tempoDeleteLabels,
-                                comparisonOverview.comparisonItemId);
+                            viewModel.createDeleteList(tempoDeleteLabels);
                           },
                     //candidateが空か否かでContainer or ListView.builderで場合わけ
                           candidateTagNameList: viewModel.candidateTagNameList,
