@@ -66,6 +66,7 @@ class CompareViewModel extends ChangeNotifier {
   List<String> _tagNameList = <String>[];//TagDialogPageでのIDに紐づくDBへの登録用リスト
   List<String> get tagNameList =>_tagNameList;
   List<String> _tempoDisplayList =<String>[];//TagDialogPageでのDB登録前の表示リスト
+  List<String> _tempoDeleteList = <String>[];//削除タグリストをつくる一歩手前のStringリスト
   String _tempoInput;//TagInputChipに仮入力してるもの
   List<Chip> _displayChipList = <Chip>[];//CompareScreen表示用
   List<Chip> get displayChipList =>_displayChipList;
@@ -551,6 +552,15 @@ class CompareViewModel extends ChangeNotifier {
   //tagChipsでtextField入力内容をviewModelへset
   Future<void> setTempoDisplayList(List<String> tempoDisplayList)async{
     _tempoDisplayList = tempoDisplayList;
+    //todo onSubmitted時にdeleteTagから重複しているタグを削除する(tempoDisplayListに上がっているものはdeleteTagListから抜く)
+    final tempoDisplaySet = _tempoDisplayList.toSet();//StringのSet
+    final  tempoDeleteLabelsSet = _tempoDeleteList.toSet();//Stringのset
+    print('tempoDisplaySet/remove前:$tempoDisplaySet');
+    print('_tempoDeleteLabels/remove前:$_tempoDeleteList');
+    print('deleteTagSet/remove前::$tempoDeleteLabelsSet');
+    tempoDeleteLabelsSet.removeAll(tempoDisplaySet);
+    _tempoDeleteList = tempoDeleteLabelsSet.toList();
+    print('_tempoDeleteLabels/remove後:$_tempoDeleteList');
     ///  _tempoInputに文字が残っていると消したのにcreateTag時に _tempoDisplayListにaddされてしまう
     _tempoInput ='';
 //    print('viewModel.setTempoDisplayList/_tempoDisplayList:$_tempoDisplayList');
@@ -599,36 +609,47 @@ class CompareViewModel extends ChangeNotifier {
 
 
   ///tagChipsで削除するTagを登録
+  //todo 引数のid消す
   Future<void> createDeleteList(
       List<String> tempoDeleteLabels,
       String comparisonItemId) async{
+
+    print('createDeleteList/_tempoDeleteLabels/:$_tempoDeleteList');
     final joinList = [...tempoDeleteLabels,..._tagNameList];
 //  final joinList= List<String>.from(tempoDeleteLabels)..addAll(_tagNameList);
     //削除する項目(tempoDeleteLabels)とDB登録してある項目(_tagNameList)を結合して
     ///重複のみを抜き出す（重複削除はset化してremoveAllすれば良いが、重複抜出はリスト結合&if文しかない）
+    //todo ここではTag化せずにList<String>に留めておいて完了押(deleteTag)したらTag化する方向にもっていく
     print('viewModel.createDeleteList/joinList:$joinList');
     final lists =<String>[];
     joinList.map((title) {
       if(lists.contains(title)){
-        final deleteTag = Tag(
-            comparisonItemId: comparisonItemId,
-            tagTitle: title,
-        );
-        deleteTagList.add(deleteTag);
-        print('deleteTagList:${deleteTagList.map((e) => e.tagTitle).toList()}');
+        _tempoDeleteList.add(title);
+//        deleteTagList.add(deleteTag);
+        print('createDeleteList/_tempoDeleteList:$_tempoDeleteList');
       }else{
        lists.add(title);
-       print('delete以外のリスト：$lists');
+//       print('delete以外のリスト：$lists');
       }
     }).toList();
 
 
   }
   ///tagDialogPageでList<tag>を削除
-  Future<void>deleteTag() async{
+  Future<void>deleteTag(String comparisonItemId) async{
+    //todo createDeleteListで作成したtempoDeleteListをList<Tag>化してDBへ渡す
+    print('deleteTagメソッドで消すtempoDeleteTagList:$_tempoDeleteList');
+    _tempoDeleteList.map((title){
+      final deleteTag = Tag(
+        comparisonItemId: comparisonItemId,
+        tagTitle: title,
+      );
+      deleteTagList.add(deleteTag);
+    }).toList();
     print('deleteTagメソッドで消すリスト:'
         '${deleteTagList.map((e) => e.tagTitle).toList()}');
     await _compareRepository.deleteTag(deleteTagList);
+    _tempoDeleteList = [];
    _deleteTagList = [];
   }
 

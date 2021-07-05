@@ -44,8 +44,9 @@ class TagDialogPage extends StatelessWidget {
               ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
 //              print('tagDialogPageの完了ボタン！');
             //tempoInputTagに入力がある場合はviewModelの_tagNameListに追加
-              await viewModel.createTag(comparisonOverview);
-              await viewModel.deleteTag();
+              await viewModel.createTag(comparisonOverview);//DBと重複してないものを登録
+              //削除リストとDBリストで重複してるものを削除
+              await viewModel.deleteTag(comparisonOverview.comparisonItemId);
               //TagPage側更新
               await viewModel.updateSelectTagPage();
               //tagChipPart更新
@@ -91,6 +92,7 @@ class TagDialogPage extends StatelessWidget {
                           setTempoInput: (tempoInput){
                             viewModel.setTempoInput(tempoInput);
                           },
+                          //todo onSubmitted時にdeleteTagから重複しているタグを削除する(tempoDisplayListに上がっているものはdeleteTagListから抜く)
                           onSubmitted: (tempoDisplayList) {
     ///いきなりviewModel側のtagNameListにsetするとキャンセルしても残るので仮リストへset
                             //_tempoDisplayListをviewModelへset
