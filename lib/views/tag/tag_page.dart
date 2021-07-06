@@ -7,6 +7,7 @@ import 'package:compare_2way/view_model/tag_view_model.dart';
 import 'package:compare_2way/views/list/componets/overview_list.dart';
 import 'package:compare_2way/views/tag/components/sub/page_title.dart';
 import 'package:compare_2way/views/tag/components/sub/tag_edit_bottom_action.dart';
+import 'package:compare_2way/views/tag/components/sub/tag_page_title.dart';
 import 'package:compare_2way/views/tag/select_tag_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,13 +28,11 @@ class TagPage extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
-        //todo 編集:タグを編集、削除:タグを削除
-        middle: const Text('タグ', style: middleTextStyle,),
+        middle: TagPageTitle(),
         trailing:
         //todo タグ名編集時にキーボードunFocusできるアイコン追加
         //編集モード(true)の時はリストをタップするとTagListのtagTitle部を編集する形に
-
-        const TagEditBottomAction(),
+         TagEditBottomAction(),
           //これまでのboolのtagEditModeの時
 //      Selector<CompareViewModel,TagEditMode>(
 //        selector: (context, viewModel) => viewModel.tagEditMode,

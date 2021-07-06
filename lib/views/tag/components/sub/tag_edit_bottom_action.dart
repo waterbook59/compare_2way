@@ -1,27 +1,12 @@
-import 'package:compare_2way/data_models/comparison_overview.dart';
-import 'package:compare_2way/home_screen.dart';
 ///CupertinoNavigationBar内ではCupertinoActionSheetAction
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
-import 'package:compare_2way/views/list/add_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class TagEditBottomAction extends StatelessWidget {
-
-  const TagEditBottomAction(
-//  {
-//    this.comparisonOverview,
-//    this.tagTitle,this.itemTitleEditMode,
-//  }
-  );
-
-//  final ComparisonOverview comparisonOverview;
-//  final String tagTitle;
-//  final ItemTitleEditMode itemTitleEditMode;
 
   @override
   Widget build(BuildContext context) {
