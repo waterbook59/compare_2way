@@ -25,7 +25,7 @@ class SingleListPage extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
         middle: const Text(
-          'Compare List',
+          'リスト',
           style: middleTextStyle,
         ),
         //todo ListPageに戻るとtrailing位置の編集に黄色下線出る
@@ -98,7 +98,7 @@ class SingleListPage extends StatelessWidget {
                         if (snapshot.hasData && snapshot.data.isEmpty) {
                           print('EmptyView側通って描画');
                           return Container(
-                              child: const Center(child: Text('リスト追加してください')));
+                              child: const Center(child: Text('アイテムを追加してください')));
                         } else {
 //print('ListView側通って描画');
                           return

@@ -30,11 +30,10 @@ class TagPage extends StatelessWidget {
         //todo 編集:タグを編集、削除:タグを削除
         middle: const Text('タグ', style: middleTextStyle,),
         trailing:
-            //todo 編集ボタンをタグ名編集・タグ削除に変更
         //todo タグ名編集時にキーボードunFocusできるアイコン追加
         //編集モード(true)の時はリストをタップするとTagListのtagTitle部を編集する形に
 
-        TagEditBottomAction(),
+        const TagEditBottomAction(),
           //これまでのboolのtagEditModeの時
 //      Selector<CompareViewModel,TagEditMode>(
 //        selector: (context, viewModel) => viewModel.tagEditMode,
@@ -66,14 +65,13 @@ class TagPage extends StatelessWidget {
 //          selector: (context, compareViewModel) => compareViewModel.allTagList,
           Consumer<CompareViewModel>(
           builder: (context, compareViewModel, child) {
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const PageTitle(
-                    title: 'タグ',
-                  ),
-                  FutureBuilder(
+            return LayoutBuilder(
+                builder: (context, constraints) =>
+               SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints:
+                  BoxConstraints(minHeight: constraints.maxHeight),
+                  child: FutureBuilder(
                     future:
                     compareViewModel.getAllTagList(),
                     //compareViewModel.allTagList,
@@ -84,41 +82,48 @@ class TagPage extends StatelessWidget {
                       }
                       if (snapshot.hasData && snapshot.data.isEmpty) {
                         print('EmptyView側通って描画');
-                        //todo 中央に位置変更 listPage参考
                         return Container(
                             child:
-                                const Center(child: Text('タグづけされたリストはありません')));
+                                const Center(child: Text('タグづけされたアイテムはありません')));
                       } else {
-                        return ListView.builder(
-                          //ListView.builderの高さを自動指定
-                          shrinkWrap: true,
-                          //リストが縦方向にスクロールできるようになる
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final overview = snapshot.data[index];
-//                            print('tagPage/itemIdList:$overview');
-                            //DateTime=>String変換
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const PageTitle(
+                              title: 'タグ',
+                            ),
                             //todo 1つめのリストの上にDivider的な線が必要
-                            return TagList(
-                            title: overview.tagTitle,
-                            selectTagIdList: overview.itemIdList,
-                            tagAmount: overview.tagAmount,
-                            createdAt: '登録時間',
-                            onDelete: ()=> _onDeleteTag(
-                                context, overview.tagTitle),
-                            onTap: ()=>_onSelectTag(
-                                context,overview.tagTitle,overview.myFocusNode),
+                            ListView.builder(
+                              //ListView.builderの高さを自動指定
+                              shrinkWrap: true,
+                              //リストが縦方向にスクロールできるようになる
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final overview = snapshot.data[index];
+//                            print('tagPage/itemIdList:$overview');
+                                //DateTime=>String変換
+                                return TagList(
+                                title: overview.tagTitle,
+                                selectTagIdList: overview.itemIdList,
+                                tagAmount: overview.tagAmount,
+                                createdAt: '登録時間',
+                                onDelete: ()=> _onDeleteTag(
+                                    context, overview.tagTitle),
+                                onTap: ()=>_onSelectTag(
+                                    context,overview.tagTitle,overview.myFocusNode),
 //                            listDecoration: listDecoration,
-                            listNumber: index,
-                            myFocusNode:overview.myFocusNode,
-                            );
-                          },
+                                listNumber: index,
+                                myFocusNode:overview.myFocusNode,
+                                );
+                              },
+                            ),
+                          ],
                         );
                       }
                     },
                   ),
-                ],
+                ),
               ),
             );
           },
