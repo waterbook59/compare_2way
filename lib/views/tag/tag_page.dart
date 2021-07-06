@@ -92,7 +92,8 @@ class TagPage extends StatelessWidget {
                             const PageTitle(
                               title: 'タグ',
                             ),
-                            //todo 1つめのリストの上にDivider的な線が必要
+                            const SizedBox(height: 8,),
+                            const Divider(color: Colors.grey,height: 0,),
                             ListView.builder(
                               //ListView.builderの高さを自動指定
                               shrinkWrap: true,
