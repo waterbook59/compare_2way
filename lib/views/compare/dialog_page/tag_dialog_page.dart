@@ -23,6 +23,7 @@ class TagDialogPage extends StatelessWidget {
       //todo navBarのUI調整
       navigationBar: CupertinoNavigationBar(
           backgroundColor: const Color(0xFF363A44),
+//        leadingはxボタンに変更
           leading: GestureDetector(
               child: const Icon(
                 CupertinoIcons.clear_thick_circled,
@@ -31,15 +32,9 @@ class TagDialogPage extends StatelessWidget {
               onTap: () =>Navigator.pop(context)
           ),
           middle: const Text('タグの追加・編集',style: middleTextStyle),
-//todo leadingはxボタンに変更
-//          leading: CupertinoButton(
-//            child:const Text('キャンセル'),
-//            onPressed:  () {
-//              Navigator.of(context).pop();
-//            },
-//          ),
-          //todo iPhoneだとtrailingの'完了'の下が切れてる..
-          //todo 完了ボタン押した時にTagInputChip入力中の項目も追加されるように(キーボード完了よりこっちをおしてしまう)
+
+          //CupertinoButtotonに変更でtrailingの'完了'の下が切れない..
+          // 完了ボタン押した時にTagInputChip入力中の項目も追加されるように(キーボード完了よりこっちをおしてしまう)
           trailing: CupertinoButton(
             padding: const EdgeInsets.all(8),
             child: const Text('完了',style: trailingTextStyle,),
@@ -49,8 +44,9 @@ class TagDialogPage extends StatelessWidget {
               ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
 //              print('tagDialogPageの完了ボタン！');
             //tempoInputTagに入力がある場合はviewModelの_tagNameListに追加
-              await viewModel.createTag(comparisonOverview);
-              await viewModel.deleteTag();
+              await viewModel.createTag(comparisonOverview);//DBと重複してないものを登録
+              //削除リストとDBリストで重複してるものを削除
+              await viewModel.deleteTag(comparisonOverview.comparisonItemId);
               //TagPage側更新
               await viewModel.updateSelectTagPage();
               //tagChipPart更新
@@ -97,14 +93,14 @@ class TagDialogPage extends StatelessWidget {
                             viewModel.setTempoInput(tempoInput);
                           },
                           onSubmitted: (tempoDisplayList) {
+    ///いきなりviewModel側のtagNameListにsetするとキャンセルしても残るので仮リストへset
                             //_tempoDisplayListをviewModelへset
-                            viewModel.setTagNameList(tempoDisplayList);
+                            viewModel.setTempoDisplayList(tempoDisplayList);
                           },
                           onDeleted: (tempoDeleteLabels) {
                       //削除項目抽出：viewModelにsetしてある_tagNameListと
                             // tempoDeleteLabels比較し、重複しているものだけを抜き出す
-                            viewModel.createDeleteList(tempoDeleteLabels,
-                                comparisonOverview.comparisonItemId);
+                            viewModel.createDeleteList(tempoDeleteLabels);
                           },
                     //candidateが空か否かでContainer or ListView.builderで場合わけ
                           candidateTagNameList: viewModel.candidateTagNameList,

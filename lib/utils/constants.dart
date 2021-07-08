@@ -34,3 +34,10 @@ enum ScreenEditMode{
   fromListPage,
   fromSelectTagPage
 }
+
+//TagPageのHeaderの編集ボタン
+enum TagEditMode{
+  normal,
+  tagTitleEdit,
+  tagDelete
+}

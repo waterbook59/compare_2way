@@ -144,6 +144,14 @@ class _SettingPageState extends State<SettingPage> {
           '設定',
           style: middleTextStyle,
         ),
+        trailing:  GestureDetector(
+          child: const Icon(
+            //CupertinoIcons.keyboard_chevron_compact_downない
+            Icons.keyboard_hide,
+            color: Colors.white,
+          ),
+          onTap:()=> _unFocusTap(context),
+        ),
       ),
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
@@ -295,6 +303,12 @@ class _SettingPageState extends State<SettingPage> {
 //        Container(child: const Center(child: Text('設定ページ')),
       ),
     );
+  }
+
+  void _unFocusTap(BuildContext context) {
+    //setStateしてない
+    print('unFocus!');
+        FocusScope.of(context).unfocus();
   }
 
 }

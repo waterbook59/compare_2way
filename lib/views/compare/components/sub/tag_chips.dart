@@ -37,6 +37,7 @@ class _TagChipsState extends State<TagChips> {
   bool isCandidate;
   bool isFocus = false;
   String _tempoInput ='';
+  bool isInput= false;//TagInputChipの入力表示(true)とActionChip(false)
 
   @override
   void initState() {
@@ -47,16 +48,17 @@ class _TagChipsState extends State<TagChips> {
 //    print('TagChips/initState/tagTitles(Set):$tagNameListSet');
     _tempoDisplayList  = tagNameListSet.toList();
 
-if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
+if(widget.candidateTagNameList==null){
   isCandidate =false;
 }else{
   isCandidate = true;
 }
     // ignore: lines_longer_than_80_chars
     //candidateTagNameListから選択したもの消したいので、widget.candidateTagNameList=>_tempoCandidateLabelsへinitStateで変換
+    //TagDialogPageのgetCandidateTagListでviewModelにcandidateTagNameList格納
     _tempoCandidateLabels = widget.candidateTagNameList;
 
-//    print('tagChips/initState/tagNameListSet:$tagNameListSet, candidateTagNameList:${widget.candidateTagNameList}' );
+    print('tagChips/initState/tagNameListSet:$tagNameListSet, candidateTagNameList:${widget.candidateTagNameList}' );
 
     super.initState();
   }
@@ -64,7 +66,8 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
   @override
   void dispose() {
     _tempoCandidateLabels = [];
-//    print('tagChips/dispose_tempoCandidateLabels:$_tempoCandidateLabels');
+    _tempoDisplayList = [];
+    print('tagChips/dispose_tempoDisplayList :$_tempoDisplayList');
     super.dispose();
   }
 
@@ -106,14 +109,16 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                       /// 削除ボタン押したらcandidateTagに追加(再度候補タグとして表示)
                       _tempoCandidateLabels.add(_tempoDisplayList[index]);
                       _tempoDeleteLabels.add(_tempoDisplayList[index]);
-//                      print('チップ削除後_tempoDeleteLabels:$_tempoDeleteLabels');
                       _tempoDisplayList.removeAt(index);
-//                        print('チップ削除後_tempoDisplayList:$_tempoDisplayList');
+                      print('onDelete/tempoDeleteLabels:$_tempoDeleteLabels');
+ ///削除した状態をviewModelへset
+//                      widget.onSubmitted(_tempoDisplayList);
                       // ignore: lines_longer_than_80_chars
                       //DB由来のタイトルから削除タイトル抜かないと1回削除して再度TagInputChipで同じものを入力しようとしても重複タグ扱いになって登録されない
-                        tagNameListSet = _tempoDisplayList.toSet();
+                        //tagNameListSet = _tempoDisplayList.toSet();//todo いらない？
 //                      print('InputChip/onDeleted/tagNameListSet:$tagNameListSet');
                         widget.onDeleted(_tempoDeleteLabels);
+
                       //tempoDeleteLabelsクリア(しないとviewModelのDeleteLabelsに重複して登録されていく)
                         _tempoDeleteLabels = [];
 
@@ -133,6 +138,12 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                   // ignore: lines_longer_than_80_chars
                   //input追加時はDB由来のtagNameListと重複したタグが作られないようvalidationして表示リスト全てをviewModelへ格納
                   TagInputChip(
+                    isInput: isInput,
+                    onChangeInputMode: (){
+                      setState(() {   //TagInputChip表示をTextFieldへ変更
+                        isInput = true;
+                      });
+                    },
                     //tagInputChipのautoFocus外して入力モードになったら+create'...'ボタン出す
                     onFocusChange: (focus){
                       setState(() {isFocus = focus.hasFocus;});
@@ -152,20 +163,23 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
                         _tempoLabels.add(input);
                         //set型に変換しないと重複削除できないので、toSet
                         final tempoLabelSet =_tempoLabels.toSet();
-                        //addAllで重複削除：_tagNameList内にinputあるかどうか
-                        tagNameListSet.addAll(tempoLabelSet);
                         /// _tempoCandidateLabels内にinput要素があれば削除
                         if( _tempoCandidateLabels.contains(input)){
                           _tempoCandidateLabels.remove(input);
                         }
                         //tempoLabelsクリア(しないと編集中に消したものが再度出てくる)
                         _tempoLabels =[];
-                        //Listへ戻す
-                        _tempoDisplayList = tagNameListSet.toList();
+                        //addAllで重複削除：_tempoDisplayList内にinputあるかどうか
+                        //_tempoDisplayListに事前に入っているものとtempoLabelを合体
+                        final tempoDisplaySet =_tempoDisplayList.toSet()
+                          ..addAll(tempoLabelSet);
+                        _tempoDisplayList = tempoDisplaySet.toList();
                         //tag_dialog_pageへタグタイトルのリスト上げてviewModelに格納
                         widget.onSubmitted(_tempoDisplayList);
                         //createTag表示をリセット
                         _tempoInput ='';
+                        //TagInputChip表示をActionChipへ戻す
+                        isInput = false;
                       }
 
                       setState(() {//tag_input_chipのcontroller破棄
@@ -181,21 +195,22 @@ if(widget.candidateTagNameList.isEmpty||widget.candidateTagNameList==null){
         onTapAddTag: (){
           //追加時フォーカス外す
           FocusScope.of(context).unfocus();
-          //todo TagInputChipの入力文字クリア
           setState(() {
             //重複バリデーション
             _tempoLabels.add(_tempoInput);
             final tempoLabelSet =_tempoLabels.toSet();
-            tagNameListSet.addAll(tempoLabelSet);
             if( _tempoCandidateLabels.contains(_tempoInput)){
               _tempoCandidateLabels.remove(_tempoInput);
             }
             _tempoLabels =[];
-//            final tempoDisplaySet = _tempoDisplayList.toSet().addAll(tempoLabelSet);
-//            _tempoDisplayList = tempoDisplaySet.toList();
-            _tempoDisplayList = tagNameListSet.toList();
+            //_tempoDisplayListに事前に入っているものとtempoLabelを合体
+            final tempoDisplaySet =_tempoDisplayList.toSet()
+                  ..addAll(tempoLabelSet);
+            _tempoDisplayList = tempoDisplaySet.toList();
             widget.onSubmitted(_tempoDisplayList);
             _tempoInput ='';
+            //TagInputChip表示をActionChipへ戻す
+            isInput = false;
           });
 
         },

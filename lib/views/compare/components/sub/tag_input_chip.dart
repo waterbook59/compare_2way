@@ -6,11 +6,15 @@ class TagInputChip extends StatefulWidget {
   const TagInputChip({
     this.onSubmitted,
     this.setTempoInput,
-    this.onFocusChange});
+    this.onFocusChange,
+  this.isInput,
+  this.onChangeInputMode,});
   //入力値をtagChipsへ上げる
   final ValueChanged<String> onSubmitted;
   final ValueChanged<String> setTempoInput;
   final ValueChanged<FocusNode>onFocusChange;
+  final VoidCallback onChangeInputMode;
+  final bool isInput;
 
   @override
   _TagInputChipState createState() => _TagInputChipState();
@@ -19,7 +23,6 @@ class TagInputChip extends StatefulWidget {
 class _TagInputChipState extends State<TagInputChip> {
   final _tagTitleController = TextEditingController();
   final FocusNode _focus = FocusNode();
-  bool isInput=false;
 
 
   @override
@@ -41,7 +44,7 @@ class _TagInputChipState extends State<TagInputChip> {
   Widget build(BuildContext context) {
     return
       //todo 入力に合わせてChipのばしたい
-   isInput
+   widget.isInput
       //フォーカスしてる時はプラスアイコンなしのTextField
     ?Chip(
         backgroundColor: Colors.blue[100],
@@ -88,9 +91,9 @@ class _TagInputChipState extends State<TagInputChip> {
         backgroundColor: Colors.blue[100],
         label: const Text('タグを入力'),
         onPressed: (){
-          setState(() {
-            isInput = true;
-          });
+          //TagInputChip表示をTextFieldへ変更
+          widget.onChangeInputMode();
+          _tagTitleController.text = '';
         }
       );
 
@@ -101,9 +104,6 @@ class _TagInputChipState extends State<TagInputChip> {
     BuildContext context, String input,){
   widget.onSubmitted(input);
   _tagTitleController.text ='';
-  //controller破棄してリフレッシュ
-  setState(() {
-  });
   }
 
   //tagInputChipのautoFocus外して入力モードになったら+create'...'ボタン出す

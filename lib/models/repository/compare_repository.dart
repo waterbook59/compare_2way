@@ -413,7 +413,7 @@ class CompareRepository {
   ///新規作成 List<Tag>
   //todo タグ追加したらcreatedAt変更
   ///同一comparisonItemId & 同一tagTitleは登録しないが、同一tagTitleは登録できるように変更
-  Future<void> createTag(List<String> tagNameList, String comparisonItemId)
+  Future<void> createTag(List<String> tempoDisplayList, String comparisonItemId)
   async {
     try {
       ///既に登録されているTagListをgetし、Setへ変換
@@ -423,12 +423,12 @@ class CompareRepository {
 
       //tagNameListをSetへ変換し、DB登録しているタグを削除
       ///2つのリストから重複削除removeAllはSetでしか使えない
-      final tagNameSet = tagNameList.toSet()
+      final tempoDisplaySet = tempoDisplayList.toSet()
       ..removeAll(dbTitleSet);
-      print('extractionSet:$tagNameSet');
+      print('extractionSet:$tempoDisplaySet');
       //DBと重複のない抽出したtagNameSetをList<Tag>へ変換
       ///extractionSet(tagNameSet)=>List<Tag>に変換して登録
-      final tagList = tagNameSet.map((name) {
+      final tagList = tempoDisplaySet.map((name) {
         return Tag(
           comparisonItemId: comparisonItemId,
           tagTitle: name,

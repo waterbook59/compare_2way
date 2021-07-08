@@ -58,21 +58,24 @@ class CompareViewModel extends ChangeNotifier {
   String tagTitle= '';
   String addTagTitle;
 
-
+ ///CompareScreenで使用
   List<String> candidateTagNameList = <String>[];
 //  List<String> get candidateTagNameList =>_candidateTagNameList;
-  String _tempoInput;
-  List<String> _tagNameList = <String>[];
-  List<String> get tagNameList =>_tagNameList;
-  List<Tag> _tagList = <Tag>[];
+  List<Tag> _tagList = <Tag>[];//CompareScreenでのIDに紐づく選択済リスト
   List<Tag> get tagList => _tagList;
-  List<Tag> _allTagList = <Tag>[];
-  List<Tag> get allTagList => _tagList;
-  List<Chip> _displayChipList = <Chip>[];
+  List<String> _tagNameList = <String>[];//TagDialogPageでのIDに紐づくDBへの登録用リスト
+  List<String> get tagNameList =>_tagNameList;
+  List<String> _tempoDisplayList =<String>[];//TagDialogPageでのDB登録前の表示リスト
+  List<String> _tempoDeleteList = <String>[];//削除タグリストをつくる一歩手前のStringリスト
+  String _tempoInput;//TagInputChipに仮入力してるもの
+  List<Chip> _displayChipList = <Chip>[];//CompareScreen表示用
   List<Chip> get displayChipList =>_displayChipList;
   List<Tag> _deleteTagList = <Tag>[];
   List<Tag> get deleteTagList => _deleteTagList;
-  List<Tag> _selectTagList = <Tag>[];
+  ///TagPageで使用
+  List<Tag> _allTagList = <Tag>[];//TagPageでの表示用全タグリスト
+  List<Tag> get allTagList => _tagList;
+  List<Tag> _selectTagList = <Tag>[];//TagPage=>SelectTagPageへtagTitleで紐づいたタグリスト
   List<Tag> get selectTagList => _selectTagList;
   List<ComparisonOverview> _selectOverviews = <ComparisonOverview>[];
   List<ComparisonOverview> get selectOverviews => _selectOverviews;
@@ -83,7 +86,7 @@ class CompareViewModel extends ChangeNotifier {
 
 
   ListEditMode editStatus = ListEditMode.display;
-  bool tagEditMode = true; //初期設定は通常モード
+  TagEditMode tagEditMode = TagEditMode.normal; //初期設定は通常モード
 //  bool editFocus = false; //初期設定はタイトルのみ
   int selectedIndex;//tagPageでのListTile選択
   int selectedDescListIndex;//DescFromAndButtonでのListTIle選択
@@ -99,6 +102,8 @@ class CompareViewModel extends ChangeNotifier {
   bool isWay2DemeritFocusList = true;
   bool isWay3MeritFocusList = true;
   bool isWay3DemeritFocusList = true;
+
+
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
   Future<void> getOverview(String comparisonItemId) async {
@@ -527,24 +532,36 @@ class CompareViewModel extends ChangeNotifier {
     //完了を押したらinput内容(List<String>)とcomparisonIdを基にList<Tag>クラスをDB登録
     //List<Tag>作成はDBでの重複削除リスト作成後にrepositoryで行う
 
+    //表示用リストだったものを本登録
     ///TagDialogPageで完了ボタン押した時に入力中のタグも登録
     if(_tempoInput =='' || _tempoInput == null || _tempoInput == ' '){
     }else{
-      _tagNameList.add(_tempoInput);
+      _tempoDisplayList.add(_tempoInput);
     }
-//    print('viewModel.createTag/tagを作る前の_tagNameList(追加後):${_tagNameList.map((e) => e)}');
-    //_tagNameListをrepositoryへ
+    print('viewModelのcreateTag時のtempoDisplayList:$_tempoDisplayList');
+
     await _compareRepository.createTag(
-        _tagNameList,comparisonOverview.comparisonItemId);
+        _tempoDisplayList,comparisonOverview.comparisonItemId);
+    ///タグを空にして完了おしてもTagがでてくるので追加
+    _tempoDisplayList = [];
+    ///残っているとtempoDisplayListにaddされ続けてしまう
+    _tempoInput ='';
     //新規作成のときはnotifyListenersいらない？取得の時のみ？
   }
 
-  ///tagChipsでtextField入力内容をviewModelへset
-  Future<void> setTagNameList(List<String> tagNameList)async{
-    _tagNameList = tagNameList;
-//    print('compareViewModelへtagNameListをset:'
-//        '${_tagNameList.map((tagName) => print('$tagName')).toList()}');
-    print('compareViewModelへtagNameListをset:$_tagNameList');
+
+  ///TagDialogPageでの登録完了(createTag)前の表示用リスト
+  //tagChipsでtextField入力内容をviewModelへset
+  Future<void> setTempoDisplayList(List<String> tempoDisplayList)async{
+    _tempoDisplayList = tempoDisplayList;
+    //onSubmitted時にtempoDeleteListから重複しているタグを削除
+    // (tempoDisplayListに上がっているものはtempoDeleteListから抜く)
+    final tempoDisplaySet = _tempoDisplayList.toSet();//StringのSet
+    final  tempoDeleteLabelsSet = _tempoDeleteList.toSet()//Stringのset
+          ..removeAll(tempoDisplaySet);
+    _tempoDeleteList = tempoDeleteLabelsSet.toList();
+    ///  _tempoInputに文字が残っていると消したのにcreateTag時に _tempoDisplayListにaddされてしまう
+    _tempoInput ='';
   }
 
   ///TagInputChipで仮入力したものをset
@@ -556,7 +573,7 @@ class CompareViewModel extends ChangeNotifier {
   }
 
 
- ///List<Tag>取得(文頭取得用)
+ ///CompareScreenでのList<Tag>取得(文頭取得用)
   Future<void> getTagList(String comparisonItemId) async{
     _tagList = await _compareRepository.getTagList(comparisonItemId);
 //    print('viewModel.getTagList:${_tagList.map((e) => e.tagTitle)}');
@@ -576,49 +593,43 @@ class CompareViewModel extends ChangeNotifier {
   }
 
 
-
-
-  Future<void> onDeleteTag(String tagTitle) async{
-    //tagTitleで紐づけて削除するのでcomparisonItemIdいらない
-    //一応Tag形式にしてやりとりしてるが、tagTitleだけあれば削除可能(のはず)
-    final deleteTag = Tag(tagTitle: tagTitle);
-    await _compareRepository.onDeleteTag(deleteTag);
-    //削除してtagPage更新
-    notifyListeners();
-  }
-
-
   ///tagChipsで削除するTagを登録
   Future<void> createDeleteList(
-      List<String> tempoDeleteLabels,
-      String comparisonItemId) async{
+      List<String> tempoDeleteLabels,) async{
     final joinList = [...tempoDeleteLabels,..._tagNameList];
 //  final joinList= List<String>.from(tempoDeleteLabels)..addAll(_tagNameList);
     //削除する項目(tempoDeleteLabels)とDB登録してある項目(_tagNameList)を結合して
-    //todo 重複しているものだけを抜き出す（結合いらない、tempoDeleteLabelsと_tagNameListを直接比較 repository/createTag参照）
+    ///重複のみを抜き出す（重複削除はset化してremoveAllすれば良いが、重複抜出はリスト結合&if文しかない）
+    // ここではTag化せずにList<String>に留めておいて完了押(deleteTag)したらTag化する方向にもっていく
     print('viewModel.createDeleteList/joinList:$joinList');
     final lists =<String>[];
     joinList.map((title) {
       if(lists.contains(title)){
-        final deleteTag = Tag(
-            comparisonItemId: comparisonItemId,
-            tagTitle: title,
-        );
-        deleteTagList.add(deleteTag);
-        print('deleteTagList:${deleteTagList.map((e) => e.tagTitle).toList()}');
+        _tempoDeleteList.add(title);
+//        print('createDeleteList/_tempoDeleteList:$_tempoDeleteList');
       }else{
        lists.add(title);
-       print('delete以外のリスト：$lists');
+//       print('delete以外のリスト：$lists');
       }
     }).toList();
 
 
   }
   ///tagDialogPageでList<tag>を削除
-  Future<void>deleteTag() async{
-    print('deleteTagメソッドで消すリスト:'
-        '${deleteTagList.map((e) => e.tagTitle).toList()}');
+  Future<void>deleteTag(String comparisonItemId) async{
+    //createDeleteListで作成したtempoDeleteListをList<Tag>化してDBへ渡す
+//    print('deleteTagメソッドで消すtempoDeleteTagList:$_tempoDeleteList');
+    _tempoDeleteList.map((title){
+      final deleteTag = Tag(
+        comparisonItemId: comparisonItemId,
+        tagTitle: title,
+      );
+      deleteTagList.add(deleteTag);
+    }).toList();
+//    print('deleteTagメソッドで消すリスト:'
+//        '${deleteTagList.map((e) => e.tagTitle).toList()}');
     await _compareRepository.deleteTag(deleteTagList);
+    _tempoDeleteList = [];
    _deleteTagList = [];
   }
 
@@ -714,10 +725,29 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   //TagPageでの通常モード(編集)<=>編集モード(完了)の切替
-  Future<void> changeTagEditMode() {
-     tagEditMode = !tagEditMode;
-     ///"完了"押した時に_selectedIndexをデフォルトに(次に編集押した時に前の選択状態にならないようにする)
-       selectedIndex =null;
+//  Future<void> changeTagEditMode() {
+//     tagEditMode = !tagEditMode;
+//     ///"完了"押した時に_selectedIndexをデフォルトに(次に編集押した時に前の選択状態にならないようにする)
+//       selectedIndex =null;
+//    notifyListeners();
+//  }
+
+///TagPageでの編集モード変更
+  void changeToTagTitleEdit() {
+    tagEditMode = TagEditMode.tagTitleEdit;
+    ///"完了"押した時に_selectedIndexをデフォルトに(次に編集押した時に前の選択状態にならないようにする)
+    selectedIndex =null;
+    notifyListeners();
+  }
+
+  void changeToTagDelete() {
+    tagEditMode = TagEditMode.tagDelete;
+    ///"完了"押した時に_selectedIndexをデフォルトに(次に編集押した時に前の選択状態にならないようにする)
+    selectedIndex =null;
+    notifyListeners();
+  }
+  void changeToNormal() {
+    tagEditMode = TagEditMode.normal;
     notifyListeners();
   }
 
@@ -726,6 +756,22 @@ class CompareViewModel extends ChangeNotifier {
   selectedIndex = listNumber;
     notifyListeners();
 //  selectedIndex =null;//ここでデフォルトにするとリストタップしても変更しなくなる
+  }
+
+  Future<void> onDeleteTag(String tagTitle) async{
+    //tagTitleで紐づけて削除するのでcomparisonItemIdいらない
+    //一応Tag形式にしてやりとりしてるが、tagTitleだけあれば削除可能(のはず)
+    final deleteTag = Tag(tagTitle: tagTitle);
+    await _compareRepository.onDeleteTag(deleteTag);
+    //削除してtagPage更新
+    selectedIndex =null;
+    notifyListeners();
+  }
+
+  void unFocusTagPageList() {
+    //考え方はchangeToNormalメソッドみたいな感じ
+    selectedIndex =null;
+    notifyListeners();
   }
 
   ///タグ名の編集時にタグ選択した時にcomparisonIdを取得する タグ名変えてもcreatedAtは更新しない
@@ -763,8 +809,7 @@ class CompareViewModel extends ChangeNotifier {
 
 
 
-  ///CompareScreen文頭で候補タグ格納(全タグから選択タグを削除)
-  //todo tagChipsStateless使用しないなら削除
+  ///TagDialogPageのFutureBuilderで候補タグ格納(全タグから選択タグを削除)
   Future<List<String>> getCandidateTagList() async{
     //全タグリストから選択されたタグリストを比較して重複を削除
     _allTagList = await _compareRepository.getAllTagList();
@@ -905,6 +950,8 @@ class CompareViewModel extends ChangeNotifier {
     isWay3MeritFocusList = false;
     notifyListeners();
   }
+
+
 
 
 
