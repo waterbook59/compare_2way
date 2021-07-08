@@ -9,11 +9,9 @@ class EditTagTitle extends StatefulWidget {
     this.tagTitle,
     this.selectTagIdList,
     this.myFocusNode,
-    this.isKeyboardUnFocus,
   });
 
   final String tagTitle;
-  final bool isKeyboardUnFocus;
   final List<String> selectTagIdList;//tagTitle編集時に更新するIDリスト
   final FocusNode myFocusNode;
 
@@ -48,11 +46,9 @@ class _EditTagTitleState extends State<EditTagTitle> {
       decoration: const BoxDecoration(color: Colors.transparent),
       controller: _tagTitleController,
       focusNode: widget.myFocusNode,
-//      onChanged:  (newDesc) => widget.inputChanged(newDesc),
     ///変更したらtagTitle更新
       onChanged: (newTagTitle)=>updateTagTile(context,newTagTitle),
       maxLines: null,
-//      autofocus: widget.isKeyboardUnFocus,
     );
   }
 

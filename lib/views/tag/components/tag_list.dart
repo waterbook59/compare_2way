@@ -95,7 +95,6 @@ class TagList extends StatelessWidget {
                         tagTitle: title,
                         selectTagIdList: selectTagIdList,
                         myFocusNode: myFocusNode,
-                        isKeyboardUnFocus: viewModel.isKeyboardUnFocus,
                       )
                     : Text(title);
               case TagEditMode.tagDelete:

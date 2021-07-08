@@ -103,7 +103,6 @@ class CompareViewModel extends ChangeNotifier {
   bool isWay3MeritFocusList = true;
   bool isWay3DemeritFocusList = true;
 
-  bool isKeyboardUnFocus = false;
 
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
@@ -772,11 +771,8 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   void unFocusTagTitleEdit(BuildContext context) {
-    print('unFocus!');
     //考え方はchangeToNormalメソッドみたいな感じ
     selectedIndex =null;
-//    isKeyboardUnFocus = true;
-//    FocusScope.of(context).unfocus();
     notifyListeners();
   }
 

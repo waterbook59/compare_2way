@@ -8,9 +8,6 @@ import 'package:provider/provider.dart';
 
 class TagEditBottomAction extends StatelessWidget {
 
-  const TagEditBottomAction({this.unFocusTap});
-  final VoidCallback unFocusTap;
-
   @override
   Widget build(BuildContext context) {
     return
@@ -74,7 +71,6 @@ class TagEditBottomAction extends StatelessWidget {
                        Icons.keyboard_hide,
                        color: Colors.white,
                      ),
-//                     onTap: unFocusTap,
                      onTap:()=> _unFocusTap(context),
                    ),
                    const SizedBox(width: 4,),
