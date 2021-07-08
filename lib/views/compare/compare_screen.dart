@@ -3,6 +3,7 @@ import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
+import 'package:compare_2way/views/common/nav_bar_button.dart';
 import 'package:compare_2way/views/common/nav_bar_icon_title.dart';
 import 'package:compare_2way/views/compare/components/accordion_part.dart';
 import 'package:compare_2way/views/compare/components/tag_chip_part.dart';
@@ -74,16 +75,9 @@ class CompareScreen extends StatelessWidget {
 //        NavBarIconTitle(tagTitle:tagTitle,titleIcon: CupertinoIcons.tag),
 
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-          ///保存完了ボタン //todo 保存完了ボタンWidget分割
-          GestureDetector(
-            child: const Icon(
-              CupertinoIcons.check_mark_circled,
-              color: Colors.white,
-            ),
-            onTap: () {
-              return _saveItem(context, comparisonOverview);
-            },
-          ),
+          ///保存完了ボタン
+          NavBarButton(navBarIcon: CupertinoIcons.check_mark_circled,
+          onTap: () => _saveItem(context, comparisonOverview),),
           const SizedBox(width: 8,),
           ///編集ボタン
           EditBottomAction(comparisonOverview: comparisonOverview,),
