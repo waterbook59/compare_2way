@@ -24,15 +24,21 @@ class TagPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor = CupertinoTheme.of(context).primaryContrastingColor;
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
         middle: TagPageTitle(),
         trailing:
-        //todo タグ名編集時にキーボードunFocusできるアイコン追加
+        //todo タグ名編集時にキーボードunFocusできるアイコン追加(viewModel経由=>Consumerに訴える)
         //編集モード(true)の時はリストをタップするとTagListのtagTitle部を編集する形に
-         TagEditBottomAction(),
+         TagEditBottomAction(
+//           unFocusTap: (){
+//             print('unfocus!!!');
+//             FocusScope.of(context).unfocus();
+//           },
+         ),
           //これまでのboolのtagEditModeの時
 //      Selector<CompareViewModel,TagEditMode>(
 //        selector: (context, viewModel) => viewModel.tagEditMode,
@@ -65,8 +71,8 @@ class TagPage extends StatelessWidget {
           Consumer<CompareViewModel>(
           builder: (context, compareViewModel, child) {
             return LayoutBuilder(
-                builder: (context, constraints) =>
-               SingleChildScrollView(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
                 child: ConstrainedBox(
                   constraints:
                   BoxConstraints(minHeight: constraints.maxHeight),
@@ -124,7 +130,8 @@ class TagPage extends StatelessWidget {
                     },
                   ),
                 ),
-              ),
+              );
+                },
             );
           },
         ),
@@ -220,4 +227,17 @@ class TagPage extends StatelessWidget {
     await viewModel.onDeleteTag(tagTitle);
 
   }
+
+//  void _unFocusTap(BuildContext context) {
+//    print('unFocus');
+    ///CupertinoNavigationBarでunfocusしてもScaffold以下のキーボードをunfocusできない
+//    FocusScope.of(context).unfocus();
+//  }
+
+//  if(viewModel.isKeyboardUnFocus){
+//  print('isKeyboardUnFocus:${viewModel.isKeyboardUnFocus}');
+//  FocusScope.of(context).unfocus();
+//  }
+
+
 }

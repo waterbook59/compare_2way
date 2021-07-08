@@ -27,7 +27,7 @@ class TagList extends StatelessWidget {
 //  final Function(FocusNode) onTap;
   final List<String> selectTagIdList; //tagTitle編集時に更新するIDリスト
   final int listNumber;
-  final FocusNode myFocusNode;
+  final FocusNode myFocusNode;//todo 完了押した時にfocusNodeのdispose必要かも
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +95,7 @@ class TagList extends StatelessWidget {
                         tagTitle: title,
                         selectTagIdList: selectTagIdList,
                         myFocusNode: myFocusNode,
+                        isKeyboardUnFocus: viewModel.isKeyboardUnFocus,
                       )
                     : Text(title);
               case TagEditMode.tagDelete:

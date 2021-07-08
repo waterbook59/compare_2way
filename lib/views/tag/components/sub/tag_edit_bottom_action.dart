@@ -8,6 +8,9 @@ import 'package:provider/provider.dart';
 
 class TagEditBottomAction extends StatelessWidget {
 
+  const TagEditBottomAction({this.unFocusTap});
+  final VoidCallback unFocusTap;
+
   @override
   Widget build(BuildContext context) {
     return
@@ -61,10 +64,26 @@ class TagEditBottomAction extends StatelessWidget {
                   padding: const EdgeInsets.all(8),);
                 break;
               case TagEditMode.tagTitleEdit:
-               return  CupertinoButton(
+               return  Row(
+                 mainAxisSize: MainAxisSize.min,
+                 children: [
+                   //todo widget分割
+                   GestureDetector(
+                     child: const Icon(
+                       //CupertinoIcons.keyboard_chevron_compact_downない
+                       Icons.keyboard_hide,
+                       color: Colors.white,
+                     ),
+//                     onTap: unFocusTap,
+                     onTap:()=> _unFocusTap(context),
+                   ),
+                   const SizedBox(width: 4,),
+                   CupertinoButton(
               child: const Text('完了', style: trailingTextStyle),
           onPressed: ()=> _changeEdit(context),//押したら通常モードへ変更
-            padding: const EdgeInsets.all(8),);
+            padding: const EdgeInsets.all(8),),
+                 ],
+               );
                 break;
               case TagEditMode.tagDelete:
                 return CupertinoButton(
@@ -161,6 +180,11 @@ class TagEditBottomAction extends StatelessWidget {
   void _changeEdit(BuildContext context) {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false)
     ..changeToNormal();
+  }
+
+  void _unFocusTap(BuildContext context) {
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+      ..unFocusTagTitleEdit(context);
   }
 
 

@@ -103,6 +103,9 @@ class CompareViewModel extends ChangeNotifier {
   bool isWay3MeritFocusList = true;
   bool isWay3DemeritFocusList = true;
 
+  bool isKeyboardUnFocus = false;
+
+
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
   Future<void> getOverview(String comparisonItemId) async {
     _comparisonOverviews =
@@ -742,6 +745,7 @@ class CompareViewModel extends ChangeNotifier {
 //    notifyListeners();
 //  }
 
+  ///TagPageでの編集モード変更
   void changeToTagTitleEdit() {
     tagEditMode = TagEditMode.tagTitleEdit;
     ///"完了"押した時に_selectedIndexをデフォルトに(次に編集押した時に前の選択状態にならないようにする)
@@ -760,12 +764,20 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
   //TagListでの通常モード(タイトル)<=>フォーカスモードの切替
   Future<void> changeEditFocus( int listNumber ) {
   selectedIndex = listNumber;
     notifyListeners();
 //  selectedIndex =null;//ここでデフォルトにするとリストタップしても変更しなくなる
+  }
+
+  void unFocusTagTitleEdit(BuildContext context) {
+    print('unFocus!');
+    //考え方はchangeToNormalメソッドみたいな感じ
+    selectedIndex =null;
+//    isKeyboardUnFocus = true;
+//    FocusScope.of(context).unfocus();
+    notifyListeners();
   }
 
   ///タグ名の編集時にタグ選択した時にcomparisonIdを取得する タグ名変えてもcreatedAtは更新しない
@@ -944,6 +956,8 @@ class CompareViewModel extends ChangeNotifier {
     isWay3MeritFocusList = false;
     notifyListeners();
   }
+
+
 
 
 
