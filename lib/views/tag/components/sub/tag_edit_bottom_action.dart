@@ -2,6 +2,7 @@
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
+import 'package:compare_2way/views/common/nav_bar_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -64,14 +65,9 @@ class TagEditBottomAction extends StatelessWidget {
                return  Row(
                  mainAxisSize: MainAxisSize.min,
                  children: [
-                   //todo widget分割
-                   GestureDetector(
-                     child: const Icon(
-                       //CupertinoIcons.keyboard_chevron_compact_downない
-                       Icons.keyboard_hide,
-                       color: Colors.white,
-                     ),
-                     onTap:()=> _unFocusTap(context),
+                   NavBarButton(
+                     navBarIcon: Icons.keyboard_hide,
+                     onTap: ()=> _unFocusTap(context),
                    ),
                    const SizedBox(width: 4,),
                    CupertinoButton(

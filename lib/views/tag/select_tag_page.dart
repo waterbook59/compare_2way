@@ -33,7 +33,7 @@ class SelectTagPage extends StatelessWidget {
       //materialのScaffoldで問題なし
       child:Scaffold(
         body:
-        //todo 並び順を更新日順に変更する
+        // 並び順を更新日順に変更する
         Selector<CompareViewModel, List<ComparisonOverview>>(
             selector: (context, viewModel) => viewModel.selectOverviews,
             builder: (context, selectOverviews, child) {
