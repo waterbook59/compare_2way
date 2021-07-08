@@ -3,6 +3,7 @@ import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
+import 'package:compare_2way/views/common/nav_bar_icon_title.dart';
 import 'package:compare_2way/views/compare/components/accordion_part.dart';
 import 'package:compare_2way/views/compare/components/tag_chip_part.dart';
 import 'package:compare_2way/views/compare/components/conclusion_input_part.dart';
@@ -69,6 +70,9 @@ class CompareScreen extends StatelessWidget {
         )
 //        const Text('Compare List', style: middleTextStyle,)
             : Text(tagTitle,style: middleTextStyle,),
+          //todo 右に保存完了ボタンがあるのでNavBarIconTitleの左側にスペース追加
+//        NavBarIconTitle(tagTitle:tagTitle,titleIcon: CupertinoIcons.tag),
+
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
           ///保存完了ボタン //todo 保存完了ボタンWidget分割
           GestureDetector(

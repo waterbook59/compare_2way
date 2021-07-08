@@ -2,6 +2,7 @@ import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
+import 'package:compare_2way/views/common/nav_bar_icon_title.dart';
 import 'package:compare_2way/views/compare/compare_screen.dart';
 import 'package:compare_2way/views/list/componets/overview_list.dart';
 import 'package:flutter/material.dart';
@@ -25,10 +26,8 @@ class SelectTagPage extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         actionsForegroundColor: Colors.white,
         backgroundColor: primaryColor,
-        middle: Text(
-          tagTitle,
-          style: middleTextStyle,
-        ),
+        /// tagアイコン追加(アイコン+文字を中心にもっていくため右を48空ける)
+        middle:NavBarIconTitle(tagTitle:tagTitle,titleIcon: CupertinoIcons.tag),
       ),
       //materialのScaffoldで問題なし
       child:Scaffold(
