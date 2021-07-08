@@ -176,8 +176,11 @@ class TagPage extends StatelessWidget {
                   ),
                   CupertinoDialogAction(
                     child: const Text('キャンセル'),
-                    //todo キャンセル押した時に_selectedIndexをデフォルトに(選択状態解除)
-                    onPressed: ()=>Navigator.pop(context),
+                    onPressed: (){
+                      //キャンセル押した時に_selectedIndexをデフォルトに(選択状態解除)
+                      viewModel.unFocusTagPageList();
+                      Navigator.pop(context);
+                    },
                   ),
                 ],
               );

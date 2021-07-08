@@ -180,7 +180,7 @@ class TagEditBottomAction extends StatelessWidget {
 
   void _unFocusTap(BuildContext context) {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-      ..unFocusTagTitleEdit(context);
+      ..unFocusTagPageList();
   }
 
 

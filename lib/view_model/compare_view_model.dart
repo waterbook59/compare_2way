@@ -593,18 +593,6 @@ class CompareViewModel extends ChangeNotifier {
   }
 
 
-
-
-  Future<void> onDeleteTag(String tagTitle) async{
-    //tagTitleで紐づけて削除するのでcomparisonItemIdいらない
-    //一応Tag形式にしてやりとりしてるが、tagTitleだけあれば削除可能(のはず)
-    final deleteTag = Tag(tagTitle: tagTitle);
-    await _compareRepository.onDeleteTag(deleteTag);
-    //削除してtagPage更新
-    notifyListeners();
-  }
-
-
   ///tagChipsで削除するTagを登録
   Future<void> createDeleteList(
       List<String> tempoDeleteLabels,) async{
@@ -744,7 +732,7 @@ class CompareViewModel extends ChangeNotifier {
 //    notifyListeners();
 //  }
 
-  ///TagPageでの編集モード変更
+///TagPageでの編集モード変更
   void changeToTagTitleEdit() {
     tagEditMode = TagEditMode.tagTitleEdit;
     ///"完了"押した時に_selectedIndexをデフォルトに(次に編集押した時に前の選択状態にならないようにする)
@@ -770,7 +758,17 @@ class CompareViewModel extends ChangeNotifier {
 //  selectedIndex =null;//ここでデフォルトにするとリストタップしても変更しなくなる
   }
 
-  void unFocusTagTitleEdit(BuildContext context) {
+  Future<void> onDeleteTag(String tagTitle) async{
+    //tagTitleで紐づけて削除するのでcomparisonItemIdいらない
+    //一応Tag形式にしてやりとりしてるが、tagTitleだけあれば削除可能(のはず)
+    final deleteTag = Tag(tagTitle: tagTitle);
+    await _compareRepository.onDeleteTag(deleteTag);
+    //削除してtagPage更新
+    selectedIndex =null;
+    notifyListeners();
+  }
+
+  void unFocusTagPageList() {
     //考え方はchangeToNormalメソッドみたいな感じ
     selectedIndex =null;
     notifyListeners();
