@@ -34,7 +34,6 @@ class OverViewList extends StatelessWidget {
         )
       ],
       child: Container(
-        //todo decorationはインスタンス設定してすっきり書く
         decoration: listDecoration,
         child: ListTile(
           onTap: onTap,
