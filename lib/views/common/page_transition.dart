@@ -19,7 +19,7 @@ class _PageTransitionState extends State<PageTransition>
   @override
   void initState() {
     widget.animationController = AnimationController(
-      value: this,
+      vsync: this,
       duration: Duration(milliseconds: 500),
     );
 
