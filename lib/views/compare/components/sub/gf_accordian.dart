@@ -100,9 +100,9 @@ class _GFAccordionState extends State<GFAccordion>
   void initState() {
     showAccordion = widget.showAccordion;
     animationController =
-        AnimationController(duration: const Duration(seconds: 2), vsync: this);
+        AnimationController(duration: const Duration(seconds: 2), value: this);
     controller = AnimationController(
-        duration: const Duration(milliseconds: 300), vsync: this);
+        duration: const Duration(milliseconds: 300), value: this);
     offset = Tween(
       ///beginをゼロにしてendを下方向へ0.02ずらす変更
       begin: Offset.zero,
@@ -175,7 +175,7 @@ class _GFAccordionState extends State<GFAccordion>
 
   void _toggleCollapsed() {
     setState(() {
-      switch (controller.status) {
+      switch (controller.status as AnimationStatus) {
         case AnimationStatus.completed:
           controller.forward(from: 0);
           break;
