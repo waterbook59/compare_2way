@@ -103,7 +103,8 @@ class CompareViewModel extends ChangeNotifier {
   bool isWay3MeritFocusList = true;
   bool isWay3DemeritFocusList = true;
 
-
+  ///ListPage
+  List<String> deleteItemIdList = <String>[];
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
   Future<void> getOverview(String comparisonItemId) async {
@@ -951,7 +952,21 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void checkDeleteIcon(String itemId) {
+    ///1.Listにindexの値をupdateするメソッドがないので、map型に変換してupdateする
+    ////asMap()するだけで{index:value}のMap型にできる=>map.update(index,(value)=>!value);
+    ///2. comparisonItemIDをリストに追加・削除を行う
+    if(deleteItemIdList.contains(itemId)){
+      deleteItemIdList.remove(itemId);
+      print('id削除後:$deleteItemIdList');
+    }else{
+      deleteItemIdList.add(itemId);
+      print('id追加後:$deleteItemIdList');
+    }
 
+//    isCheckIcon= !isCheckIcon;
+    notifyListeners();
+  }
 
 
 

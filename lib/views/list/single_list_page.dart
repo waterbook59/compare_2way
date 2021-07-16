@@ -4,6 +4,7 @@ import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/compare_screen.dart';
 import 'package:compare_2way/views/list/add_screen.dart';
+import 'package:compare_2way/views/list/componets/edit_list_tile.dart';
 import 'package:compare_2way/views/list/componets/overview_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,8 +29,6 @@ class SingleListPage extends StatelessWidget {
           'リスト',
           style: middleTextStyle,
         ),
-        //todo ListPageに戻るとtrailing位置の編集に黄色下線出る
-        //参考https://qiita.com/kurararara/items/2afd7f93f2676c5cee34
         //todo Selectorでbool型での方がすっきりかける(TagPage参照)
         trailing: GestureDetector(
             onTap: () => _changeEdit(context, viewModel.editStatus),
@@ -154,16 +153,27 @@ class SingleListPage extends StatelessWidget {
                                 final overview =
                                     compareViewModel.comparisonOverviews[index];
                                 return
+                                ///チェックボックス用ListTile
+                                  EditListTile(
+                                    onTap:()=> checkDeleteIcon(context,overview.comparisonItemId),
+                                    title:overview.itemTitle,
+                                    icon: const Icon(
+                                      Icons.check_box_outline_blank,
+                                      size: 30.0,
+                                      color: Colors.blue,
+                                    ),
+                                  );
+
                                   ///checkかラジオボタンを押すと右からSlidableが出てきて削除ボタン表示される
-                                    CheckboxListTile(
-                                  title: Text(overview.itemTitle),
-                                  //conclusionはConsumerで初回描画されない
-                                  subtitle: Text(overview.conclusion),
-                                  //チェックボックスを左側に
-                                  controlAffinity:
-                                      ListTileControlAffinity.leading,
-                                  value: _isSelected,
-                                );
+//                                    CheckboxListTile(
+//                                  title: Text(overview.itemTitle),
+//                                  //conclusionはConsumerで初回描画されない
+//                                  subtitle: Text(overview.conclusion),
+//                                  //チェックボックスを左側に
+//                                  controlAffinity:
+//                                      ListTileControlAffinity.leading,
+//                                  value: _isSelected,
+//                                );
                               },
                             )
 //                        const Text('編集モードです')
@@ -225,5 +235,10 @@ class SingleListPage extends StatelessWidget {
                   comparisonOverview: updateOverview,
               screenEditMode: ScreenEditMode.fromListPage,
                 )));
+  }
+
+  void checkDeleteIcon(BuildContext context, String itemId) {
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+        ..checkDeleteIcon(itemId);
   }
 }
