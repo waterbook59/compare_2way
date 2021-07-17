@@ -12,61 +12,35 @@ import 'package:provider/provider.dart';
 import "package:intl/intl.dart";
 
 class SingleListPage extends StatelessWidget {
-  final bool _isSelected = false;
 
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-//    if(viewModel.comparisonOverviews.isEmpty){
-//      Future(viewModel.getOverviewList);
-//    }
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
-        middle: const Text(
-          'リスト',
-          style: middleTextStyle,
-        ),
-        //todo Selectorでbool型での方がすっきりかける(TagPage参照)
+        middle: Selector<CompareViewModel,ListEditMode>(
+        selector: (context, viewModel) => viewModel.editStatus,
+            builder:(context, editStatus, child){
+          return(editStatus == ListEditMode.display)
+              ? const Text('リスト', style: middleTextStyle,)
+              :const Text('アイテムの並び替え・削除', style: middleTextStyle,);
+    }),
+
         trailing: GestureDetector(
             onTap: () => _changeEdit(context, viewModel.editStatus),
-            child: Consumer<CompareViewModel>(
-                builder: (context, compareViewModel, child) {
-              return (viewModel.editStatus == ListEditMode.display)
-                  ? const Text(
-                      '編集',
-                      style: trailingTextStyle,
-                    )
-                  : const Text(
-                      '完了',
-                      style: trailingTextStyle,
-                    );
+            child: Selector<CompareViewModel,ListEditMode>(
+                selector: (context, viewModel) => viewModel.editStatus,
+                builder: (context, editStatus, child) {
+              return (editStatus == ListEditMode.display)
+                  ? const Text('編集', style: trailingTextStyle,)
+                  : const Text('完了', style: trailingTextStyle,);
             })),
       ),
       child: Scaffold(
-//        appBar: CupertinoNavigationBar(
-//          backgroundColor: primaryColor,
-//          middle: const Text(
-//            'Compare List',
-//            style: middleTextStyle,
-//          ),
-//          trailing: GestureDetector(
-//              onTap: () => _changeEdit(context, viewModel.editStatus),
-//              child: Consumer<CompareViewModel>(
-//                  builder: (context, compareViewModel, child) {
-//                    return (viewModel.editStatus == ListEditMode.display)
-//                        ? const Text(
-//                      '編集',
-//                      style: trailingTextStyle,
-//                    )
-//                        : const Text(
-//                      '完了',
-//                      style: trailingTextStyle,
-//                    );
-//                  })),
-//        ),
 
         //todo Consumer=>Selectorへ変更を検討
         body: Consumer<CompareViewModel>(
@@ -130,8 +104,6 @@ class SingleListPage extends StatelessWidget {
                           );
 //                              }//ConnectionState.done
                         }
-                        //時間かかる場合indicatorぐるぐるでもいいかも
-                        return Container();
                       },
                     ),
                   )),
@@ -162,30 +134,18 @@ class SingleListPage extends StatelessWidget {
                                     //deleteItemIdListにidがある場合はチェック、ない場合はblanck
                                     ? const Icon(
                                       Icons.check,
-                                      size: 30.0,
+                                      size: 30,
                                       color: Colors.blue,
                                     )
                                         :
                                     const Icon(
                                       Icons.check_box_outline_blank,
-                                      size: 30.0,
+                                      size: 30,
                                       color: Colors.blue,
                                     )
                                   );
-
-                                  ///checkかラジオボタンを押すと右からSlidableが出てきて削除ボタン表示される
-//                                    CheckboxListTile(
-//                                  title: Text(overview.itemTitle),
-//                                  //conclusionはConsumerで初回描画されない
-//                                  subtitle: Text(overview.conclusion),
-//                                  //チェックボックスを左側に
-//                                  controlAffinity:
-//                                      ListTileControlAffinity.leading,
-//                                  value: _isSelected,
-//                                );
                               },
                             )
-//                        const Text('編集モードです')
                             ),
                       ));
         }),
@@ -234,9 +194,9 @@ class SingleListPage extends StatelessWidget {
   }
 
   void _updateList(BuildContext context, ComparisonOverview updateOverview) {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
     ///初期表示は読み込みさせる
-    viewModel.compareScreenStatus =CompareScreenStatus.set;
+    ..compareScreenStatus =CompareScreenStatus.set;
     ///画面遷移時、bottomNavbarを外す
     Navigator.of(context, rootNavigator: true).push(
         MaterialPageRoute<void>(
