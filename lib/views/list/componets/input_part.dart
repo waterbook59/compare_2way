@@ -20,15 +20,6 @@ class InputPart extends StatelessWidget {
     final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
-
-    /// ここでのFutureが悪さして入力を阻害(本来は更新キャンセル=>新規の時のcontroller残りをなくす目的)
-//    if (displayMode == AddScreenMode.add) {
-//      Future(() async {
-//        await viewModel.itemControllerClear();
-//      });
-//    }
-
-
     return Column(
       children: [
         ///タイトル

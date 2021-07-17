@@ -145,6 +145,7 @@ class SingleListPage extends StatelessWidget {
                             constraints: BoxConstraints(
                                 minHeight: constraints.maxHeight),
                             //初回描画の時にgetListが２回発動される
+                            //todo reorderble使用するならStatefulが素直?
                             child: ListView.builder(
                               shrinkWrap: true,
                               itemCount:
@@ -157,11 +158,19 @@ class SingleListPage extends StatelessWidget {
                                   EditListTile(
                                     onTap:()=> checkDeleteIcon(context,overview.comparisonItemId),
                                     title:overview.itemTitle,
-                                    icon: const Icon(
+                                    icon: compareViewModel.deleteItemIdList.contains(overview.comparisonItemId)
+                                    //deleteItemIdListにidがある場合はチェック、ない場合はblanck
+                                    ? const Icon(
+                                      Icons.check,
+                                      size: 30.0,
+                                      color: Colors.blue,
+                                    )
+                                        :
+                                    const Icon(
                                       Icons.check_box_outline_blank,
                                       size: 30.0,
                                       color: Colors.blue,
-                                    ),
+                                    )
                                   );
 
                                   ///checkかラジオボタンを押すと右からSlidableが出てきて削除ボタン表示される
