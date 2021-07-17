@@ -34,23 +34,29 @@ class AddScreen extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         //todo Androidでの端末下の戻るボタン無効:WillPopScopeのonWillPopをfalse
 //        automaticallyImplyLeading: false,
-      leading: displayMode == AddScreenMode.add
-      //新規追加時キャンセル
-        ? GestureDetector(
+      leading:  GestureDetector(
         child: const Icon(
-          CupertinoIcons.clear_thick_circled,
-          color: Colors.white,
-        ),
-        onTap: () =>Navigator.pop(context)
-      )
+        CupertinoIcons.clear_thick_circled,
+        color: Colors.white,
+    ),
+          onTap: () =>_cancelTitleEdit(context)),
+//      displayMode == AddScreenMode.add
+      //新規追加時キャンセル
+//        ? GestureDetector(
+//        child: const Icon(
+//          CupertinoIcons.clear_thick_circled,
+//          color: Colors.white,
+//        ),
+//        onTap: () =>_cancelTitleEdit(context)
+//      )
       //タイトル編集時キャンセル
-        : GestureDetector(
-          child: const Icon(
-            CupertinoIcons.clear_thick_circled,
-            color: Colors.white,
-          ),
-          onTap: ()=> _cancelTitleEdit(context),
-      ),
+//        : GestureDetector(
+//          child: const Icon(
+//            CupertinoIcons.clear_thick_circled,
+//            color: Colors.white,
+//          ),
+//          onTap: ()=> _cancelTitleEdit(context),
+//      ),
         backgroundColor: primaryColor,
         middle:displayMode == AddScreenMode.add
         ? const Text(
@@ -98,9 +104,11 @@ class AddScreen extends StatelessWidget {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     //todo 画面閉じる前にTextFieldへの変更が少し見える
      Navigator.pop(context);
-     displayMode == AddScreenMode.add
-    ? viewModel.itemControllerClear()
-    :viewModel.cancelControllerEdit(comparisonOverview);
+    viewModel.itemControllerClear();
+//     displayMode == AddScreenMode.add
+//    ? viewModel.itemControllerClear()
+//    :viewModel.cancelControllerEdit(comparisonOverview);
+//
   }
 
 }

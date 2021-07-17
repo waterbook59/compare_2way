@@ -76,7 +76,7 @@ class TagPage extends StatelessWidget {
                         return Container();
                       }
                       if (snapshot.hasData && snapshot.data.isEmpty) {
-                        print('EmptyView側通って描画');
+                        print('TagPage/EmptyView側通って描画');
                         return Container(
                             child:
                                 const Center(child: Text('タグづけされたアイテムはありません')));

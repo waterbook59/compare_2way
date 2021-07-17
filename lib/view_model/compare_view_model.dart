@@ -857,6 +857,7 @@ class CompareViewModel extends ChangeNotifier {
     _way1Controller.clear();
     _way2Controller.clear();
   }
+  //todo AddScreenのキャンセルボタンをviewModel.itemControllerClear()で統一できるならいらない
   //タイトル更新時(AddScreenMode.edit)、addScreenでcancelするとき
   void cancelControllerEdit(ComparisonOverview comparisonOverview) {
     _titleController.text = comparisonOverview.itemTitle;
