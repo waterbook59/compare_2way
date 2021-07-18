@@ -31,19 +31,7 @@ class SingleListPage extends StatelessWidget {
               ? const Text('リスト', style: middleTextStyle,)
               :const Text('アイテムの並び替え・削除', style: middleTextStyle,);
     }),
-
         trailing:ListPageEditButton(),
-
-//        GestureDetector(
-//            onTap: () => _changeEdit(context, viewModel.editStatus),
-//            child: Selector<CompareViewModel,ListEditMode>(
-//                selector: (context, viewModel) => viewModel.editStatus,
-//                builder: (context, editStatus, child) {
-//              return (editStatus == ListEditMode.display)
-//                  ? const Text('編集', style: trailingTextStyle,)
-//              //todo editモードのときは削除ボタン追加
-//                  : const Text('完了', style: trailingTextStyle,);
-//            })),
       ),
       child: Scaffold(
 
@@ -184,12 +172,6 @@ class SingleListPage extends StatelessWidget {
       builder: (context) =>
       const AddScreen(displayMode: AddScreenMode.add),
     ));
-  }
-
-  Future<void> _changeEdit(BuildContext context, ListEditMode editMode) async {
-    print('編集タップ！：$editMode');
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.changeEditStatus(editMode);
   }
 
   Future<void> _deleteList(

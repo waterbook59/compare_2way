@@ -12,19 +12,27 @@ class ListPageEditButton extends StatelessWidget {
         selector: (context, viewModel) => viewModel.editStatus,
         builder: (context, editStatus, child) {
           return (editStatus == ListEditMode.display)
-          //todo 編集ボタンの下切れてる
               ? CupertinoButton(
                   child: const Text(
                     '編集',
                     style: trailingTextStyle,
                   ),
                   onPressed: () => _changeEdit(context, editStatus),
+
+                  /// 編集ボタンの下切れるのを防ぐ
+                  padding: const EdgeInsets.all(8),
                 )
               : Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     CupertinoButton(
-                      child: const Text('削除', style: trailingTextStyle),
+                      child: const Text(
+                        '削除',
+                        style: TextStyle(
+                            fontFamily: regularFontJa,
+                            fontSize: 16,
+                            color: Colors.redAccent),
+                      ),
                       onPressed: () => _deleteItem(context), //押したら通常モードへ変更
                       padding: const EdgeInsets.all(8),
                     ),
