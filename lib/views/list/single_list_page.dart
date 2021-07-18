@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import "package:intl/intl.dart";
 
+import 'componets/sub/list_page_edit_button.dart';
+
 class SingleListPage extends StatelessWidget {
 
   @override
@@ -30,15 +32,18 @@ class SingleListPage extends StatelessWidget {
               :const Text('アイテムの並び替え・削除', style: middleTextStyle,);
     }),
 
-        trailing: GestureDetector(
-            onTap: () => _changeEdit(context, viewModel.editStatus),
-            child: Selector<CompareViewModel,ListEditMode>(
-                selector: (context, viewModel) => viewModel.editStatus,
-                builder: (context, editStatus, child) {
-              return (editStatus == ListEditMode.display)
-                  ? const Text('編集', style: trailingTextStyle,)
-                  : const Text('完了', style: trailingTextStyle,);
-            })),
+        trailing:ListPageEditButton(),
+
+//        GestureDetector(
+//            onTap: () => _changeEdit(context, viewModel.editStatus),
+//            child: Selector<CompareViewModel,ListEditMode>(
+//                selector: (context, viewModel) => viewModel.editStatus,
+//                builder: (context, editStatus, child) {
+//              return (editStatus == ListEditMode.display)
+//                  ? const Text('編集', style: trailingTextStyle,)
+//              //todo editモードのときは削除ボタン追加
+//                  : const Text('完了', style: trailingTextStyle,);
+//            })),
       ),
       child: Scaffold(
 

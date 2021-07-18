@@ -2,14 +2,14 @@ import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/tag/components/sub/page_title.dart';
-import 'package:compare_2way/views/tag/components/sub/tag_edit_bottom_action.dart';
 import 'package:compare_2way/views/tag/components/sub/tag_page_title.dart';
 import 'package:compare_2way/views/tag/select_tag_page.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+import 'components/sub/tag_edit_botton_action.dart';
 import 'components/tag_list.dart';
 
 ///List<Tag>で一覧のデータ取得しつつ、tagTitleで重複するものを削除するのにtoSet()を使う
@@ -28,7 +28,7 @@ class TagPage extends StatelessWidget {
         trailing:
         //タグ名編集時にキーボードunFocusできるアイコン追加(viewModel経由=>Consumerに訴える)
         //編集モード(true)の時はリストをタップするとTagListのtagTitle部を編集する形に
-         TagEditBottomAction(),
+         TagEditButtonAction(),
           //これまでのboolのtagEditModeの時
 //      Selector<CompareViewModel,TagEditMode>(
 //        selector: (context, viewModel) => viewModel.tagEditMode,
