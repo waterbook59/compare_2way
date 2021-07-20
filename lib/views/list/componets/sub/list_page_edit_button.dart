@@ -58,7 +58,6 @@ class ListPageEditButton extends StatelessWidget {
 
   //ListPage選択行削除
   Future<void> _deleteItem(BuildContext context) async{
-    print('編集時に削除ボタンを押すとチェックしたリストが消える');
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.deleteItemList();
   }
