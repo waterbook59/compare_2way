@@ -47,7 +47,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   }
 
   ///削除：comparisonOverview
-  Future<void> deleteList(String comparisonItemId) =>
+  Future<void> deleteItem(String comparisonItemId) =>
       //comparisonOverviewRecordsテーブルのcomparisonItemIdと
   // view側から持ってきたcomparisonItemIdが同じものを削除
   (delete(comparisonOverviewRecords)
@@ -238,7 +238,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   //todo Way1MeritList,Way2MeritListが削除できていない
   Future<void> deleteListAll(String comparisonItemId) =>
       transaction(() async {
-        await deleteList(comparisonItemId);
+        await deleteItem(comparisonItemId);
         await deleteWay1MeritList(comparisonItemId);
         await deleteWay2MeritList(comparisonItemId);
       });

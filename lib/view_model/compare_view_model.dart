@@ -453,17 +453,40 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> changeEditStatus(ListEditMode editMode) async {
     if (editMode == ListEditMode.edit) {
       editStatus = ListEditMode.display;
+      deleteItemIdList =[];
     } else {
       editStatus = ListEditMode.edit;
+
+    }
+    notifyListeners();
+  }
+  //ListPage単一行削除
+  Future<void> deleteItem(String comparisonItemId) async {
+    //削除
+    await _compareRepository.deleteItem(comparisonItemId);
+    //データ取得?
+    notifyListeners();
+  }
+
+  void checkDeleteIcon(String itemId) {
+    ///1.Listにindexの値をupdateするメソッドがないので、map型に変換してupdateする
+    ////asMap()するだけで{index:value}のMap型にできる=>map.update(index,(value)=>!value);
+    ///2. comparisonItemIDをリストに追加・削除を行う
+    if(deleteItemIdList.contains(itemId)){
+      deleteItemIdList.remove(itemId);
+      print('id削除後:$deleteItemIdList');
+    }else{
+      deleteItemIdList.add(itemId);
+      print('id追加後:$deleteItemIdList');
     }
     notifyListeners();
   }
 
-  Future<void> deleteList(String comparisonItemId) async {
-    //削除
-    await _compareRepository.deleteList(comparisonItemId);
-    //データ取得?
-    notifyListeners();
+  //ListPage選択行削除
+  Future<void> deleteItemList() async {
+     _compareRepository.deleteItemList(deleteItemIdList);
+     deleteItemIdList =[];
+    notifyListeners();//NavBarで削除おしてもListView反映されない
   }
 
   Future<void> backListPage() {
@@ -947,21 +970,7 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void checkDeleteIcon(String itemId) {
-    ///1.Listにindexの値をupdateするメソッドがないので、map型に変換してupdateする
-    ////asMap()するだけで{index:value}のMap型にできる=>map.update(index,(value)=>!value);
-    ///2. comparisonItemIDをリストに追加・削除を行う
-    if(deleteItemIdList.contains(itemId)){
-      deleteItemIdList.remove(itemId);
-      print('id削除後:$deleteItemIdList');
-    }else{
-      deleteItemIdList.add(itemId);
-      print('id追加後:$deleteItemIdList');
-    }
 
-//    isCheckIcon= !isCheckIcon;
-    notifyListeners();
-  }
 
 
 

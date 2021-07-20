@@ -14,7 +14,6 @@ import "package:intl/intl.dart";
 import 'componets/sub/list_page_edit_button.dart';
 
 class SingleListPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
@@ -24,21 +23,27 @@ class SingleListPage extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
-        middle: Selector<CompareViewModel,ListEditMode>(
-        selector: (context, viewModel) => viewModel.editStatus,
-            builder:(context, editStatus, child){
-          return(editStatus == ListEditMode.display)
-              ? const Text('リスト', style: middleTextStyle,)
-              :const Text('アイテムの並び替え・削除', style: middleTextStyle,);
-    }),
-        trailing:ListPageEditButton(),
+        middle: Selector<CompareViewModel, ListEditMode>(
+            selector: (context, viewModel) => viewModel.editStatus,
+            builder: (context, editStatus, child) {
+              return (editStatus == ListEditMode.display)
+                  ? const Text(
+                      'リスト',
+                      style: middleTextStyle,
+                    )
+                  : const Text(
+                      'アイテムの並び替え・削除',
+                      style: middleTextStyle,
+                    );
+            }),
+        trailing: ListPageEditButton(),
       ),
       child: Scaffold(
-
         //todo Consumer=>Selectorへ変更を検討
         body: Consumer<CompareViewModel>(
-          /// Consumer=>FutureBuilderは空リスト表示できるが、リスト押してからCompareScreen表示が遅い?
-          //todo FutureBuilderを再考する(Consumer or Selectorのみ)iPhoneでは遅さ感じない
+
+            /// Consumer=>FutureBuilderは空リスト表示できるが、リスト押してからCompareScreen表示が遅い?
+            //todo FutureBuilderを再考する(Consumer or Selectorのみ)iPhoneでは遅さ感じない
 
             builder: (context, compareViewModel, child) {
           return (viewModel.editStatus == ListEditMode.display)
@@ -59,12 +64,13 @@ class SingleListPage extends StatelessWidget {
                           print('List<ComparisonOverview>>snapshotがnull');
                           return Container();
                         }
-                      ///viewModel.comparisonOverviews.isEmptyだとEmptyView通ってしまう
+                        ///viewModel.comparisonOverviews.isEmptyだとEmptyView通ってしまう
                         ///あくまでFutureBuilderで待った結果（snapshot.data）で条件分けすべき
                         if (snapshot.hasData && snapshot.data.isEmpty) {
                           print('ListPage/EmptyView側通って描画');
                           return Container(
-                              child: const Center(child: Text('アイテムを追加してください')));
+                              child:
+                                  const Center(child: Text('アイテムを追加してください')));
                         } else {
 //print('ListView側通って描画');
                           return
@@ -72,27 +78,26 @@ class SingleListPage extends StatelessWidget {
 // => overview.conclusion).toList());
                               ListView.builder(
                             //ListView.builderの高さを自動指定
-                                shrinkWrap: true,
-                                //リストが縦方向にスクロールできるようになる
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: snapshot.data.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  final overview = snapshot.data[index];
-                                  //DateTime=>String変換
-                                final formatter =
-                                      DateFormat('yyyy/MM/dd(E) HH:mm:ss', 'ja_JP');
-                                  final formatted =
-                                      formatter.format(overview.createdAt);
-                                return OverViewList(
-                                  title: overview.itemTitle,
-                                  conclusion: overview.conclusion,
-                                  createdAt: formatted,
-                                  onDelete: () => _deleteList(
-                                      context, overview.comparisonItemId),
-                                  onTap: () => _updateList(context, overview),
-                                  listDecoration: listDecoration,
-                                );
-
+                            shrinkWrap: true,
+                            //リストが縦方向にスクロールできるようになる
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final overview = snapshot.data[index];
+                              //DateTime=>String変換
+                              final formatter =
+                                  DateFormat('yyyy/MM/dd(E) HH:mm:ss', 'ja_JP');
+                              final formatted =
+                                  formatter.format(overview.createdAt);
+                              return OverViewList(
+                                title: overview.itemTitle,
+                                conclusion: overview.conclusion,
+                                createdAt: formatted,
+                                onDelete: () => _deleteItem(
+                                    context, overview.comparisonItemId),
+                                onTap: () => _updateList(context, overview),
+                                listDecoration: listDecoration,
+                              );
                             },
                           );
 //                              }//ConnectionState.done
@@ -111,35 +116,58 @@ class SingleListPage extends StatelessWidget {
                                 minHeight: constraints.maxHeight),
                             //初回描画の時にgetListが２回発動される
                             //todo reorderble使用するならStatefulが素直?
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount:
-                                  compareViewModel.comparisonOverviews.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final overview =
-                                    compareViewModel.comparisonOverviews[index];
-                                return
-                                ///チェックボックス用ListTile
-                                  EditListTile(
-                                    onTap:()=> checkDeleteIcon(context,overview.comparisonItemId),
-                                    title:overview.itemTitle,
-                                    icon: compareViewModel.deleteItemIdList.contains(overview.comparisonItemId)
-                                    //deleteItemIdListにidがある場合はチェック、ない場合はblanck
-                                    ? const Icon(
-                                      Icons.check,
-                                      size: 30,
-                                      color: Colors.blue,
-                                    )
-                                        :
-                                    const Icon(
-                                      Icons.check_box_outline_blank,
-                                      size: 30,
-                                      color: Colors.blue,
-                                    )
-                                  );
-                              },
-                            )
-                            ),
+                            child: //削除更新行うならFutureBuilder必要
+                                FutureBuilder(
+                                    future: viewModel.getList(),
+                                    builder: (context,
+                                        AsyncSnapshot<List<ComparisonOverview>>
+                                            snapshot) {
+                                      if (snapshot.data == null) {
+                                        return Container();
+                                      }
+                                      if (snapshot.hasData &&
+                                          snapshot.data.isEmpty) {
+                                        return Container(
+                                            child: const Center(
+                                                child: Text('アイテムはありません')));
+                                      } else {
+                                        return ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: compareViewModel
+                                              .comparisonOverviews.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            final overview = compareViewModel
+                                                .comparisonOverviews[index];
+                                            return
+
+                                                ///チェックボックス用ListTile
+                                                EditListTile(
+                                                  onTap: () => checkDeleteIcon(
+                                                        context,
+                                                        overview
+                                                            .comparisonItemId),
+                                                    title: overview.itemTitle,
+                                                    icon: compareViewModel
+                                                            .deleteItemIdList
+                                                            .contains(overview
+                                                            .comparisonItemId)
+                          //deleteItemIdListにidがある場合はチェック、ない場合はblank
+                                                        ? const Icon(
+                                                            Icons.check,
+                                                            size: 30,
+                                                            color: Colors.blue,
+                                                          )
+                                                        : const Icon(
+                                                            Icons
+                                                      .check_box_outline_blank,
+                                                            size: 30,
+                                                            color: Colors.blue,
+                                                          ));
+                                          },
+                                        );
+                                      }
+                                    })),
                       ));
         }),
         floatingActionButton: Consumer<CompareViewModel>(
@@ -169,32 +197,33 @@ class SingleListPage extends StatelessWidget {
   void _createComparisonItems(BuildContext context) {
     ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
     Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
-      builder: (context) =>
-      const AddScreen(displayMode: AddScreenMode.add),
+      builder: (context) => const AddScreen(displayMode: AddScreenMode.add),
     ));
   }
 
-  Future<void> _deleteList(
+  //ListPage単一行削除
+  Future<void> _deleteItem(
       BuildContext context, String comparisonItemId) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.deleteList(comparisonItemId);
+    await viewModel.deleteItem(comparisonItemId);
   }
 
   void _updateList(BuildContext context, ComparisonOverview updateOverview) {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-    ///初期表示は読み込みさせる
-    ..compareScreenStatus =CompareScreenStatus.set;
+
+      ///初期表示は読み込みさせる
+      ..compareScreenStatus = CompareScreenStatus.set;
+
     ///画面遷移時、bottomNavbarを外す
-    Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute<void>(
-            builder: (context) => CompareScreen(
-                  comparisonOverview: updateOverview,
+    Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
+        builder: (context) => CompareScreen(
+              comparisonOverview: updateOverview,
               screenEditMode: ScreenEditMode.fromListPage,
-                )));
+            )));
   }
 
   void checkDeleteIcon(BuildContext context, String itemId) {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-        ..checkDeleteIcon(itemId);
+      ..checkDeleteIcon(itemId);
   }
 }

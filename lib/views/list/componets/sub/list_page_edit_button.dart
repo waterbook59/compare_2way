@@ -40,7 +40,7 @@ class ListPageEditButton extends StatelessWidget {
                       width: 4,
                     ),
                     CupertinoButton(
-                      child: const Text('完了', style: trailingTextStyle),
+                      child: const Text('戻る', style: trailingTextStyle),
                       onPressed: () => _changeEdit(context, editStatus),
                       //押したら通常モードへ変更
                       padding: const EdgeInsets.all(8),
@@ -56,7 +56,10 @@ class ListPageEditButton extends StatelessWidget {
     await viewModel.changeEditStatus(editStatus);
   }
 
-  void _deleteItem(BuildContext context) {
+  //ListPage選択行削除
+  Future<void> _deleteItem(BuildContext context) async{
     print('編集時に削除ボタンを押すとチェックしたリストが消える');
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.deleteItemList();
   }
 }
