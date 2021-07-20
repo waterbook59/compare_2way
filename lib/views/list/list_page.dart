@@ -8,6 +8,8 @@ import 'package:compare_2way/views/list/componets/edit_list_tile.dart';
 import 'package:compare_2way/views/list/componets/overview_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/components/checkbox/gf_checkbox.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 import "package:intl/intl.dart";
 
@@ -153,16 +155,17 @@ class ListPage extends StatelessWidget {
                                                             .contains(overview
                                                             .comparisonItemId)
                           //deleteItemIdListにidがある場合はチェック、ない場合はblank
-                                                        ? const Icon(
-                                                            Icons.check,
+                                                        ?
+                                                     Icon(
+                                          CupertinoIcons.checkmark_circle_fill,
+//                                                            Icons.check,
                                                             size: 30,
-                                                            color: Colors.blue,
+                                                            color: accentColor,
                                                           )
-                                                        : const Icon(
-                                                            Icons
-                                                      .check_box_outline_blank,
+                                                        :  Icon(
+                                                      CupertinoIcons.circle,
                                                             size: 30,
-                                                            color: Colors.blue,
+                                                            color: primaryColor,
                                                           ));
                                           },
                                         );
