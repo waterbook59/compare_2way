@@ -13,44 +13,27 @@ class AddScreen extends StatelessWidget {
   const AddScreen({
     this.displayMode,
     this.comparisonOverview,
-//    this.tagTitle,
-//    this.itemTitleEditMode,
   });
   final AddScreenMode displayMode;
   final ComparisonOverview comparisonOverview;
-//  final String tagTitle;
-//  final ItemTitleEditMode itemTitleEditMode;
-//  final String way1Title;
-//  final String way2Title;
+
 
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme
         .of(context)
         .primaryColor;
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         //todo Androidでの端末下の戻るボタン無効:WillPopScopeのonWillPopをfalse
 //        automaticallyImplyLeading: false,
-      leading: displayMode == AddScreenMode.add
-      //新規追加時キャンセル
-        ? GestureDetector(
+      leading:  GestureDetector(
         child: const Icon(
-          CupertinoIcons.clear_thick_circled,
-          color: Colors.white,
-        ),
-        onTap: () =>Navigator.pop(context)
-      )
-      //タイトル編集時キャンセル
-        : GestureDetector(
-          child: const Icon(
-            CupertinoIcons.clear_thick_circled,
-            color: Colors.white,
-          ),
-          onTap: ()=> _cancelTitleEdit(context),
-      ),
+        CupertinoIcons.clear_thick_circled,
+        color: Colors.white,
+    ),
+          onTap: () =>_cancelTitleEdit(context)),
         backgroundColor: primaryColor,
         middle:displayMode == AddScreenMode.add
         ? const Text(
@@ -59,17 +42,6 @@ class AddScreen extends StatelessWidget {
         )
         :const Text('名称編集',style: middleTextStyle,),
         /// 下から出てくる場合は右上に比較ボタンでもいいかも
-
-//        trailing:displayMode == AddScreenMode.add
-//        //todo  onPressedでDBに項目登録して比較画面に遷移
-//        ? const Text(
-//          '作成',
-//          style: trailingTextStyle,
-//        )
-//      :
-      //todo Containerにするとmiddle文字まで消える
-//        Container(),
-//        const Text('更新',style: middleTextStyle,),
 
       ),
       child: Scaffold(
@@ -98,9 +70,7 @@ class AddScreen extends StatelessWidget {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     //todo 画面閉じる前にTextFieldへの変更が少し見える
      Navigator.pop(context);
-     displayMode == AddScreenMode.add
-    ? viewModel.itemControllerClear()
-    :viewModel.cancelControllerEdit(comparisonOverview);
+    viewModel.itemControllerClear();
   }
 
 }

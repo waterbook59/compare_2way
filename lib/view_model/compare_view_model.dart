@@ -103,7 +103,8 @@ class CompareViewModel extends ChangeNotifier {
   bool isWay3MeritFocusList = true;
   bool isWay3DemeritFocusList = true;
 
-
+  ///ListPage
+  List<String> deleteItemIdList = <String>[];
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
   Future<void> getOverview(String comparisonItemId) async {
@@ -452,17 +453,40 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> changeEditStatus(ListEditMode editMode) async {
     if (editMode == ListEditMode.edit) {
       editStatus = ListEditMode.display;
+      deleteItemIdList =[];
     } else {
       editStatus = ListEditMode.edit;
+
+    }
+    notifyListeners();
+  }
+  //ListPage単一行削除
+  Future<void> deleteItem(String comparisonItemId) async {
+    //削除
+    await _compareRepository.deleteItem(comparisonItemId);
+    //データ取得?
+    notifyListeners();
+  }
+
+  void checkDeleteIcon(String itemId) {
+    ///1.Listにindexの値をupdateするメソッドがないので、map型に変換してupdateする
+    ////asMap()するだけで{index:value}のMap型にできる=>map.update(index,(value)=>!value);
+    ///2. comparisonItemIDをリストに追加・削除を行う
+    if(deleteItemIdList.contains(itemId)){
+      deleteItemIdList.remove(itemId);
+      print('id削除後:$deleteItemIdList');
+    }else{
+      deleteItemIdList.add(itemId);
+      print('id追加後:$deleteItemIdList');
     }
     notifyListeners();
   }
 
-  Future<void> deleteList(String comparisonItemId) async {
-    //削除
-    await _compareRepository.deleteList(comparisonItemId);
-    //データ取得?
-    notifyListeners();
+  //ListPage選択行削除
+  Future<void> deleteItemList() async {
+     _compareRepository.deleteItemList(deleteItemIdList);
+     deleteItemIdList =[];
+    notifyListeners();//NavBarで削除おしてもListView反映されない
   }
 
   Future<void> backListPage() {
@@ -856,12 +880,7 @@ class CompareViewModel extends ChangeNotifier {
     _way1Controller.clear();
     _way2Controller.clear();
   }
-  //タイトル更新時(AddScreenMode.edit)、addScreenでcancelするとき
-  void cancelControllerEdit(ComparisonOverview comparisonOverview) {
-    _titleController.text = comparisonOverview.itemTitle;
-    _way1Controller.text= comparisonOverview.way1Title;
-    _way2Controller.text = comparisonOverview.way2Title;
-  }
+
   //タイトル更新時(AddScreenMode.edit)、
   // inputPartの初期表示(CompareScreeのSelectorで表示されているものを表示)
   void setEditController(){

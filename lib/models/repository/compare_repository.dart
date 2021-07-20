@@ -120,11 +120,11 @@ class CompareRepository {
         .toComparisonOverviews(comparisonOverviewRecords);
   }
 
-  ///Delete
-  Future<void> deleteList(String comparisonItemId) async {
+  ///Delete ListPage単一行
+  Future<void> deleteItem(String comparisonItemId) async {
   // Merit/Demeritも同時に削除必要(transaction)
 //    await _comparisonItemDao.deleteListAll(comparisonItemId);
-    await _comparisonItemDao.deleteList(comparisonItemId);
+    await _comparisonItemDao.deleteItem(comparisonItemId);
     await _comparisonItemDao.deleteWay1MeritList(comparisonItemId);
     await _comparisonItemDao.deleteWay2MeritList(comparisonItemId);
     await _comparisonItemDao.deleteWay1DemeritList(comparisonItemId);
@@ -135,6 +135,23 @@ class CompareRepository {
     await _comparisonItemDao.deleteAllTagList(comparisonItemId);
     print('データ削除完了');
   }
+
+  ///Delete ListPage選択行
+  void deleteItemList(List<String> deleteItemIdList)  {
+    deleteItemIdList.forEach((id) async{
+      await _comparisonItemDao.deleteItem(id);
+      await _comparisonItemDao.deleteWay1MeritList(id);
+      await _comparisonItemDao.deleteWay2MeritList(id);
+      await _comparisonItemDao.deleteWay1DemeritList(id);
+      await _comparisonItemDao.deleteWay2DemeritList(id);
+      //todo way3List削除
+//    await _comparisonItemDao.deleteWay3MeritList(comparisonItemId);
+//    await _comparisonItemDao.deleteWay3DemeritList(comparisonItemId);
+      await _comparisonItemDao.deleteAllTagList(id);
+      print('データ削除完了');
+    });
+  }
+
 
   ///List<ComparisonOverview>ではなく、comparisonItemIdからComparisonOverview１行だけ取ってくる
   Future<ComparisonOverview> getComparisonOverview(

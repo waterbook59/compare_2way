@@ -175,7 +175,7 @@ class _GFAccordionState extends State<GFAccordion>
 
   void _toggleCollapsed() {
     setState(() {
-      switch (controller.status) {
+      switch (controller.status as AnimationStatus) {
         case AnimationStatus.completed:
           controller.forward(from: 0);
           break;

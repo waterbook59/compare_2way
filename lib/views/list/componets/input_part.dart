@@ -20,14 +20,6 @@ class InputPart extends StatelessWidget {
     final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
-
-    if (displayMode == AddScreenMode.add) {
-      Future(() async {
-        await viewModel.itemControllerClear();
-      });
-    }
-
-
     return Column(
       children: [
         ///タイトル

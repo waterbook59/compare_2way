@@ -109,7 +109,7 @@ class EditBottomAction extends StatelessWidget {
                     isDestructiveAction: true,
                     onPressed: (){
         final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-                        ..deleteList(comparisonOverview.comparisonItemId);
+                        ..deleteItem(comparisonOverview.comparisonItemId);
                       Navigator.pop(context);
                       Fluttertoast.showToast(
                         msg: '削除完了',
