@@ -6,6 +6,7 @@ import 'package:compare_2way/views/compare/compare_screen.dart';
 import 'package:compare_2way/views/list/add_screen.dart';
 import 'package:compare_2way/views/list/componets/edit_list_tile.dart';
 import 'package:compare_2way/views/list/componets/overview_list.dart';
+import 'package:compare_2way/views/list/componets/reorderble_edit_lsit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/checkbox/gf_checkbox.dart';
@@ -13,7 +14,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 import "package:intl/intl.dart";
 
-import 'componets/sub/list_page_edit_button.dart';
+import 'componets/list_page_edit_button.dart';
 
 class ListPage extends StatelessWidget {
   @override
@@ -117,61 +118,65 @@ class ListPage extends StatelessWidget {
                             constraints: BoxConstraints(
                                 minHeight: constraints.maxHeight),
                             //初回描画の時にgetListが２回発動される
-                            //todo reorderble使用するならStatefulが素直?
-                            child: //削除更新行うならFutureBuilder必要
-                                FutureBuilder(
-                                    future: viewModel.getList(),
-                                    builder: (context,
-                                        AsyncSnapshot<List<ComparisonOverview>>
-                                            snapshot) {
-                                      if (snapshot.data == null) {
-                                        return Container();
-                                      }
-                                      if (snapshot.hasData &&
-                                          snapshot.data.isEmpty) {
-                                        return Container(
-                                            child: const Center(
-                                                child: Text('アイテムはありません')));
-                                      } else {
-                                        return ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount: compareViewModel
-                                              .comparisonOverviews.length,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            final overview = compareViewModel
-                                                .comparisonOverviews[index];
-                                            return
-
-                                                ///チェックボックス用ListTile
-                                                EditListTile(
-                                                  onTap: () => checkDeleteIcon(
-                                                        context,
-                                                        overview
-                                                            .comparisonItemId),
-                                                    title: overview.itemTitle,
-                                                    icon: compareViewModel
-                                                            .deleteItemIdList
-                                                            .contains(overview
-                                                            .comparisonItemId)
-                          //deleteItemIdListにidがある場合はチェック、ない場合はblank
-                                                        ?
-                                                     Icon(
-                                          CupertinoIcons.checkmark_circle_fill,
-//                                                            Icons.check,
-                                                            size: 30,
-                                                            color: accentColor,
-                                                          )
-                                                        :  Icon(
-                                                      CupertinoIcons.circle,
-                                                            size: 30,
-                                                            color: primaryColor,
-                                                          ));
-                                          },
-                                        );
-                                      }
-                                    })),
-                      ));
+                            //todo reorderable使用するならStatefulが素直?
+                            child:
+                            ReorderableEditList(),
+                          //削除更新行うならFutureBuilder必要
+//                                FutureBuilder(
+//                                    future: viewModel.getList(),
+//                                    builder: (context,
+//                                        AsyncSnapshot<List<ComparisonOverview>>
+//                                            snapshot) {
+//                                      if (snapshot.data == null) {
+//                                        return Container();
+//                                      }
+//                                      if (snapshot.hasData &&
+//                                          snapshot.data.isEmpty) {
+//                                        return Container(
+//                                            child: const Center(
+//                                                child: Text('アイテムはありません')));
+//                                      } else {
+//                                        return ListView.builder(
+//                                          shrinkWrap: true,
+//                                          itemCount: compareViewModel
+//                                              .comparisonOverviews.length,
+//                                          itemBuilder: (BuildContext context,
+//                                              int index) {
+//                                            final overview = compareViewModel
+//                                                .comparisonOverviews[index];
+//                                            return
+//
+//                                                ///チェックボックス用ListTile
+//                                                EditListTile(
+//                                                  onTap: () => checkDeleteIcon(
+//                                                        context,
+//                                                        overview
+//                                                            .comparisonItemId),
+//                                                    title: overview.itemTitle,
+//                                                    icon: compareViewModel
+//                                                            .deleteItemIdList
+//                                                            .contains(overview
+//                                                            .comparisonItemId)
+//                          //deleteItemIdListにidがある場合はチェック、ない場合はblank
+//                                                        ?
+//                                                     Icon(
+//                                          CupertinoIcons.checkmark_circle_fill,
+////                                                            Icons.check,
+//                                                            size: 30,
+//                                                            color: accentColor,
+//                                                          )
+//                                                        :  Icon(
+//                                                      CupertinoIcons.circle,
+//                                                            size: 30,
+//                                                            color: primaryColor,
+//                                                          ));
+//                                          },
+//                                        );
+//                                      }
+//                                    }),
+                        ),
+                      )
+          );
         }),
         floatingActionButton: Consumer<CompareViewModel>(
             builder: (context, compareViewModel, child) {
