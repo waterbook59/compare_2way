@@ -70,62 +70,77 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
   Widget build(BuildContext context) {
     return ReorderableList(
       onReorder: _reorderCallback,
-      onReorderDone: this._reorderDone,
-      child: CustomScrollView(
+      onReorderDone: _reorderDone,
+      child: ListView.builder(
         shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        // cacheExtent: 3000,
-        slivers: <Widget>[
-          SliverAppBar(
-            actions: <Widget>[
-              PopupMenuButton<DraggingMode>(
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: Text("Options"),
-                ),
-                initialValue: _draggingMode,
-                onSelected: (DraggingMode mode) {
-                  setState(() {
-                    _draggingMode = mode;
-                  });
-                },
-                itemBuilder: (BuildContext context) =>
-                <PopupMenuItem<DraggingMode>>[
-                  const PopupMenuItem<DraggingMode>(
-                      value: DraggingMode.iOS,
-                      child: Text('iOS-like dragging')),
-                  const PopupMenuItem<DraggingMode>(
-                      value: DraggingMode.Android,
-                      child: Text('Android-like dragging')),
-                ],
-              ),
-            ],
-            pinned: true,
-            expandedHeight: 150.0,
-            flexibleSpace: const FlexibleSpaceBar(
-              title: const Text('Demo'),
-            ),
-          ),
-          SliverPadding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).padding.bottom),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                    return Item(
-                      data: _items[index],
-                      // first and last attributes affect border drawn during dragging
-                      isFirst: index == 0,
-                      isLast: index == _items.length - 1,
-                      draggingMode: _draggingMode,
-                    );
-                  },
-                  childCount: _items.length,
-                ),
-              )),
-        ],
+        physics: const NeverScrollableScrollPhysics(),
+          itemCount: _items.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Item(
+              data: _items[index],
+              // first and last attributes affect border drawn during dragging
+              isFirst: index == 0,
+              isLast: index == _items.length - 1,
+              draggingMode: _draggingMode,
+            );
+
+          }
       ),
+//      CustomScrollView(
+//        shrinkWrap: true,
+//        physics: const NeverScrollableScrollPhysics(),
+//        // cacheExtent: 3000,
+//        slivers: <Widget>[
+//          SliverAppBar(
+//            actions: <Widget>[
+//              PopupMenuButton<DraggingMode>(
+//                child: Container(
+//                  alignment: Alignment.center,
+//                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+//                  child: Text("Options"),
+//                ),
+//                initialValue: _draggingMode,
+//                onSelected: (DraggingMode mode) {
+//                  setState(() {
+//                    _draggingMode = mode;
+//                  });
+//                },
+//                itemBuilder: (BuildContext context) =>
+//                <PopupMenuItem<DraggingMode>>[
+//                  const PopupMenuItem<DraggingMode>(
+//                      value: DraggingMode.iOS,
+//                      child: Text('iOS-like dragging')),
+//                  const PopupMenuItem<DraggingMode>(
+//                      value: DraggingMode.Android,
+//                      child: Text('Android-like dragging')),
+//                ],
+//              ),
+//            ],
+//            pinned: true,
+//            expandedHeight: 150.0,
+//            flexibleSpace: const FlexibleSpaceBar(
+//              title: const Text('Demo'),
+//            ),
+//          ),
+//          SliverPadding(
+//              padding: EdgeInsets.only(
+//                  bottom: MediaQuery.of(context).padding.bottom),
+//              sliver: SliverList(
+//                delegate: SliverChildBuilderDelegate(
+//                      (BuildContext context, int index) {
+//                    return Item(
+//                      data: _items[index],
+//                      // first and last attributes affect border drawn during dragging
+//                      isFirst: index == 0,
+//                      isLast: index == _items.length - 1,
+//                      draggingMode: _draggingMode,
+//                    );
+//                  },
+//                  childCount: _items.length,
+//                ),
+//              )),
+//        ],
+//      ),
     );
   }
 }
@@ -164,7 +179,7 @@ class Item extends StatelessWidget {
           color: placeholder ? null : Colors.white);
     }
 
-
+    ///ListTile右側の並び替え部
     Widget dragHandle = draggingMode == DraggingMode.iOS
         ? ReorderableListener(
       child: Container(
@@ -186,6 +201,7 @@ class Item extends StatelessWidget {
             // hide content for placeholder
             opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
             child: IntrinsicHeight(
+              ///ListTile部分
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
@@ -200,12 +216,14 @@ class Item extends StatelessWidget {
                                 .subtitle1),
                       )),
                   // Triggers the reordering
+                  ///ListTile右側の並び替え部
                   dragHandle,
                 ],
               ),
             ),
           )),
     );
+
 
     if (draggingMode == DraggingMode.Android) {
       content = DelayedReorderableListener(
