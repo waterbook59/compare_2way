@@ -1,8 +1,13 @@
+import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
 
 class ReorderableEditList extends StatefulWidget {
+
+  const ReorderableEditList({this.allItemList});
+   final List<ComparisonOverview> allItemList;
+
   @override
   _ReorderableEditListState createState() => _ReorderableEditListState();
 }
@@ -17,25 +22,34 @@ class ItemData {
   final Key key;
 }
 
-enum DraggingMode {
-  iOS,
-  Android,
-}
+//enum DraggingMode {
+//  iOS,
+//  Android,
+//}
 
 
 class _ReorderableEditListState extends State<ReorderableEditList> {
 
-  List<ItemData> _items;
-  _ReorderableEditListState(){
-    _items = [];
-    for (int i = 0; i < 500; ++i) {
-      String label = "List item $i";
-      if (i == 5) {
-        label += ". This item has a long label and will be wrapped.";
-      }
-      _items.add(ItemData(label, ValueKey(i)));
-    }
-  }
+  //List<CompareViewModel>の内容をList<ItemData>へ変換
+  final List<ItemData> _items =<ItemData>[];
+
+//  _ReorderableEditListState(){
+//    _items = [];
+//    widget.allItemList.map((overview){
+//      return ItemData(overview.itemTitle,ValueKey());
+//    }).toList();
+
+
+    //todo allItemListに変更するとThe getter 'allItemList' was called on null.
+//    for (int i = 0; i < widget.allItemList.length; ++i) {
+//      final overView = widget.allItemList[i];
+//      String label = "List item $i";
+//      if (i == 5) {
+//        label += ". This item has a long label and will be wrapped.";
+//      }
+//      _items.add(ItemData(overView.itemTitle, ValueKey(i)));
+//    }
+//  }
 
   int _indexOfKey(Key key) {
     return _items.indexWhere((ItemData d) => d.key == key);
@@ -64,7 +78,16 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
     debugPrint("Reordering finished for ${draggedItem.title}}");
   }
 
-  DraggingMode _draggingMode = DraggingMode.iOS;
+//  DraggingMode _draggingMode = DraggingMode.iOS;
+
+  @override
+  void initState() {
+    for (int i = 0; i < widget.allItemList.length; ++i) {
+      final overView = widget.allItemList[i];
+      _items.add(ItemData(overView.itemTitle, ValueKey(i)));
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +104,7 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
               // first and last attributes affect border drawn during dragging
               isFirst: index == 0,
               isLast: index == _items.length - 1,
-              draggingMode: _draggingMode,
+//              draggingMode: _draggingMode,
             );
 
           }
@@ -151,13 +174,13 @@ class Item extends StatelessWidget {
     this.data,
     this.isFirst,
     this.isLast,
-    this.draggingMode,
+//    this.draggingMode,
   });
 
   final ItemData data;
   final bool isFirst;
   final bool isLast;
-  final DraggingMode draggingMode;
+//  final DraggingMode draggingMode;
 
   Widget _buildChild(BuildContext context, ReorderableItemState state) {
     BoxDecoration decoration;
@@ -180,8 +203,11 @@ class Item extends StatelessWidget {
     }
 
     ///ListTile右側の並び替え部
-    Widget dragHandle = draggingMode == DraggingMode.iOS
-        ? ReorderableListener(
+    Widget
+    dragHandle =
+//    draggingMode == DraggingMode.iOS
+//        ?
+    ReorderableListener(
       child: Container(
         padding: EdgeInsets.only(right: 18.0, left: 18.0),
         color: Color(0x08000000),
@@ -189,8 +215,8 @@ class Item extends StatelessWidget {
           child: Icon(Icons.reorder, color: Color(0xFF888888)),
         ),
       ),
-    )
-        : Container();
+    );
+//        : Container();
 
     Widget content = Container(
       decoration: decoration,
@@ -225,11 +251,11 @@ class Item extends StatelessWidget {
     );
 
 
-    if (draggingMode == DraggingMode.Android) {
-      content = DelayedReorderableListener(
-        child: content,
-      );
-    }
+//    if (draggingMode == DraggingMode.Android) {
+//      content = DelayedReorderableListener(
+//        child: content,
+//      );
+//    }
 
     return content;
   }

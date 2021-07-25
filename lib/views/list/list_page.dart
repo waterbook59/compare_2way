@@ -112,7 +112,11 @@ class ListPage extends StatelessWidget {
 
               ///編集時  ListTile→ReorderableListView&CheckboxListTile
               //todo Consumerにしないと編集時リストがなくなる
-              : LayoutBuilder(
+              :
+//            ReorderableEditList(
+//         allItemList: compareViewModel.comparisonOverviews
+//                            );
+          LayoutBuilder(
                   builder: (context, constraints) => SingleChildScrollView(
                         child: ConstrainedBox(
                             constraints: BoxConstraints(
@@ -120,7 +124,9 @@ class ListPage extends StatelessWidget {
                             //初回描画の時にgetListが２回発動される
                             //todo reorderable使用するならStatefulが素直?
                             child:
-                            ReorderableEditList(),
+                            ReorderableEditList(
+                              allItemList: compareViewModel.comparisonOverviews
+                            ),
                           //削除更新行うならFutureBuilder必要
 //                                FutureBuilder(
 //                                    future: viewModel.getList(),
