@@ -1,4 +1,5 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/views/list/componets/edit_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
@@ -183,6 +184,7 @@ class Item extends StatelessWidget {
 //  final DraggingMode draggingMode;
 
   Widget _buildChild(BuildContext context, ReorderableItemState state) {
+    final accentColor = Theme.of(context).accentColor;
     BoxDecoration decoration;
 
     if (state == ReorderableItemState.dragProxy ||
@@ -203,8 +205,8 @@ class Item extends StatelessWidget {
     }
 
     ///ListTile右側の並び替え部
-    Widget
-    dragHandle =
+//    Widget
+    final dragHandle =
 //    draggingMode == DraggingMode.iOS
 //        ?
     ReorderableListener(
@@ -218,7 +220,8 @@ class Item extends StatelessWidget {
     );
 //        : Container();
 
-    Widget content = Container(
+//    Widget
+    final content = Container(
       decoration: decoration,
       child: SafeArea(
           top: false,
@@ -232,15 +235,29 @@ class Item extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Expanded(
-                      child: Padding(
-                        padding:
-                        EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
-                        child: Text(data.title,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .subtitle1),
-                      )),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: EditListTile(
+                        title: data.title,
+                        onTap: (){print('タップで削除アイコン切替');},
+                        icon: Icon(
+                          CupertinoIcons.checkmark_circle_fill,
+                          size: 30,
+                          color: accentColor,
+                        ),
+                      ),
+                    ),
+                  ),
+//                  Expanded(
+//                      child: Padding(
+//                        padding:
+//                        EdgeInsets.symmetric(vertical: 14.0, horizontal: 14.0),
+//                        child: Text(data.title,
+//                            style: Theme
+//                                .of(context)
+//                                .textTheme
+//                                .subtitle1),
+//                      )),
                   // Triggers the reordering
                   ///ListTile右側の並び替え部
                   dragHandle,

@@ -156,13 +156,9 @@ class ListPage extends StatelessWidget {
 //                                                EditListTile(
 //                                                  onTap: () => checkDeleteIcon(
 //                                                        context,
-//                                                        overview
-//                                                            .comparisonItemId),
+//                                                        overview.comparisonItemId),
 //                                                    title: overview.itemTitle,
-//                                                    icon: compareViewModel
-//                                                            .deleteItemIdList
-//                                                            .contains(overview
-//                                                            .comparisonItemId)
+//                                                    icon: compareViewModel.deleteItemIdList.contains(overview.comparisonItemId)
 //                          //deleteItemIdListにidがある場合はチェック、ない場合はblank
 //                                                        ?
 //                                                     Icon(
