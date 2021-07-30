@@ -244,7 +244,7 @@ class Item extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: EditListTile(
                         title: data.title,
-                        onTap: (){print('タップで削除アイコン切替');},
+                        onTap: ()=>checkDeleteIcon(context,data.id),
                         icon:
                         viewModel.deleteItemIdList.contains(data.id)
                        ? Icon(
@@ -294,5 +294,11 @@ class Item extends StatelessWidget {
     return ReorderableItem(
         key: data.key, //
         childBuilder: _buildChild);
+  }
+
+  void checkDeleteIcon(BuildContext context, String itemId) {
+    print('タップで削除アイコン切替');
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+      ..checkDeleteIcon(itemId);
   }
 }
