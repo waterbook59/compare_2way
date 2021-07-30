@@ -1,8 +1,10 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/list/componets/edit_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
+import 'package:provider/provider.dart';
 
 class ReorderableEditList extends StatefulWidget {
 
@@ -15,12 +17,11 @@ class ReorderableEditList extends StatefulWidget {
 
 
 class ItemData {
-  ItemData(this.title, this.key);
-
+  ItemData(this.title, this.key,this.id);
   final String title;
-
   // Each item in reorderable list needs stable and unique key
   final Key key;
+  final String id;
 }
 
 //enum DraggingMode {
@@ -85,7 +86,8 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
   void initState() {
     for (int i = 0; i < widget.allItemList.length; ++i) {
       final overView = widget.allItemList[i];
-      _items.add(ItemData(overView.itemTitle, ValueKey(i)));
+      _items.add(ItemData(overView.itemTitle, ValueKey(i),
+          overView.comparisonItemId));
     }
     super.initState();
   }
@@ -184,7 +186,10 @@ class Item extends StatelessWidget {
 //  final DraggingMode draggingMode;
 
   Widget _buildChild(BuildContext context, ReorderableItemState state) {
+    final primaryColor = Theme.of(context).primaryColor;
     final accentColor = Theme.of(context).accentColor;
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+
     BoxDecoration decoration;
 
     if (state == ReorderableItemState.dragProxy ||
@@ -240,11 +245,18 @@ class Item extends StatelessWidget {
                       child: EditListTile(
                         title: data.title,
                         onTap: (){print('タップで削除アイコン切替');},
-                        icon: Icon(
+                        icon:
+                        viewModel.deleteItemIdList.contains(data.id)
+                       ? Icon(
                           CupertinoIcons.checkmark_circle_fill,
                           size: 30,
                           color: accentColor,
-                        ),
+                        )
+                            :Icon(
+                          CupertinoIcons.circle,
+                          size: 30,
+                          color: primaryColor,
+                        )
                       ),
                     ),
                   ),
