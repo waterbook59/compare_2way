@@ -120,10 +120,9 @@ class ListPage extends StatelessWidget {
                         child: ConstrainedBox(
                             constraints: BoxConstraints(
                                 minHeight: constraints.maxHeight),
-                            //初回描画の時にgetListが２回発動される
-//todo reorderable使用でStatefulに変更、ListPageEditButtonの削除表示反映にFutureBuilder入れても画面更新なし
-                        ///NavBarの削除ボタンを押した時にReorderableEditListをsetStateするには???ReorderableEditListをStatelessにするしかない？？
-                          ///statelessにしても削除がListViewに反映されない
+//reorderable使用でStatefulに変更
+///NavBarの削除ボタンを押した時にReorderableEditListをsetStateするには、
+///initStateを使わず、インスタンスで渡した値をStateWidget側で使用する
                             child:
                             FutureBuilder(
                               ///List<ComparisonOverview>ではなくList<ItemData>へ変換して取得(getAllTagList参照)

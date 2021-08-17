@@ -499,6 +499,7 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   //ListPage編集時の並び替え可能なアイテムリスト変換
+  //initStateの役割をここで行う
   Future<List<DraggingItemData>> getItemDataList() async {
     // FutureBuilder呼び出し毎にaddしていくとdraggedItemsが増えていってしまう
     draggedItems = <DraggingItemData>[];
