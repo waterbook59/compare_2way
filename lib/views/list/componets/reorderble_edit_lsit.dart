@@ -57,7 +57,6 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
     return _items.indexWhere((ItemData d) => d.key == key);
   }
 
-
   bool _reorderCallback(Key item, Key newPosition) {
     int draggingIndex = _indexOfKey(item);
     int newPositionIndex = _indexOfKey(newPosition);
@@ -107,6 +106,11 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
               // first and last attributes affect border drawn during dragging
               isFirst: index == 0,
               isLast: index == _items.length - 1,
+              onTap: (){
+                print('onTap!!!');
+                final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+                  ..checkDeleteIcon(_items[index].id);
+              },
 //              draggingMode: _draggingMode,
             );
 
@@ -177,12 +181,14 @@ class Item extends StatelessWidget {
     this.data,
     this.isFirst,
     this.isLast,
+    this.onTap,
 //    this.draggingMode,
   });
 
   final ItemData data;
   final bool isFirst;
   final bool isLast;
+  final VoidCallback onTap;
 //  final DraggingMode draggingMode;
 
   Widget _buildChild(BuildContext context, ReorderableItemState state) {
@@ -244,7 +250,8 @@ class Item extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: EditListTile(
                         title: data.title,
-                        onTap: ()=>checkDeleteIcon(context,data.id),
+                        onTap: onTap,
+//                            checkDeleteIcon(context,data.id),
                         icon:
                         viewModel.deleteItemIdList.contains(data.id)
                        ? Icon(
@@ -296,9 +303,9 @@ class Item extends StatelessWidget {
         childBuilder: _buildChild);
   }
 
-  void checkDeleteIcon(BuildContext context, String itemId) {
-    print('タップで削除アイコン切替');
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-      ..checkDeleteIcon(itemId);
-  }
+//  void checkDeleteIcon(BuildContext context, String itemId) {
+//    print('タップで削除アイコン切替');
+//    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+//      ..checkDeleteIcon(itemId);
+//  }
 }

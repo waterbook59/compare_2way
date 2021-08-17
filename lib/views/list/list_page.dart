@@ -1,4 +1,5 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/dragging_item_data.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
@@ -7,6 +8,7 @@ import 'package:compare_2way/views/list/add_screen.dart';
 import 'package:compare_2way/views/list/componets/edit_list_tile.dart';
 import 'package:compare_2way/views/list/componets/overview_list.dart';
 import 'package:compare_2way/views/list/componets/reorderble_edit_lsit.dart';
+import 'package:compare_2way/views/list/componets/sub/reorderable_stateless_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/checkbox/gf_checkbox.dart';
@@ -113,19 +115,41 @@ class ListPage extends StatelessWidget {
               ///編集時  ListTile→ReorderableListView&CheckboxListTile
               //todo Consumerにしないと編集時リストがなくなる
               :
-//            ReorderableEditList(
-//         allItemList: compareViewModel.comparisonOverviews
-//                            );
           LayoutBuilder(
                   builder: (context, constraints) => SingleChildScrollView(
                         child: ConstrainedBox(
                             constraints: BoxConstraints(
                                 minHeight: constraints.maxHeight),
                             //初回描画の時にgetListが２回発動される
-                            //todo reorderable使用するならStatefulが素直?
+//todo reorderable使用でStatefulに変更、ListPageEditButtonの削除表示反映にFutureBuilder入れても画面更新なし
+                        ///NavBarの削除ボタンを押した時にReorderableEditListをsetStateするには???ReorderableEditListをStatelessにするしかない？？
+                          ///statelessにしても削除がListViewに反映されない
                             child:
-                            ReorderableEditList(
-                              allItemList: compareViewModel.comparisonOverviews
+                            FutureBuilder(
+                              ///List<ComparisonOverview>ではなくList<ItemData>へ変換して取得(getAllTagList参照)
+//                              future: viewModel.getList(),
+                                future: viewModel.getItemDataList(),
+                              builder: (context,
+                                  AsyncSnapshot<List<DraggingItemData>>
+                                  snapshot) {
+                                if (snapshot.data == null) {
+                                        return Container();
+                                      }
+                                if (snapshot.hasData && snapshot.data.isEmpty) {
+                                  return Container(
+                                      child: const Center(
+                                          child: Text('アイテムはありません')));
+                                      } else {
+                                       return ReorderableStatelessList(
+                                     draggedItems:snapshot.data
+                                           );
+//                                         ReorderableEditList(
+//                                           allItemList:
+//                                           compareViewModel.comparisonOverviews
+//                                         );
+                                                                      }
+                              }
+
                             ),
                           //削除更新行うならFutureBuilder必要
 //                                FutureBuilder(
