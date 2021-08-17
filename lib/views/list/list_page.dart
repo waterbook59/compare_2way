@@ -127,9 +127,11 @@ class ListPage extends StatelessWidget {
                             child:
                             FutureBuilder(
                               ///List<ComparisonOverview>ではなくList<ItemData>へ変換して取得(getAllTagList参照)
-//                              future: viewModel.getList(),
-                                future: viewModel.getItemDataList(),
+                              future:
+//                              viewModel.getList(),
+                                viewModel.getItemDataList(),
                               builder: (context,
+//                                  AsyncSnapshot<List<ComparisonOverview>>
                                   AsyncSnapshot<List<DraggingItemData>>
                                   snapshot) {
                                 if (snapshot.data == null) {
@@ -140,13 +142,14 @@ class ListPage extends StatelessWidget {
                                       child: const Center(
                                           child: Text('アイテムはありません')));
                                       } else {
-                                       return ReorderableStatelessList(
-                                     draggedItems:snapshot.data
-                                           );
-//                                         ReorderableEditList(
-//                                           allItemList:
-//                                           compareViewModel.comparisonOverviews
-//                                         );
+                                       return
+//                                         ReorderableStatelessList(
+//                                     draggedItems:snapshot.data
+//                                           );
+                                         ReorderableEditList(
+                                             draggedItems:
+                                           snapshot.data
+                                         );
                                                                       }
                               }
 

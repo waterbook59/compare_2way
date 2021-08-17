@@ -1,4 +1,5 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/dragging_item_data.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/list/componets/edit_list_tile.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,8 +9,9 @@ import 'package:provider/provider.dart';
 
 class ReorderableEditList extends StatefulWidget {
 
-  const ReorderableEditList({this.allItemList});
-   final List<ComparisonOverview> allItemList;
+  const ReorderableEditList({this.draggedItems});
+//   final List<ComparisonOverview> allItemList;
+  final List<DraggingItemData> draggedItems;
 
   @override
   _ReorderableEditListState createState() => _ReorderableEditListState();
@@ -54,42 +56,48 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
 //  }
 
   int _indexOfKey(Key key) {
-    return _items.indexWhere((ItemData d) => d.key == key);
+//    return _items.indexWhere((ItemData d) => d.key == key);
+    return widget.draggedItems.indexWhere((DraggingItemData d) => d.key == key);
   }
 
   bool _reorderCallback(Key item, Key newPosition) {
     int draggingIndex = _indexOfKey(item);
     int newPositionIndex = _indexOfKey(newPosition);
 
-    // Uncomment to allow only even target reorder possition
-    // if (newPositionIndex % 2 == 1)
-    //   return false;
 
-    final draggedItem = _items[draggingIndex];
-    setState(() {
-      debugPrint("Reordering $item -> $newPosition");
-      _items.removeAt(draggingIndex);
-      _items.insert(newPositionIndex, draggedItem);
+//    final draggedItem = _items[draggingIndex];
+//    setState(() {
+//      debugPrint("Reordering $item -> $newPosition");
+//      _items.removeAt(draggingIndex);
+//      _items.insert(newPositionIndex, draggedItem);
+
+      final draggedItem =  widget.draggedItems[draggingIndex];
+      setState(() {
+        debugPrint("Reordering $item -> $newPosition");
+        widget.draggedItems.removeAt(draggingIndex);
+        widget.draggedItems.insert(newPositionIndex, draggedItem);
+
     });
     return true;
   }
 
   void _reorderDone(Key item) {
-    final draggedItem = _items[_indexOfKey(item)];
+//    final draggedItem = _items[_indexOfKey(item)];
+    final draggedItem = widget.draggedItems[_indexOfKey(item)];
     debugPrint("Reordering finished for ${draggedItem.title}}");
   }
 
 //  DraggingMode _draggingMode = DraggingMode.iOS;
 
-  @override
-  void initState() {
-    for (int i = 0; i < widget.allItemList.length; ++i) {
-      final overView = widget.allItemList[i];
-      _items.add(ItemData(overView.itemTitle, ValueKey(i),
-          overView.comparisonItemId));
-    }
-    super.initState();
-  }
+//  @override
+//  void initState() {
+//    for (int i = 0; i < widget.allItemList.length; ++i) {
+//      final overView = widget.allItemList[i];
+//      _items.add(ItemData(overView.itemTitle, ValueKey(i),
+//          overView.comparisonItemId));
+//    }
+//    super.initState();
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,17 +107,22 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
       child: ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-          itemCount: _items.length,
+          itemCount:
+//          _items.length,
+          widget.draggedItems.length,
           itemBuilder: (BuildContext context, int index) {
             return Item(
-              data: _items[index],
+              data:
+//            _items[index],
+    widget.draggedItems[index],
               // first and last attributes affect border drawn during dragging
               isFirst: index == 0,
+//              isLast: index == _items.length - 1,
               isLast: index == _items.length - 1,
               onTap: (){
                 print('onTap!!!');
                 final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-                  ..checkDeleteIcon(_items[index].id);
+                  ..checkDeleteIcon( widget.draggedItems[index].id);
               },
 //              draggingMode: _draggingMode,
             );
@@ -185,7 +198,8 @@ class Item extends StatelessWidget {
 //    this.draggingMode,
   });
 
-  final ItemData data;
+//  final ItemData data;
+  final DraggingItemData data;
   final bool isFirst;
   final bool isLast;
   final VoidCallback onTap;
