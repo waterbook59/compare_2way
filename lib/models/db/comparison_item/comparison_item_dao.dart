@@ -1,3 +1,5 @@
+import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/dragging_item_data.dart';
 import 'package:compare_2way/data_models/tag.dart';
 import 'package:moor/moor.dart';
 import 'comparison_item_database.dart';
@@ -335,6 +337,15 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       (delete(tagRecords)
         ..where((tbl) => tbl.tagTitle.equals(deleteTagRecord.tagTitle)))
           .go();
+
+  ///並び替え保存:comparisonOverview
+  Future<void> changeCompareListOrder(
+      String comparisonItemId,
+      ComparisonOverviewRecordsCompanion overviewCompanion) {
+    return (update(comparisonOverviewRecords)
+      ..where((it) => it.comparisonItemId.equals(comparisonItemId)))
+        .write(overviewCompanion);
+  }
 
 
 

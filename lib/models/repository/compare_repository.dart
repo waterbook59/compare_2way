@@ -1,4 +1,5 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/dragging_item_data.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
@@ -532,7 +533,28 @@ class CompareRepository {
       print('tagList削除時repositoryエラー:${e.toString()}');
     }
   }
+  //todo ListPage編集並び替え後のDBの順番入れ替え、まずdataIdで行ってみる
+  Future<void> changeCompareListOrder(
+      List<ComparisonOverview> comparisonOverviews) async{
+    try{
+      comparisonOverviews.forEach((overview) async{
+        final overviewRecord =
+        overview.toComparisonOverviewRecord(overview);
+        print('repo/overviewRecord:$overviewRecord');
+        final overviewCompanion = ComparisonOverviewRecordsCompanion(
+          //アップデート要素がないものを入れるとnullでエラー(Companionに入れるのは値が更新できるものだけ)
+          dataId: Value(overviewRecord.dataId),
+        );
 
+        //todo dataIdを上書きしようとするとunique制約に引っかかってエラー
+        await _comparisonItemDao.changeCompareListOrder(
+            overviewRecord.comparisonItemId, overviewCompanion);
+      });
+
+    }on SqliteException catch (e) {
+      print('repository更新エラー:${e.toString()}');
+    }
+  }
 
 
 

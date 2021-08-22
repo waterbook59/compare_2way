@@ -38,7 +38,7 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
                 print('onTap!!!');
                 //todo checkIconした時にnotifyListenersでリストが再呼び出しされて順序がもどる
                 final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-                  ..checkDeleteIcon( widget.draggedItems[index].id);
+                ..checkDeleteIcon(widget.draggedItems[index].comparisonItemId);
               },
 
             );
@@ -57,18 +57,22 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
     final newPositionIndex = _indexOfKey(newPosition);
 
     final draggedItem =  widget.draggedItems[draggingIndex];
-    //todo リストの位置を変更した形でDBへ保存が必要
+    //todo リストの位置を変更した形でDBへ保存が必要(comparisonItemIdからDB検索してdataIdを書き換えする)
     setState(() {
-      debugPrint("Reordering $item -> $newPosition");
+      debugPrint('Reordering $item -> $newPosition');
       widget.draggedItems.removeAt(draggingIndex);
       widget.draggedItems.insert(newPositionIndex, draggedItem);
     });
+
     return true;
   }
 
   void _reorderDone(Key item) {
     final draggedItem = widget.draggedItems[_indexOfKey(item)];
-    debugPrint("Reordering finished for ${draggedItem.title}}");
+    debugPrint('Reordering finished for ${draggedItem.title}&$item}');
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+//    comparisonID順にList<ComparisonOverview>並替=>dataIdをその順に書換?
+    viewModel.changeCompareListOrder(widget.draggedItems);
   }
 
 }
@@ -143,7 +147,7 @@ class Item extends StatelessWidget {
                         title: data.title,
                         onTap: onTap,
                         icon:
-                        viewModel.deleteItemIdList.contains(data.id)
+                      viewModel.deleteItemIdList.contains(data.comparisonItemId)
                        ? Icon(
                           CupertinoIcons.checkmark_circle_fill,
                           size: 30,

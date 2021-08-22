@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class DraggingItemData {
-  DraggingItemData(this.title, this.key,this.id);
+  DraggingItemData({this.title, this.key,this.comparisonItemId,this.orderId});
   final String title;
   // Each item in reorderable list needs stable and unique key
   final Key key;
-  final String id;
+  final String comparisonItemId;
+  final int orderId;
 }

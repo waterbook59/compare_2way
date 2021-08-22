@@ -37,7 +37,7 @@ class ReorderableStatelessList extends StatelessWidget {
               onTap: (){
                 print('onTap!!!');
                 final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-                  ..checkDeleteIcon(draggedItems[index].id);
+                  ..checkDeleteIcon(draggedItems[index].comparisonItemId);
               },
 //              draggingMode: _draggingMode,
             );
@@ -162,7 +162,7 @@ class Item extends StatelessWidget {
                           onTap: onTap,
 //                            checkDeleteIcon(context,data.id),
                           icon:
-                          viewModel.deleteItemIdList.contains(data.id)
+                      viewModel.deleteItemIdList.contains(data.comparisonItemId)
                               ? Icon(
                             CupertinoIcons.checkmark_circle_fill,
                             size: 30,
