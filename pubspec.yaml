@@ -38,7 +38,8 @@ dev_dependencies:
   moor_generator: ^3.3.1
   build_runner: ^1.10.1
 
-
+dependency_overrides:
+  analyzer: ^0.39.14
 
 
 flutter:

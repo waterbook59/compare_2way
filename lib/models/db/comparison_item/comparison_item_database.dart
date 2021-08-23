@@ -36,8 +36,9 @@ class ComparisonOverviewRecords extends Table {
   TextColumn get conclusion => text().nullable()();
   DateTimeColumn get createdAt => dateTime().nullable()();
 
-  @override
-  Set<Column> get primaryKey => {dataId};
+  ///unique制約外し
+//  @override
+//  Set<Column> get primaryKey => {dataId};
 
 }
 
