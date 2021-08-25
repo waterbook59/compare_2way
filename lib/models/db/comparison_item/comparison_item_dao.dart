@@ -341,7 +341,14 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   ///並び替え保存:comparisonOverview
   Future<void> changeCompareListOrder(
       String comparisonItemId,
-      ComparisonOverviewRecordsCompanion overviewCompanion) {
+      ComparisonOverviewRecordsCompanion overviewCompanion) async{
+
+//    await Future.forEach(comparisonItemIdList,(String itemId) {
+//      (update(comparisonOverviewRecords)
+//        ..where((it) => it.comparisonItemId.equals(itemId)))
+//          .write(overviewCompanion);
+//    });
+    print('並び替え:dao');
     return (update(comparisonOverviewRecords)
       ..where((it) => it.comparisonItemId.equals(comparisonItemId)))
         .write(overviewCompanion);

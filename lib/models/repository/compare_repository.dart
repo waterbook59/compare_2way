@@ -535,21 +535,54 @@ class CompareRepository {
   }
   //todo ListPage編集並び替え後のDBの順番入れ替え、まずdataIdで行ってみる
   Future<void> changeCompareListOrder(
-      List<ComparisonOverview> comparisonOverviews) async{
+      List<ComparisonOverview> comparisonOverviews,
+      List<DraggingItemData> draggingItems) async{
     try{
-      comparisonOverviews.forEach((overview) async{
-        final overviewRecord =
-        overview.toComparisonOverviewRecord(overview);
-        print('repo/overviewRecord:$overviewRecord');
-        final overviewCompanion = ComparisonOverviewRecordsCompanion(
-          //アップデート要素がないものを入れるとnullでエラー(Companionに入れるのは値が更新できるものだけ)
-          dataId: Value(overviewRecord.dataId),
-        );
+      //todo draggingItemsをrepositoryにそのまま渡してcomparisonItemId順にdataIdを更新する
+      ///dataIDだけ上書き
+//      draggingItems.forEach((item) async{
+////        final overviewRecord =
+////        overview.toComparisonOverviewRecord(overview);
+////        print('repo/overviewRecord:$overviewRecord');
+//      final itemId = item.comparisonItemId;
+//        final overviewCompanion = ComparisonOverviewRecordsCompanion(
+//          ///ここにcomparisonOverviewsのdataIdを割り当てる
+//          dataId: Value(item.orderId),
+//        );
+//          print('id:$itemId/companion:$overviewCompanion');
+//
+//      await _comparisonItemDao.changeCompareListOrder(
+//          itemId, overviewCompanion);
+//      });
 
-        //todo dataIdを上書きしようとするとunique制約に引っかかってエラー
-        await _comparisonItemDao.changeCompareListOrder(
-            overviewRecord.comparisonItemId, overviewCompanion);
-      });
+    for (var i = 0; i < draggingItems.length; ++i) {
+      final itemId = draggingItems[i].comparisonItemId;
+      ///並び替え時のdataIdの重複さけるのにリスト数を足して外す
+      //UNIQUE制約かからないよう1つずつではなく一気に変更できないか？？？batch的な
+      final newDataId = comparisonOverviews[i].dataId+ draggingItems.length;
+      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+        ///ここにcomparisonOverviewsのdataIdを割り当てる
+      // dataIdに同じ値があるとautoIncrementしてるので、UNIQUE制約でエラー
+        dataId: Value(newDataId),
+      );
+      print('newId:$newDataId/id:$itemId/companion:$overviewCompanion');
+      await _comparisonItemDao.changeCompareListOrder(
+          itemId, overviewCompanion);
+    }
+
+    ///dataIdの重複さけるのにリスト数を足した分を引く
+    for (var u = 0; u < draggingItems.length; ++u) {
+      final itemId = draggingItems[u].comparisonItemId;
+      final dataId = comparisonOverviews[u].dataId - draggingItems.length;
+      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+        ///ここにcomparisonOverviewsのdataIdを割り当てる
+        // dataIdに同じ値があるとautoIncrementしてるので、UNIQUE制約でエラー
+        dataId: Value(dataId),
+      );
+      await _comparisonItemDao.changeCompareListOrder(
+          itemId, overviewCompanion);
+    }
+
 
     }on SqliteException catch (e) {
       print('repository更新エラー:${e.toString()}');
