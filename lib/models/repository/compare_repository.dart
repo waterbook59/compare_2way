@@ -538,47 +538,31 @@ class CompareRepository {
       List<ComparisonOverview> comparisonOverviews,
       List<DraggingItemData> draggingItems) async{
     try{
-      //todo draggingItemsをrepositoryにそのまま渡してcomparisonItemId順にdataIdを更新する
-      ///dataIDだけ上書き
-//      draggingItems.forEach((item) async{
-////        final overviewRecord =
-////        overview.toComparisonOverviewRecord(overview);
-////        print('repo/overviewRecord:$overviewRecord');
-//      final itemId = item.comparisonItemId;
-//        final overviewCompanion = ComparisonOverviewRecordsCompanion(
-//          ///ここにcomparisonOverviewsのdataIdを割り当てる
-//          dataId: Value(item.orderId),
-//        );
-//          print('id:$itemId/companion:$overviewCompanion');
-//
-//      await _comparisonItemDao.changeCompareListOrder(
-//          itemId, overviewCompanion);
-//      });
-
+      //draggingItemsをrepositoryにそのまま渡してcomparisonItemId順にdataIdを更新する
     for (var i = 0; i < draggingItems.length; ++i) {
       final itemId = draggingItems[i].comparisonItemId;
       ///並び替え時のdataIdの重複さけるのにリスト数を足して外す
-      //UNIQUE制約かからないよう1つずつではなく一気に変更できないか？？？batch的な
       final newDataId = comparisonOverviews[i].dataId+ draggingItems.length;
       final overviewCompanion = ComparisonOverviewRecordsCompanion(
         ///ここにcomparisonOverviewsのdataIdを割り当てる
       // dataIdに同じ値があるとautoIncrementしてるので、UNIQUE制約でエラー
         dataId: Value(newDataId),
       );
-      print('newId:$newDataId/id:$itemId/companion:$overviewCompanion');
+//      print('newId:$newDataId/id:$itemId/companion:$overviewCompanion');
+//            print('draggingItems.length:${draggingItems.length}/plusId:$newDataId/id:$itemId');
       await _comparisonItemDao.changeCompareListOrder(
           itemId, overviewCompanion);
     }
 
-    ///dataIdの重複さけるのにリスト数を足した分を引く
+    ///comparisonOverviewのdataIdから引くのではなく、そのまま登録
     for (var u = 0; u < draggingItems.length; ++u) {
       final itemId = draggingItems[u].comparisonItemId;
-      final dataId = comparisonOverviews[u].dataId - draggingItems.length;
+      //引くならcomparisonOverviews[u].dataIdではなく、上でDB登録したnewDataIdから
+      final dataId = comparisonOverviews[u].dataId;
       final overviewCompanion = ComparisonOverviewRecordsCompanion(
-        ///ここにcomparisonOverviewsのdataIdを割り当てる
-        // dataIdに同じ値があるとautoIncrementしてるので、UNIQUE制約でエラー
         dataId: Value(dataId),
       );
+//      print('draggingItems.length:${draggingItems.length}/minusId:$dataId/id:$itemId');
       await _comparisonItemDao.changeCompareListOrder(
           itemId, overviewCompanion);
     }

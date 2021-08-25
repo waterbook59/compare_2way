@@ -519,46 +519,9 @@ class CompareViewModel extends ChangeNotifier {
   ///ListPage編集並び替え後のDBの順番入れ替え、まずdataIdで行ってみる
   Future<void> changeCompareListOrder(List<DraggingItemData> draggingItems)
   async{
-    //todo draggingItemsをrepositoryにそのまま渡してcomparisonItemId順にdataIdを更新する
-    var orderList = draggingItems.map((e)=>e.orderId).toList();
-    print('並び替えdataId：$orderList');
-    print('並び替えタイトル：${draggingItems.map((e) => e.title)}');
-    print('並び替えItemId：${draggingItems.map((e) => e.comparisonItemId)}');
-    //todo repositoryでCompanion使うならdataIdListだけでいいかもsaveComparisonItem参照
-//dataId部分に順番にkeyListの値を入れていきたい、keyList.forEach?
-//        for (var i = 0; i < draggingItems.length; ++i) {
-//          final overview = _comparisonOverviews[i];
-//          final newOrder = orderList[i];
-//          final newOverview = ComparisonOverview(
-//            dataId: i,
-//            comparisonItemId: overview.comparisonItemId,
-//            itemTitle: overview.itemTitle,
-//            way1Title: overview.way1Title,
-//            way2Title: overview.way2Title,
-//            way1MeritEvaluate: overview.way1MeritEvaluate,
-//            way1DemeritEvaluate: overview.way1DemeritEvaluate,
-//            way2MeritEvaluate: overview.way2MeritEvaluate,
-//            way2DemeritEvaluate: overview.way2DemeritEvaluate,
-//            conclusion: overview.conclusion,
-//            createdAt: overview.createdAt,
-//            //todo favorite,way3追加
-//          );
-//          newComparisonOverviews.add(newOverview);
-//        }
-//        _comparisonOverviews  =[];
-//        _comparisonOverviews =newComparisonOverviews;
-//        newComparisonOverviews =[];
-    //orderList再設定
-//    orderList =[];
-//    for (var i = 0; i < draggingItems.length; ++i) {
-//     orderList.add(i);
-//    }
-
-//    print('並び替え後のアイテムリスト：${comparisonOverviews.map((e) => e.itemTitle)}');
-    print('comparisonOverviewsのdataId:${comparisonOverviews.map((e) => e.dataId)}');
-//    print('並び替え後のorderList：$orderList');
-//同じidを割り当てて登録しようとするとエラー？
- await _compareRepository.changeCompareListOrder(_comparisonOverviews,draggingItems);
+    //draggingItemsをrepositoryにそのまま渡してcomparisonItemId順にdataIdを更新する
+    await _compareRepository.changeCompareListOrder(
+     _comparisonOverviews,draggingItems);
 
   }
 

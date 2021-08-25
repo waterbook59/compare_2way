@@ -343,12 +343,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       String comparisonItemId,
       ComparisonOverviewRecordsCompanion overviewCompanion) async{
 
-//    await Future.forEach(comparisonItemIdList,(String itemId) {
-//      (update(comparisonOverviewRecords)
-//        ..where((it) => it.comparisonItemId.equals(itemId)))
-//          .write(overviewCompanion);
-//    });
-    print('並び替え:dao');
+//    print('並び替え:dao');
     return (update(comparisonOverviewRecords)
       ..where((it) => it.comparisonItemId.equals(comparisonItemId)))
         .write(overviewCompanion);
