@@ -497,13 +497,11 @@ class CompareViewModel extends ChangeNotifier {
       ///=>snapshot<List<DraggingItemData>>を変更しないと通知されない
       ///>comparisonOverviewsを変更するのに同時にgetOverviewListが必要
      await getOverviewList();
-//    notifyListeners();
   }
 
   //ListPage編集時の並び替え可能なアイテムリスト変換
   //initStateの役割をここで行う
   Future<List<DraggingItemData>> getItemDataList() async {
-    print('getItemDataList呼び出し');
     // FutureBuilder呼び出し毎にaddしていくとdraggedItemsが増えていってしまう
     draggedItems = <DraggingItemData>[];
     for (var i = 0; i < _comparisonOverviews.length; ++i) {
@@ -514,7 +512,6 @@ class CompareViewModel extends ChangeNotifier {
           comparisonItemId:overView.comparisonItemId,
           orderId: i));
     }
-    print('draggedItems順番：${draggedItems.map((e) => e.title)}');
     return draggedItems;
   }
 
@@ -529,16 +526,6 @@ class CompareViewModel extends ChangeNotifier {
     ///_comparisonOverviewsを新たな順番で取得できてればOK
     _comparisonOverviews =await _compareRepository.getOverviewList();
   }
-
-  //reorderbleStatelessで使用
-  void dragItem(int draggingIndex, int newPositionIndex,
-  DraggingItemData draggedItem) {
-          debugPrint('Reordering $draggingIndex -> $newPositionIndex');
-           draggedItems.removeAt(draggingIndex);
-          draggedItems.insert(newPositionIndex, draggedItem);
-      notifyListeners();
-  }
-
 
   Future<void> backListPage() {
     notifyListeners();

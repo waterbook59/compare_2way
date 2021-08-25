@@ -7,8 +7,7 @@ import 'package:compare_2way/views/compare/compare_screen.dart';
 import 'package:compare_2way/views/list/add_screen.dart';
 import 'package:compare_2way/views/list/componets/edit_list_tile.dart';
 import 'package:compare_2way/views/list/componets/overview_list.dart';
-import 'package:compare_2way/views/list/componets/reorderble_edit_lsit.dart';
-import 'package:compare_2way/views/list/componets/sub/reorderable_stateless_list.dart';
+import 'package:compare_2way/views/list/componets/reorderable_edit_lsit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/checkbox/gf_checkbox.dart';
@@ -125,12 +124,10 @@ class ListPage extends StatelessWidget {
 ///initStateを使わず、インスタンスで渡した値をStateWidget側で使用する
                             child:
                             FutureBuilder(
-                              ///List<ComparisonOverview>ではなくList<ItemData>へ変換して取得(getAllTagList参照)
+///List<ComparisonOverview>ではなくList<ItemData>へ変換して取得(getAllTagList参照)
                               future:
-//                              viewModel.getList(),
                                 viewModel.getItemDataList(),
                               builder: (context,
-//                                  AsyncSnapshot<List<ComparisonOverview>>
                                   AsyncSnapshot<List<DraggingItemData>>
                                   snapshot) {
                                 if (snapshot.data == null) {
@@ -142,66 +139,13 @@ class ListPage extends StatelessWidget {
                                           child: Text('アイテムはありません')));
                                       } else {
                                        return
-//                                         ReorderableStatelessList(
-//                                     draggedItems:snapshot.data
-//                                           );
                                          ReorderableEditList(
                                              draggedItems:
                                            snapshot.data
                                          );
-                                                                      }
+                                }
                               }
-
                             ),
-                          //削除更新行うならFutureBuilder必要
-//                                FutureBuilder(
-//                                    future: viewModel.getList(),
-//                                    builder: (context,
-//                                        AsyncSnapshot<List<ComparisonOverview>>
-//                                            snapshot) {
-//                                      if (snapshot.data == null) {
-//                                        return Container();
-//                                      }
-//                                      if (snapshot.hasData &&
-//                                          snapshot.data.isEmpty) {
-//                                        return Container(
-//                                            child: const Center(
-//                                                child: Text('アイテムはありません')));
-//                                      } else {
-//                                        return ListView.builder(
-//                                          shrinkWrap: true,
-//                                          itemCount: compareViewModel
-//                                              .comparisonOverviews.length,
-//                                          itemBuilder: (BuildContext context,
-//                                              int index) {
-//                                            final overview = compareViewModel
-//                                                .comparisonOverviews[index];
-//                                            return
-//
-//                                                ///チェックボックス用ListTile
-//                                                EditListTile(
-//                                                  onTap: () => checkDeleteIcon(
-//                                                        context,
-//                                                        overview.comparisonItemId),
-//                                                    title: overview.itemTitle,
-//                                                    icon: compareViewModel.deleteItemIdList.contains(overview.comparisonItemId)
-//                          //deleteItemIdListにidがある場合はチェック、ない場合はblank
-//                                                        ?
-//                                                     Icon(
-//                                          CupertinoIcons.checkmark_circle_fill,
-////                                                            Icons.check,
-//                                                            size: 30,
-//                                                            color: accentColor,
-//                                                          )
-//                                                        :  Icon(
-//                                                      CupertinoIcons.circle,
-//                                                            size: 30,
-//                                                            color: primaryColor,
-//                                                          ));
-//                                          },
-//                                        );
-//                                      }
-//                                    }),
                         ),
                       )
           );

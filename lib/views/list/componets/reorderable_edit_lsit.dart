@@ -35,9 +35,7 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
               isFirst: index == 0,
               isLast: index == widget.draggedItems.length - 1,
               onTap: (){
-                print('onTap!!!');
-                //todo checkIconした時にnotifyListenersでリストが再呼び出しされて順序がもどる
-                final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+        final viewModel = Provider.of<CompareViewModel>(context, listen: false)
                 ..checkDeleteIcon(widget.draggedItems[index].comparisonItemId);
               },
 
@@ -57,9 +55,9 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
     final newPositionIndex = _indexOfKey(newPosition);
 
     final draggedItem =  widget.draggedItems[draggingIndex];
-    //todo リストの位置を変更した形でDBへ保存が必要(comparisonItemIdからDB検索してdataIdを書き換えする)
+    //リストの位置を変更した形でDBへ保存が必要(comparisonItemIdからDB検索してdataIdを書き換えする)
     setState(() {
-      debugPrint('Reordering $item -> $newPosition');
+//      debugPrint('Reordering $item -> $newPosition');
       widget.draggedItems.removeAt(draggingIndex);
       widget.draggedItems.insert(newPositionIndex, draggedItem);
     });
@@ -68,11 +66,10 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
   }
 
   void _reorderDone(Key item) {
-    final draggedItem = widget.draggedItems[_indexOfKey(item)];
-    debugPrint('Reordering finished for ${draggedItem.title}&$item}');
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-//    comparisonID順にList<ComparisonOverview>並替=>dataIdをその順に書換?
-    viewModel.changeCompareListOrder(widget.draggedItems);
+//    final draggedItem = widget.draggedItems[_indexOfKey(item)];
+//    debugPrint('Reordering finished for ${draggedItem.title}&$item}');
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+    ..changeCompareListOrder(widget.draggedItems);
   }
 
 }
@@ -101,9 +98,9 @@ class Item extends StatelessWidget {
     if (state == ReorderableItemState.dragProxy ||
         state == ReorderableItemState.dragProxyFinished) {
       // slightly transparent background white dragging (just like on iOS)
-      decoration = BoxDecoration(color: Color(0xD0FFFFFF));
+      decoration = const BoxDecoration(color: Color(0xD0FFFFFF));
     } else {
-      bool placeholder = state == ReorderableItemState.placeholder;
+      final placeholder = state == ReorderableItemState.placeholder;
       decoration = BoxDecoration(
           border: Border(
               top: isFirst && !placeholder
@@ -119,9 +116,9 @@ class Item extends StatelessWidget {
     final dragHandle =
     ReorderableListener(
       child: Container(
-        padding: EdgeInsets.only(right: 18.0, left: 18.0),
-        color: Color(0x08000000),
-        child: Center(
+        padding: const EdgeInsets.only(right: 18, left: 18),
+        color: const Color(0x08000000),
+        child: const Center(
           child: Icon(Icons.reorder, color: Color(0xFF888888)),
         ),
       ),
