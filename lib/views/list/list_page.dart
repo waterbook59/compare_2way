@@ -1,4 +1,5 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/dragging_item_data.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
@@ -6,12 +7,15 @@ import 'package:compare_2way/views/compare/compare_screen.dart';
 import 'package:compare_2way/views/list/add_screen.dart';
 import 'package:compare_2way/views/list/componets/edit_list_tile.dart';
 import 'package:compare_2way/views/list/componets/overview_list.dart';
+import 'package:compare_2way/views/list/componets/reorderable_edit_lsit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/components/checkbox/gf_checkbox.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 import "package:intl/intl.dart";
 
-import 'componets/sub/list_page_edit_button.dart';
+import 'componets/list_page_edit_button.dart';
 
 class ListPage extends StatelessWidget {
   @override
@@ -109,66 +113,42 @@ class ListPage extends StatelessWidget {
 
               ///編集時  ListTile→ReorderableListView&CheckboxListTile
               //todo Consumerにしないと編集時リストがなくなる
-              : LayoutBuilder(
+              :
+          LayoutBuilder(
                   builder: (context, constraints) => SingleChildScrollView(
                         child: ConstrainedBox(
                             constraints: BoxConstraints(
                                 minHeight: constraints.maxHeight),
-                            //初回描画の時にgetListが２回発動される
-                            //todo reorderble使用するならStatefulが素直?
-                            child: //削除更新行うならFutureBuilder必要
-                                FutureBuilder(
-                                    future: viewModel.getList(),
-                                    builder: (context,
-                                        AsyncSnapshot<List<ComparisonOverview>>
-                                            snapshot) {
-                                      if (snapshot.data == null) {
+//reorderable使用でStatefulに変更
+///NavBarの削除ボタンを押した時にReorderableEditListをsetStateするには、
+///initStateを使わず、インスタンスで渡した値をStateWidget側で使用する
+                            child:
+                            FutureBuilder(
+///List<ComparisonOverview>ではなくList<ItemData>へ変換して取得(getAllTagList参照)
+                              future:
+                                viewModel.getItemDataList(),
+                              builder: (context,
+                                  AsyncSnapshot<List<DraggingItemData>>
+                                  snapshot) {
+                                if (snapshot.data == null) {
                                         return Container();
                                       }
-                                      if (snapshot.hasData &&
-                                          snapshot.data.isEmpty) {
-                                        return Container(
-                                            child: const Center(
-                                                child: Text('アイテムはありません')));
+                                if (snapshot.hasData && snapshot.data.isEmpty) {
+                                  return Container(
+                                      child: const Center(
+                                          child: Text('アイテムはありません')));
                                       } else {
-                                        return ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount: compareViewModel
-                                              .comparisonOverviews.length,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            final overview = compareViewModel
-                                                .comparisonOverviews[index];
-                                            return
-
-                                                ///チェックボックス用ListTile
-                                                EditListTile(
-                                                  onTap: () => checkDeleteIcon(
-                                                        context,
-                                                        overview
-                                                            .comparisonItemId),
-                                                    title: overview.itemTitle,
-                                                    icon: compareViewModel
-                                                            .deleteItemIdList
-                                                            .contains(overview
-                                                            .comparisonItemId)
-                          //deleteItemIdListにidがある場合はチェック、ない場合はblank
-                                                        ? const Icon(
-                                                            Icons.check,
-                                                            size: 30,
-                                                            color: Colors.blue,
-                                                          )
-                                                        : const Icon(
-                                                            Icons
-                                                      .check_box_outline_blank,
-                                                            size: 30,
-                                                            color: Colors.blue,
-                                                          ));
-                                          },
-                                        );
-                                      }
-                                    })),
-                      ));
+                                       return
+                                         ReorderableEditList(
+                                             draggedItems:
+                                           snapshot.data
+                                         );
+                                }
+                              }
+                            ),
+                        ),
+                      )
+          );
         }),
         floatingActionButton: Consumer<CompareViewModel>(
             builder: (context, compareViewModel, child) {

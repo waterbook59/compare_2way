@@ -1,4 +1,5 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/dragging_item_data.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
@@ -532,7 +533,45 @@ class CompareRepository {
       print('tagList削除時repositoryエラー:${e.toString()}');
     }
   }
+  //todo ListPage編集並び替え後のDBの順番入れ替え、まずdataIdで行ってみる
+  Future<void> changeCompareListOrder(
+      List<ComparisonOverview> comparisonOverviews,
+      List<DraggingItemData> draggingItems) async{
+    try{
+      //draggingItemsをrepositoryにそのまま渡してcomparisonItemId順にdataIdを更新する
+    for (var i = 0; i < draggingItems.length; ++i) {
+      final itemId = draggingItems[i].comparisonItemId;
+      ///並び替え時のdataIdの重複さけるのにリスト数を足して外す
+      final newDataId = comparisonOverviews[i].dataId+ draggingItems.length;
+      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+        ///ここにcomparisonOverviewsのdataIdを割り当てる
+      // dataIdに同じ値があるとautoIncrementしてるので、UNIQUE制約でエラー
+        dataId: Value(newDataId),
+      );
+//      print('newId:$newDataId/id:$itemId/companion:$overviewCompanion');
+//            print('draggingItems.length:${draggingItems.length}/plusId:$newDataId/id:$itemId');
+      await _comparisonItemDao.changeCompareListOrder(
+          itemId, overviewCompanion);
+    }
 
+    ///comparisonOverviewのdataIdから引くのではなく、そのまま登録
+    for (var u = 0; u < draggingItems.length; ++u) {
+      final itemId = draggingItems[u].comparisonItemId;
+      //引くならcomparisonOverviews[u].dataIdではなく、上でDB登録したnewDataIdから
+      final dataId = comparisonOverviews[u].dataId;
+      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+        dataId: Value(dataId),
+      );
+//      print('draggingItems.length:${draggingItems.length}/minusId:$dataId/id:$itemId');
+      await _comparisonItemDao.changeCompareListOrder(
+          itemId, overviewCompanion);
+    }
+
+
+    }on SqliteException catch (e) {
+      print('repository更新エラー:${e.toString()}');
+    }
+  }
 
 
 

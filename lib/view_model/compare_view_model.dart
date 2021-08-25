@@ -1,4 +1,5 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/dragging_item_data.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
@@ -14,6 +15,8 @@ class CompareViewModel extends ChangeNotifier {
   final CompareRepository _compareRepository;
   List<ComparisonOverview> _comparisonOverviews = <ComparisonOverview>[];
   List<ComparisonOverview> get comparisonOverviews => _comparisonOverviews;
+  //ListPage編集並び替え後のリスト
+  List<ComparisonOverview>  newComparisonOverviews= <ComparisonOverview>[];
   CompareScreenStatus compareScreenStatus;
   ComparisonOverview overviewDB;
   List<Way1Merit> _way1MeritList = <Way1Merit>[];
@@ -103,8 +106,11 @@ class CompareViewModel extends ChangeNotifier {
   bool isWay3MeritFocusList = true;
   bool isWay3DemeritFocusList = true;
 
-  ///ListPage
+  ///ListPage並び替え・削除モード
   List<String> deleteItemIdList = <String>[];
+  List<DraggingItemData> draggedItems = <DraggingItemData>[];
+
+
 
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
   Future<void> getOverview(String comparisonItemId) async {
@@ -468,6 +474,7 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  //ListPage削除項目選択
   void checkDeleteIcon(String itemId) {
     ///1.Listにindexの値をupdateするメソッドがないので、map型に変換してupdateする
     ////asMap()するだけで{index:value}のMap型にできる=>map.update(index,(value)=>!value);
@@ -484,9 +491,40 @@ class CompareViewModel extends ChangeNotifier {
 
   //ListPage選択行削除
   Future<void> deleteItemList() async {
-     _compareRepository.deleteItemList(deleteItemIdList);
+      _compareRepository.deleteItemList(deleteItemIdList);
      deleteItemIdList =[];
-    notifyListeners();//NavBarで削除おしてもListView反映されない
+     ///NavBarで削除おしてもListView反映されない
+      ///=>snapshot<List<DraggingItemData>>を変更しないと通知されない
+      ///>comparisonOverviewsを変更するのに同時にgetOverviewListが必要
+     await getOverviewList();
+  }
+
+  //ListPage編集時の並び替え可能なアイテムリスト変換
+  //initStateの役割をここで行う
+  Future<List<DraggingItemData>> getItemDataList() async {
+    // FutureBuilder呼び出し毎にaddしていくとdraggedItemsが増えていってしまう
+    draggedItems = <DraggingItemData>[];
+    for (var i = 0; i < _comparisonOverviews.length; ++i) {
+      final overView = _comparisonOverviews[i];
+      draggedItems.add(DraggingItemData(
+          title:overView.itemTitle,
+          key:ValueKey(i),
+          comparisonItemId:overView.comparisonItemId,
+          orderId: i));
+    }
+    return draggedItems;
+  }
+
+  ///ListPage編集並び替え後のDBの順番入れ替え、まずdataIdで行ってみる
+  Future<void> changeCompareListOrder(List<DraggingItemData> draggingItems)
+  async{
+    //draggingItemsをrepositoryにそのまま渡してcomparisonItemId順にdataIdを更新する
+    await _compareRepository.changeCompareListOrder(
+     _comparisonOverviews,draggingItems);
+    // 順番変更登録後にreorderble_edit_listで使うdraggedItems更新必要
+    // 並び替えてもcheckDeleteIcon=>getItemDataListで戻ってしまう
+    ///_comparisonOverviewsを新たな順番で取得できてればOK
+    _comparisonOverviews =await _compareRepository.getOverviewList();
   }
 
   Future<void> backListPage() {

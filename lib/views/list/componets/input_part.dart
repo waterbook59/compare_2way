@@ -3,7 +3,7 @@ import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/compare_screen.dart';
-import 'package:compare_2way/views/list/componets/text_field_part.dart';
+import 'package:compare_2way/views/list/componets/sub/text_field_part.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
