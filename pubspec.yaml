@@ -38,6 +38,16 @@ dev_dependencies:
   moor_generator: ^3.3.1
   build_runner: ^1.10.1
 
+  flutter_launcher_icons: ^0.8.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/first_icon.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/images/first_icon.png"
+
+
 dependency_overrides:
   analyzer: ^0.39.14
 
