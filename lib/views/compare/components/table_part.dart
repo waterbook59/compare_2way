@@ -38,18 +38,32 @@ class TablePart extends StatefulWidget {
 
 class _TablePartState extends State<TablePart> {
   ///evaluatePickerのリスト
-  final List<String> evaluates = <String>[
-    '',
-    '◎',
-    '○',
-    '△',
-    '×',
+//  final List<String> evaluates = <String>[
+//    '',
+//    '◎',
+//    '◯',
+//    '△',
+//    '×',
+//  ];
+  final List<Image> evaluates = <Image>[
+    Image.asset('assets/images/blank.png'),
+    Image.asset('assets/images/double_circle.png'),
+    Image.asset('assets/images/round.png'),
+    Image.asset('assets/images/triangle.png'),
+    Image.asset('assets/images/cross.png'),
   ];
 
-  String way1MeritDisplay = '';
-  String way1DemeritDisplay = '';
-  String way2MeritDisplay = '';
-  String way2DemeritDisplay = '';
+
+//  String way1MeritDisplay = '';
+//  String way1DemeritDisplay = '';
+//  String way2MeritDisplay = '';
+//  String way2DemeritDisplay = '';
+
+  Image way1MeritDisplay = Image.asset('assets/images/blank.png');
+  Image way1DemeritDisplay = Image.asset('assets/images/blank.png');
+  Image way2MeritDisplay = Image.asset('assets/images/blank.png');
+  Image way2DemeritDisplay = Image.asset('assets/images/blank.png');
+
 
   @override
   void initState() {
@@ -118,11 +132,13 @@ class _TablePartState extends State<TablePart> {
                 child: Row(children: [
                   Expanded(
                       flex: 2,
-                      child: Text(
-                        way1MeritDisplay,
-                        style: const TextStyle(fontSize: 40),
-                        textAlign: TextAlign.right,
-                      )),
+                      child:  way1MeritDisplay,
+//                      Text(
+//                        way1MeritDisplay,
+//                        style: const TextStyle(fontSize: 40),
+//                        textAlign: TextAlign.right,
+//                      )
+                  ),
  //todo EvaluateDropdownで選択したときもフォーカス外す(キーボード下げる)
                   Expanded(
                       flex: 1,
@@ -147,11 +163,13 @@ class _TablePartState extends State<TablePart> {
                 child: Row(children: [
                   Expanded(
                       flex: 2,
-                      child: Text(
-                        way1DemeritDisplay,
-                        style: const TextStyle(fontSize: 40),
-                        textAlign: TextAlign.right,
-                      )),
+                      child:  way1DemeritDisplay,
+//                      Text(
+//                        way1DemeritDisplay,
+//                        style: const TextStyle(fontSize: 40),
+//                        textAlign: TextAlign.right,
+//                      )
+                  ),
                   Expanded(
                       flex: 1,
                       child: EvaluateDropdown(
@@ -186,11 +204,13 @@ class _TablePartState extends State<TablePart> {
                 child: Row(children: [
                   Expanded(
                       flex: 2,
-                      child: Text(
-                        way2MeritDisplay,
-                        style: const TextStyle(fontSize: 40),
-                        textAlign: TextAlign.right,
-                      )),
+                      child: way2MeritDisplay,
+//                      Text(
+//                        way2MeritDisplay,
+//                        style: const TextStyle(fontSize: 40),
+//                        textAlign: TextAlign.right,
+//                      )
+                  ),
                   Expanded(
                       flex: 1,
                       child: EvaluateDropdown(
@@ -212,11 +232,13 @@ class _TablePartState extends State<TablePart> {
                 child: Row(children: [
                   Expanded(
                       flex: 2,
-                      child: Text(
-                        way2DemeritDisplay,
-                        style: const TextStyle(fontSize: 40),
-                        textAlign: TextAlign.right,
-                      )),
+                      child:   way2DemeritDisplay,
+//                      Text(
+//                        way2DemeritDisplay,
+//                        style: const TextStyle(fontSize: 40),
+//                        textAlign: TextAlign.right,
+//                      )
+                  ),
                   Expanded(
                       flex: 1,
                       child: EvaluateDropdown(
