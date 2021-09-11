@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    //todo MaterialAppで書けばMaterialの中でCupertinoWidget使えるのでは
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title:'Compare 2way' ,
@@ -33,6 +33,8 @@ class MyApp extends StatelessWidget {
         primaryColor: const Color(0xFF363A44),
         accentColor: const Color(0xFFFF7043),
         scaffoldBackgroundColor: const Color(0xFFF5F5F5),
+        // フォントとしてヒラギノ使う
+        fontFamily: 'Hiragino Kaku Gothic ProN',
         ),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

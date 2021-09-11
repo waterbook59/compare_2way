@@ -32,8 +32,9 @@ class InputPart extends StatelessWidget {
           textEditingController: viewModel.titleController,
           //テキスト入力があるかどうかを下のRaisedButtonを押せる押せないのために通知するだけ
           didChanged: (text)=>viewModel.itemTitleChanged(),
+          iconData: CupertinoIcons.squares_below_rectangle,
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 8),
 
         ///way1
         TextFieldPart(
@@ -43,9 +44,10 @@ class InputPart extends StatelessWidget {
           textEditingController: viewModel.way1Controller,
           //テキスト入力があるかどうかを下のRaisedButtonを押せる押せないのために通知するだけ
           didChanged: (text)=>viewModel.itemTitleChanged(),
+          iconData: CupertinoIcons.arrow_uturn_left,
         ),
-        const SizedBox(height: 8),
-        const Text('と', style: TextStyle(color: Colors.black)),
+//        const SizedBox(height: 8),
+//        const Text('と', style: TextStyle(color: Colors.black)),
         const SizedBox(height: 8),
 
         ///way2
@@ -56,9 +58,15 @@ class InputPart extends StatelessWidget {
           textEditingController: viewModel.way2Controller,
           //テキスト入力があるかどうかを下のRaisedButtonを押せる押せないのために通知するだけ
           didChanged: (text)=>viewModel.itemTitleChanged(),
+          iconData: CupertinoIcons.arrow_uturn_right,
+//          iconData: CupertinoIcons.chevron_left_2 ,
+//          iconData: CupertinoIcons.arrowshape_turn_up_left_2 ,
+//          iconData: CupertinoIcons.arrowshape_turn_up_left ,
+//          iconData: CupertinoIcons.arrow_turn_up_left ,
         ),
-        const SizedBox(height: 40),
-
+        const SizedBox(height: 16),
+//todo way3のアイコン
+//          iconData: CupertinoIcons.arrow_uturn_up ,
         ///button
         Consumer<CompareViewModel>(
         builder: (context, compareViewModel, child) {

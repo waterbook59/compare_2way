@@ -26,8 +26,6 @@ class AddScreen extends StatelessWidget {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        //todo Androidでの端末下の戻るボタン無効:WillPopScopeのonWillPopをfalse
-//        automaticallyImplyLeading: false,
       leading:  GestureDetector(
         child: const Icon(
         CupertinoIcons.clear_thick_circled,
@@ -42,7 +40,7 @@ class AddScreen extends StatelessWidget {
         )
         :const Text('名称編集',style: middleTextStyle,),
         /// 下から出てくる場合は右上に比較ボタンでもいいかも
-
+//      trailing:
       ),
       child: Scaffold(
         backgroundColor: CupertinoTheme
@@ -52,7 +50,7 @@ class AddScreen extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(
-                height: 48,
+                height: 24,
               ),
 ///InputPart
                     InputPart(
@@ -68,7 +66,6 @@ class AddScreen extends StatelessWidget {
 
   void _cancelTitleEdit(BuildContext context) {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    //todo 画面閉じる前にTextFieldへの変更が少し見える
      Navigator.pop(context);
     viewModel.itemControllerClear();
   }
