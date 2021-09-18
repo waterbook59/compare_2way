@@ -1,11 +1,14 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
+import 'package:compare_2way/views/compare/compare_screen.dart';
 import 'package:compare_2way/views/list/componets/input_part.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 
 class AddScreen extends StatelessWidget {
@@ -23,6 +26,8 @@ class AddScreen extends StatelessWidget {
     final primaryColor = Theme
         .of(context)
         .primaryColor;
+    final accentColor = Theme.of(context).accentColor;
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -40,7 +45,35 @@ class AddScreen extends StatelessWidget {
         )
         :const Text('名称編集',style: middleTextStyle,),
         /// 下から出てくる場合は右上に比較ボタンでもいいかも
-//      trailing:
+        //todo 作成・更新ボタン nullの場合、灰色にしたい
+      trailing:
+      Consumer<CompareViewModel>(
+          builder: (context, compareViewModel, child) {
+            return
+              viewModel.titleController.text.isNotEmpty &&
+                  viewModel.way1Controller.text.isNotEmpty &&
+                  viewModel.way2Controller.text.isNotEmpty
+            //入力されているとき
+             ? CupertinoButton(
+                child: displayMode == AddScreenMode.add
+                    ? Text('作成',style: TextStyle(color: accentColor),)
+                    : Text('更新',style: TextStyle(color: accentColor),),
+                padding: const EdgeInsets.all(8),
+                onPressed:
+                    displayMode == AddScreenMode.add
+                    ?() => _createComparisonItems(context)
+                    :()=>_updateComparisonItems(context)
+            )
+              //入力されていないとき
+             : CupertinoButton(
+                child:displayMode == AddScreenMode.add
+                    ? const Text('作成',style: TextStyle(color: Colors.grey),)
+                    :const Text('更新',style: TextStyle(color: Colors.grey),),
+         /// 編集ボタンの下切れるのを防ぐ
+                 padding: const EdgeInsets.all(8),
+                onPressed: null,);
+          }),
+
       ),
       child: Scaffold(
         backgroundColor: CupertinoTheme
@@ -69,5 +102,78 @@ class AddScreen extends StatelessWidget {
      Navigator.pop(context);
     viewModel.itemControllerClear();
   }
+
+  ///新規作成
+  Future<void> _createComparisonItems(BuildContext context) async {
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+    //初期表示は読み込みさせる
+      ..compareScreenStatus = CompareScreenStatus.set;
+
+    //Uuid渡したいので、view側でcomparisonOverview作成
+    final newComparisonOverview = ComparisonOverview(
+      comparisonItemId: Uuid().v1(),
+      itemTitle: viewModel.titleController.text,
+      way1Title: viewModel.way1Controller.text,
+      way2Title: viewModel.way2Controller.text,
+      createdAt: DateTime.now(),
+    );
+
+    //最初は1つだけComparisonIdが入ったWay1Merit,Way2Meritを入れたい
+    final initWay1Merit = Way1Merit(
+      comparisonItemId: newComparisonOverview.comparisonItemId,
+      way1MeritDesc: '',
+    );
+    final initWay2Merit = Way2Merit(
+      comparisonItemId: newComparisonOverview.comparisonItemId,
+      way2MeritDesc: '',
+    );
+    final initWay1Demerit = Way1Demerit(
+      comparisonItemId: newComparisonOverview.comparisonItemId,
+      way1DemeritDesc: '',
+    );
+    final initWay2Demerit = Way2Demerit(
+      comparisonItemId: newComparisonOverview.comparisonItemId,
+      way2DemeritDesc: '',
+    );
+    //todo way3追加
+
+    ///DB登録
+    ///viewModel側でcontroller.textを入力してDB登録
+    await viewModel.createNewItem(newComparisonOverview);
+    //DB登録 Merit/Demeritの1行だけをUuidでつけたComparisonIdを入れて登録する
+    await viewModel.createDesc(
+        initWay1Merit, initWay2Merit,initWay1Demerit,initWay2Demerit);
+
+    //DBからUuidでつけたComparisonIdを元に1行だけ読込(overviewDBへ格納)=>compareScreenへ渡す
+    ///Merit/DemeritのリストはCompareScreenでFutureBuilderから読込のでviewModel側への格納はなし
+    await viewModel.getComparisonOverview(
+        newComparisonOverview.comparisonItemId);
+
+    ///DBに登録されたcomparisonOverviewをCompareScreenへ渡したい
+    await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<void>(
+            builder: (context) => CompareScreen(
+              screenEditMode: ScreenEditMode.fromListPage,
+//                  comparisonOverview: comparisonOverview,
+              comparisonOverview: viewModel.overviewDB,
+            )));
+    //DB登録後controllerクリア
+    await viewModel.itemControllerClear();
+
+    //この時点でcontrollerが破棄されるので、CompareScreenから戻るときにclearメソッドがあると、
+    //Once you have called dispose() on a TextEditingController,のエラー出る
+  }
+
+  ///更新メソッド
+  Future<void>_updateComparisonItems(BuildContext context,
+      ) async{
+    //テキスト入力したものをviewModel側へ格納
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.updateItem(comparisonOverview);
+    //CompareScreenへ
+    Navigator.pop(context);
+  }
+
 
 }
