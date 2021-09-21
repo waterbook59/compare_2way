@@ -40,53 +40,6 @@ class DescFormAndButton extends StatefulWidget {
 }
 
 class _DescFormAndButtonState extends State<DescFormAndButton> {
-//  List<TextEditingController> controllers = <TextEditingController>[];
-//  List<FocusNode> focusNodes = <FocusNode>[];
-
-
-
-//  @override
-//  void initState() {
-//    //todo way3Merit,Demerit分作成
-//    switch (widget.displayList) {
-//      case DisplayList.way1Merit:
-//        widget.way1MeritList.isNotEmpty
-//            ? createWay1MeritList()
-////        controllers = widget.way1MeritList.map((item) {
-////          return TextEditingController(text: item.way1MeritDesc);
-////        }).toList()
-//            : controllers = [];
-//        break;
-//      case DisplayList.way2Merit:
-//        widget.way2MeritList.isNotEmpty
-//            ? createWay2MeritList()
-////        controllers = widget.way2MeritList.map((item) {
-////          return TextEditingController(text: item.way2MeritDesc);
-////        }).toList()
-//            : controllers = [];
-//        break;
-//      case DisplayList.way1Demerit:
-//        widget.way1DemeritList.isNotEmpty
-//            ? createWay1DemeritList()
-//            : controllers = [];
-//        break;
-//      case DisplayList.way2Demerit:
-//        widget.way2DemeritList.isNotEmpty
-//            ? createWay2DemeritList()
-//            : controllers = [];
-//        break;
-//
-//
-//    }
-//    super.initState();
-//  }
-//
-//  @override
-//  void dispose() {
-//    controllers.map((e) => e.dispose()).toList();
-//    focusNodes.map((e) => e.dispose()).toList();
-//    super.dispose();
-//  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +54,6 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
             itemCount: widget.controllers.length,
             itemBuilder: (context, index) {
               return
-                  //deleteするときのキーボード立ち上がりをふせぐにはStackでボタン独立
                   ///way1とway2等リストまたぐと反応しない=>Consumerに変更してAccordionPart以下を再ビルド
                   GestureDetector(
                 onTap: () {
@@ -143,25 +95,6 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
               );
             }),
 
-//        ButtonTheme(
-//          buttonColor: accordionBackgroundColor,
-//          height: 16,
-//          child: RaisedButton(
-//            child: const Icon(Icons.add,color: Colors.black38,),
-//    shape: RoundedRectangleBorder(
-//  borderRadius: BorderRadius.circular(5),);
-//            onPressed: () {
-//              setState(() {
-//                widget.addList();
-//                widget.controllers.add(TextEditingController());
-//                widget.focusNodes.add(FocusNode());
-////              print(
-////                  'descFormAndButton/RaisedButton:controllers${controllers.map((controller) => controller.text).toList()}');
-//              });
-//            },
-//          ),
-//        ),
-
       ],
     );
   }
@@ -184,34 +117,6 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
       });
     }
   }
-
-  //todo way3Merit,Demerit分作成
-//  void createWay1MeritList() {
-//    controllers = widget.way1MeritList.map((item) {
-//      return TextEditingController(text: item.way1MeritDesc);
-//    }).toList();
-//    focusNodes = widget.way1MeritList.map((item) => FocusNode()).toList();
-//  }
-//
-//  void createWay2MeritList() {
-//    controllers = widget.way2MeritList.map((item) {
-//      return TextEditingController(text: item.way2MeritDesc);
-//    }).toList();
-//    focusNodes = widget.way2MeritList.map((item) => FocusNode()).toList();
-//  }
-//  void createWay1DemeritList() {
-//    controllers = widget.way1DemeritList.map((item) {
-//      return TextEditingController(text: item.way1DemeritDesc);
-//    }).toList();
-//    focusNodes = widget.way1DemeritList.map((item) => FocusNode()).toList();
-//  }
-//  void createWay2DemeritList() {
-//    controllers = widget.way2DemeritList.map((item) {
-//      return TextEditingController(text: item.way2DemeritDesc);
-//    }).toList();
-//    focusNodes = widget.way2DemeritList.map((item) => FocusNode()).toList();
-//  }
-//
 
 
 }

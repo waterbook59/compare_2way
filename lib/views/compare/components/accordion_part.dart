@@ -41,7 +41,6 @@ class AccordionPart extends StatefulWidget {
 
 class _AccordionPartState extends State<AccordionPart> {
 
-//  List<TextEditingController> textFieldControllers = <TextEditingController>[];
   List<TextEditingController> controllers = <TextEditingController>[];
   List<FocusNode> focusNodes = <FocusNode>[];
 
@@ -92,7 +91,7 @@ class _AccordionPartState extends State<AccordionPart> {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-//todo coloumn=> StackでDescFormAndButtonをGFAccordionのタイトルのところに追加(PlayButtonsPart)
+//Column=> StackでDescFormAndButtonをGFAccordionのタイトルのところに追加(PlayButtonsPart)
     return Stack(
       children: [
 
@@ -146,23 +145,20 @@ class _AccordionPartState extends State<AccordionPart> {
         ),
 
     //todo ボタン押しやすいサイズに
-    Positioned(
-    right: 64,
-    top: 20,
-    child: GestureDetector(
-        child: const Icon(
-          CupertinoIcons.plus_circled,
-          color: Colors.black,
-        ),
+        Positioned(
+          right: 64,
+          top: 20,
+          child: GestureDetector(
+              child: const Icon(
+                CupertinoIcons.plus_circled, color: Colors.black,),
         // DescFormAndButtonのsetStateで実行していることをここでやる
-        onTap: () {
-          setState(() {
-            widget.addList();
-            controllers.add(TextEditingController());
-            focusNodes.add(FocusNode());
-          });
-        }),)
-
+              onTap: () {
+                setState(() {
+                  widget.addList();
+                  controllers.add(TextEditingController());
+                  focusNodes.add(FocusNode());
+                });
+              }),)
       ],
     );
   }
