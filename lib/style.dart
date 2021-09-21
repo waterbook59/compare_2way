@@ -37,8 +37,10 @@ const accordionBottomBorderRadius = BorderRadius.only(
     bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5));
 
 //比較のRaisedButton
-//var createButtonBorderRadius =
-//    RoundedRectangleBorder(borderRadius: BorderRadius.circular(20));
+//var  createButtonBorderRadius = RoundedRectangleBorder(
+//  borderRadius: BorderRadius.circular(5),);
 
 const listDecoration = BoxDecoration(
     border: Border(bottom: BorderSide(width: 0.5, color: Colors.grey)));
+
+const accordionBackgroundColor = Color(0xFFE0E0E0);
