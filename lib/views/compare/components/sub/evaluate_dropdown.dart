@@ -48,9 +48,13 @@ class _EvaluateDropdownState extends State<EvaluateDropdown> {
               value: 3,
               child: Center(child: Text('△',style: TextStyle(fontSize: 40),)),
             ),
-            const PopupMenuItem(
+             PopupMenuItem(
               value: 4,
-              child: Center(child: Text('×',style: TextStyle(fontSize: 40),)),
+              child: Center(child: Image.asset('assets/images/cross.png',width: 48,),),
+            ),
+             PopupMenuItem(
+              value: 5,
+              child: Center(child: Image.asset('assets/images/double_cross.png',width: 48,),),
             )
           ],
           onSelected: (newValue){

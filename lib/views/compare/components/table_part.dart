@@ -51,6 +51,7 @@ class _TablePartState extends State<TablePart> {
     Image.asset('assets/images/round.png'),
     Image.asset('assets/images/triangle.png'),
     Image.asset('assets/images/cross.png'),
+    Image.asset('assets/images/double_cross.png'),
   ];
 
 
@@ -127,7 +128,7 @@ class _TablePartState extends State<TablePart> {
             ///way1MeritEvaluate
             //高さを設定しないと'!_debugDoingThisLayout': is not true.エラー
             SizedBox(
-                height: 50,
+                height: 48,
                 //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
                 child: Row(children: [
                   Expanded(
@@ -158,7 +159,7 @@ class _TablePartState extends State<TablePart> {
                 ])),
             ///way1DemeritEvaluate
             SizedBox(
-                height: 50,
+                height: 48,
                 //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
                 child: Row(children: [
                   Expanded(
@@ -199,7 +200,7 @@ class _TablePartState extends State<TablePart> {
 
             ///way2MeritEvaluate
             SizedBox(
-                height: 50,
+                height: 48,
                 //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
                 child: Row(children: [
                   Expanded(
@@ -227,7 +228,7 @@ class _TablePartState extends State<TablePart> {
 
             ///way2DemeritEvaluate
             SizedBox(
-                height: 50,
+                height: 48,
                 //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
                 child: Row(children: [
                   Expanded(
