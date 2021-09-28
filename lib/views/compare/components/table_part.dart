@@ -92,6 +92,11 @@ class _TablePartState extends State<TablePart> {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Table(
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+//        columnWidths: const <int, TableColumnWidth>{
+//          0: FixedColumnWidth(1),
+//          1: FixedColumnWidth(1),
+//          2: FixedColumnWidth(1),
+//        },
         border: TableBorder.all(),
         children: [
           ///タイトル行
@@ -130,24 +135,22 @@ class _TablePartState extends State<TablePart> {
             SizedBox(
                 height: 48,
                 //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
-                child: Row(children: [
+                child:
+                Row(
+//                  mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const SizedBox(width: 16,),
                   Expanded(
                       flex: 2,
-                      child:  way1MeritDisplay,
-//                      Text(
-//                        way1MeritDisplay,
-//                        style: const TextStyle(fontSize: 40),
-//                        textAlign: TextAlign.right,
-//                      )
-                  ),
- //todo EvaluateDropdownで選択したときもフォーカス外す(キーボード下げる)
+                      child: way1MeritDisplay,),
+
                   Expanded(
                       flex: 1,
-                      child: EvaluateDropdown(
-                        initialValue:
-                            widget.way1MeritEvaluate,
+                      child:
+                      EvaluateDropdown(
+                        initialValue:widget.way1MeritEvaluate,
                         onSelected: (newValue) {
-                          print('newValueをsetState:$newValue');
+//                          print('newValueをsetState:$newValue');
                           widget.way1MeritChanged(newValue);
                           setState(() {
                             way1MeritDisplay = evaluates[newValue];
@@ -155,13 +158,17 @@ class _TablePartState extends State<TablePart> {
 //                            viewModel.setWay1MeritNewValue(newValue);
                           });
                         },
-                      )),
-                ])),
+                      ),
+                  ),
+                      const SizedBox(width: 8,),
+                ])
+            ),
             ///way1DemeritEvaluate
             SizedBox(
                 height: 48,
                 //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
                 child: Row(children: [
+                  const SizedBox(width: 16,),
                   Expanded(
                       flex: 2,
                       child:  way1DemeritDisplay,
@@ -171,6 +178,7 @@ class _TablePartState extends State<TablePart> {
 //                        textAlign: TextAlign.right,
 //                      )
                   ),
+                  // EvaluateDropdownで選択したときもフォーカス外す(キーボード下げる)
                   Expanded(
                       flex: 1,
                       child: EvaluateDropdown(
@@ -183,6 +191,7 @@ class _TablePartState extends State<TablePart> {
                           });
                         },
                       )),
+                  const SizedBox(width: 8,),
                 ])),
           ]),
 
@@ -203,6 +212,7 @@ class _TablePartState extends State<TablePart> {
                 height: 48,
                 //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
                 child: Row(children: [
+                  const SizedBox(width: 16,),
                   Expanded(
                       flex: 2,
                       child: way2MeritDisplay,
@@ -224,6 +234,7 @@ class _TablePartState extends State<TablePart> {
                           });
                         },
                       )),
+                  const SizedBox(width: 8,),
                 ])),
 
             ///way2DemeritEvaluate
@@ -231,6 +242,7 @@ class _TablePartState extends State<TablePart> {
                 height: 48,
                 //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
                 child: Row(children: [
+                  const SizedBox(width: 16,),
                   Expanded(
                       flex: 2,
                       child:   way2DemeritDisplay,
@@ -252,6 +264,7 @@ class _TablePartState extends State<TablePart> {
                           });
                         },
                       )),
+                  const SizedBox(width: 8,),
                 ])),
           ]),
         ],
