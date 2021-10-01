@@ -109,6 +109,15 @@ class CompareScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 8),
+              ///表示切り替えボタン
+                CupertinoSegmentedControl(
+                    children: {"1":Text('All'),"2":Text('way1'),"3":Text('way2'),},
+                    onValueChanged: (String newValue){
+                      print('$newValue');//todo notifyListener必要
+                    },
+                  unselectedColor: primaryColor,
+                  pressedColor: accentColor,
+                    selectedColor: accentColor,),
               ///メリットアイコン
                 IconTitle(
                   title: 'メリット',

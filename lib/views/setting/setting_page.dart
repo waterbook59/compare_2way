@@ -1,6 +1,7 @@
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/style.dart';
+import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/views/compare/components/accordion_part.dart';
 import 'package:compare_2way/views/compare/components/sub/desc_form.dart';
 import 'package:compare_2way/views/compare/components/sub/desc_form_and_button.dart';
@@ -80,7 +81,23 @@ class _SettingPageState extends State<SettingPage> {
 
   int _selectedIndex ;
 //  int _selected2ndIndex ;
-  //List<bool>
+
+//表示切り替え選択ボタン
+  String value = '1';
+
+
+//  Map<String,Widget> segmentList =
+//  {'1':SizedBox(child: Center(child: Text('All')),),
+//    '2':SizedBox(child: Center(child: Text('way1')),),
+//    '3':SizedBox(child: Center(child: Text('way2')),)
+//  };
+
+  Map<String,Text> segmentList =
+  {'1': Text('All'),
+    '2':Text('way1'),
+    '3':Text('way2'),
+  };
+
 
 
   static List<Way1Merit> testItems = [
@@ -131,7 +148,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-
+    final accentColor= Theme.of(context).accentColor;
 
 
 //    List<bool>
@@ -167,6 +184,27 @@ class _SettingPageState extends State<SettingPage> {
           },
           child: SingleChildScrollView(
             child: Column(children: [
+              const SizedBox(height: 16,),
+              ///表示切り替えボタン
+              SizedBox(
+                width: double.infinity,
+                child: CupertinoSegmentedControl(
+                  children:segmentList,
+                  onValueChanged: (String newValue){
+                    print('$newValue');//todo notifyListener必要
+                    setState(() {
+                      value = newValue;
+                    });
+                  },
+                  groupValue: value,
+                  padding: EdgeInsets.only(right: 24,left: 24,bottom: 16),
+//                borderColor: accentColor,
+//                unselectedColor: primaryColor,
+//                pressedColor: accentColor,
+//                selectedColor: accentColor,
+                ),
+              ),
+              ///Accordionテスト
               GFAccordion(
                 title: 'テスト',
                 titleBorderRadius: accordionTopBorderRadius,
@@ -178,9 +216,12 @@ class _SettingPageState extends State<SettingPage> {
 //            content: 'GFAccordion content',
                 contentChild:
                     //todo contentChildの中でボタン押す=>DescFormAndButtonへ変更
-                DescFormAndButton(
-                        way1MeritList: testItems,
-                      ),
+                 IconButton(icon: const Icon(Icons.add),onPressed: (){},),
+//                DescFormAndButton(
+//                  displayList: DisplayList.way1Merit,
+//                        way1MeritList: testItems,
+//                  controllers: myControllers,
+//                      ),
               ),
 
               const SizedBox(height: 16,),
