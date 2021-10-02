@@ -191,17 +191,17 @@ class _SettingPageState extends State<SettingPage> {
                 child: CupertinoSegmentedControl(
                   children:segmentList,
                   onValueChanged: (String newValue){
-                    print('$newValue');//todo notifyListener必要
+                    print('$newValue');
                     setState(() {
                       value = newValue;
                     });
                   },
                   groupValue: value,
                   padding: EdgeInsets.only(right: 24,left: 24,bottom: 16),
-//                borderColor: accentColor,
+                borderColor: Colors.grey,
 //                unselectedColor: primaryColor,
 //                pressedColor: accentColor,
-//                selectedColor: accentColor,
+                selectedColor: primaryColor,
                 ),
               ),
               ///Accordionテスト

@@ -110,14 +110,30 @@ class CompareScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
               ///表示切り替えボタン
-                CupertinoSegmentedControl(
-                    children: {"1":Text('All'),"2":Text('way1'),"3":Text('way2'),},
-                    onValueChanged: (String newValue){
-                      print('$newValue');//todo notifyListener必要
-                    },
-                  unselectedColor: primaryColor,
-                  pressedColor: accentColor,
-                    selectedColor: accentColor,),
+                SizedBox(
+                  width: double.infinity,
+                  child: Selector<CompareViewModel, String>(
+                    selector: (context, viewModel) => viewModel.segmentValue,
+                      builder: (context, segmentValue, child) {
+                      return CupertinoSegmentedControl(
+                        children: const
+                        {'1': Text('All'),
+                          '2': Text('way1'),
+                          '3': Text('way2'),},
+                        onValueChanged: (String newValue){
+                          print('$newValue');
+                          _selectSegment(context,newValue);
+                        },
+                        groupValue: segmentValue,
+                        padding: const EdgeInsets.only(
+                            right: 24,left: 24,bottom: 16),
+                        borderColor: Colors.grey,
+                        selectedColor: primaryColor,
+                      );
+                      }
+
+                  ),
+                ),
               ///メリットアイコン
                 IconTitle(
                   title: 'メリット',
@@ -424,6 +440,11 @@ class CompareScreen extends StatelessWidget {
       ..isWay2DemeritFocusList = false
       ..isWay3MeritFocusList = false
       ..isWay3DemeritFocusList = false;
+  }
+
+  Future<void> _selectSegment(BuildContext context,String newValue) async{
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.selectSegment(newValue);
   }
 
 

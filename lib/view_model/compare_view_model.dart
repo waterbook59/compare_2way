@@ -110,8 +110,10 @@ class CompareViewModel extends ChangeNotifier {
   List<String> deleteItemIdList = <String>[];
   List<DraggingItemData> draggedItems = <DraggingItemData>[];
 
+  ///cupertinoSegmentControl用
+  String segmentValue = '1';
 
-
+///ここからメソッド
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
   Future<void> getOverview(String comparisonItemId) async {
     _comparisonOverviews =
@@ -1008,7 +1010,10 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
+Future<void> selectSegment(String newValue){
+    segmentValue = newValue;
+    notifyListeners();
+}
 
 
 
