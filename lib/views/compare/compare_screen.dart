@@ -146,7 +146,8 @@ class CompareScreen extends StatelessWidget {
 //                Selector<CompareViewModel, String>(
 //                    selector: (context, viewModel) => viewModel.way1Title,
                     builder: (context, viewModel, child) {
-                      return (viewModel.segmentValue == '0'||viewModel.segmentValue == '1')
+                      return
+                        (viewModel.segmentValue == '0'||viewModel.segmentValue == '1')
                         ? FutureBuilder( //material
                         future: viewModel
                         .getWay1MeritDesc(comparisonOverview.comparisonItemId),
@@ -183,7 +184,9 @@ class CompareScreen extends StatelessWidget {
 //                Selector<CompareViewModel, String>(
 //                  selector: (context, viewModel) => viewModel.way2Title,
                   builder: (context, viewModel, child) {
-                    return FutureBuilder(
+                    return
+                      (viewModel.segmentValue == '0'||viewModel.segmentValue == '2')
+                      ? FutureBuilder(
                       future: viewModel
                         .getWay2MeritDesc(comparisonOverview.comparisonItemId),
                       builder:
@@ -208,7 +211,8 @@ class CompareScreen extends StatelessWidget {
                           )
                           : Container();
                       },
-                    );
+                    )
+                    :Container();
                   },
                 ),
                 const SizedBox(
@@ -223,7 +227,9 @@ class CompareScreen extends StatelessWidget {
               ///way1 デメリット
                 Consumer<CompareViewModel>(
                   builder: (context, viewModel, child) {
-                    return FutureBuilder(
+                    return
+                      (viewModel.segmentValue == '0'||viewModel.segmentValue == '1')
+                      ? FutureBuilder(
                       future:
                       viewModel.getWay1DemeritDesc(
                           comparisonOverview.comparisonItemId),
@@ -249,13 +255,16 @@ class CompareScreen extends StatelessWidget {
                         )
                             : Container();
                       },
-                    );
+                    )
+                    :Container();
                   },
                 ),
               ///way2 デメリット
                 Consumer<CompareViewModel>(
                   builder: (context, viewModel, child) {
-                    return FutureBuilder(
+                    return
+                      (viewModel.segmentValue == '0'||viewModel.segmentValue == '2')
+                      ? FutureBuilder(
                       future:
                       viewModel.getWay2DemeritDesc(
                           comparisonOverview.comparisonItemId),
@@ -281,7 +290,8 @@ class CompareScreen extends StatelessWidget {
                         )
                             : Container();
                       },
-                    );
+                    )
+                    :Container();
                   },
                 ),
                 //todo 自己評価&TablePart widget分割
