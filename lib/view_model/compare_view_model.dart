@@ -111,7 +111,7 @@ class CompareViewModel extends ChangeNotifier {
   List<DraggingItemData> draggedItems = <DraggingItemData>[];
 
   ///cupertinoSegmentControl用
-  String segmentValue = '1';
+  String segmentValue = '0';
 
 ///ここからメソッド
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)

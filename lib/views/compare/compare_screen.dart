@@ -109,17 +109,18 @@ class CompareScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 8),
-              ///表示切り替えボタン
+              ///segment表示切り替えボタン
                 SizedBox(
                   width: double.infinity,
                   child: Selector<CompareViewModel, String>(
                     selector: (context, viewModel) => viewModel.segmentValue,
                       builder: (context, segmentValue, child) {
+                      //todo widget分割ですっきり書きたい
                       return CupertinoSegmentedControl(
                         children: const
-                        {'1': Text('All'),
-                          '2': Text('way1'),
-                          '3': Text('way2'),},
+                        {'0': Text('All'),
+                          '1': Text('way1'),
+                          '2': Text('way2'),},
                         onValueChanged: (String newValue){
                           print('$newValue');
                           _selectSegment(context,newValue);
@@ -145,7 +146,8 @@ class CompareScreen extends StatelessWidget {
 //                Selector<CompareViewModel, String>(
 //                    selector: (context, viewModel) => viewModel.way1Title,
                     builder: (context, viewModel, child) {
-                      return FutureBuilder( //material
+                      return (viewModel.segmentValue == '0'||viewModel.segmentValue == '1')
+                        ? FutureBuilder( //material
                         future: viewModel
                         .getWay1MeritDesc(comparisonOverview.comparisonItemId),
                         builder:
@@ -173,7 +175,8 @@ class CompareScreen extends StatelessWidget {
                             return Container();
                           }
                         },
-                      );
+                      )
+                      :Container();
                     }),
                 ///way2 メリット
                 Consumer<CompareViewModel>(
@@ -442,6 +445,7 @@ class CompareScreen extends StatelessWidget {
       ..isWay3DemeritFocusList = false;
   }
 
+  ///選択したsegmentに更新
   Future<void> _selectSegment(BuildContext context,String newValue) async{
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.selectSegment(newValue);
