@@ -66,7 +66,7 @@ class _DescFormState extends State<DescForm> {
               maxLines: null,
               suffix: const SizedBox(width: 24,),//IconButton分(24)隙間あける
               focusNode: widget.focusNode,
-              placeholder: 'メリットを入力',
+              placeholder: 'メリットを入力してください',
               decoration:
               const BoxDecoration(
                   border: Border(bottom:BorderSide(color: Colors.grey)),
@@ -135,7 +135,7 @@ class _DescFormState extends State<DescForm> {
               maxLines: null,
               suffix: const SizedBox(width: 24,),//IconButton分(24)隙間あける
               focusNode: widget.focusNode,
-              placeholder: 'メリットを入力',
+              placeholder: 'デリットを入力してください',
               decoration:
               const BoxDecoration(
                 border: Border(bottom:BorderSide(color: Colors.grey)),
@@ -168,7 +168,7 @@ class _DescFormState extends State<DescForm> {
               maxLines: null,
               suffix: const SizedBox(width: 24,),//IconButton分(24)隙間あける
               focusNode: widget.focusNode,
-              placeholder: 'メリットを入力',
+              placeholder: 'デリットを入力してください',
               decoration:
               const BoxDecoration(
                 border: Border(bottom:BorderSide(color: Colors.grey)),
