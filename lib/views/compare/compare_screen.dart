@@ -303,16 +303,24 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(height: 4,),
               ///テーブル
                 //todo  width: MediaQuery.of(context).size.width*0.8の形に変更
-                TablePart(
-                  way1Title: comparisonOverview.way1Title,
-                  //way1Merit以外はTablePart内でviewModelへsetしている
-                  way1MeritChanged: (newValue) =>
-                      _setWay1Merit(context, newValue),
-                  way1MeritEvaluate: comparisonOverview.way1MeritEvaluate,
-                  way1DemeritEvaluate: comparisonOverview.way1DemeritEvaluate,
-                  way2Title: comparisonOverview.way2Title,
-                  way2MeritEvaluate: comparisonOverview.way2MeritEvaluate,
-                  way2DemeritEvaluate: comparisonOverview.way2DemeritEvaluate,
+                //way1Title,way2Title名編集時に即時反映させる=>Consumer
+                Consumer<CompareViewModel>(
+                 builder: (context, viewModel, child) {
+                  return
+                    TablePart(
+                      way1Title: viewModel.way1Title,
+                      //way1Merit以外はTablePart内でviewModelへsetしている
+                      way1MeritChanged: (newValue) =>
+                          _setWay1Merit(context, newValue),
+                      way1MeritEvaluate: comparisonOverview.way1MeritEvaluate,
+                      way1DemeritEvaluate:
+                      comparisonOverview.way1DemeritEvaluate,
+                      way2Title: viewModel.way2Title,
+                      way2MeritEvaluate: comparisonOverview.way2MeritEvaluate,
+                      way2DemeritEvaluate:
+                      comparisonOverview.way2DemeritEvaluate,
+                      );
+                    }
                 ),
                 //todo 結論&ConclusionInputPart widget分割
                 const SizedBox(
