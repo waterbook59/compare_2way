@@ -168,6 +168,28 @@ class CompareRepository {
 
   ///ComparisonItem=>ComparisonOverviewRecord,List<Way1Merit>に分解登録
 
+ ///TablePart自動更新
+  //way1Demerit
+  Future<void> updateWay1DemeritEvaluate(ComparisonOverview updateOverview)
+    async{
+    try{
+      final comparisonOverviewRecord =
+      updateOverview.toComparisonOverviewRecord(updateOverview);
+      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+        //アップデート要素がないものを入れるとnullでエラー(Companionに入れるのは値が更新できるものだけ)
+        comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
+        way1DemeritEvaluate: Value(comparisonOverviewRecord.way1DemeritEvaluate),
+        createdAt: Value(comparisonOverviewRecord.createdAt),
+      );
+      await _comparisonItemDao.saveComparisonOverviewDB(
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+    }on SqliteException catch (e) {
+      print('repository保存エラー:${e.toString()}');
+    }
+
+    }
+
+
   //todo createComparisonOverviewと結合,way3List追加
   ///新規作成 way1MeritList,way2MeritList
   Future<void> createDescList(
@@ -572,6 +594,8 @@ class CompareRepository {
       print('repository更新エラー:${e.toString()}');
     }
   }
+
+
 
 
 

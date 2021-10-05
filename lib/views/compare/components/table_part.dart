@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 ///Statefulへ変更:余裕あればSelector導入
 class TablePart extends StatefulWidget {
    const TablePart({
+     this.comparisonItemId,
      this.way1Title,
      this.way1MeritEvaluate,
      this.way1DemeritEvaluate,
@@ -18,6 +19,7 @@ class TablePart extends StatefulWidget {
      this.way1MeritChanged,
   });
 
+    final String comparisonItemId;
     final String way1Title;
     final int way1MeritEvaluate;
     final int way1DemeritEvaluate;
@@ -187,7 +189,8 @@ class _TablePartState extends State<TablePart> {
                           print(newValue);
                           setState(() {
                             way1DemeritDisplay = evaluates[newValue];
-                            viewModel.setWay1DemeritNewValue(newValue);
+                            viewModel.setWay1DemeritNewValue(
+                                widget.comparisonItemId,newValue);
                           });
                         },
                       )),

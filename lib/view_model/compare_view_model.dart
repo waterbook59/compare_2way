@@ -217,8 +217,16 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> setWay1MeritNewValue(int newValue) async {
     _way1MeritEvaluate = newValue;
   }
-  Future<void> setWay1DemeritNewValue(int newValue) async {
+  Future<void> setWay1DemeritNewValue(String comparisonItemId,int newValue)
+  async {
     _way1DemeritEvaluate = newValue;
+    final updateOverview = ComparisonOverview(
+      comparisonItemId: comparisonItemId,
+      way1DemeritEvaluate: newValue,
+      createdAt: DateTime.now(),
+    );
+    await _compareRepository.updateWay1DemeritEvaluate(updateOverview);
+    notifyListeners();
   }
   Future<void> setWay2MeritNewValue(int newValue) async {
     _way2MeritEvaluate = newValue;

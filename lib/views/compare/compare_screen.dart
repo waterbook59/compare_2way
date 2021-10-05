@@ -308,8 +308,10 @@ class CompareScreen extends StatelessWidget {
                  builder: (context, viewModel, child) {
                   return
                     TablePart(
+                      comparisonItemId: comparisonOverview.comparisonItemId,
                       way1Title: viewModel.way1Title,
                       //way1Merit以外はTablePart内でviewModelへsetしている
+                      //todo way1MeritもTablePart内でviewModelへset
                       way1MeritChanged: (newValue) =>
                           _setWay1Merit(context, newValue),
                       way1MeritEvaluate: comparisonOverview.way1MeritEvaluate,
