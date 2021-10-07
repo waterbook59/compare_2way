@@ -16,7 +16,6 @@ class TablePart extends StatefulWidget {
      this.way2Title,
      this.way2MeritEvaluate,
      this.way2DemeritEvaluate,
-     this.way1MeritChanged,
   });
 
     final String comparisonItemId;
@@ -27,12 +26,6 @@ class TablePart extends StatefulWidget {
     final int way2MeritEvaluate;
     final int way2DemeritEvaluate;
 
-
-  /// CompareScreenへ値を渡して保存
-   final Function(int) way1MeritChanged;
-//   final Function(int) way1DemeritChanged;
-//   final Function(int) way2MeritChanged;
-//   final Function(int) way2DemeritChanged;
 
   @override
   _TablePartState createState() => _TablePartState();
@@ -56,11 +49,6 @@ class _TablePartState extends State<TablePart> {
     Image.asset('assets/images/double_cross.png'),
   ];
 
-
-//  String way1MeritDisplay = '';
-//  String way1DemeritDisplay = '';
-//  String way2MeritDisplay = '';
-//  String way2DemeritDisplay = '';
 
   Image way1MeritDisplay = Image.asset('assets/images/blank.png');
   Image way1DemeritDisplay = Image.asset('assets/images/blank.png');
@@ -139,7 +127,6 @@ class _TablePartState extends State<TablePart> {
                 //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
                 child:
                 Row(
-//                  mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       const SizedBox(width: 16,),
                   Expanded(
@@ -152,14 +139,11 @@ class _TablePartState extends State<TablePart> {
                       EvaluateDropdown(
                         initialValue:widget.way1MeritEvaluate,
                         onSelected: (newValue) {
-//                          print('newValueをsetState:$newValue');
-//                          widget.way1MeritChanged(newValue);
                           setState(() {
                             way1MeritDisplay = evaluates[newValue];
+                            // CompareScreenへ渡さずに直接viewModel側に保存
                             viewModel.setWay1MeritNewValue(
                                 widget.comparisonItemId,newValue);
-                        // CompareScreenへ渡さずに直接viewModel側に保存でも可
-//                            viewModel.setWay1MeritNewValue(newValue);
                           });
                         },
                       ),

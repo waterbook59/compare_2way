@@ -177,14 +177,12 @@ class CompareRepository {
       final comparisonOverviewRecord =
       updateOverview.toComparisonOverviewRecord(updateOverview);
       final overviewCompanion = ComparisonOverviewRecordsCompanion(
-        //アップデート要素がないものを入れるとnullでエラー(Companionに入れるのは値が更新できるものだけ)
         comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
         way1MeritEvaluate: Value(comparisonOverviewRecord.way1MeritEvaluate),
         createdAt: Value(comparisonOverviewRecord.createdAt),
       );
       await _comparisonItemDao.saveComparisonOverviewDB(
           comparisonOverviewRecord.comparisonItemId, overviewCompanion);
-      print('DBへway1MeritEvaluate更新');
     }on SqliteException catch (e) {
       print('repository保存エラー:${e.toString()}');
     }
@@ -196,14 +194,12 @@ class CompareRepository {
       final comparisonOverviewRecord =
       updateOverview.toComparisonOverviewRecord(updateOverview);
       final overviewCompanion = ComparisonOverviewRecordsCompanion(
-        //アップデート要素がないものを入れるとnullでエラー(Companionに入れるのは値が更新できるものだけ)
         comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
-        way1DemeritEvaluate: Value(comparisonOverviewRecord.way1DemeritEvaluate),
+        way1DemeritEvaluate:Value(comparisonOverviewRecord.way1DemeritEvaluate),
         createdAt: Value(comparisonOverviewRecord.createdAt),
       );
       await _comparisonItemDao.saveComparisonOverviewDB(
           comparisonOverviewRecord.comparisonItemId, overviewCompanion);
-      print('DBへway1DemeritEvaluate更新');
     }on SqliteException catch (e) {
       print('repository保存エラー:${e.toString()}');
     }

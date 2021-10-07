@@ -216,10 +216,8 @@ class CompareViewModel extends ChangeNotifier {
   }
   Future<void> setWay1MeritNewValue(String comparisonItemId,int newValue)
   async {
-    print('元の値:$_way1MeritEvaluate');
-    //値を変えた場合だけ更新したい
+    //値を変えた場合だけ更新
     if(_way1MeritEvaluate!=newValue){
-      print('set値:$newValue');
       //TablePartでviewModel.way1MeritEvaluateとして表示しないならこのset1行いらない
       _way1MeritEvaluate = newValue;
       final updateOverview = ComparisonOverview(

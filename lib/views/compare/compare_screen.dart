@@ -310,12 +310,6 @@ class CompareScreen extends StatelessWidget {
                     TablePart(
                       comparisonItemId: comparisonOverview.comparisonItemId,
                       way1Title: viewModel.way1Title,
-                      //way1Merit以外はTablePart内でviewModelへsetしている
-                      //todo way1MeritもTablePart内でviewModelへset
-//                      way1MeritChanged: (newValue) =>
-//                          _setWay1Merit(context, newValue),
-                    //todo viewModel.way1MeritEvaluateする場合は、CompareScreen入る時・出る時にviewModel側の値の更新が必要
-                      //viewModelのnotifyListenerがきかない
                       way1MeritEvaluate: comparisonOverview.way1MeritEvaluate,
                       way1DemeritEvaluate:
                       comparisonOverview.way1DemeritEvaluate,
