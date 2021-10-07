@@ -214,19 +214,37 @@ class CompareViewModel extends ChangeNotifier {
     overviewDB =
     await _compareRepository.getComparisonOverview(comparisonItemId);
   }
-  Future<void> setWay1MeritNewValue(int newValue) async {
-    _way1MeritEvaluate = newValue;
+  Future<void> setWay1MeritNewValue(String comparisonItemId,int newValue)
+  async {
+    print('元の値:$_way1MeritEvaluate');
+    //値を変えた場合だけ更新したい
+    if(_way1MeritEvaluate!=newValue){
+      print('set値:$newValue');
+      //TablePartでviewModel.way1MeritEvaluateとして表示しないならこのset1行いらない
+      _way1MeritEvaluate = newValue;
+      final updateOverview = ComparisonOverview(
+        comparisonItemId: comparisonItemId,
+        way1MeritEvaluate: newValue,
+        createdAt: DateTime.now(),
+      );
+      await _compareRepository.updateWay1MeritEvaluate(updateOverview);
+      notifyListeners();
+    }
+
   }
   Future<void> setWay1DemeritNewValue(String comparisonItemId,int newValue)
   async {
-    _way1DemeritEvaluate = newValue;
-    final updateOverview = ComparisonOverview(
-      comparisonItemId: comparisonItemId,
-      way1DemeritEvaluate: newValue,
-      createdAt: DateTime.now(),
-    );
-    await _compareRepository.updateWay1DemeritEvaluate(updateOverview);
-    notifyListeners();
+    if(_way1DemeritEvaluate!=newValue){
+      _way1DemeritEvaluate = newValue;
+      final updateOverview = ComparisonOverview(
+        comparisonItemId: comparisonItemId,
+        way1DemeritEvaluate: newValue,
+        createdAt: DateTime.now(),
+      );
+      await _compareRepository.updateWay1DemeritEvaluate(updateOverview);
+      notifyListeners();
+    }
+
   }
   Future<void> setWay2MeritNewValue(int newValue) async {
     _way2MeritEvaluate = newValue;

@@ -153,9 +153,11 @@ class _TablePartState extends State<TablePart> {
                         initialValue:widget.way1MeritEvaluate,
                         onSelected: (newValue) {
 //                          print('newValueをsetState:$newValue');
-                          widget.way1MeritChanged(newValue);
+//                          widget.way1MeritChanged(newValue);
                           setState(() {
                             way1MeritDisplay = evaluates[newValue];
+                            viewModel.setWay1MeritNewValue(
+                                widget.comparisonItemId,newValue);
                         // CompareScreenへ渡さずに直接viewModel側に保存でも可
 //                            viewModel.setWay1MeritNewValue(newValue);
                           });

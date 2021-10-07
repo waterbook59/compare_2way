@@ -312,8 +312,10 @@ class CompareScreen extends StatelessWidget {
                       way1Title: viewModel.way1Title,
                       //way1Merit以外はTablePart内でviewModelへsetしている
                       //todo way1MeritもTablePart内でviewModelへset
-                      way1MeritChanged: (newValue) =>
-                          _setWay1Merit(context, newValue),
+//                      way1MeritChanged: (newValue) =>
+//                          _setWay1Merit(context, newValue),
+                    //todo viewModel.way1MeritEvaluateする場合は、CompareScreen入る時・出る時にviewModel側の値の更新が必要
+                      //viewModelのnotifyListenerがきかない
                       way1MeritEvaluate: comparisonOverview.way1MeritEvaluate,
                       way1DemeritEvaluate:
                       comparisonOverview.way1DemeritEvaluate,
@@ -407,10 +409,10 @@ class CompareScreen extends StatelessWidget {
   }
 
   //TablePartのway1Merit変更されたらset
-  Future<void> _setWay1Merit(BuildContext context, int newValue) async {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.setWay1MeritNewValue(newValue);
-  }
+//  Future<void> _setWay1Merit(BuildContext context, int newValue) async {
+//    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+//    await viewModel.setWay1MeritNewValue(newValue);
+//  }
 
   ///Accordion中の選択したリストの詳細が変更されたらset
   Future<void> _accordionInputChange(
