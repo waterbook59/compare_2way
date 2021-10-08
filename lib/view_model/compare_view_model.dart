@@ -244,16 +244,39 @@ class CompareViewModel extends ChangeNotifier {
     }
 
   }
-  Future<void> setWay2MeritNewValue(int newValue) async {
-    _way2MeritEvaluate = newValue;
+  Future<void> setWay2MeritNewValue(String comparisonItemId,int newValue)async {
+    if (_way2MeritEvaluate != newValue) {
+      _way2MeritEvaluate = newValue;
+      final updateOverview = ComparisonOverview(
+        comparisonItemId: comparisonItemId,
+        way2MeritEvaluate: newValue,
+        createdAt: DateTime.now(),
+      );
+      await _compareRepository.updateWay2MeritEvaluate(updateOverview);
+      notifyListeners();
+    }
   }
-  Future<void> setWay2DemeritNewValue(int newValue) async {
-    _way2DemeritEvaluate = newValue;
+  Future<void> setWay2DemeritNewValue(String comparisonItemId,int newValue)
+  async {
+    if (_way2DemeritEvaluate != newValue) {
+      _way2DemeritEvaluate = newValue;
+      final updateOverview = ComparisonOverview(
+        comparisonItemId: comparisonItemId,
+        way2DemeritEvaluate: newValue,
+        createdAt: DateTime.now(),
+      );
+      await _compareRepository.updateWay2DemeritEvaluate(updateOverview);
+      notifyListeners();
+    }
+
   }
-  Future<void> setWay3MeritNewValue(int newValue) async {
+  //todo way3メソッド設定
+  Future<void> setWay3MeritNewValue(String comparisonItemId,int newValue)
+  async {
     _way3MeritEvaluate = newValue;
   }
-  Future<void> setWay3DemeritNewValue(int newValue) async {
+  Future<void> setWay3DemeritNewValue(String comparisonItemId,int newValue)
+  async {
     _way3DemeritEvaluate = newValue;
   }
   Future<void> setConclusion(String newConclusion) async {

@@ -204,8 +204,41 @@ class CompareRepository {
       print('repository保存エラー:${e.toString()}');
     }
   }
+  //way2Merit
+  Future<void> updateWay2MeritEvaluate(ComparisonOverview updateOverview)
+  async{
+    try{
+      final comparisonOverviewRecord =
+      updateOverview.toComparisonOverviewRecord(updateOverview);
+      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+        comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
+        way2MeritEvaluate:Value(comparisonOverviewRecord.way2MeritEvaluate),
+        createdAt: Value(comparisonOverviewRecord.createdAt),
+      );
+      await _comparisonItemDao.saveComparisonOverviewDB(
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+    }on SqliteException catch (e) {
+      print('repository保存エラー:${e.toString()}');
+    }
+  }
 
-
+  //way2Demerit
+  Future<void> updateWay2DemeritEvaluate(ComparisonOverview updateOverview)
+  async{
+    try{
+      final comparisonOverviewRecord =
+      updateOverview.toComparisonOverviewRecord(updateOverview);
+      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+        comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
+        way2DemeritEvaluate:Value(comparisonOverviewRecord.way2DemeritEvaluate),
+        createdAt: Value(comparisonOverviewRecord.createdAt),
+      );
+      await _comparisonItemDao.saveComparisonOverviewDB(
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+    }on SqliteException catch (e) {
+      print('repository保存エラー:${e.toString()}');
+    }
+  }
   //todo createComparisonOverviewと結合,way3List追加
   ///新規作成 way1MeritList,way2MeritList
   Future<void> createDescList(

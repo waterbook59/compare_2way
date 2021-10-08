@@ -160,11 +160,6 @@ class _TablePartState extends State<TablePart> {
                   Expanded(
                       flex: 2,
                       child:  way1DemeritDisplay,
-//                      Text(
-//                        way1DemeritDisplay,
-//                        style: const TextStyle(fontSize: 40),
-//                        textAlign: TextAlign.right,
-//                      )
                   ),
                   // EvaluateDropdownで選択したときもフォーカス外す(キーボード下げる)
                   Expanded(
@@ -205,11 +200,6 @@ class _TablePartState extends State<TablePart> {
                   Expanded(
                       flex: 2,
                       child: way2MeritDisplay,
-//                      Text(
-//                        way2MeritDisplay,
-//                        style: const TextStyle(fontSize: 40),
-//                        textAlign: TextAlign.right,
-//                      )
                   ),
                   Expanded(
                       flex: 1,
@@ -219,7 +209,8 @@ class _TablePartState extends State<TablePart> {
                           print(newValue);
                           setState(() {
                             way2MeritDisplay = evaluates[newValue];
-                            viewModel.setWay2MeritNewValue(newValue);
+                            viewModel.setWay2MeritNewValue(
+                                widget.comparisonItemId,newValue);
                           });
                         },
                       )),
@@ -235,11 +226,6 @@ class _TablePartState extends State<TablePart> {
                   Expanded(
                       flex: 2,
                       child:   way2DemeritDisplay,
-//                      Text(
-//                        way2DemeritDisplay,
-//                        style: const TextStyle(fontSize: 40),
-//                        textAlign: TextAlign.right,
-//                      )
                   ),
                   Expanded(
                       flex: 1,
@@ -249,7 +235,8 @@ class _TablePartState extends State<TablePart> {
                           print(newValue);
                           setState(() {
                             way2DemeritDisplay = evaluates[newValue];
-                            viewModel.setWay2DemeritNewValue(newValue);
+                            viewModel.setWay2DemeritNewValue(
+                                widget.comparisonItemId,newValue);
                           });
                         },
                       )),
