@@ -335,11 +335,24 @@ class CompareScreen extends StatelessWidget {
                   height: 4,
                 ),
               ///結論TextArea:MaterialForm
-                ConclusionInputPart(
-                  conclusion: comparisonOverview.conclusion,
-                  //非同期でviewModelへ設定しにいかないと値保存できない
-                  inputChanged: (newConclusion) =>
-                      _conclusionInputChanged(context, newConclusion),
+                Selector<CompareViewModel, String>(
+                  selector: (context, viewModel) => viewModel.conclusion,
+                    builder: (context, conclusion, child) {
+                    return ConclusionInputPart(
+                      conclusion: comparisonOverview.conclusion,
+                      //非同期でviewModelへ設定しにいかないと値保存できない
+                      inputChanged: (newConclusion) =>
+                          _conclusionInputChanged(context, newConclusion,
+                            comparisonOverview.comparisonItemId,),
+                    );
+                    }
+//                  child: ConclusionInputPart(
+//                    conclusion: comparisonOverview.conclusion,
+//                    //非同期でviewModelへ設定しにいかないと値保存できない
+//                    inputChanged: (newConclusion) =>
+//                        _conclusionInputChanged(context, newConclusion,
+//                          comparisonOverview.comparisonItemId,),
+//                  ),
                 ),
                 const SizedBox(height: 16,),
               ///タグエリア
@@ -397,9 +410,11 @@ class CompareScreen extends StatelessWidget {
 
   //conclusion変更されたらset
   Future<void> _conclusionInputChanged(
-      BuildContext context, String newConclusion) async {
+      BuildContext context, String newConclusion,String comparisonItemId,)
+  async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.setConclusion(newConclusion);
+    await viewModel.setConclusion(newConclusion:newConclusion,
+        comparisonItemId: comparisonItemId);
   }
 
   //TablePartのway1Merit変更されたらset

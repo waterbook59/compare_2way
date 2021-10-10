@@ -239,6 +239,24 @@ class CompareRepository {
       print('repository保存エラー:${e.toString()}');
     }
   }
+
+  ///ConclusionPart自動更新
+  Future<void> updateConclusion(ComparisonOverview updateOverview)async{
+    try{
+      final comparisonOverviewRecord =
+      updateOverview.toComparisonOverviewRecord(updateOverview);
+      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+        comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
+        conclusion:Value(comparisonOverviewRecord.conclusion),
+        createdAt: Value(comparisonOverviewRecord.createdAt),
+      );
+      await _comparisonItemDao.saveComparisonOverviewDB(
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+    }on SqliteException catch (e) {
+      print('repository保存エラー:${e.toString()}');
+    }
+  }
+
   //todo createComparisonOverviewと結合,way3List追加
   ///新規作成 way1MeritList,way2MeritList
   Future<void> createDescList(

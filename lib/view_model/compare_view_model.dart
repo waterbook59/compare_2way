@@ -279,8 +279,19 @@ class CompareViewModel extends ChangeNotifier {
   async {
     _way3DemeritEvaluate = newValue;
   }
-  Future<void> setConclusion(String newConclusion) async {
-    conclusion = newConclusion;
+  Future<void> setConclusion({String comparisonItemId,String newConclusion})
+  async {
+    if (conclusion != newConclusion) {
+      conclusion = newConclusion;
+      final updateOverview = ComparisonOverview(
+        comparisonItemId: comparisonItemId,
+        conclusion: newConclusion,
+        createdAt: DateTime.now(),
+      );
+      await _compareRepository.updateConclusion(updateOverview);
+      notifyListeners();
+    }
+
   }
 
 
