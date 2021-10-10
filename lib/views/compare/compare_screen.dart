@@ -364,11 +364,13 @@ class CompareScreen extends StatelessWidget {
                      }
                  ),
               ///保存ボタン
-                //todo ConstrainedBoxでボタンサイズ可変
                 Center(
                   child: RaisedButton(
                       child: const Text('保存'),
                       color: accentColor,
+                      shape:
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
                       onPressed: () {
                         return _saveItem(
                           context,
