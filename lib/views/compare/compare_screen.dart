@@ -346,13 +346,6 @@ class CompareScreen extends StatelessWidget {
                             comparisonOverview.comparisonItemId,),
                     );
                     }
-//                  child: ConclusionInputPart(
-//                    conclusion: comparisonOverview.conclusion,
-//                    //非同期でviewModelへ設定しにいかないと値保存できない
-//                    inputChanged: (newConclusion) =>
-//                        _conclusionInputChanged(context, newConclusion,
-//                          comparisonOverview.comparisonItemId,),
-//                  ),
                 ),
                 const SizedBox(height: 16,),
               ///タグエリア
@@ -416,12 +409,6 @@ class CompareScreen extends StatelessWidget {
     await viewModel.setConclusion(newConclusion:newConclusion,
         comparisonItemId: comparisonItemId);
   }
-
-  //TablePartのway1Merit変更されたらset
-//  Future<void> _setWay1Merit(BuildContext context, int newValue) async {
-//    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-//    await viewModel.setWay1MeritNewValue(newValue);
-//  }
 
   ///Accordion中の選択したリストの詳細が変更されたらset
   Future<void> _accordionInputChange(
