@@ -110,8 +110,10 @@ class CompareViewModel extends ChangeNotifier {
   List<String> deleteItemIdList = <String>[];
   List<DraggingItemData> draggedItems = <DraggingItemData>[];
 
+  ///cupertinoSegmentControl用
+  String segmentValue = '0';
 
-
+///ここからメソッド
   ///ページ開いた時の取得(notifyListeners(リビルド)あり)
   Future<void> getOverview(String comparisonItemId) async {
     _comparisonOverviews =
@@ -212,26 +214,84 @@ class CompareViewModel extends ChangeNotifier {
     overviewDB =
     await _compareRepository.getComparisonOverview(comparisonItemId);
   }
-  Future<void> setWay1MeritNewValue(int newValue) async {
-    _way1MeritEvaluate = newValue;
+  Future<void> setWay1MeritNewValue(String comparisonItemId,int newValue)
+  async {
+    //値を変えた場合だけ更新
+    if(_way1MeritEvaluate!=newValue){
+      //TablePartでviewModel.way1MeritEvaluateとして表示しないならこのset1行いらない
+      _way1MeritEvaluate = newValue;
+      final updateOverview = ComparisonOverview(
+        comparisonItemId: comparisonItemId,
+        way1MeritEvaluate: newValue,
+        createdAt: DateTime.now(),
+      );
+      await _compareRepository.updateWay1MeritEvaluate(updateOverview);
+      notifyListeners();
+    }
+
   }
-  Future<void> setWay1DemeritNewValue(int newValue) async {
-    _way1DemeritEvaluate = newValue;
+  Future<void> setWay1DemeritNewValue(String comparisonItemId,int newValue)
+  async {
+    if(_way1DemeritEvaluate!=newValue){
+      _way1DemeritEvaluate = newValue;
+      final updateOverview = ComparisonOverview(
+        comparisonItemId: comparisonItemId,
+        way1DemeritEvaluate: newValue,
+        createdAt: DateTime.now(),
+      );
+      await _compareRepository.updateWay1DemeritEvaluate(updateOverview);
+      notifyListeners();
+    }
+
   }
-  Future<void> setWay2MeritNewValue(int newValue) async {
-    _way2MeritEvaluate = newValue;
+  Future<void> setWay2MeritNewValue(String comparisonItemId,int newValue)async {
+    if (_way2MeritEvaluate != newValue) {
+      _way2MeritEvaluate = newValue;
+      final updateOverview = ComparisonOverview(
+        comparisonItemId: comparisonItemId,
+        way2MeritEvaluate: newValue,
+        createdAt: DateTime.now(),
+      );
+      await _compareRepository.updateWay2MeritEvaluate(updateOverview);
+      notifyListeners();
+    }
   }
-  Future<void> setWay2DemeritNewValue(int newValue) async {
-    _way2DemeritEvaluate = newValue;
+  Future<void> setWay2DemeritNewValue(String comparisonItemId,int newValue)
+  async {
+    if (_way2DemeritEvaluate != newValue) {
+      _way2DemeritEvaluate = newValue;
+      final updateOverview = ComparisonOverview(
+        comparisonItemId: comparisonItemId,
+        way2DemeritEvaluate: newValue,
+        createdAt: DateTime.now(),
+      );
+      await _compareRepository.updateWay2DemeritEvaluate(updateOverview);
+      notifyListeners();
+    }
+
   }
-  Future<void> setWay3MeritNewValue(int newValue) async {
+  //todo way3メソッド設定
+  Future<void> setWay3MeritNewValue(String comparisonItemId,int newValue)
+  async {
     _way3MeritEvaluate = newValue;
   }
-  Future<void> setWay3DemeritNewValue(int newValue) async {
+  Future<void> setWay3DemeritNewValue(String comparisonItemId,int newValue)
+  async {
     _way3DemeritEvaluate = newValue;
   }
-  Future<void> setConclusion(String newConclusion) async {
-    conclusion = newConclusion;
+  Future<void> setConclusion({String comparisonItemId,String newConclusion})
+  async {
+    if (conclusion != newConclusion) {
+      conclusion = newConclusion;
+      final updateOverview = ComparisonOverview(
+        comparisonItemId: comparisonItemId,
+        conclusion: newConclusion,
+        createdAt: DateTime.now(),
+      );
+      await _compareRepository.updateConclusion(updateOverview);
+      notifyListeners();
+    }
+
   }
 
 
@@ -414,6 +474,8 @@ class CompareViewModel extends ChangeNotifier {
   ///CompareScreenで表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
   //todo favorite,way3追加
   Future<void> saveComparisonItem(ComparisonOverview updateOverview) async {
+
+    //値を変更した時だけ更新=>現状どの項目も変更時自動保存（保存押しても時間だけ変更）
     final saveOverview = ComparisonOverview(
       comparisonItemId: updateOverview.comparisonItemId,
       itemTitle: itemTitle,
@@ -1008,7 +1070,10 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
+Future<void> selectSegment(String newValue){
+    segmentValue = newValue;
+    notifyListeners();
+}
 
 
 

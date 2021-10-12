@@ -38,6 +38,7 @@ class _DescFormState extends State<DescForm> {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
 //todo way3Merit,Demerit追加
+    //todo cupertinoTextField部分は共通でスッキリ書く
     switch(widget.displayList){
       case DisplayList.way1Merit:
         return Stack(
@@ -66,7 +67,7 @@ class _DescFormState extends State<DescForm> {
               maxLines: null,
               suffix: const SizedBox(width: 24,),//IconButton分(24)隙間あける
               focusNode: widget.focusNode,
-              placeholder: 'メリットを入力',
+              placeholder: 'メリットを入力してください',
               decoration:
               const BoxDecoration(
                   border: Border(bottom:BorderSide(color: Colors.grey)),
@@ -93,23 +94,22 @@ class _DescFormState extends State<DescForm> {
         );
         break;
       case DisplayList.way2Merit:
-        //todo cupertinoTextFieldに統一
         return Stack(
           //material
           alignment: Alignment.centerRight,
           children: [
-            TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'メリットを入力してください',
-                ///TextFieldを長く入力するとボタンが重なるのを回避
-                contentPadding: EdgeInsets.fromLTRB(6, 6, 48, 0),
-              ),
+            CupertinoTextField(
               controller: widget.controllers[widget.index],
               onChanged: (newDesc) => widget.inputChanged(newDesc),
               style: const TextStyle(color: Colors.black),
-              ///TextFieldを長く入力すると折り返し
               maxLines: null,
+              suffix: const SizedBox(width: 24,),//IconButton分(24)隙間あける
               focusNode: widget.focusNode,
+              placeholder: 'メリットを入力してください',
+              decoration:
+              const BoxDecoration(
+                border: Border(bottom:BorderSide(color: Colors.grey)),
+              ),
             ),
             viewModel.isWay2MeritDeleteIcon
                 ? IconButton(
@@ -135,7 +135,7 @@ class _DescFormState extends State<DescForm> {
               maxLines: null,
               suffix: const SizedBox(width: 24,),//IconButton分(24)隙間あける
               focusNode: widget.focusNode,
-              placeholder: 'メリットを入力',
+              placeholder: 'デリットを入力してください',
               decoration:
               const BoxDecoration(
                 border: Border(bottom:BorderSide(color: Colors.grey)),
@@ -168,7 +168,7 @@ class _DescFormState extends State<DescForm> {
               maxLines: null,
               suffix: const SizedBox(width: 24,),//IconButton分(24)隙間あける
               focusNode: widget.focusNode,
-              placeholder: 'メリットを入力',
+              placeholder: 'デリットを入力してください',
               decoration:
               const BoxDecoration(
                 border: Border(bottom:BorderSide(color: Colors.grey)),

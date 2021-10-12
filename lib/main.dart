@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         primaryColor: const Color(0xFF363A44),
         accentColor: const Color(0xFFFF7043),
         scaffoldBackgroundColor: const Color(0xFFF5F5F5),
-        // フォントとしてヒラギノ使う
+        // フォントとしてヒラギノ使う 'Hiragino Sans'も選択肢
         fontFamily: 'Hiragino Kaku Gothic ProN',
         ),
       localizationsDelegates: const [

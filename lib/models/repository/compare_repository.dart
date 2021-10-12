@@ -168,6 +168,95 @@ class CompareRepository {
 
   ///ComparisonItem=>ComparisonOverviewRecord,List<Way1Merit>に分解登録
 
+ ///TablePart自動更新
+  //todo updateEvaluateでスッキリ書く
+  //way1Merit
+  Future<void> updateWay1MeritEvaluate(ComparisonOverview updateOverview)
+  async{
+    try{
+      final comparisonOverviewRecord =
+      updateOverview.toComparisonOverviewRecord(updateOverview);
+      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+        comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
+        way1MeritEvaluate: Value(comparisonOverviewRecord.way1MeritEvaluate),
+        createdAt: Value(comparisonOverviewRecord.createdAt),
+      );
+      await _comparisonItemDao.saveComparisonOverviewDB(
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+    }on SqliteException catch (e) {
+      print('repository保存エラー:${e.toString()}');
+    }
+  }
+  //way1Demerit
+  Future<void> updateWay1DemeritEvaluate(ComparisonOverview updateOverview)
+    async{
+    try{
+      final comparisonOverviewRecord =
+      updateOverview.toComparisonOverviewRecord(updateOverview);
+      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+        comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
+        way1DemeritEvaluate:Value(comparisonOverviewRecord.way1DemeritEvaluate),
+        createdAt: Value(comparisonOverviewRecord.createdAt),
+      );
+      await _comparisonItemDao.saveComparisonOverviewDB(
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+    }on SqliteException catch (e) {
+      print('repository保存エラー:${e.toString()}');
+    }
+  }
+  //way2Merit
+  Future<void> updateWay2MeritEvaluate(ComparisonOverview updateOverview)
+  async{
+    try{
+      final comparisonOverviewRecord =
+      updateOverview.toComparisonOverviewRecord(updateOverview);
+      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+        comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
+        way2MeritEvaluate:Value(comparisonOverviewRecord.way2MeritEvaluate),
+        createdAt: Value(comparisonOverviewRecord.createdAt),
+      );
+      await _comparisonItemDao.saveComparisonOverviewDB(
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+    }on SqliteException catch (e) {
+      print('repository保存エラー:${e.toString()}');
+    }
+  }
+
+  //way2Demerit
+  Future<void> updateWay2DemeritEvaluate(ComparisonOverview updateOverview)
+  async{
+    try{
+      final comparisonOverviewRecord =
+      updateOverview.toComparisonOverviewRecord(updateOverview);
+      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+        comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
+        way2DemeritEvaluate:Value(comparisonOverviewRecord.way2DemeritEvaluate),
+        createdAt: Value(comparisonOverviewRecord.createdAt),
+      );
+      await _comparisonItemDao.saveComparisonOverviewDB(
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+    }on SqliteException catch (e) {
+      print('repository保存エラー:${e.toString()}');
+    }
+  }
+
+  ///ConclusionPart自動更新
+  Future<void> updateConclusion(ComparisonOverview updateOverview)async{
+    try{
+      final comparisonOverviewRecord =
+      updateOverview.toComparisonOverviewRecord(updateOverview);
+      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+        comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
+        conclusion:Value(comparisonOverviewRecord.conclusion),
+        createdAt: Value(comparisonOverviewRecord.createdAt),
+      );
+      await _comparisonItemDao.saveComparisonOverviewDB(
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+    }on SqliteException catch (e) {
+      print('repository保存エラー:${e.toString()}');
+    }
+  }
+
   //todo createComparisonOverviewと結合,way3List追加
   ///新規作成 way1MeritList,way2MeritList
   Future<void> createDescList(
@@ -572,6 +661,8 @@ class CompareRepository {
       print('repository更新エラー:${e.toString()}');
     }
   }
+
+
 
 
 

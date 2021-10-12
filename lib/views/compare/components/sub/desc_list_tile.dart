@@ -85,7 +85,7 @@ class DescListTile extends StatelessWidget {
           description: '${controllers[index].text}',
         )
             : const DescDisplay(
-          description: 'メリットを入力',
+          description: 'デメリットを入力',
           textColor: Colors.grey,
         );
         break;
@@ -105,7 +105,7 @@ class DescListTile extends StatelessWidget {
           description: '${controllers[index].text}',
         )
             : const DescDisplay(
-          description: 'メリットを入力',
+          description: 'デメリットを入力',
           textColor: Colors.grey,
         );
         break;

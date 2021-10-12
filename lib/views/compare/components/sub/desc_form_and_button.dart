@@ -1,4 +1,5 @@
 import 'package:compare_2way/data_models/merit_demerit.dart';
+import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/sub/desc_list_tile.dart';
@@ -19,6 +20,8 @@ class DescFormAndButton extends StatefulWidget {
     this.inputChanged,
     this.addList,
     this.deleteList,
+    this.controllers,
+    this.focusNodes,
   });
 
   final DisplayList displayList;
@@ -29,59 +32,14 @@ class DescFormAndButton extends StatefulWidget {
   final Function(String, int) inputChanged;
   final Function() addList;
   final Function(int) deleteList;
+  final List<TextEditingController> controllers;
+  final List<FocusNode> focusNodes;
 
   @override
   _DescFormAndButtonState createState() => _DescFormAndButtonState();
 }
 
 class _DescFormAndButtonState extends State<DescFormAndButton> {
-  List<TextEditingController> controllers = <TextEditingController>[];
-  List<FocusNode> focusNodes = <FocusNode>[];
-
-//  int _selectedIndex ;
-
-  @override
-  void initState() {
-    //todo way3Merit,Demerit分作成
-    switch (widget.displayList) {
-      case DisplayList.way1Merit:
-        widget.way1MeritList.isNotEmpty
-            ? createWay1MeritList()
-//        controllers = widget.way1MeritList.map((item) {
-//          return TextEditingController(text: item.way1MeritDesc);
-//        }).toList()
-            : controllers = [];
-        break;
-      case DisplayList.way2Merit:
-        widget.way2MeritList.isNotEmpty
-            ? createWay2MeritList()
-//        controllers = widget.way2MeritList.map((item) {
-//          return TextEditingController(text: item.way2MeritDesc);
-//        }).toList()
-            : controllers = [];
-        break;
-      case DisplayList.way1Demerit:
-        widget.way1DemeritList.isNotEmpty
-            ? createWay1DemeritList()
-            : controllers = [];
-        break;
-      case DisplayList.way2Demerit:
-        widget.way2DemeritList.isNotEmpty
-            ? createWay2DemeritList()
-            : controllers = [];
-        break;
-
-
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    controllers.map((e) => e.dispose()).toList();
-    focusNodes.map((e) => e.dispose()).toList();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,10 +51,9 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
         ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: controllers.length,
+            itemCount: widget.controllers.length,
             itemBuilder: (context, index) {
               return
-                  //deleteするときのキーボード立ち上がりをふせぐにはStackでボタン独立
                   ///way1とway2等リストまたぐと反応しない=>Consumerに変更してAccordionPart以下を再ビルド
                   GestureDetector(
                 onTap: () {
@@ -104,7 +61,7 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
                     viewModel.selectedDescListIndex = index;
                     print('viewModel.selectedIndex:'
                         '${viewModel.selectedDescListIndex}');
-                    focusNodes[index].requestFocus();
+                    widget.focusNodes[index].requestFocus();
                     //isDisplayIconをviewModelにもたせる
                     //todo way3Merit,Demerit分作成
                     switch (widget.displayList) {
@@ -128,29 +85,16 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
                 child: DescListTile(
                   inputChanged: (newDesc) =>
                       widget.inputChanged(newDesc, index),
-                  controllers: controllers,
+                  controllers: widget.controllers,
                   index: index,
                   deleteList: (deleteIndex) =>
                       _deleteList(context, deleteIndex),
-                  focusNode: focusNodes[index],
+                  focusNode: widget.focusNodes[index],
                   displayList: widget.displayList,
                 ),
               );
             }),
-        //todo テキスト編集時のみ表示
-        RaisedButton(
-          child: const Icon(Icons.add),
-          onPressed: () {
-            setState(() {
-              print('押したらリストが増える');
-              widget.addList();
-              controllers.add(TextEditingController());
-              focusNodes.add(FocusNode());
-              print(
-                  'descFormAndButton/RaisedButton:controllers${controllers.map((controller) => controller.text).toList()}');
-            });
-          },
-        ),
+
       ],
     );
   }
@@ -158,46 +102,21 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
   //todo リストが1の時だけdeleteIcon出さない
   //deleteするときのキーボード立ち上がりをふせぐ
   void _deleteList(BuildContext context, int deleteIndex) {
-    print(
-        'DescFormAndButton/removeOnTapした瞬間のcontrollers.length:${controllers.length}'
-        '/onTapしたindex$deleteIndex');
+//    print(
+//        'DescFormAndButton/removeOnTapした瞬間のcontrollers.length:${controllers.length}'
+//        '/onTapしたindex$deleteIndex');
 
     //リストを0にしない
-    if (controllers.length > 1) {
+    if (widget.controllers.length > 1) {
       setState(() {
-        controllers.removeAt(deleteIndex);
-        focusNodes.removeAt(deleteIndex);
+        widget.controllers.removeAt(deleteIndex);
+        widget.focusNodes.removeAt(deleteIndex);
         widget.deleteList(deleteIndex);
         print('DescForm削除setState時のcontrollers.length:'
-            '${controllers.length}');
+            '${widget.controllers.length}');
       });
     }
   }
 
-  //todo way3Merit,Demerit分作成
-  void createWay1MeritList() {
-    controllers = widget.way1MeritList.map((item) {
-      return TextEditingController(text: item.way1MeritDesc);
-    }).toList();
-    focusNodes = widget.way1MeritList.map((item) => FocusNode()).toList();
-  }
 
-  void createWay2MeritList() {
-    controllers = widget.way2MeritList.map((item) {
-      return TextEditingController(text: item.way2MeritDesc);
-    }).toList();
-    focusNodes = widget.way2MeritList.map((item) => FocusNode()).toList();
-  }
-  void createWay1DemeritList() {
-    controllers = widget.way1DemeritList.map((item) {
-      return TextEditingController(text: item.way1DemeritDesc);
-    }).toList();
-    focusNodes = widget.way1DemeritList.map((item) => FocusNode()).toList();
-  }
-  void createWay2DemeritList() {
-    controllers = widget.way2DemeritList.map((item) {
-      return TextEditingController(text: item.way2DemeritDesc);
-    }).toList();
-    focusNodes = widget.way2DemeritList.map((item) => FocusNode()).toList();
-  }
 }

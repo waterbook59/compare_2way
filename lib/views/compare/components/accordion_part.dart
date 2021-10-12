@@ -41,13 +41,58 @@ class AccordionPart extends StatefulWidget {
 
 class _AccordionPartState extends State<AccordionPart> {
 
-  List<TextEditingController> textFieldControllers = <TextEditingController>[];
+  List<TextEditingController> controllers = <TextEditingController>[];
+  List<FocusNode> focusNodes = <FocusNode>[];
+
+
+  @override
+  void initState() {
+    //todo way3Merit,Demerit分作成
+    switch (widget.displayList) {
+      case DisplayList.way1Merit:
+        widget.way1MeritList.isNotEmpty
+            ? createWay1MeritList()
+//        controllers = widget.way1MeritList.map((item) {
+//          return TextEditingController(text: item.way1MeritDesc);
+//        }).toList()
+            : controllers = [];
+        break;
+      case DisplayList.way2Merit:
+        widget.way2MeritList.isNotEmpty
+            ? createWay2MeritList()
+//        controllers = widget.way2MeritList.map((item) {
+//          return TextEditingController(text: item.way2MeritDesc);
+//        }).toList()
+            : controllers = [];
+        break;
+      case DisplayList.way1Demerit:
+        widget.way1DemeritList.isNotEmpty
+            ? createWay1DemeritList()
+            : controllers = [];
+        break;
+      case DisplayList.way2Demerit:
+        widget.way2DemeritList.isNotEmpty
+            ? createWay2DemeritList()
+            : controllers = [];
+        break;
+
+
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controllers.map((e) => e.dispose()).toList();
+    focusNodes.map((e) => e.dispose()).toList();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-
-    return Column(
+//Column=> StackでDescFormAndButtonをGFAccordionのタイトルのところに追加(PlayButtonsPart)
+    return Stack(
       children: [
 
         custom.GFAccordion(
@@ -58,8 +103,7 @@ class _AccordionPartState extends State<AccordionPart> {
             showAccordion: true,
             collapsedTitleBackgroundColor:
             const Color(0xFFE0E0E0),
-          //todo collapsed時にDB再読込,更新される場合されない場合のエラー回避
-          //todo way1,2,3Merit,Demerit分作成
+          // collapsed時にDB再読込,更新される場合されない場合のエラー回避
             onToggleCollapsed: (value){
               FocusScope.of(context).unfocus();
               //accordionpart=>descFormのiconButtonの非表示
@@ -94,12 +138,59 @@ class _AccordionPartState extends State<AccordionPart> {
                 widget.addList();
               },
               deleteList: widget.deleteList,
+              controllers: controllers,
+              focusNodes: focusNodes,
             ),
           contentPadding: const EdgeInsets.only(top: 1,left: 8,right: 8),
         ),
+
+    //todo ボタン押しやすいサイズに
+        Positioned(
+          right: 64,
+          top: 20,
+          child: GestureDetector(
+              child: const Icon(
+                CupertinoIcons.plus_circled, color: Colors.black,),
+        // DescFormAndButtonのsetStateで実行していることをここでやる
+              onTap: () {
+                setState(() {
+                  widget.addList();
+                  controllers.add(TextEditingController());
+                  focusNodes.add(FocusNode());
+                });
+              }),)
       ],
     );
   }
+
+  //todo way3Merit,Demerit分作成
+  void createWay1MeritList() {
+    controllers = widget.way1MeritList.map((item) {
+      return TextEditingController(text: item.way1MeritDesc);
+    }).toList();
+    focusNodes = widget.way1MeritList.map((item) => FocusNode()).toList();
+  }
+
+  void createWay2MeritList() {
+    controllers = widget.way2MeritList.map((item) {
+      return TextEditingController(text: item.way2MeritDesc);
+    }).toList();
+    focusNodes = widget.way2MeritList.map((item) => FocusNode()).toList();
+  }
+  void createWay1DemeritList() {
+    controllers = widget.way1DemeritList.map((item) {
+      return TextEditingController(text: item.way1DemeritDesc);
+    }).toList();
+    focusNodes = widget.way1DemeritList.map((item) => FocusNode()).toList();
+  }
+  void createWay2DemeritList() {
+    controllers = widget.way2DemeritList.map((item) {
+      return TextEditingController(text: item.way2DemeritDesc);
+    }).toList();
+    focusNodes = widget.way2DemeritList.map((item) => FocusNode()).toList();
+  }
+
+
 }
 
 

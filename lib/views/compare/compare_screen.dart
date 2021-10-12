@@ -109,6 +109,32 @@ class CompareScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 8),
+              ///segment表示切り替えボタン
+                SizedBox(
+                  width: double.infinity,
+                  child: Selector<CompareViewModel, String>(
+                    selector: (context, viewModel) => viewModel.segmentValue,
+                      builder: (context, segmentValue, child) {
+                      //todo widget分割ですっきり書きたい
+                      return CupertinoSegmentedControl(
+                        children: const
+                        {'0': Text('All'),
+                          '1': Text('way1'),
+                          '2': Text('way2'),},
+                        onValueChanged: (String newValue){
+                          print('$newValue');
+                          _selectSegment(context,newValue);
+                        },
+                        groupValue: segmentValue,
+                        padding: const EdgeInsets.only(
+                            right: 24,left: 24,bottom: 16),
+                        borderColor: Colors.grey,
+                        selectedColor: primaryColor,
+                      );
+                      }
+
+                  ),
+                ),
               ///メリットアイコン
                 IconTitle(
                   title: 'メリット',
@@ -120,7 +146,9 @@ class CompareScreen extends StatelessWidget {
 //                Selector<CompareViewModel, String>(
 //                    selector: (context, viewModel) => viewModel.way1Title,
                     builder: (context, viewModel, child) {
-                      return FutureBuilder( //material
+                      return
+                        (viewModel.segmentValue == '0'||viewModel.segmentValue == '1')
+                        ? FutureBuilder( //material
                         future: viewModel
                         .getWay1MeritDesc(comparisonOverview.comparisonItemId),
                         builder:
@@ -148,14 +176,17 @@ class CompareScreen extends StatelessWidget {
                             return Container();
                           }
                         },
-                      );
+                      )
+                      :Container();
                     }),
                 ///way2 メリット
                 Consumer<CompareViewModel>(
 //                Selector<CompareViewModel, String>(
 //                  selector: (context, viewModel) => viewModel.way2Title,
                   builder: (context, viewModel, child) {
-                    return FutureBuilder(
+                    return
+                      (viewModel.segmentValue == '0'||viewModel.segmentValue == '2')
+                      ? FutureBuilder(
                       future: viewModel
                         .getWay2MeritDesc(comparisonOverview.comparisonItemId),
                       builder:
@@ -180,7 +211,8 @@ class CompareScreen extends StatelessWidget {
                           )
                           : Container();
                       },
-                    );
+                    )
+                    :Container();
                   },
                 ),
                 const SizedBox(
@@ -195,7 +227,9 @@ class CompareScreen extends StatelessWidget {
               ///way1 デメリット
                 Consumer<CompareViewModel>(
                   builder: (context, viewModel, child) {
-                    return FutureBuilder(
+                    return
+                      (viewModel.segmentValue == '0'||viewModel.segmentValue == '1')
+                      ? FutureBuilder(
                       future:
                       viewModel.getWay1DemeritDesc(
                           comparisonOverview.comparisonItemId),
@@ -221,13 +255,16 @@ class CompareScreen extends StatelessWidget {
                         )
                             : Container();
                       },
-                    );
+                    )
+                    :Container();
                   },
                 ),
               ///way2 デメリット
                 Consumer<CompareViewModel>(
                   builder: (context, viewModel, child) {
-                    return FutureBuilder(
+                    return
+                      (viewModel.segmentValue == '0'||viewModel.segmentValue == '2')
+                      ? FutureBuilder(
                       future:
                       viewModel.getWay2DemeritDesc(
                           comparisonOverview.comparisonItemId),
@@ -253,7 +290,8 @@ class CompareScreen extends StatelessWidget {
                         )
                             : Container();
                       },
-                    );
+                    )
+                    :Container();
                   },
                 ),
                 //todo 自己評価&TablePart widget分割
@@ -265,16 +303,22 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(height: 4,),
               ///テーブル
                 //todo  width: MediaQuery.of(context).size.width*0.8の形に変更
-                TablePart(
-                  way1Title: comparisonOverview.way1Title,
-                  //way1Merit以外はTablePart内でviewModelへsetしている
-                  way1MeritChanged: (newValue) =>
-                      _setWay1Merit(context, newValue),
-                  way1MeritEvaluate: comparisonOverview.way1MeritEvaluate,
-                  way1DemeritEvaluate: comparisonOverview.way1DemeritEvaluate,
-                  way2Title: comparisonOverview.way2Title,
-                  way2MeritEvaluate: comparisonOverview.way2MeritEvaluate,
-                  way2DemeritEvaluate: comparisonOverview.way2DemeritEvaluate,
+                //way1Title,way2Title名編集時に即時反映させる=>Consumer
+                Consumer<CompareViewModel>(
+                 builder: (context, viewModel, child) {
+                  return
+                    TablePart(
+                      comparisonItemId: comparisonOverview.comparisonItemId,
+                      way1Title: viewModel.way1Title,
+                      way1MeritEvaluate: comparisonOverview.way1MeritEvaluate,
+                      way1DemeritEvaluate:
+                      comparisonOverview.way1DemeritEvaluate,
+                      way2Title: viewModel.way2Title,
+                      way2MeritEvaluate: comparisonOverview.way2MeritEvaluate,
+                      way2DemeritEvaluate:
+                      comparisonOverview.way2DemeritEvaluate,
+                      );
+                    }
                 ),
                 //todo 結論&ConclusionInputPart widget分割
                 const SizedBox(
@@ -291,11 +335,17 @@ class CompareScreen extends StatelessWidget {
                   height: 4,
                 ),
               ///結論TextArea:MaterialForm
-                ConclusionInputPart(
-                  conclusion: comparisonOverview.conclusion,
-                  //非同期でviewModelへ設定しにいかないと値保存できない
-                  inputChanged: (newConclusion) =>
-                      _conclusionInputChanged(context, newConclusion),
+                Selector<CompareViewModel, String>(
+                  selector: (context, viewModel) => viewModel.conclusion,
+                    builder: (context, conclusion, child) {
+                    return ConclusionInputPart(
+                      conclusion: comparisonOverview.conclusion,
+                      //非同期でviewModelへ設定しにいかないと値保存できない
+                      inputChanged: (newConclusion) =>
+                          _conclusionInputChanged(context, newConclusion,
+                            comparisonOverview.comparisonItemId,),
+                    );
+                    }
                 ),
                 const SizedBox(height: 16,),
               ///タグエリア
@@ -314,11 +364,13 @@ class CompareScreen extends StatelessWidget {
                      }
                  ),
               ///保存ボタン
-                //todo ConstrainedBoxでボタンサイズ可変
                 Center(
                   child: RaisedButton(
                       child: const Text('保存'),
                       color: accentColor,
+                      shape:
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
                       onPressed: () {
                         return _saveItem(
                           context,
@@ -346,22 +398,20 @@ class CompareScreen extends StatelessWidget {
     //ComparisonOverviewをviewModel側から保存に変更
     ///表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
     await viewModel.saveComparisonItem(comparisonOverview);
+    //todo 完了アイコンの入ったトースト表示
     await Fluttertoast.showToast(
+      gravity: ToastGravity.CENTER,
       msg: '保存完了',
     );
   }
 
   //conclusion変更されたらset
   Future<void> _conclusionInputChanged(
-      BuildContext context, String newConclusion) async {
+      BuildContext context, String newConclusion,String comparisonItemId,)
+  async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.setConclusion(newConclusion);
-  }
-
-  //TablePartのway1Merit変更されたらset
-  Future<void> _setWay1Merit(BuildContext context, int newValue) async {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.setWay1MeritNewValue(newValue);
+    await viewModel.setConclusion(newConclusion:newConclusion,
+        comparisonItemId: comparisonItemId);
   }
 
   ///Accordion中の選択したリストの詳細が変更されたらset
@@ -415,6 +465,12 @@ class CompareScreen extends StatelessWidget {
       ..isWay2DemeritFocusList = false
       ..isWay3MeritFocusList = false
       ..isWay3DemeritFocusList = false;
+  }
+
+  ///選択したsegmentに更新
+  Future<void> _selectSegment(BuildContext context,String newValue) async{
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.selectSegment(newValue);
   }
 
 

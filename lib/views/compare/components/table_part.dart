@@ -9,15 +9,16 @@ import 'package:provider/provider.dart';
 ///Statefulへ変更:余裕あればSelector導入
 class TablePart extends StatefulWidget {
    const TablePart({
+     this.comparisonItemId,
      this.way1Title,
      this.way1MeritEvaluate,
      this.way1DemeritEvaluate,
      this.way2Title,
      this.way2MeritEvaluate,
      this.way2DemeritEvaluate,
-     this.way1MeritChanged,
   });
 
+    final String comparisonItemId;
     final String way1Title;
     final int way1MeritEvaluate;
     final int way1DemeritEvaluate;
@@ -25,12 +26,6 @@ class TablePart extends StatefulWidget {
     final int way2MeritEvaluate;
     final int way2DemeritEvaluate;
 
-
-  /// CompareScreenへ値を渡して保存
-   final Function(int) way1MeritChanged;
-//   final Function(int) way1DemeritChanged;
-//   final Function(int) way2MeritChanged;
-//   final Function(int) way2DemeritChanged;
 
   @override
   _TablePartState createState() => _TablePartState();
@@ -51,13 +46,9 @@ class _TablePartState extends State<TablePart> {
     Image.asset('assets/images/round.png'),
     Image.asset('assets/images/triangle.png'),
     Image.asset('assets/images/cross.png'),
+    Image.asset('assets/images/double_cross.png'),
   ];
 
-
-//  String way1MeritDisplay = '';
-//  String way1DemeritDisplay = '';
-//  String way2MeritDisplay = '';
-//  String way2DemeritDisplay = '';
 
   Image way1MeritDisplay = Image.asset('assets/images/blank.png');
   Image way1DemeritDisplay = Image.asset('assets/images/blank.png');
@@ -91,6 +82,11 @@ class _TablePartState extends State<TablePart> {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Table(
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+//        columnWidths: const <int, TableColumnWidth>{
+//          0: FixedColumnWidth(1),
+//          1: FixedColumnWidth(1),
+//          2: FixedColumnWidth(1),
+//        },
         border: TableBorder.all(),
         children: [
           ///タイトル行
@@ -127,49 +123,45 @@ class _TablePartState extends State<TablePart> {
             ///way1MeritEvaluate
             //高さを設定しないと'!_debugDoingThisLayout': is not true.エラー
             SizedBox(
-                height: 50,
+                height: 48,
                 //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
-                child: Row(children: [
+                child:
+                Row(
+                    children: [
+                      const SizedBox(width: 16,),
                   Expanded(
                       flex: 2,
-                      child:  way1MeritDisplay,
-//                      Text(
-//                        way1MeritDisplay,
-//                        style: const TextStyle(fontSize: 40),
-//                        textAlign: TextAlign.right,
-//                      )
-                  ),
- //todo EvaluateDropdownで選択したときもフォーカス外す(キーボード下げる)
+                      child: way1MeritDisplay,),
+
                   Expanded(
                       flex: 1,
-                      child: EvaluateDropdown(
-                        initialValue:
-                            widget.way1MeritEvaluate,
+                      child:
+                      EvaluateDropdown(
+                        initialValue:widget.way1MeritEvaluate,
                         onSelected: (newValue) {
-                          print('newValueをsetState:$newValue');
-                          widget.way1MeritChanged(newValue);
                           setState(() {
                             way1MeritDisplay = evaluates[newValue];
-                        // CompareScreenへ渡さずに直接viewModel側に保存でも可
-//                            viewModel.setWay1MeritNewValue(newValue);
+                            // CompareScreenへ渡さずに直接viewModel側に保存
+                            viewModel.setWay1MeritNewValue(
+                                widget.comparisonItemId,newValue);
                           });
                         },
-                      )),
-                ])),
+                      ),
+                  ),
+                      const SizedBox(width: 8,),
+                ])
+            ),
             ///way1DemeritEvaluate
             SizedBox(
-                height: 50,
+                height: 48,
                 //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
                 child: Row(children: [
+                  const SizedBox(width: 16,),
                   Expanded(
                       flex: 2,
                       child:  way1DemeritDisplay,
-//                      Text(
-//                        way1DemeritDisplay,
-//                        style: const TextStyle(fontSize: 40),
-//                        textAlign: TextAlign.right,
-//                      )
                   ),
+                  // EvaluateDropdownで選択したときもフォーカス外す(キーボード下げる)
                   Expanded(
                       flex: 1,
                       child: EvaluateDropdown(
@@ -178,10 +170,12 @@ class _TablePartState extends State<TablePart> {
                           print(newValue);
                           setState(() {
                             way1DemeritDisplay = evaluates[newValue];
-                            viewModel.setWay1DemeritNewValue(newValue);
+                            viewModel.setWay1DemeritNewValue(
+                                widget.comparisonItemId,newValue);
                           });
                         },
                       )),
+                  const SizedBox(width: 8,),
                 ])),
           ]),
 
@@ -199,17 +193,13 @@ class _TablePartState extends State<TablePart> {
 
             ///way2MeritEvaluate
             SizedBox(
-                height: 50,
+                height: 48,
                 //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
                 child: Row(children: [
+                  const SizedBox(width: 16,),
                   Expanded(
                       flex: 2,
                       child: way2MeritDisplay,
-//                      Text(
-//                        way2MeritDisplay,
-//                        style: const TextStyle(fontSize: 40),
-//                        textAlign: TextAlign.right,
-//                      )
                   ),
                   Expanded(
                       flex: 1,
@@ -219,25 +209,23 @@ class _TablePartState extends State<TablePart> {
                           print(newValue);
                           setState(() {
                             way2MeritDisplay = evaluates[newValue];
-                            viewModel.setWay2MeritNewValue(newValue);
+                            viewModel.setWay2MeritNewValue(
+                                widget.comparisonItemId,newValue);
                           });
                         },
                       )),
+                  const SizedBox(width: 8,),
                 ])),
 
             ///way2DemeritEvaluate
             SizedBox(
-                height: 50,
+                height: 48,
                 //Tableの中でRowを幅に合わせるなら要素にExpandedかFlexible必要
                 child: Row(children: [
+                  const SizedBox(width: 16,),
                   Expanded(
                       flex: 2,
                       child:   way2DemeritDisplay,
-//                      Text(
-//                        way2DemeritDisplay,
-//                        style: const TextStyle(fontSize: 40),
-//                        textAlign: TextAlign.right,
-//                      )
                   ),
                   Expanded(
                       flex: 1,
@@ -247,10 +235,12 @@ class _TablePartState extends State<TablePart> {
                           print(newValue);
                           setState(() {
                             way2DemeritDisplay = evaluates[newValue];
-                            viewModel.setWay2DemeritNewValue(newValue);
+                            viewModel.setWay2DemeritNewValue(
+                                widget.comparisonItemId,newValue);
                           });
                         },
                       )),
+                  const SizedBox(width: 8,),
                 ])),
           ]),
         ],
