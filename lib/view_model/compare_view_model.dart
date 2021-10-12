@@ -474,6 +474,8 @@ class CompareViewModel extends ChangeNotifier {
   ///CompareScreenで表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
   //todo favorite,way3追加
   Future<void> saveComparisonItem(ComparisonOverview updateOverview) async {
+
+    //値を変更した時だけ更新=>現状どの項目も変更時自動保存（保存押しても時間だけ変更）
     final saveOverview = ComparisonOverview(
       comparisonItemId: updateOverview.comparisonItemId,
       itemTitle: itemTitle,

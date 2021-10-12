@@ -398,7 +398,9 @@ class CompareScreen extends StatelessWidget {
     //ComparisonOverviewをviewModel側から保存に変更
     ///表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
     await viewModel.saveComparisonItem(comparisonOverview);
+    //todo 完了アイコンの入ったトースト表示
     await Fluttertoast.showToast(
+      gravity: ToastGravity.CENTER,
       msg: '保存完了',
     );
   }
