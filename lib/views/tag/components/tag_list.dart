@@ -49,6 +49,7 @@ class TagList extends StatelessWidget {
         )
       ],
       child: Container(
+        //todo Container内部の余白調整でListTile幅をタイトに
         //flutterのverが低いのでListTileのtileColorなし
         decoration: BoxDecoration(
           color: //ここでswitch使えない=>即時関数:https://yumanoblog.com/flutter-if-switch/
@@ -81,7 +82,7 @@ class TagList extends StatelessWidget {
         child: ListTile(
           leading: Icon(
             CupertinoIcons.tag_solid,
-            size: 40,
+            size: 36,
             color: primaryColor,
           ),
           title: (() {

@@ -32,7 +32,7 @@ class ListPage extends StatelessWidget {
             builder: (context, editStatus, child) {
               return (editStatus == ListEditMode.display)
                   ? const Text(
-                      'リスト',
+                      'アイテムリスト',
                       style: middleTextStyle,
                     )
                   : const Text(

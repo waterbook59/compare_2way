@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 
 class NavBarIconTitle extends StatelessWidget {
 
-  const NavBarIconTitle({this.tagTitle,this.titleIcon});
+  const NavBarIconTitle({this.tagTitle,this.titleIcon,this.rightPadding});
   final String tagTitle;
   final IconData titleIcon;
+  final double rightPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class NavBarIconTitle extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(width: 48,)
+         SizedBox(width: rightPadding,)
       ],
     );
   }
