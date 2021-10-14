@@ -29,9 +29,9 @@ class TagDialogPage extends StatelessWidget {
                 CupertinoIcons.clear_thick_circled,
                 color: Colors.white,
               ),
-              onTap: () =>Navigator.pop(context)
+              onTap: () =>_cancelPage(context),
           ),
-          middle: const Text('タグの追加・編集',style: middleTextStyle),
+          middle: const Text('タグの追加・削除',style: middleTextStyle),
 
           //CupertinoButtotonに変更でtrailingの'完了'の下が切れない..
           // 完了ボタン押した時にTagInputChip入力中の項目も追加されるように(キーボード完了よりこっちをおしてしまう)
@@ -113,6 +113,13 @@ class TagDialogPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _cancelPage(BuildContext context) {
+    Navigator.pop(context);
+    //todo viewModel側のtempoDisplayListは削除が必要
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+    ..clearTempoList();
   }
 
 }

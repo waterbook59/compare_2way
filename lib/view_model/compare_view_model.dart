@@ -757,6 +757,13 @@ class CompareViewModel extends ChangeNotifier {
    _deleteTagList = [];
   }
 
+  //tagDialogPageでキャンセルした時に_tempoDisplayListを空に
+  void clearTempoList(){
+    _tempoDisplayList=[];
+    _tempoDeleteList=[];
+  }
+
+
   ///TagPageのFutureBuilder用
   Future<List<TagChart>> getAllTagList() async {
     //ordrybyで登録時間順で取得
