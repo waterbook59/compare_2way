@@ -98,6 +98,7 @@ class CompareScreen extends StatelessWidget {
               ///タイトル:itemTitleに変更があったときだけrebuildされる
                 screenEditMode ==ScreenEditMode.fromListPage
                 ? Container()
+                //TagPage側から
                 :Selector<CompareViewModel, String>(
                   selector: (context, viewModel) => viewModel.itemTitle,
                   builder: (context, itemTitle, child) {
