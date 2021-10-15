@@ -117,7 +117,7 @@ class TagDialogPage extends StatelessWidget {
 
   void _cancelPage(BuildContext context) {
     Navigator.pop(context);
-    //todo viewModel側のtempoDisplayListは削除が必要
+    //viewModel側のtempoDisplayList,tempoDeleteListは削除が必要
     final viewModel = Provider.of<CompareViewModel>(context, listen: false)
     ..clearTempoList();
   }

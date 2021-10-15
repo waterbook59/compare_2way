@@ -257,6 +257,22 @@ class CompareRepository {
     }
   }
 
+  ///時間だけ更新
+  Future<void> updateTime(ComparisonOverview updateOverview)async{
+    try{
+      final comparisonOverviewRecord =
+      updateOverview.toComparisonOverviewRecord(updateOverview);
+      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+        comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
+        createdAt: Value(comparisonOverviewRecord.createdAt),
+      );
+      await _comparisonItemDao.saveComparisonOverviewDB(
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+    }on SqliteException catch (e) {
+      print('repository保存エラー:${e.toString()}');
+    }
+  }
+
   //todo createComparisonOverviewと結合,way3List追加
   ///新規作成 way1MeritList,way2MeritList
   Future<void> createDescList(
@@ -519,6 +535,7 @@ class CompareRepository {
 
   ///新規作成 List<Tag>
   //todo タグ追加したらcreatedAt変更
+  //todo repo側でupdateOverview作成してDatetime更新(deleteTagメソッドでも同じ)
   ///同一comparisonItemId & 同一tagTitleは登録しないが、同一tagTitleは登録できるように変更
   Future<void> createTag(List<String> tempoDisplayList, String comparisonItemId)
   async {
@@ -554,8 +571,15 @@ class CompareRepository {
       // insertOnConflictUpdateが良い(毎回UNIQUE constraint failedエラー発生するので)
       await _comparisonItemDao
           .insertTagRecordList(tagRecordList);
-
-      print('repository:tagListを新規登録');
+      ///tag新規登録したら時間更新(tagListに新規追加がある場合)
+      if(tagList.isNotEmpty) {
+        final updateOverview = ComparisonOverview(
+          comparisonItemId: comparisonItemId,
+          createdAt: DateTime.now(),
+        );
+        await updateTime(updateOverview);
+      }
+        print('repository:tagListを新規登録');
     } on SqliteException catch (e) {
       print('tagList登録時repositoryエラー:${e.toString()}');
     }

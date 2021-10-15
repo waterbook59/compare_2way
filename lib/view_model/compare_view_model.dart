@@ -62,6 +62,7 @@ class CompareViewModel extends ChangeNotifier {
   String addTagTitle;
 
  ///CompareScreenで使用
+  //tagDialogPageの下で先に登録のあるタグの候補表示する
   List<String> candidateTagNameList = <String>[];
 //  List<String> get candidateTagNameList =>_candidateTagNameList;
   List<Tag> _tagList = <Tag>[];//CompareScreenでのIDに紐づく選択済リスト
@@ -664,6 +665,7 @@ class CompareViewModel extends ChangeNotifier {
     }
     print('viewModelのcreateTag時のtempoDisplayList:$_tempoDisplayList');
 
+    //repo側でupdateOverview作成してDatetime更新(deleteTagメソッドでも同じ)
     await _compareRepository.createTag(
         _tempoDisplayList,comparisonOverview.comparisonItemId);
     ///タグを空にして完了おしてもTagがでてくるので追加
@@ -757,7 +759,7 @@ class CompareViewModel extends ChangeNotifier {
    _deleteTagList = [];
   }
 
-  //tagDialogPageでキャンセルした時に_tempoDisplayListを空に
+  //tagDialogPageで左上でキャンセルした時に_tempoDisplayListを空に
   void clearTempoList(){
     _tempoDisplayList=[];
     _tempoDeleteList=[];
@@ -809,10 +811,12 @@ class CompareViewModel extends ChangeNotifier {
 
   ///TagPage=>SelectTagPage
   Future<void> onSelectTag(String tagTitle) async{
+    ///tag名を元にDBからList<Tag>=>comparisonIdのリスト
+    ///=>idリストを元にDBからList<Overview>をviewModelに格納
     selectTagTitle = tagTitle;
     _selectOverviews =[];
     //tagTitleを元にList<Tag>を取得(更新順)
-    // todo ListPage(_comparisonOverviews)とSelectListPage(_selectOverviews)のcreatedAtが異なることでリスト表示が違う
+    //ListPage(_comparisonOverviews)もSelectTagPage(_selectOverviews)もcreatedAtはidを元にDBからとってくるので同じ
     //タグが追加された順になっている(一方で更新されたものほど上に来た方が使い勝手いいかも(ascでなくてdesc))
     _selectTagList =await _compareRepository.onSelectTag(tagTitle);
     print('viewModel/onSelectTag:${_selectTagList.map((e) => e.tagTitle)}');
