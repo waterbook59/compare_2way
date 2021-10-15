@@ -3,6 +3,7 @@ import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
+import 'package:compare_2way/views/common/nav_bar_icon_title.dart';
 import 'package:compare_2way/views/compare/components/sub/tag_chips.dart';
 import 'package:compare_2way/views/compare/components/sub/candidate_tag.dart';
 import 'package:compare_2way/views/tag/components/tag_list.dart';
@@ -31,7 +32,8 @@ class TagDialogPage extends StatelessWidget {
               ),
               onTap: () =>_cancelPage(context),
           ),
-          middle: const Text('タグの追加・削除',style: middleTextStyle),
+          middle: const NavBarIconTitle(tagTitle:'タグの追加・削除',
+            titleIcon: CupertinoIcons.tag,),
 
           //CupertinoButtotonに変更でtrailingの'完了'の下が切れない..
           // 完了ボタン押した時にTagInputChip入力中の項目も追加されるように(キーボード完了よりこっちをおしてしまう)
