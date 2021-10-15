@@ -755,6 +755,15 @@ class CompareViewModel extends ChangeNotifier {
 //    print('deleteTagメソッドで消すリスト:'
 //        '${deleteTagList.map((e) => e.tagTitle).toList()}');
     await _compareRepository.deleteTag(deleteTagList);
+    ///deleteTagListが空じゃない時、更新日時を更新(createTagはrepoで実施)
+    if(deleteTagList.isNotEmpty) {
+      final updateOverview = ComparisonOverview(
+        comparisonItemId: comparisonItemId,
+        createdAt: DateTime.now(),
+      );
+      await _compareRepository.updateTime(updateOverview);
+    }
+
     _tempoDeleteList = [];
    _deleteTagList = [];
   }
