@@ -31,7 +31,6 @@ class TagPage extends StatelessWidget {
         trailing:
         //タグ名編集時にキーボードunFocusできるアイコン追加(viewModel経由=>Consumerに訴える)
         //編集モード(true)の時はリストをタップするとTagListのtagTitle部を編集する形に
-        //todo 削除モードで削除表示追加
          TagEditButtonAction(),
       ),
 
@@ -119,7 +118,6 @@ class TagPage extends StatelessWidget {
                     child: ConstrainedBox(
                       constraints:
                       BoxConstraints(minHeight: constraints.maxHeight),
-                      //todo FutureBuilder getTagChartList
                       child: FutureBuilder(
                         future: compareViewModel.getTagChartList(),
                         builder: (context,

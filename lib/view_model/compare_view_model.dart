@@ -978,14 +978,12 @@ class CompareViewModel extends ChangeNotifier {
   }
 
 
-  ///TagPage編集=>削除・並び替え画面での削除候補リスト
-  ///方法1.Tapしてチェック=>deleteTagListへ格納、
-  ///     チェック済=>tagTitleが重複しているTagをdeleteTagListから削除:難
-  ///方法2.Tapしてチェック=>tempoDeleteListへtagTitleのみ格納
-  ///tagEditButtonActionで完了=>tagTitleでDBからList<ComparisonItemId>格納(重複削除)
-  ///    tempoDeleteListをTag化してonDeleteTagでDBから削除、
-  ///    同時にList<ComparisonItemId>からidに紐づく更新日時変更
-  //todo tempoDeleteListへtagTitle格納=>deleteTagListへ格納 deleteSelectTagで削除実行&紐づいたItemの更新日時の更新
+  ///TagPage編集=>選択削除・並び替え画面での削除候補のチェック
+  //方法1.Tapしてチェック=>deleteTagListへ格納、
+  //     チェック済=>tagTitleが重複しているTagをdeleteTagListから削除:難
+  //方法2.Tapしてチェック=>tempoDeleteListへtagTitleのみ格納
+  //tagTitleでDBからdeleteItemIdListにcomparisonItemId格納
+  //deleteSelectTagListで削除=>deleteItemIdListの重複削除し、List<Tag>に変換して削除
   Future<void> checkDeleteTag(String tagTitle) async{
     ///tagTitleをリストに追加・削除を行う
     ///comparisonItemIdをリストに追加・削除を行う(ListPage削除用のdeleteItemIdListを借りる)
@@ -1006,7 +1004,7 @@ class CompareViewModel extends ChangeNotifier {
       //tagTitle新たにチェック
       _tempoDeleteList.add(tagTitle);
       //todo getAllTagListでitemIdListに格納することでDBからとらなくていい
-  //List<TagChart>内にidListないとonSelectTagみたいにtagTitleを使ってDBからとるしかない
+  //tagChartList内にidList格納できないとonSelectTagみたいにtagTitleを使ってDBからとるしかない
       _selectTagList =await _compareRepository.onSelectTag(tagTitle);
       _selectTagList.map((tag) =>
           deleteItemIdList.add(tag.comparisonItemId)).toList();
@@ -1029,7 +1027,7 @@ class CompareViewModel extends ChangeNotifier {
     }).toList();
 
     await _compareRepository.deleteSelectTagList(deleteTagList);
-    //todo 削除時、紐づいたitemIdの更新日時を更新(mapでやるとListでrepoに渡す必要あり)
+    //削除時、紐づいたitemIdの更新日時を更新(mapでやるとListでrepoに渡す必要あり)
     if(deleteTagList.isNotEmpty) {
       await Future.forEach(deleteItemIdList, (String id){
         final updateOverview = ComparisonOverview(
