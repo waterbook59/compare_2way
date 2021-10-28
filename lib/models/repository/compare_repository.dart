@@ -1,5 +1,6 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/dragging_item_data.dart';
+import 'package:compare_2way/data_models/dragging_tag_chart.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
@@ -646,7 +647,8 @@ class CompareRepository {
       print('tagList削除時repositoryエラー:${e.toString()}');
     }
   }
-  //todo ListPage編集並び替え後のDBの順番入れ替え、まずdataIdで行ってみる
+  /// ListPage編集並び替え後のDBの順番入れ替え、まずdataIdで行ってみる
+  //todo comparisonOverviewsはRecordへ変換した方がよい
   Future<void> changeCompareListOrder(
       List<ComparisonOverview> comparisonOverviews,
       List<DraggingItemData> draggingItems) async{
@@ -684,6 +686,62 @@ class CompareRepository {
     }on SqliteException catch (e) {
       print('repository更新エラー:${e.toString()}');
     }
+  }
+
+
+  /// TagPage編集並び替え後のDBの順番入れ替え
+  Future<void> changeTagListOrder(
+      List<Tag> allTagList,
+      List<DraggingTagChart> draggingTags) async{
+    try{
+      //draggingItemsをrepositoryにそのまま渡してcomparisonItemId順にdataIdを更新する
+      for (var i = 0; i < draggingTags.length; ++i) {
+        final itemTagTitle = draggingTags[i].tagTitle;
+        ///並び替え時のdataIdの重複さけるのにリスト数を足して外す
+        final newDataId = allTagList[i].tagId+ draggingTags.length;
+        //todo 変更 たぶんTagCompanion
+        final overviewCompanion = ComparisonOverviewRecordsCompanion(
+          ///ここにcomparisonOverviewsのdataIdを割り当てる
+          // dataIdに同じ値があるとautoIncrementしてるので、UNIQUE制約でエラー
+          dataId: Value(newDataId),
+        );
+//      print('newId:$newDataId/id:$itemId/companion:$overviewCompanion');
+//            print('draggingItems.length:${draggingItems.length}/plusId:$newDataId/id:$itemId');
+
+//        await _comparisonItemDao.changeTagListOrder(
+//            itemTagTitle, overviewCompanion);
+      }
+
+      ///comparisonOverviewのdataIdから引くのではなく、そのまま登録
+//      for (var u = 0; u < draggingItems.length; ++u) {
+//        final itemId = draggingItems[u].comparisonItemId;
+//        //引くならcomparisonOverviews[u].dataIdではなく、上でDB登録したnewDataIdから
+//        final dataId = comparisonOverviews[u].dataId;
+//        final overviewCompanion = ComparisonOverviewRecordsCompanion(
+//          dataId: Value(dataId),
+//        );
+////      print('draggingItems.length:${draggingItems.length}/minusId:$dataId/id:$itemId');
+//        await _comparisonItemDao.changeCompareListOrder(
+//            itemId, overviewCompanion);
+//      }
+
+
+    }on SqliteException catch (e) {
+      print('repository更新エラー:${e.toString()}');
+    }
+  }
+  /// TagPage選択行削除 //todo deleteItemList,deleteTag参照
+  Future<void> deleteSelectTagList(List<Tag> deleteTagList) async{
+    try {
+      //List<Tag>=>List<TagRecord>へ変換保存
+      final deleteTagRecordList =
+      deleteTagList.toTagRecordList(deleteTagList);
+      await _comparisonItemDao.deleteSelectTagList(deleteTagRecordList);
+    } on SqliteException catch (e) {
+      print('tagList削除時repositoryエラー:${e.toString()}');
+    }
+
+
   }
 
 

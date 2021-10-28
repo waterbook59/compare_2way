@@ -40,7 +40,7 @@ class TagEditButtonAction extends StatelessWidget {
                               ),
                               CupertinoActionSheetAction(
                                 child: const Text(
-                                  '削除',
+                                  '並び替えと削除',
                                   style: actionSheetCationTextStyle,
                                 ),
                                 onPressed: () {
@@ -78,7 +78,34 @@ class TagEditButtonAction extends StatelessWidget {
                );
                 break;
               case TagEditMode.tagDelete:
-                return CupertinoButton(
+                return
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CupertinoButton(
+                        child: const Text(
+                          '削除',
+                          style: TextStyle(
+                              fontFamily: regularFontJa,
+                              fontSize: 16,
+                              color: Colors.redAccent),
+                        ),
+                        onPressed: () => _deleteSelectTagList(context),
+                        padding: const EdgeInsets.all(8),
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      CupertinoButton(
+                        child: const Text('戻る', style: trailingTextStyle),
+                        onPressed: () => _changeEdit(context),//押したら通常モードへ変更
+                        //押したら通常モードへ変更
+                        padding: const EdgeInsets.all(8),
+                      ),
+                    ],
+                  );
+
+                  CupertinoButton(
                   child: const Text('完了', style: trailingTextStyle),
                   onPressed: ()=>_changeEdit(context),//押したら通常モードへ変更
                   padding: const EdgeInsets.all(8),);
@@ -179,6 +206,11 @@ class TagEditButtonAction extends StatelessWidget {
       ..unFocusTagPageList();
   }
 
+  //TagPage選択行削除
+  Future<void> _deleteSelectTagList(BuildContext context) async{
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    await viewModel.deleteSelectTagList();
+  }
 
 
 }
