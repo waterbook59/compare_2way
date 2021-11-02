@@ -24,6 +24,7 @@ class CompareRepository {
   List<Way2Demerit> _way2DemeritList = <Way2Demerit>[];
   List<Tag> _tagList = <Tag>[];
   List<Tag> _selectTagList = <Tag>[];
+  List<TagChart> _tagChartList = <TagChart>[];
 
 
   ///新規作成 comparisonOverview
@@ -605,7 +606,7 @@ class CompareRepository {
       print('tagList削除時repositoryエラー:${e.toString()}');
     }
   }
-
+  ///Read List<Tag>
   Future<List<Tag>> getAllTagList() async{
     final tagRecordList = await _comparisonItemDao.getAllTagList();
     return _tagList = tagRecordList.toTagList(tagRecordList);
@@ -617,6 +618,27 @@ class CompareRepository {
     //List<TagRecord>=>List<Tag>
     return _selectTagList = selectTagRecordList.toTagList(selectTagRecordList);
   }
+  ///新規作成 List<TagChart>
+  Future<void> createTagChart(List<TagChart> tagChartList)async{
+    try{
+      //List<TagChart>=>List<TagChartDB>
+      final tagChartRecordList = tagChartList.toTagChartRecordList(tagChartList);
+      await _comparisonItemDao.createTagChart(tagChartRecordList);
+      print('repository/createTagChartも作成');
+    }on SqliteException catch (e) {
+      print('repository更新エラー/createTagChart:${e.toString()}');
+    }
+  }
+
+  ///Read List<TagChart>
+  Future<List<TagChart>> getAllTagChartList() async{
+    final tagChartRecordList = await _comparisonItemDao.getAllTagChartList();
+    return
+      _tagChartList = tagChartRecordList.toTagChartList(tagChartRecordList);
+  }
+
+
+
   ///更新 Tag List<TagChart>=>TagRecordsCompanion
   Future<void> updateTagTitle(
       List<Tag> selectTagList,String newTagTitle) async{
@@ -648,7 +670,7 @@ class CompareRepository {
     }
   }
   /// ListPage編集並び替え後のDBの順番入れ替え、まずdataIdで行ってみる
-  //todo comparisonOverviewsはRecordへ変換した方がよい
+  //todo comparisonOverviewsはRecordへ,draggingItemsも変換した方がよい
   Future<void> changeCompareListOrder(
       List<ComparisonOverview> comparisonOverviews,
       List<DraggingItemData> draggingItems) async{

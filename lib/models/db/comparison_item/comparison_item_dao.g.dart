@@ -18,4 +18,5 @@ mixin _$ComparisonItemDaoMixin on DatabaseAccessor<ComparisonItemDB> {
   $Way2DemeritRecordsTable get way2DemeritRecords =>
       attachedDatabase.way2DemeritRecords;
   $TagRecordsTable get tagRecords => attachedDatabase.tagRecords;
+  $TagChartRecordsTable get tagChartRecords => attachedDatabase.tagChartRecords;
 }

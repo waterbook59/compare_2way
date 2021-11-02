@@ -71,7 +71,7 @@ class ListPage extends StatelessWidget {
                         ///viewModel.comparisonOverviews.isEmptyだとEmptyView通ってしまう
                         ///あくまでFutureBuilderで待った結果（snapshot.data）で条件分けすべき
                         if (snapshot.hasData && snapshot.data.isEmpty) {
-                          print('ListPage/EmptyView側通って描画');
+//                          print('ListPage/EmptyView側通って描画');
                           return Container(
                               child:
                                   const Center(child: Text('アイテムを追加してください')));

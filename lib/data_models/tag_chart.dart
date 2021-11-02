@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class TagChart{
   TagChart({
+    this.dataId,
     this.tagTitle,
     this.tagAmount,
     this.itemIdList,
@@ -9,6 +10,7 @@ class TagChart{
 //    this.createdAt,
   });
 
+  final int dataId;
   final String tagTitle;
   final int tagAmount;//同じタグをもつリストの総数
   final List<String> itemIdList;//同じタグをもつcomparisonItemIdのリスト

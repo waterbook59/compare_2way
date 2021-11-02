@@ -679,6 +679,32 @@ class CompareViewModel extends ChangeNotifier {
     ///残っているとtempoDisplayListにaddされ続けてしまう
     _tempoInput ='';
     //新規作成のときはnotifyListenersいらない？取得の時のみ？
+
+    //todo tagChartを並び替えできるようにgetAllTagListではなくここでtagChartもdataIdを割り当ててDB登録する(myFocusNodeの割り当てだけgetAllTagListで)
+    //todo 登録がどんどん追加されていってしまう(title同じの場合、DBでは更新が必要)
+    //ordrybyで登録時間順で取得
+    _allTagList = await _compareRepository.getAllTagList();
+    final tagAllTitleList = <String>[];
+    _tagChartList =[];//編集=>完了でどんどん増えていってしまうので
+    _allTagList.map((tag) {
+      return tagAllTitleList.add(tag.tagTitle);
+    }).toList();
+
+    final tagSummary =<String, int>{};//Map<String,int>
+    //重複タイトルの数を数えてMap型に格納
+    //参照:https://www.fixes.pub/program/268895.html
+    //.where参照:https://qiita.com/dennougorilla/items/170deacf178891ced41e
+    tagAllTitleList.toSet().toList().forEach(
+            (st)=> tagSummary[st]=
+            tagAllTitleList.where((i)=> i== st).length);
+    //Map<String,dynamic> =>List<TagChart>参考:https://qiita.com/7_asupara/items/01c29c006556e89f5b17
+    tagSummary.forEach((key, amount) =>
+        _tagChartList.add(TagChart(
+          tagTitle: key,
+          tagAmount: amount,
+        )));
+    await _compareRepository.createTagChart(_tagChartList);
+
   }
 
 
@@ -723,7 +749,6 @@ class CompareViewModel extends ChangeNotifier {
 //    await onSelectTag(selectTagTitle);
     notifyListeners();
   }
-
 
   ///tagChipsで削除するTagを登録
   Future<void> createDeleteList(
@@ -781,48 +806,53 @@ class CompareViewModel extends ChangeNotifier {
     _tempoDeleteList=[];
   }
 
-
   ///TagPageのFutureBuilder用
-  Future<List<TagChart>> getAllTagList() async {
-    //ordrybyで登録時間順で取得
-    _allTagList = await _compareRepository.getAllTagList();
-    print('viewModel.getTagAllList:${_allTagList.map((e) => e.tagTitle)}');
+  Future<List<TagChart>> getAllTagChartList() async {
+    _tagChartList = await _compareRepository.getAllTagChartList();
+    print('getAllTagChartList/tagChart:${_tagChartList.map((tagChart) => tagChart.tagTitle)}');
 
     //TagPageを表示する手順
     ///方法1. List<Tag>の内容を全てList<TagChart>として取得して表示する:難
     ///重複タイトルを削除&重複タイトルのcomparisonItemIdをリスト化する
     ///List<Tag> => List<Map<String,dynamic>> =>同じタイトル数とそのidを抽出 =>List<TagChart>
-      //List<Map<String, dynamic>>へ変換
-//        final  allTagListMap = _allTagList.map((tag) => tag.toMap()).toList();
-//        print('allTagList=>allTagListMap:$allTagListMap');
 
     ///方法2. List<Tag>から最低限必要なタイトルとアイテム数だけをList<TagChart>に格納して表示する:簡単
-    final tagAllTitleList = <String>[];
-    _tagChartList =[];//編集=>完了でどんどん増えていってしまうので
-    _allTagList.map((tag) {
-     return tagAllTitleList.add(tag.tagTitle);
-    }).toList();
+//    final tagAllTitleList = <String>[];
+//    _tagChartList =[];//編集=>完了でどんどん増えていってしまうので
+//    _allTagList.map((tag) {
+//     return tagAllTitleList.add(tag.tagTitle);
+//    }).toList();
 
-    final tagSummary =<String, int>{};//Map<String,int>
+//    final tagSummary =<String, int>{};//Map<String,int>
+//    tagAllTitleList.toSet().toList().forEach(
+//            (st)=> tagSummary[st]=
+//            tagAllTitleList.where((i)=> i== st).length);
+////    final tagChartList = <TagChart>[];
+//    tagSummary.forEach((key, amount) =>
+//        _tagChartList.add(TagChart(
+//            tagTitle: key,
+//            tagAmount: amount,
+//            myFocusNode: FocusNode(),//タップした時focusする用に追加
+//        )));
+    ///focusNodeだけ加えて返す//todo mapに変換
+    final tagDisplayList = <TagChart>[];
+    _tagChartList.forEach((tagChart)=>tagDisplayList.add(
+      TagChart(dataId: tagChart.dataId,
+          tagTitle: tagChart.tagTitle,
+          tagAmount: tagChart.tagAmount,
+          myFocusNode: FocusNode())
+    ));
 
-    ///重複タイトルの数を数えてMap型に格納
-    ///参照:https://www.fixes.pub/program/268895.html
-    ///.where参照:https://qiita.com/dennougorilla/items/170deacf178891ced41e
-    tagAllTitleList.toSet().toList().forEach(
-            (st)=> tagSummary[st]=
-            tagAllTitleList.where((i)=> i== st).length);
-    ///Map<String,dynamic> =>List<TagChart>
-    ///参考:https://qiita.com/7_asupara/items/01c29c006556e89f5b17
-//    final tagChartList = <TagChart>[];
-    tagSummary.forEach((key, amount) =>
-        _tagChartList.add(TagChart(
-            tagTitle: key,
-            tagAmount: amount,
-            myFocusNode: FocusNode(),//タップした時focusする用に追加
-        )));
-//    print('tagSummary:$tagSummary');
-//    print('tagChartList:$tagChartList');
-    return _tagChartList;
+//    _tagChartList.map((tagChart){
+//      TagChart(dataId: tagChart.dataId,
+//        tagTitle: tagChart.tagTitle,
+//        tagAmount: tagChart.tagAmount,
+//      myFocusNode: FocusNode());
+//    }).toList();
+
+//    print('getAllTagChartList/FocusNode追加/tagChart:${_tagChartList.map((tagChart) => tagChart.tagTitle)}');
+    print('getAllTagChartList/FocusNode追加/tagDisplayList:${tagDisplayList.map((tagChart) => tagChart.tagTitle)}');
+   return  tagDisplayList;
   }
 
   ///TagPage=>SelectTagPage
@@ -1042,7 +1072,7 @@ class CompareViewModel extends ChangeNotifier {
     _tempoDeleteList=[];
     _deleteTagList =[];
     _selectTagList=[];
-    await getAllTagList();//_tagChartListの更新
+    await getAllTagChartList();//_tagChartListの更新
     notifyListeners();//tagPageのFutureBuilderでList<DraggingTagChart>の更新
   }
 

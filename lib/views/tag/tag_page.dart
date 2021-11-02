@@ -57,11 +57,11 @@ class TagPage extends StatelessWidget {
                   BoxConstraints(minHeight: constraints.maxHeight),
                   child: FutureBuilder(
                     future:
-                    compareViewModel.getAllTagList(),
+                    compareViewModel.getAllTagChartList(),
                     //compareViewModel.allTagList,
                     builder: (context, AsyncSnapshot<List<TagChart>> snapshot) {
                       if (snapshot.data == null) {
-                        print('AsyncSnapshot<List<Tag>> snapshotがnull');
+                        print('AsyncSnapshot<List<TagChart>> snapshotがnull');
                         return Container();
                       }
                       if (snapshot.hasData && snapshot.data.isEmpty) {
@@ -86,6 +86,7 @@ class TagPage extends StatelessWidget {
                               itemCount: snapshot.data.length,
                               itemBuilder: (BuildContext context, int index) {
                                 final overview = snapshot.data[index];
+                                print('tagPage/snapshot:$overview');
                                 //DateTime=>String変換
                                 return TagList(
                                 title: overview.tagTitle,

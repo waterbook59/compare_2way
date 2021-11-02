@@ -13,6 +13,7 @@ part 'comparison_item_dao.g.dart';
   Way2MeritRecords,
   Way2DemeritRecords,
   TagRecords,
+  TagChartRecords,
 ])
 class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     with _$ComparisonItemDaoMixin {
@@ -251,7 +252,6 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   ///新規作成:List<TagRecord>:batchでやると重複登録されてしまうので
   ///1行ずつdao側でinsertOnConflictUpdate
   Future<void> insertTagRecordList(List<TagRecord> tagRecordList) async{
-    
     await batch((batch) {
       batch.insertAll(tagRecords, tagRecordList);
     });
@@ -361,9 +361,18 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
         .write(overviewCompanion);
   }
 
+  ///新規作成:List<TagChart>
+  Future<void> createTagChart(
+      List<TagChartRecord> tagChartRecordList) async {
+    //2行以上の可能性あり
+    await batch((batch) {
+      batch.insertAll(tagChartRecords, tagChartRecordList);
+    });
+  }
 
-
-
+  ///読込：全TagChart情報取得
+  Future<List<TagChartRecord>>  getAllTagChartList() =>
+      select(tagChartRecords).get();
 
 
 }
