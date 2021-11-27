@@ -1,6 +1,7 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/dragging_item_data.dart';
 import 'package:compare_2way/data_models/tag.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:moor/moor.dart';
 import 'comparison_item_database.dart';
 
@@ -361,14 +362,80 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
         .write(overviewCompanion);
   }
 
-  ///新規作成:List<TagChart>
+  ///新規作成:List<TagChart>登録(dataIdはincrement)&tagTitle同じものは更新
   Future<void> createTagChart(
       List<TagChartRecord> tagChartRecordList) async {
-    //2行以上の可能性あり
-    await batch((batch) {
-      batch.insertAll(tagChartRecords, tagChartRecordList);
+
+    //2行以上の可能性あり:重複登録でNG
+//    await batch((batch) {
+//      batch.insertAll(tagChartRecords, tagChartRecordList);
+//    });
+
+    //primaryKeyをtitleにしてinsertOnConflict:dataIdのautoIncrementされない
+    await Future.forEach(tagChartRecordList,(TagChartRecord tagChart){
+      into(tagChartRecords).insertOnConflictUpdate(tagChart);
+    });
+
+    //todo tagTitleに等しいものだけ上書きする& DBコード再生成
+
+
+    //更新
+//    return (update(tagChartRecords)
+//      ..where((it) => it.tagTitle.equals(tagTitle)))
+//        .write(overviewCompanion);
+
+  }
+  ///更新:List<TagChart>tagTitleに紐づいて数量を更新
+  Future<void> updateTagChart(
+      List<TagChartRecord> tagChartRecordList,
+      TagChartRecordsCompanion updateTagRecordCompanion
+      ) async {
+    await Future.forEach(tagChartRecordList,(TagChartRecord tagChart) {
+      (update(tagChartRecords)
+        ..where((tbl) => tbl.tagTitle.equals(tagChart.tagTitle)
+        ))
+          .write(updateTagRecordCompanion);
     });
   }
+  ///読込：tagTitleからTagChart返す(１行だけ取ってくる)
+  Future<TagChartRecord> getTagChart(String title) {
+    return (select(tagChartRecords)
+      ..where((t) => t.tagTitle.equals(title)
+      )).getSingle();
+
+    //todo 1行ずつ読み取る(戻り値設定されてない)
+//    await Future.forEach(titleList, (String title) {
+//    (select(tagChartRecords)..where((t)=>t.tagTitle.equals(title)
+//      )).get();
+//    });
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+  ///削除：TagChart tagTitleから削除
+  Future<void> removeTagChart(List<TagChartRecord> removeTagChartRecordList)async{
+    await Future.forEach(removeTagChartRecordList,(TagChartRecord tagChart) {
+      (delete(tagChartRecords)
+        ..where((tbl) => tbl.tagTitle.equals(tagChart.tagTitle)))
+          .go();
+    });
+
+  }
+
+
+
+
+
 
   ///読込：全TagChart情報取得
   Future<List<TagChartRecord>>  getAllTagChartList() =>
