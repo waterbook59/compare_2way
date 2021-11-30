@@ -663,34 +663,19 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> createTag(ComparisonOverview comparisonOverview) async{
     //tagSummary以外のタイトルも増えてしまうのでtagChartList最初空に
     _tagChartList =[];
-    print('createTag時の初め_tempoInput:$_tempoInput');
-    print('createTag時の初め_tagChartList${_tagChartList.map((e) => e.tagTitle)}');
-    print('createTag時の_tagNameList(DB)${_tagNameList.map((e) => e)}');
-    print('createTag時の_tempoInput:$_tempoInput');
     //表示用リストだったものを本登録
     ///TagDialogPageで完了ボタン押した時に入力中のタグも登録
     if(_tempoInput =='' || _tempoInput == null || _tempoInput == ' '){
-      print('tempoInputが空かnullの方');
     }else{
-      print('tempoInput:$_tempoInput');
       _tempoDisplayList.add(_tempoInput);
-      print('tempoInput入力あり');
-    }//ex.DB[ライフスタイル:2,車中泊:2,冬:2]の状態で[ライフスタイル,車中泊]は登録済み、[冬]を更新追加、[子供]を新規追加
-
-    print('viewModelのcreateTag時のtempoDisplayList:$_tempoDisplayList');//[ライフスタイル,車中泊,冬,子供]
-
-//    final dbTagList = await _compareRepository.getTagList(comparisonOverview.comparisonItemId);//todo dbTagList=>tagList,dbTitleSet=>tagNameListとしてCompareScreenの冒頭で取得済み
-//    final dbTitleSet = dbTagList.map((dbTag)=>dbTag.tagTitle).toSet();
-    final dbTitleSet = _tagNameList.toSet();//[ライフスタイル,車中泊]
-    print('dbTitleSet:$dbTitleSet');
+    }
+    final dbTitleSet = _tagNameList.toSet();
     //TagChart新規登録or更新するものだけ抜き出す
-    final extractAddTag = _tempoDisplayList.toSet()..removeAll(dbTitleSet);//[冬,子供]
-    print('extractAddTag:$extractAddTag');
-    final extractRemoveTagSet = dbTitleSet..removeAll(_tempoDisplayList.toSet());
+    final extractAddTag = _tempoDisplayList.toSet()..removeAll(dbTitleSet);
+    final extractRemoveTagSet =dbTitleSet..removeAll(_tempoDisplayList.toSet());
     final extractRemoveTagList =extractRemoveTagSet.toList();
-    print('extractRemoveTag:$extractRemoveTagSet');
 
-    //todo ここで場合分け、tagChartDBにtagTitleあり=>update,なし=>新規登録
+    //ここで場合分け、tagChartDBにtagTitleあり=>update,なし=>新規登録
     _allTagList = await _compareRepository.getAllTagList();
     final tagAllTitleList = <String>[];//DBからのTagのタイトル
 //     DBのTagChartのタイトル取得=>格納
@@ -699,30 +684,34 @@ class CompareViewModel extends ChangeNotifier {
     _allTagList.map((tag) {
       return tagAllTitleList.add(tag.tagTitle);
     }).toList();
-    print('tagAllTitleList:$tagAllTitleList');//[冬,ライフスタイル,車中泊,ライフスタイル,車中泊,冬]
 
     //1.追加更新tagChart作成:extractAddTagからtagChartDBTitleにあるタイトルだけ抽出
     //1.1.extractDelete = tagAllTitleList-extractAddTag(更新用タイトルタグ抽出)
-    final  extractDeleteTitleSet = tagAllTitleList.toSet()..removeAll(extractAddTag); //[冬,ライフスタイル,車中泊,ライフスタイル,車中泊,冬]=>[ライフスタイル,車中泊,冬]=>[ライフスタイル,車中泊]
+    final  extractDeleteTitleSet =
+    tagAllTitleList.toSet()..removeAll(extractAddTag);
     final extractDeleteTitle= extractDeleteTitleSet.toList();
     print('extractDeleteTitle:$extractDeleteTitle');
- //1.2.extractTagDB = tagAllTitleList-extractDelete(更新タイトルタグを抽出)//tagAllTitleListから[ライフスタイル,車中泊]を抜いてextractTagDBとなる
-    for (var i = 0; i < extractDeleteTitle.length; ++i) {//tagAllTitleListからextractDeleteTitleを1つづつ抜いていく
+ //1.2.extractTagDB = tagAllTitleList-extractDelete(更新タイトルタグを抽出)
+    //tagAllTitleListからextractDeleteTitleを1つづつ抜いていく
+    for (var i = 0; i < extractDeleteTitle.length; ++i) {
       final deleteTitle= extractDeleteTitle[i];
-      print('deleteTitle:$deleteTitle');
-      final testTag = tagAllTitleList..removeWhere((String value)=>value==deleteTitle);//removeAllと同じ
-      print('testTag$testTag') ;
+//      print('deleteTitle:$deleteTitle');
+      //removeAllと同じ
+      final testTag =
+      tagAllTitleList..removeWhere((String value)=>value==deleteTitle);
+//      print('testTag$testTag') ;
     }
     print('extractTagDB:$tagAllTitleList');//testTagと同じ
     //1.3.extractNewTitle = extractAddTag-tagChartDBTitleList
-    final  extractNewTitle = extractAddTag.toSet()..removeAll(tagChartDBTitleList.toSet());//[子供]
-    print('extractNewTitle:$extractNewTitle');
+    final  extractNewTitle =
+    extractAddTag.toSet()..removeAll(tagChartDBTitleList.toSet());
+//    print('extractNewTitle:$extractNewTitle');
     //1.4.extractTempo = extractAddTag-extractNewTitle
-    final  extractTempo = extractAddTag.toSet()..removeAll(extractNewTitle);//[冬]
-    print('extractTempo:$extractTempo');
+    final  extractTempo = extractAddTag.toSet()..removeAll(extractNewTitle);
+//    print('extractTempo:$extractTempo');
     //1.5.tagChartUpdateList = extractTagDB+extractTempo
-    final tagChartUpdateList = tagAllTitleList + extractTempo.toList();//[冬,冬,冬]
-   print('tagChart更新タイトル:${tagChartUpdateList.map((e) => e)}');
+    final tagChartUpdateList = tagAllTitleList + extractTempo.toList();
+//   print('tagChart更新タイトル:${tagChartUpdateList.map((e) => e)}');
 
 // 更新タイトルの数を数えてTagChartとして更新登録
     final tagSummary =<String, int>{};//Map<String,int>
@@ -739,38 +728,33 @@ class CompareViewModel extends ChangeNotifier {
           tagAmount: amount,
         )));
     //todo tagSummary以外のタイトルも増えてしまう(tagChartList最初空にしてみる)
-    print('tagSummary:$tagSummary');//{冬:3}
-    print('tagChart:${_tagChartList.map((e) => e.tagTitle)}');
-    print('tagChart:${_tagChartList.map((e) => e.tagAmount)}');
+    print('tagSummary:$tagSummary');
     await _compareRepository.updateTagChart(_tagChartList);
 
     //2.削除更新tagChart作成:extractRemoveTagだけTagChartDBのAmountが2以上なら-1、1なら削除する
     if(extractRemoveTagList.isNotEmpty){
-      final TagChartDBList= await _compareRepository.getTagChartList(extractRemoveTagList);
-      print('TagChartDBList:${TagChartDBList.map((e) => e.tagTitle)}');
-      print('TagChartDBListのtagAmount:${TagChartDBList.map((e) => e.tagAmount)}');
-      await Future.forEach(TagChartDBList, (TagChart tagChart) async{
+      final tagChartDBList=
+      await _compareRepository.getTagChartList(extractRemoveTagList);
+      await Future.forEach(tagChartDBList, (TagChart tagChart) async{
         if(tagChart.tagAmount > 1){//Value更新
-          print('削除更新でtagAmount−１の方');
+//          print('削除更新でtagAmount−１の方');
           final decreaseTagChartList =<TagChart>[]..add(
-              TagChart(tagTitle: tagChart.tagTitle,tagAmount: tagChart.tagAmount-1));
-          print('decreaseTagChartListタイトル:${decreaseTagChartList.map((e) => e.tagTitle)}');
-          print('decreaseTagChartList:${decreaseTagChartList.map((e) => e.tagAmount)}');
-          _compareRepository.updateTagChart(decreaseTagChartList);
+         TagChart(tagTitle: tagChart.tagTitle,tagAmount: tagChart.tagAmount-1));
+          await _compareRepository.updateTagChart(decreaseTagChartList);
         }else{//削除
-          print('削除更新で削除しちゃう方');
+//          print('削除更新で削除しちゃう方');
           final removeTagChartList =<TagChart>[]..add(
-              TagChart(tagTitle: tagChart.tagTitle,tagAmount: tagChart.tagAmount));
-          _compareRepository.removeTagChart(removeTagChartList);
+          TagChart(tagTitle: tagChart.tagTitle,tagAmount: tagChart.tagAmount));
+          await _compareRepository.removeTagChart(removeTagChartList);
         }
       });
     }
-
     //新規tagChart作成:
-    final newTagChartTitleList = _tempoDisplayList.toSet()..removeAll(tagChartDBTitleList.toSet())..toList();
+    final newTagChartTitleList =
+    _tempoDisplayList.toSet()..removeAll(tagChartDBTitleList.toSet())..toList();
     final newTagChartList = newTagChartTitleList.map((tagTitle) =>
         TagChart(tagTitle:tagTitle,tagAmount: 1 )).toList();
-    print('newTagChart:${newTagChartList.map((e) => e.tagTitle)}');
+//    print('newTagChart:${newTagChartList.map((e) => e.tagTitle)}');
 
     await _compareRepository.createTagChart(newTagChartList);
 
@@ -783,11 +767,8 @@ class CompareViewModel extends ChangeNotifier {
     _tempoDisplayList = [];
     ///残っているとtempoDisplayListにaddされ続けてしまう
     _tempoInput ='';
-    print('tagDialogPageで完了したときの_tempoInput:$_tempoInput');
     _tagChartList =[];//編集=>完了でどんどん増えていってしまうので
     //新規作成のときはnotifyListenersいらない？取得の時のみ？
-
-
 
   }
 
