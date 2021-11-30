@@ -1017,7 +1017,7 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
 //  selectedIndex =null;//ここでデフォルトにするとリストタップしても変更しなくなる
   }
-  ///TagPageの１つだけのタグ削除//todo 選択削除できたらいらない
+  ///TagPageの１つだけのタグ削除
   Future<void> onDeleteTag(String tagTitle) async{
     //tagTitleで紐づけて削除するのでcomparisonItemIdいらない
     //一応Tag形式にしてやりとりしてるが、tagTitleだけあれば削除可能(のはず)
@@ -1025,6 +1025,10 @@ class CompareViewModel extends ChangeNotifier {
     await _compareRepository.onDeleteTag(deleteTag);
     //削除してtagPage更新
     selectedIndex =null;
+    //todo 削除したアイテム全ての日時更新(タグ名変更と同じで変えるのは変かも)
+    final removeTagChartList =<TagChart>[]..add(
+        TagChart(tagTitle: tagTitle));
+    await _compareRepository.removeTagChart(removeTagChartList);
     notifyListeners();
   }
 
