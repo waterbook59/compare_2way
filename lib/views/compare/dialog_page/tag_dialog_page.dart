@@ -107,8 +107,7 @@ class TagDialogPage extends StatelessWidget {
                             viewModel.createDeleteList(tempoDeleteLabels,tempoDisplayList);
                           },
                     //candidateが空か否かでContainer or ListView.builderで場合わけ
-                          //todo ここはsnapshotじゃない？？
-                          candidateTagNameList: viewModel.candidateTagNameList,
+                          candidateTagNameList: snapshot.data,
                         );
                       }
                     }),
