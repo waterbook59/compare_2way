@@ -665,17 +665,15 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> createTag(ComparisonOverview comparisonOverview) async{
     //tagSummary以外のタイトルも増えてしまうのでtagChartList最初空に
     _tagChartList =[];
-    print('vieModel/createTagはじめtagNameList/$_tagNameList');
     //表示用リストだったものを本登録
     ///TagDialogPageで完了ボタン押した時に入力中のタグも登録
     if(_tempoInput =='' || _tempoInput == null || _tempoInput == ' '){
     }else{
-      //todo _tempoInputだけのとき、tagNameListにもtempoInputが追加され登録されない
+      // _tempoInputだけのとき、tagNameListにもtempoInputが追加されてしまう
       _tempoDisplayList.add(_tempoInput);
-      print('viewModel/createTag/tempoInputありの_tempoDisplayList:$_tempoDisplayList');
-      print('viewModel/createTag/tempoInputありのtagNameList/$_tagNameList');
     }
-    final dbTagList = await _compareRepository.getTagList(comparisonOverview.comparisonItemId);
+    final dbTagList =
+    await _compareRepository.getTagList(comparisonOverview.comparisonItemId);
     final dbTitleList = dbTagList.map((tag)=>tag.tagTitle).toList();
     final dbTitleSet = dbTitleList.toSet();
     print('viewModel/createTag/dbTitleSet:$dbTitleSet');
