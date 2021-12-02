@@ -79,6 +79,8 @@ class CompareViewModel extends ChangeNotifier {
   List<Chip> get displayChipList =>_displayChipList;
   List<Tag> _deleteTagList = <Tag>[];
   List<Tag> get deleteTagList => _deleteTagList;
+  List<TagChart> _removeTagChartList = <TagChart>[];
+  List<TagChart> get removeTagChartList =>_removeTagChartList;
   ///TagPageで使用
   List<Tag> _allTagList = <Tag>[];//TagPageでの表示用全タグリスト
   List<Tag> get allTagList => _allTagList;
@@ -663,15 +665,23 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> createTag(ComparisonOverview comparisonOverview) async{
     //tagSummary以外のタイトルも増えてしまうのでtagChartList最初空に
     _tagChartList =[];
+    print('vieModel/createTagはじめtagNameList/$_tagNameList');
     //表示用リストだったものを本登録
     ///TagDialogPageで完了ボタン押した時に入力中のタグも登録
     if(_tempoInput =='' || _tempoInput == null || _tempoInput == ' '){
     }else{
+      //todo _tempoInputだけのとき、tagNameListにもtempoInputが追加され登録されない
       _tempoDisplayList.add(_tempoInput);
+      print('viewModel/createTag/tempoInputありの_tempoDisplayList:$_tempoDisplayList');
+      print('viewModel/createTag/tempoInputありのtagNameList/$_tagNameList');
     }
-    final dbTitleSet = _tagNameList.toSet();
+    final dbTagList = await _compareRepository.getTagList(comparisonOverview.comparisonItemId);
+    final dbTitleList = dbTagList.map((tag)=>tag.tagTitle).toList();
+    final dbTitleSet = dbTitleList.toSet();
+    print('viewModel/createTag/dbTitleSet:$dbTitleSet');
     //TagChart新規登録or更新するものだけ抜き出す
     final extractAddTag = _tempoDisplayList.toSet()..removeAll(dbTitleSet);
+    print('viewModel/createTag/extractAddTag:$extractAddTag');
     final extractRemoveTagSet =dbTitleSet..removeAll(_tempoDisplayList.toSet());
     final extractRemoveTagList =extractRemoveTagSet.toList();
 
@@ -727,7 +737,6 @@ class CompareViewModel extends ChangeNotifier {
           tagTitle: key,
           tagAmount: amount,
         )));
-    //todo tagSummary以外のタイトルも増えてしまう(tagChartList最初空にしてみる)
     print('tagSummary:$tagSummary');
     await _compareRepository.updateTagChart(_tagChartList);
 
@@ -1126,15 +1135,27 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> deleteSelectTagList() async {
     //重複id削除(id一つだけ残す)set化してList化
     final idSet=deleteItemIdList.toSet();
-    deleteItemIdList = idSet.toList();
+    deleteItemIdList = idSet.toList();//日時更新用
+    //Tag削除
     _tempoDeleteList.map((title){
-      final deleteTag = Tag(
-        tagTitle: title,
-      );
+      final deleteTag = Tag(tagTitle: title,);
       deleteTagList.add(deleteTag);
     }).toList();
-
+    //TagChart削除
+    _tempoDeleteList.map((title){final deleteTagChart =
+    TagChart(tagTitle: title,);
+      _removeTagChartList.add(deleteTagChart);
+    }).toList();
     await _compareRepository.deleteSelectTagList(deleteTagList);
+    //todo tagDialogの_removeTagChartListにおきかえてもいい
+    await _compareRepository.removeTagChart(_removeTagChartList);
+    _removeTagChartList=[];
+
+
+
+
+
+
     //削除時、紐づいたitemIdの更新日時を更新(mapでやるとListでrepoに渡す必要あり)
     if(deleteTagList.isNotEmpty) {
       await Future.forEach(deleteItemIdList, (String id){

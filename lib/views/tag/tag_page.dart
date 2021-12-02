@@ -86,7 +86,7 @@ class TagPage extends StatelessWidget {
                               itemCount: snapshot.data.length,
                               itemBuilder: (BuildContext context, int index) {
                                 final overview = snapshot.data[index];
-                                print('tagPage/snapshot:$overview');
+//                                print('tagPage/snapshot:$overview');
                                 //DateTime=>String変換
                                 return TagList(
                                 title: overview.tagTitle,

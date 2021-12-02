@@ -42,7 +42,6 @@ class _ReorderableTagListState extends State<ReorderableTagList> {
 //                      widget.draggedTags[index].itemIdList IdList中は空
                   );
               },
-
             );
 
           }

@@ -553,6 +553,7 @@ class CompareRepository {
 //      print('extractionSet:$tempoDisplaySet');
       //DBと重複のない抽出したtagNameSetをList<Tag>へ変換
       ///extractionSet(tagNameSet)=>List<Tag>に変換して登録
+      print('repo/createTag/extractionDisplayTag:$extractionDisplayTag');
       final tagList = extractionDisplayTag.map((name) {
         return Tag(
           comparisonItemId: comparisonItemId,
