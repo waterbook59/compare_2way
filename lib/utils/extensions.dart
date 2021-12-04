@@ -2,6 +2,7 @@
 //Dartのモデルクラス(Task)=>DBのテーブルクラス(TaskRecord)へ変換
 
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/dragging_tag_chart.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
@@ -417,5 +418,23 @@ extension ConvertToTagChartList on List<TagChartRecord>{
       );
     }).toList() ;
     return tagChartList;
+  }
+}
+
+///新規挿入時(model=>DB):List<draggingTag>=>List<TagChartRecord>
+extension FromDraggingTagConvertToTagChartRecordList on List<DraggingTagChart>{
+  // tagTitleをprimaryKeyに設定した場合、tagIdのautoIncrement効かないかも
+  //=>tagIdがint型なのでUuid.hashCodeを使う
+  List<TagChartRecord> dragToTagChartRecordList(
+      List<DraggingTagChart> draggingTags){
+    final tagChartRecordList =
+    draggingTags.map((draggingTag) {
+      return TagChartRecord(
+          dataId: draggingTag.orderId,
+          tagTitle:draggingTag.tagTitle ?? '',
+          tagAmount:draggingTag.tagAmount ?? 0,
+      );
+    }).toList();
+    return tagChartRecordList;
   }
 }

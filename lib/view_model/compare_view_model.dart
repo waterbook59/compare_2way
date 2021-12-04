@@ -518,9 +518,8 @@ class CompareViewModel extends ChangeNotifier {
   ///ListPageのFutureBuilder用
   Future<List<ComparisonOverview>> getList() async {
 //    print('getList発動');
-    _comparisonOverviews = await _compareRepository.getList();
-//    print('getList非同期終了');
-    return _comparisonOverviews;
+    return _comparisonOverviews =
+    await _compareRepository.getOverviewList();
   }
 
   //FutureBuilder用
@@ -1174,20 +1173,17 @@ class CompareViewModel extends ChangeNotifier {
   }
 
 
-  //todo たぶん_allTagListではなくてTagChartListかも
   ///TagPage並び替え後のDBの順番入れ替え
   Future<void> changeTagListOrder(List<DraggingTagChart> draggingTags)
   async{
-    //draggingTagsをrepositoryにそのまま渡してtagTitle順にdataIdを更新する
-    await _compareRepository.changeTagListOrder(
-        _allTagList,draggingTags);
+    //draggingTags順にdataIdを更新する
+    await _compareRepository.changeTagListOrder(_tagChartList,
+        draggingTags);
     // 順番変更登録後にreorderble_edit_listで使うdraggedItems更新必要
     // 並び替えてもcheckDeleteIcon=>getItemDataListで戻ってしまう
-    ///_allTagListを新たな順番で取得できてればOK
+    ///_TagChartListを新たな順番で取得できてればOK
 
-    //ordrybyで登録時間順で取得
-    _allTagList = await _compareRepository.getAllTagList();
-
+    _tagChartList = await _compareRepository.getAllTagChartList();
   }
 
 

@@ -71,7 +71,7 @@ class _ReorderableTagListState extends State<ReorderableTagList> {
   void _reorderDone(Key item) {
 //    final draggedItem = widget.draggedItems[_indexOfKey(item)];
 //    debugPrint('Reordering finished for ${draggedItem.title}&$item}');
-    ///TagPage並び替え後のDBの順番入れ替え、まずdataIdで行ってみる
+    ///TagPage並び替え後のDBの順番入れ替え、dataIdで行う
     final viewModel = Provider.of<CompareViewModel>(context, listen: false)
       ..changeTagListOrder(widget.draggedTags);
   }

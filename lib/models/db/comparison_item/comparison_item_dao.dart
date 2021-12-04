@@ -408,19 +408,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 //    (select(tagChartRecords)..where((t)=>t.tagTitle.equals(title)
 //      )).get();
 //    });
-
-
-
-
-
   }
-
-
-
-
-
-
-
 
   ///削除：TagChart tagTitleから削除
   Future<void> removeTagChart(List<TagChartRecord> removeTagChartRecordList)async{
@@ -429,17 +417,37 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
         ..where((tbl) => tbl.tagTitle.equals(tagChart.tagTitle)))
           .go();
     });
-
   }
-
-
-
-
-
 
   ///読込：全TagChart情報取得
   Future<List<TagChartRecord>>  getAllTagChartList() =>
       select(tagChartRecords).get();
+
+  ///並び替え保存:TagChart
+  Future<void> changeTagListOrder(String itemTagTitle,
+      TagChartRecordsCompanion tagChartCompanion) async{
+    return (update(tagChartRecords)
+      ..where((it) => it.tagTitle.equals(itemTagTitle)))
+        .write(tagChartCompanion);
+  }
+
+  ///削除：TagChart 全削除
+  Future<void> allDeleteTagChartList()async{
+    await delete(tagChartRecords).go();
+  }
+///新規作成：TagChart全登録
+  Future<void> allCreateTagChartList(List<TagChartRecord> tagChartRecordList)
+  async{
+    await batch((batch) {
+      batch.insertAll(tagChartRecords, tagChartRecordList);
+    });
+    print('dao/insertTagRecordList:${tagChartRecordList.map((e) => e.tagTitle)}');
+
+//   tagRecordList.forEach(
+//     into(tagRecords).insertOnConflictUpdate
+//    );
+
+  }
 
 
 }

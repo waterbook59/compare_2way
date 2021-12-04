@@ -117,11 +117,11 @@ class CompareRepository {
   }
 
   //todo getOverviewListと内容同じなので、統一してもいいかも
-  Future<List<ComparisonOverview>> getList() async {
-    final comparisonOverviewRecords = await _comparisonItemDao.allOverviews;
-    return _overviewResults = comparisonOverviewRecords
-        .toComparisonOverviews(comparisonOverviewRecords);
-  }
+//  Future<List<ComparisonOverview>> getList() async {
+//    final comparisonOverviewRecords = await _comparisonItemDao.allOverviews;
+//    return _overviewResults = comparisonOverviewRecords
+//        .toComparisonOverviews(comparisonOverviewRecords);
+//  }
 
   ///Delete ListPage単一行
   Future<void> deleteItem(String comparisonItemId) async {
@@ -765,41 +765,28 @@ class CompareRepository {
 
 
   /// TagPage編集並び替え後のDBの順番入れ替え
-  Future<void> changeTagListOrder(
-      List<Tag> allTagList,
+  Future<void> changeTagListOrder(List<TagChart>tagChartList,
       List<DraggingTagChart> draggingTags) async{
     try{
-      //draggingItemsをrepositoryにそのまま渡してcomparisonItemId順にdataIdを更新する
+      print('repo/changeTagListOrder/tagChartList${tagChartList.map((e) => e.tagTitle)}');
+      print('repo/changeTagListOrder/draggingTags${draggingTags.map((e) => e.tagTitle)}');
+      //タイトル順にorderIdわりあて
+      final newOrderTags = <DraggingTagChart>[];
       for (var i = 0; i < draggingTags.length; ++i) {
-        final itemTagTitle = draggingTags[i].tagTitle;
-        ///並び替え時のdataIdの重複さけるのにリスト数を足して外す
-        final newDataId = allTagList[i].tagId+ draggingTags.length;
-        //todo 変更 たぶんTagCompanion
-        final overviewCompanion = ComparisonOverviewRecordsCompanion(
-          ///ここにcomparisonOverviewsのdataIdを割り当てる
-          // dataIdに同じ値があるとautoIncrementしてるので、UNIQUE制約でエラー
-          dataId: Value(newDataId),
-        );
-//      print('newId:$newDataId/id:$itemId/companion:$overviewCompanion');
-//            print('draggingItems.length:${draggingItems.length}/plusId:$newDataId/id:$itemId');
-
-//        await _comparisonItemDao.changeTagListOrder(
-//            itemTagTitle, overviewCompanion);
+        final draggingTag = draggingTags[i];
+        newOrderTags.add(DraggingTagChart(
+            tagTitle:draggingTag.tagTitle,
+            key:ValueKey(i),
+            tagAmount:draggingTag.tagAmount,
+            orderId: i));
       }
-
-      ///comparisonOverviewのdataIdから引くのではなく、そのまま登録
-//      for (var u = 0; u < draggingItems.length; ++u) {
-//        final itemId = draggingItems[u].comparisonItemId;
-//        //引くならcomparisonOverviews[u].dataIdではなく、上でDB登録したnewDataIdから
-//        final dataId = comparisonOverviews[u].dataId;
-//        final overviewCompanion = ComparisonOverviewRecordsCompanion(
-//          dataId: Value(dataId),
-//        );
-////      print('draggingItems.length:${draggingItems.length}/minusId:$dataId/id:$itemId');
-//        await _comparisonItemDao.changeCompareListOrder(
-//            itemId, overviewCompanion);
-//      }
-
+      print('repo/changeTagListOrder/newOrderTags${newOrderTags.map((e) => e.orderId)}');
+      //idのみの更新はやめて、draggingTagsとしてList全てを削除=>再登録する
+      //draggingTags=>TagChartRecordList
+      final tagChartRecordList =
+      draggingTags.dragToTagChartRecordList(newOrderTags);
+      await _comparisonItemDao.allDeleteTagChartList();
+      await _comparisonItemDao.allCreateTagChartList(tagChartRecordList);
 
     }on SqliteException catch (e) {
       print('repository更新エラー:${e.toString()}');
