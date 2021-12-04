@@ -423,8 +423,6 @@ extension ConvertToTagChartList on List<TagChartRecord>{
 
 ///新規挿入時(model=>DB):List<draggingTag>=>List<TagChartRecord>
 extension FromDraggingTagConvertToTagChartRecordList on List<DraggingTagChart>{
-  // tagTitleをprimaryKeyに設定した場合、tagIdのautoIncrement効かないかも
-  //=>tagIdがint型なのでUuid.hashCodeを使う
   List<TagChartRecord> dragToTagChartRecordList(
       List<DraggingTagChart> draggingTags){
     final tagChartRecordList =

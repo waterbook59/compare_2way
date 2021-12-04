@@ -592,8 +592,6 @@ class CompareViewModel extends ChangeNotifier {
     //draggingItemsをrepositoryにそのまま渡してcomparisonItemId順にdataIdを更新する
     await _compareRepository.changeCompareListOrder(
      _comparisonOverviews,draggingItems);
-    // 順番変更登録後にreorderble_edit_listで使うdraggedItems更新必要
-    // 並び替えてもcheckDeleteIcon=>getItemDataListで戻ってしまう
     ///_comparisonOverviewsを新たな順番で取得できてればOK
     _comparisonOverviews =await _compareRepository.getOverviewList();
   }
@@ -1177,12 +1175,7 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> changeTagListOrder(List<DraggingTagChart> draggingTags)
   async{
     //draggingTags順にdataIdを更新する
-    await _compareRepository.changeTagListOrder(_tagChartList,
-        draggingTags);
-    // 順番変更登録後にreorderble_edit_listで使うdraggedItems更新必要
-    // 並び替えてもcheckDeleteIcon=>getItemDataListで戻ってしまう
-    ///_TagChartListを新たな順番で取得できてればOK
-
+    await _compareRepository.changeTagListOrder(draggingTags);
     _tagChartList = await _compareRepository.getAllTagChartList();
   }
 

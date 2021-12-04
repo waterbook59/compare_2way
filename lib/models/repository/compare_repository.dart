@@ -116,13 +116,6 @@ class CompareRepository {
         .toComparisonOverviews(comparisonOverviewRecords);
   }
 
-  //todo getOverviewListと内容同じなので、統一してもいいかも
-//  Future<List<ComparisonOverview>> getList() async {
-//    final comparisonOverviewRecords = await _comparisonItemDao.allOverviews;
-//    return _overviewResults = comparisonOverviewRecords
-//        .toComparisonOverviews(comparisonOverviewRecords);
-//  }
-
   ///Delete ListPage単一行
   Future<void> deleteItem(String comparisonItemId) async {
   // Merit/Demeritも同時に削除必要(transaction)
@@ -722,8 +715,9 @@ class CompareRepository {
       print('tagList削除時repositoryエラー:${e.toString()}');
     }
   }
-  /// ListPage編集並び替え後のDBの順番入れ替え、まずdataIdで行ってみる
+  /// ListPage編集並び替え後のDBの順番入れ替え、dataIdで行う
   //todo comparisonOverviewsはRecordへ,draggingItemsも変換した方がよい
+  //todo 順番入れ替えは全削除・全登録の方法に変更
   Future<void> changeCompareListOrder(
       List<ComparisonOverview> comparisonOverviews,
       List<DraggingItemData> draggingItems) async{
@@ -765,11 +759,8 @@ class CompareRepository {
 
 
   /// TagPage編集並び替え後のDBの順番入れ替え
-  Future<void> changeTagListOrder(List<TagChart>tagChartList,
-      List<DraggingTagChart> draggingTags) async{
+  Future<void> changeTagListOrder(List<DraggingTagChart> draggingTags) async{
     try{
-      print('repo/changeTagListOrder/tagChartList${tagChartList.map((e) => e.tagTitle)}');
-      print('repo/changeTagListOrder/draggingTags${draggingTags.map((e) => e.tagTitle)}');
       //タイトル順にorderIdわりあて
       final newOrderTags = <DraggingTagChart>[];
       for (var i = 0; i < draggingTags.length; ++i) {
@@ -780,7 +771,6 @@ class CompareRepository {
             tagAmount:draggingTag.tagAmount,
             orderId: i));
       }
-      print('repo/changeTagListOrder/newOrderTags${newOrderTags.map((e) => e.orderId)}');
       //idのみの更新はやめて、draggingTagsとしてList全てを削除=>再登録する
       //draggingTags=>TagChartRecordList
       final tagChartRecordList =

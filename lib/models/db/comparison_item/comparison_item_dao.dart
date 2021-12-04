@@ -365,26 +365,11 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   ///新規作成:List<TagChart>登録(dataIdはincrement)&tagTitle同じものは更新
   Future<void> createTagChart(
       List<TagChartRecord> tagChartRecordList) async {
-
-    //2行以上の可能性あり:重複登録でNG
-//    await batch((batch) {
-//      batch.insertAll(tagChartRecords, tagChartRecordList);
-//    });
-
-    //primaryKeyをtitleにしてinsertOnConflict:dataIdのautoIncrementされない
     await Future.forEach(tagChartRecordList,(TagChartRecord tagChart){
       into(tagChartRecords).insertOnConflictUpdate(tagChart);
     });
-
-    //todo tagTitleに等しいものだけ上書きする& DBコード再生成
-
-
-    //更新
-//    return (update(tagChartRecords)
-//      ..where((it) => it.tagTitle.equals(tagTitle)))
-//        .write(overviewCompanion);
-
   }
+
   ///更新:List<TagChart>tagTitleに紐づいて数量を更新
   Future<void> updateTagChart(
       List<TagChartRecord> tagChartRecordList,
@@ -402,16 +387,11 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     return (select(tagChartRecords)
       ..where((t) => t.tagTitle.equals(title)
       )).getSingle();
-
-    //todo 1行ずつ読み取る(戻り値設定されてない)
-//    await Future.forEach(titleList, (String title) {
-//    (select(tagChartRecords)..where((t)=>t.tagTitle.equals(title)
-//      )).get();
-//    });
   }
 
   ///削除：TagChart tagTitleから削除
-  Future<void> removeTagChart(List<TagChartRecord> removeTagChartRecordList)async{
+  Future<void> removeTagChart(List<TagChartRecord> removeTagChartRecordList
+      )async{
     await Future.forEach(removeTagChartRecordList,(TagChartRecord tagChart) {
       (delete(tagChartRecords)
         ..where((tbl) => tbl.tagTitle.equals(tagChart.tagTitle)))
@@ -441,12 +421,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     await batch((batch) {
       batch.insertAll(tagChartRecords, tagChartRecordList);
     });
-    print('dao/insertTagRecordList:${tagChartRecordList.map((e) => e.tagTitle)}');
-
-//   tagRecordList.forEach(
-//     into(tagRecords).insertOnConflictUpdate
-//    );
-
+//    print('dao/insertTagRecordList:${tagChartRecordList.map((e) => e.tagTitle)}');
   }
 
 
