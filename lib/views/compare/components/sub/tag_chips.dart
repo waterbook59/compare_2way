@@ -16,7 +16,8 @@ class TagChips extends StatefulWidget {
   });
   final List<String> tagNameList;//DBからのtagTitleのリスト
   final ValueChanged<List<String>> onSubmitted;
-  final ValueChanged<List<String>> onDeleted;
+//  final ValueChanged<List<String>,List<String>> onDeleted;
+  final Function(List<String>,List<String>) onDeleted;
   final String addTagTitle;
   final List<String> candidateTagNameList;
   final ValueChanged<String> setTempoInput;
@@ -67,6 +68,7 @@ if(widget.candidateTagNameList==null){
   void dispose() {
     _tempoCandidateLabels = [];
     _tempoDisplayList = [];
+    _tempoInput ='';//tagChips破棄時に空にする
     print('tagChips/dispose_tempoDisplayList :$_tempoDisplayList');
     super.dispose();
   }
@@ -117,7 +119,7 @@ if(widget.candidateTagNameList==null){
                       //DB由来のタイトルから削除タイトル抜かないと1回削除して再度TagInputChipで同じものを入力しようとしても重複タグ扱いになって登録されない
                         //tagNameListSet = _tempoDisplayList.toSet();//todo いらない？
 //                      print('InputChip/onDeleted/tagNameListSet:$tagNameListSet');
-                        widget.onDeleted(_tempoDeleteLabels);
+                        widget.onDeleted(_tempoDeleteLabels,_tempoDisplayList);
 
                       //tempoDeleteLabelsクリア(しないとviewModelのDeleteLabelsに重複して登録されていく)
                         _tempoDeleteLabels = [];

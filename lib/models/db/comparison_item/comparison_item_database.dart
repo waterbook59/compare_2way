@@ -86,7 +86,16 @@ class TagRecords extends Table{
   @override
   Set<Column> get primaryKey => {tagId};
 }
+//テーブルtagChart
+class TagChartRecords extends Table{
+  IntColumn get dataId => integer().autoIncrement()();
+  TextColumn get tagTitle => text()();
+  IntColumn get tagAmount => integer().nullable()();
+  //tagTitleをKeyにするとdataIdのautoIncrementが反映されない
+//  @override
+//  Set<Column> get primaryKey => {tagTitle};
 
+}
 
 @UseMoor(tables: [
   ComparisonOverviewRecords,
@@ -95,6 +104,7 @@ class TagRecords extends Table{
   Way2MeritRecords,
   Way2DemeritRecords,
   TagRecords,
+  TagChartRecords,
 ],daos: [ComparisonItemDao])
 class ComparisonItemDB  extends _$ComparisonItemDB{
   ComparisonItemDB() : super(_openConnection());

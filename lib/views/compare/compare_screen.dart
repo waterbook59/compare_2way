@@ -69,10 +69,10 @@ class CompareScreen extends StatelessWidget {
                 );
           },
         )
-//        const Text('Compare List', style: middleTextStyle,)
-            : Text(tagTitle,style: middleTextStyle,),
+//            : Text(tagTitle,style: middleTextStyle,),
           //todo 右に保存完了ボタンがあるのでNavBarIconTitleの左側にスペース追加
-//        NavBarIconTitle(tagTitle:tagTitle,titleIcon: CupertinoIcons.tag),
+        :NavBarIconTitle(tagTitle:tagTitle,titleIcon: CupertinoIcons.tag,
+          rightPadding: 0,),
 
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
           ///保存完了ボタン
@@ -98,14 +98,19 @@ class CompareScreen extends StatelessWidget {
               ///タイトル:itemTitleに変更があったときだけrebuildされる
                 screenEditMode ==ScreenEditMode.fromListPage
                 ? Container()
+                //TagPage側から
                 :Selector<CompareViewModel, String>(
                   selector: (context, viewModel) => viewModel.itemTitle,
                   builder: (context, itemTitle, child) {
-                    return Center(
-                        child: Text(
-                      itemTitle,
-                      style: itemTitleTextStyle,
-                    ));
+                    return Column(
+                      children:[ Center(
+                          child: Text(
+                        itemTitle,
+                        style: itemTitleTextStyle,
+                      )),
+                        const SizedBox(height: 8),
+                      ],
+                    );
                   },
                 ),
                 const SizedBox(height: 8),

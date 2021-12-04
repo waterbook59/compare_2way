@@ -1,6 +1,8 @@
+import 'package:compare_2way/data_models/dragging_tag_chart.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
+import 'package:compare_2way/views/tag/components/reorderable_tag_list.dart';
 import 'package:compare_2way/views/tag/components/sub/page_title.dart';
 import 'package:compare_2way/views/tag/components/sub/tag_page_title.dart';
 import 'package:compare_2way/views/tag/select_tag_page.dart';
@@ -20,6 +22,7 @@ class TagPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor = CupertinoTheme.of(context).primaryContrastingColor;
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -29,25 +32,6 @@ class TagPage extends StatelessWidget {
         //タグ名編集時にキーボードunFocusできるアイコン追加(viewModel経由=>Consumerに訴える)
         //編集モード(true)の時はリストをタップするとTagListのtagTitle部を編集する形に
          TagEditButtonAction(),
-          //これまでのboolのtagEditModeの時
-//      Selector<CompareViewModel,TagEditMode>(
-//        selector: (context, viewModel) => viewModel.tagEditMode,
-//      builder:(context, tagEditMode, child){
-//          return
-//            tagEditMode
-//          ///CupertinoButtonに変更すると黄色二十線出ない
-//              ?  CupertinoButton(
-//            child: const Text('編集',
-//              style: trailingTextStyle),
-//          onPressed: ()=>_changeEdit(context),
-//          padding: const EdgeInsets.all(8),)
-//              : CupertinoButton(
-//              child: const Text('完了', style: trailingTextStyle),
-//          onPressed: ()=>_changeEdit(context),
-//            padding: const EdgeInsets.all(8),);
-//        },
-////         const Text('編集', style: trailingTextStyle,
-//        ),//Selector
       ),
 
       ///Scaffoldで全く問題なし
@@ -60,7 +44,12 @@ class TagPage extends StatelessWidget {
 //          selector: (context, compareViewModel) => compareViewModel.allTagList,
           Consumer<CompareViewModel>(
           builder: (context, compareViewModel, child) {
-            return LayoutBuilder(
+            return (viewModel.tagEditMode == TagEditMode.normal
+                ||viewModel.tagEditMode == TagEditMode.tagTitleEdit)
+            //ここでnormal&editとdeleteModeで表示変更
+            //todo normal&tagTitleEdit内のdeleteModeの表示削除
+            //normal&tagTitleEdit
+              ?LayoutBuilder(
                 builder: (context, constraints) {
                   return SingleChildScrollView(
                 child: ConstrainedBox(
@@ -68,11 +57,11 @@ class TagPage extends StatelessWidget {
                   BoxConstraints(minHeight: constraints.maxHeight),
                   child: FutureBuilder(
                     future:
-                    compareViewModel.getAllTagList(),
+                    compareViewModel.getAllTagChartList(),
                     //compareViewModel.allTagList,
                     builder: (context, AsyncSnapshot<List<TagChart>> snapshot) {
                       if (snapshot.data == null) {
-                        print('AsyncSnapshot<List<Tag>> snapshotがnull');
+                        print('AsyncSnapshot<List<TagChart>> snapshotがnull');
                         return Container();
                       }
                       if (snapshot.hasData && snapshot.data.isEmpty) {
@@ -97,7 +86,7 @@ class TagPage extends StatelessWidget {
                               itemCount: snapshot.data.length,
                               itemBuilder: (BuildContext context, int index) {
                                 final overview = snapshot.data[index];
-//                            print('tagPage/itemIdList:$overview');
+//                                print('tagPage/snapshot:$overview');
                                 //DateTime=>String変換
                                 return TagList(
                                 title: overview.tagTitle,
@@ -122,7 +111,36 @@ class TagPage extends StatelessWidget {
                 ),
               );
                 },
-            );
+            )
+            //削除モード
+                :LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints:
+                      BoxConstraints(minHeight: constraints.maxHeight),
+                      child: FutureBuilder(
+                        future: compareViewModel.getTagChartList(),
+                        builder: (context,
+                        AsyncSnapshot<List<DraggingTagChart>>snapshot) {
+                          if (snapshot.data == null) {
+                            return Container();
+                          }
+                          if (snapshot.hasData && snapshot.data.isEmpty) {
+                            return Container(
+                                child: const Center(
+                                    child: Text('アイテムはありません')));
+                          } else {
+                            return
+                              ReorderableTagList(
+                                  draggedTags: snapshot.data
+                              );
+                          }
+                        },
+                      ),
+                    ),
+                  );
+                });
           },
         ),
 
@@ -148,6 +166,8 @@ class TagPage extends StatelessWidget {
                 )));
         break;
     ///編集モード：タップでタイトルをeditTagTitleへ変更=>onSubmittedでitemIdListを元にDBをupdate
+    //編集モードでリストの１つをタップ=>tagTitleからList<Tag>をviewModelへ格納
+    //タグ名を編集=>新しいTagTitleからList<Tag>上書き、tagIdとcomparisonItemIdの2つからtagTitleを上書き
       case TagEditMode.tagTitleEdit:
       // タップでtextFieldにfocus
         myFocusNode.requestFocus();

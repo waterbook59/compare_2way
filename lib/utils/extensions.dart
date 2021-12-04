@@ -2,8 +2,10 @@
 //Dartのモデルクラス(Task)=>DBのテーブルクラス(TaskRecord)へ変換
 
 import 'package:compare_2way/data_models/comparison_overview.dart';
+import 'package:compare_2way/data_models/dragging_tag_chart.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
+import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_database.dart';
 import 'package:uuid/uuid.dart';
 
@@ -383,5 +385,54 @@ extension ConvertToTagRecord on Tag{
         createAtToString: tag.createAtToString ??'',
       );
     return tagRecord;
+  }
+}
+
+///新規挿入時(model=>DB):List<TagChart>=>List<TagChartRecord>
+extension ConvertToTagChartRecordList on List<TagChart>{
+  // tagTitleをprimaryKeyに設定した場合、tagIdのautoIncrement効かないかも
+  //=>tagIdがint型なのでUuid.hashCodeを使う
+  List<TagChartRecord> toTagChartRecordList(
+      List<TagChart> tagChartList){
+    final tagChartRecordList =
+    tagChartList.map((tagChart) {
+      return TagChartRecord(
+          dataId: tagChart.dataId,
+          tagTitle:tagChart.tagTitle ?? '',
+          tagAmount:tagChart.tagAmount ?? 0,
+      );
+    }).toList();
+    return tagChartRecordList;
+  }
+}
+
+///読込時(DB=>model) List<TagChartRecord>=>List<TagChart>
+extension ConvertToTagChartList on List<TagChartRecord>{
+  List<TagChart> toTagChartList(List<TagChartRecord> tagChartRecordList){
+    final tagChartList =
+    tagChartRecordList.map((tagChartRecord) {
+      return TagChart(
+        dataId: tagChartRecord.dataId ?? 0,
+        tagTitle: tagChartRecord.tagTitle ??'',
+        tagAmount: tagChartRecord.tagAmount ?? 0,
+      );
+    }).toList() ;
+    return tagChartList;
+  }
+}
+
+///新規挿入時(model=>DB):List<draggingTag>=>List<TagChartRecord>
+extension FromDraggingTagConvertToTagChartRecordList on List<DraggingTagChart>{
+  List<TagChartRecord> dragToTagChartRecordList(
+      List<DraggingTagChart> draggingTags){
+    final tagChartRecordList =
+    draggingTags.map((draggingTag) {
+      return TagChartRecord(
+          dataId: draggingTag.orderId,
+          tagTitle:draggingTag.tagTitle ?? '',
+          tagAmount:draggingTag.tagAmount ?? 0,
+      );
+    }).toList();
+    return tagChartRecordList;
   }
 }

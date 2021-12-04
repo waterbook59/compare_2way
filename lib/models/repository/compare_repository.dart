@@ -1,5 +1,6 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/dragging_item_data.dart';
+import 'package:compare_2way/data_models/dragging_tag_chart.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
@@ -23,6 +24,7 @@ class CompareRepository {
   List<Way2Demerit> _way2DemeritList = <Way2Demerit>[];
   List<Tag> _tagList = <Tag>[];
   List<Tag> _selectTagList = <Tag>[];
+  List<TagChart> _tagChartList = <TagChart>[];
 
 
   ///新規作成 comparisonOverview
@@ -109,13 +111,6 @@ class CompareRepository {
 
   ///Read comparisonOverview
   Future<List<ComparisonOverview>> getOverviewList() async {
-    final comparisonOverviewRecords = await _comparisonItemDao.allOverviews;
-    return _overviewResults = comparisonOverviewRecords
-        .toComparisonOverviews(comparisonOverviewRecords);
-  }
-
-  //todo getOverviewListと内容同じなので、統一してもいいかも
-  Future<List<ComparisonOverview>> getList() async {
     final comparisonOverviewRecords = await _comparisonItemDao.allOverviews;
     return _overviewResults = comparisonOverviewRecords
         .toComparisonOverviews(comparisonOverviewRecords);
@@ -248,6 +243,22 @@ class CompareRepository {
       final overviewCompanion = ComparisonOverviewRecordsCompanion(
         comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
         conclusion:Value(comparisonOverviewRecord.conclusion),
+        createdAt: Value(comparisonOverviewRecord.createdAt),
+      );
+      await _comparisonItemDao.saveComparisonOverviewDB(
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+    }on SqliteException catch (e) {
+      print('repository保存エラー:${e.toString()}');
+    }
+  }
+
+  ///時間だけ更新
+  Future<void> updateTime(ComparisonOverview updateOverview)async{
+    try{
+      final comparisonOverviewRecord =
+      updateOverview.toComparisonOverviewRecord(updateOverview);
+      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+        comparisonItemId: Value(comparisonOverviewRecord.comparisonItemId),
         createdAt: Value(comparisonOverviewRecord.createdAt),
       );
       await _comparisonItemDao.saveComparisonOverviewDB(
@@ -518,24 +529,25 @@ class CompareRepository {
 
 
   ///新規作成 List<Tag>
-  //todo タグ追加したらcreatedAt変更
+  // repo側でupdateOverview作成してDatetime更新(deleteTagメソッドでも同じ)
   ///同一comparisonItemId & 同一tagTitleは登録しないが、同一tagTitleは登録できるように変更
-  Future<void> createTag(List<String> tempoDisplayList, String comparisonItemId)
+  Future<void> createTag(Set<String> extractionDisplayTag, String comparisonItemId)
   async {
     try {
-      ///既に登録されているTagListをgetし、Setへ変換
-      final dbTagList = await _comparisonItemDao.getTagList(comparisonItemId);
-      final dbTitleSet = dbTagList.map((dbTag)=>dbTag.tagTitle).toSet();
-      print('dbTitleSet:$dbTitleSet');
-
-      //tagNameListをSetへ変換し、DB登録しているタグを削除
-      ///2つのリストから重複削除removeAllはSetでしか使えない
-      final tempoDisplaySet = tempoDisplayList.toSet()
-      ..removeAll(dbTitleSet);
-      print('extractionSet:$tempoDisplaySet');
+//      ///既に登録されているTagListをgetし、Setへ変換
+//      final dbTagList = await _comparisonItemDao.getTagList(comparisonItemId);
+//      final dbTitleSet = dbTagList.map((dbTag)=>dbTag.tagTitle).toSet();
+//      print('dbTitleSet:$dbTitleSet');
+//
+//      //tagNameListをSetへ変換し、DB登録しているタグを削除
+//      ///2つのリストから重複削除removeAllはSetでしか使えない
+//      final tempoDisplaySet = tempoDisplayList.toSet()
+//      ..removeAll(dbTitleSet);
+//      print('extractionSet:$tempoDisplaySet');
       //DBと重複のない抽出したtagNameSetをList<Tag>へ変換
       ///extractionSet(tagNameSet)=>List<Tag>に変換して登録
-      final tagList = tempoDisplaySet.map((name) {
+      print('repo/createTag/extractionDisplayTag:$extractionDisplayTag');
+      final tagList = extractionDisplayTag.map((name) {
         return Tag(
           comparisonItemId: comparisonItemId,
           tagTitle: name,
@@ -543,9 +555,8 @@ class CompareRepository {
           createAtToString: DateTime.now().toIso8601String(),
         );
       }).toList();
-      print('extractionTagList:$tagList');
 
-      //最終的に登録するList<Tag>ができたらList<TagRecord>へ変換する
+      //最終的に登録するList<Tag>ができたらList<TagRecord>へ変換する(tagIdはここで付与)
       final tagRecordList = tagList.toTagRecordList(tagList);
 
       //2つのリストを比較しようとしてforEach内でforEachしようとしたけど、動かない
@@ -554,8 +565,15 @@ class CompareRepository {
       // insertOnConflictUpdateが良い(毎回UNIQUE constraint failedエラー発生するので)
       await _comparisonItemDao
           .insertTagRecordList(tagRecordList);
-
-      print('repository:tagListを新規登録');
+      ///tag新規登録したら時間更新(tagListに新規追加がある場合)
+      if(tagList.isNotEmpty) {
+        final updateOverview = ComparisonOverview(
+          comparisonItemId: comparisonItemId,
+          createdAt: DateTime.now(),
+        );
+        await updateTime(updateOverview);
+      }
+        print('repository:tagListを新規登録');
     } on SqliteException catch (e) {
       print('tagList登録時repositoryエラー:${e.toString()}');
     }
@@ -580,7 +598,7 @@ class CompareRepository {
       print('tagList削除時repositoryエラー:${e.toString()}');
     }
   }
-
+  ///Read List<Tag>
   Future<List<Tag>> getAllTagList() async{
     final tagRecordList = await _comparisonItemDao.getAllTagList();
     return _tagList = tagRecordList.toTagList(tagRecordList);
@@ -592,7 +610,82 @@ class CompareRepository {
     //List<TagRecord>=>List<Tag>
     return _selectTagList = selectTagRecordList.toTagList(selectTagRecordList);
   }
-  ///更新 Tag List<TagChart>=>TagRecordsCompanion
+  ///新規作成 List<TagChart>
+  Future<void> createTagChart(List<TagChart> tagChartList)async{
+    try{
+      //List<TagChart>=>List<TagChartDB>
+      final tagChartRecordList = tagChartList.toTagChartRecordList(tagChartList);
+      await _comparisonItemDao.createTagChart(tagChartRecordList);
+      print('repository/createTagChartも作成');
+    }on SqliteException catch (e) {
+      print('repository更新エラー/createTagChart:${e.toString()}');
+    }
+  }
+
+  ///Read List<TagChart>
+  Future<List<TagChart>> getAllTagChartList() async{
+    final tagChartRecordList = await _comparisonItemDao.getAllTagChartList();
+    return
+      _tagChartList = tagChartRecordList.toTagChartList(tagChartRecordList);
+  }
+  ///Update List<TagChart>=>TagChartRecordsCompanion
+  Future<void> updateTagChart(List<TagChart> tagChartList)async{
+    //List<TagChart>=>List<TaChartRecord>
+    final tagChartRecordList =
+    tagChartList.toTagChartRecordList(tagChartList);
+
+    try{
+      //TagChartRecordsCompanionのリストで数量更新
+      tagChartRecordList.map((tagChartRecord){
+        final updateTagRecordCompanion =TagChartRecordsCompanion(
+            tagAmount: Value(tagChartRecord.tagAmount));
+         _comparisonItemDao.updateTagChart(
+            tagChartRecordList, updateTagRecordCompanion);
+      }).toList();
+      print('repository/updateTagChart:更新完了');
+
+    }on SqliteException catch (e) {
+      print('repository更新エラー/updateTagChart:${e.toString()}');
+    }
+  }
+
+
+  ///Read List<TagChart>のtitleのみ(vieModel側で書くと行数多くなるので)
+  Future<List<String>> getTagChartDBTitle() async{
+    final tagChartRecordList = await _comparisonItemDao.getAllTagChartList();
+    final tagChartDBTitle =
+    tagChartRecordList.map((tagChart) => tagChart.tagTitle).toList();
+    return tagChartDBTitle;
+  }
+
+  ///Read List<TagChart>削除更新用にtitle検索からtagChartList読み込み
+  Future<List<TagChart>> getTagChartList(List<String> titleList) async{
+    final tagChartRecordList = <TagChartRecord>[];
+    //todo 1行ずつ読み取る
+    await  Future.forEach(titleList,(String title)async{
+      final  tagChartRecord = await _comparisonItemDao.getTagChart(title);
+      tagChartRecordList.add(tagChartRecord);
+    });
+    print('repo/getTagChartList:${tagChartRecordList.map((e) => e.tagTitle)}');
+    return
+      _tagChartList = tagChartRecordList.toTagChartList(tagChartRecordList);
+  }
+
+  ///Delete List<TagChart>タイトルから削除
+  Future<void> removeTagChart(List<TagChart> removeTagChartList) async{
+    try {
+      //List<TagChart>=>List<TagChartRecord>へ変換保存
+      final removeTagChartRecordList =
+      removeTagChartList.toTagChartRecordList(removeTagChartList);
+      await _comparisonItemDao.removeTagChart(removeTagChartRecordList);
+    } on SqliteException catch (e) {
+      print('tagChartList削除時repositoryエラー:${e.toString()}');
+    }
+  }
+
+
+
+  ///更新 Tag List<Tag>=>TagRecordsCompanion
   Future<void> updateTagTitle(
       List<Tag> selectTagList,String newTagTitle) async{
     //List<Tag>=>List<TagRecord>
@@ -622,7 +715,9 @@ class CompareRepository {
       print('tagList削除時repositoryエラー:${e.toString()}');
     }
   }
-  //todo ListPage編集並び替え後のDBの順番入れ替え、まずdataIdで行ってみる
+  /// ListPage編集並び替え後のDBの順番入れ替え、dataIdで行う
+  //todo comparisonOverviewsはRecordへ,draggingItemsも変換した方がよい
+  //todo 順番入れ替えは全削除・全登録の方法に変更
   Future<void> changeCompareListOrder(
       List<ComparisonOverview> comparisonOverviews,
       List<DraggingItemData> draggingItems) async{
@@ -660,6 +755,45 @@ class CompareRepository {
     }on SqliteException catch (e) {
       print('repository更新エラー:${e.toString()}');
     }
+  }
+
+
+  /// TagPage編集並び替え後のDBの順番入れ替え
+  Future<void> changeTagListOrder(List<DraggingTagChart> draggingTags) async{
+    try{
+      //タイトル順にorderIdわりあて
+      final newOrderTags = <DraggingTagChart>[];
+      for (var i = 0; i < draggingTags.length; ++i) {
+        final draggingTag = draggingTags[i];
+        newOrderTags.add(DraggingTagChart(
+            tagTitle:draggingTag.tagTitle,
+            key:ValueKey(i),
+            tagAmount:draggingTag.tagAmount,
+            orderId: i));
+      }
+      //idのみの更新はやめて、draggingTagsとしてList全てを削除=>再登録する
+      //draggingTags=>TagChartRecordList
+      final tagChartRecordList =
+      draggingTags.dragToTagChartRecordList(newOrderTags);
+      await _comparisonItemDao.allDeleteTagChartList();
+      await _comparisonItemDao.allCreateTagChartList(tagChartRecordList);
+
+    }on SqliteException catch (e) {
+      print('repository更新エラー:${e.toString()}');
+    }
+  }
+  /// TagPage選択行削除 //todo deleteItemList,deleteTag参照
+  Future<void> deleteSelectTagList(List<Tag> deleteTagList) async{
+    try {
+      //List<Tag>=>List<TagRecord>へ変換保存
+      final deleteTagRecordList =
+      deleteTagList.toTagRecordList(deleteTagList);
+      await _comparisonItemDao.deleteSelectTagList(deleteTagRecordList);
+    } on SqliteException catch (e) {
+      print('tagList削除時repositoryエラー:${e.toString()}');
+    }
+
+
   }
 
 

@@ -2091,6 +2091,245 @@ class $TagRecordsTable extends TagRecords
   }
 }
 
+class TagChartRecord extends DataClass implements Insertable<TagChartRecord> {
+  final int dataId;
+  final String tagTitle;
+  final int tagAmount;
+  TagChartRecord(
+      {@required this.dataId, @required this.tagTitle, this.tagAmount});
+  factory TagChartRecord.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return TagChartRecord(
+      dataId:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}data_id']),
+      tagTitle: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}tag_title']),
+      tagAmount:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}tag_amount']),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || dataId != null) {
+      map['data_id'] = Variable<int>(dataId);
+    }
+    if (!nullToAbsent || tagTitle != null) {
+      map['tag_title'] = Variable<String>(tagTitle);
+    }
+    if (!nullToAbsent || tagAmount != null) {
+      map['tag_amount'] = Variable<int>(tagAmount);
+    }
+    return map;
+  }
+
+  TagChartRecordsCompanion toCompanion(bool nullToAbsent) {
+    return TagChartRecordsCompanion(
+      dataId:
+          dataId == null && nullToAbsent ? const Value.absent() : Value(dataId),
+      tagTitle: tagTitle == null && nullToAbsent
+          ? const Value.absent()
+          : Value(tagTitle),
+      tagAmount: tagAmount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(tagAmount),
+    );
+  }
+
+  factory TagChartRecord.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return TagChartRecord(
+      dataId: serializer.fromJson<int>(json['dataId']),
+      tagTitle: serializer.fromJson<String>(json['tagTitle']),
+      tagAmount: serializer.fromJson<int>(json['tagAmount']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'dataId': serializer.toJson<int>(dataId),
+      'tagTitle': serializer.toJson<String>(tagTitle),
+      'tagAmount': serializer.toJson<int>(tagAmount),
+    };
+  }
+
+  TagChartRecord copyWith({int dataId, String tagTitle, int tagAmount}) =>
+      TagChartRecord(
+        dataId: dataId ?? this.dataId,
+        tagTitle: tagTitle ?? this.tagTitle,
+        tagAmount: tagAmount ?? this.tagAmount,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('TagChartRecord(')
+          ..write('dataId: $dataId, ')
+          ..write('tagTitle: $tagTitle, ')
+          ..write('tagAmount: $tagAmount')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf(
+      $mrjc(dataId.hashCode, $mrjc(tagTitle.hashCode, tagAmount.hashCode)));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is TagChartRecord &&
+          other.dataId == this.dataId &&
+          other.tagTitle == this.tagTitle &&
+          other.tagAmount == this.tagAmount);
+}
+
+class TagChartRecordsCompanion extends UpdateCompanion<TagChartRecord> {
+  final Value<int> dataId;
+  final Value<String> tagTitle;
+  final Value<int> tagAmount;
+  const TagChartRecordsCompanion({
+    this.dataId = const Value.absent(),
+    this.tagTitle = const Value.absent(),
+    this.tagAmount = const Value.absent(),
+  });
+  TagChartRecordsCompanion.insert({
+    this.dataId = const Value.absent(),
+    @required String tagTitle,
+    this.tagAmount = const Value.absent(),
+  }) : tagTitle = Value(tagTitle);
+  static Insertable<TagChartRecord> custom({
+    Expression<int> dataId,
+    Expression<String> tagTitle,
+    Expression<int> tagAmount,
+  }) {
+    return RawValuesInsertable({
+      if (dataId != null) 'data_id': dataId,
+      if (tagTitle != null) 'tag_title': tagTitle,
+      if (tagAmount != null) 'tag_amount': tagAmount,
+    });
+  }
+
+  TagChartRecordsCompanion copyWith(
+      {Value<int> dataId, Value<String> tagTitle, Value<int> tagAmount}) {
+    return TagChartRecordsCompanion(
+      dataId: dataId ?? this.dataId,
+      tagTitle: tagTitle ?? this.tagTitle,
+      tagAmount: tagAmount ?? this.tagAmount,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (dataId.present) {
+      map['data_id'] = Variable<int>(dataId.value);
+    }
+    if (tagTitle.present) {
+      map['tag_title'] = Variable<String>(tagTitle.value);
+    }
+    if (tagAmount.present) {
+      map['tag_amount'] = Variable<int>(tagAmount.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TagChartRecordsCompanion(')
+          ..write('dataId: $dataId, ')
+          ..write('tagTitle: $tagTitle, ')
+          ..write('tagAmount: $tagAmount')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TagChartRecordsTable extends TagChartRecords
+    with TableInfo<$TagChartRecordsTable, TagChartRecord> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $TagChartRecordsTable(this._db, [this._alias]);
+  final VerificationMeta _dataIdMeta = const VerificationMeta('dataId');
+  GeneratedIntColumn _dataId;
+  @override
+  GeneratedIntColumn get dataId => _dataId ??= _constructDataId();
+  GeneratedIntColumn _constructDataId() {
+    return GeneratedIntColumn('data_id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _tagTitleMeta = const VerificationMeta('tagTitle');
+  GeneratedTextColumn _tagTitle;
+  @override
+  GeneratedTextColumn get tagTitle => _tagTitle ??= _constructTagTitle();
+  GeneratedTextColumn _constructTagTitle() {
+    return GeneratedTextColumn(
+      'tag_title',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _tagAmountMeta = const VerificationMeta('tagAmount');
+  GeneratedIntColumn _tagAmount;
+  @override
+  GeneratedIntColumn get tagAmount => _tagAmount ??= _constructTagAmount();
+  GeneratedIntColumn _constructTagAmount() {
+    return GeneratedIntColumn(
+      'tag_amount',
+      $tableName,
+      true,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [dataId, tagTitle, tagAmount];
+  @override
+  $TagChartRecordsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'tag_chart_records';
+  @override
+  final String actualTableName = 'tag_chart_records';
+  @override
+  VerificationContext validateIntegrity(Insertable<TagChartRecord> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('data_id')) {
+      context.handle(_dataIdMeta,
+          dataId.isAcceptableOrUnknown(data['data_id'], _dataIdMeta));
+    }
+    if (data.containsKey('tag_title')) {
+      context.handle(_tagTitleMeta,
+          tagTitle.isAcceptableOrUnknown(data['tag_title'], _tagTitleMeta));
+    } else if (isInserting) {
+      context.missing(_tagTitleMeta);
+    }
+    if (data.containsKey('tag_amount')) {
+      context.handle(_tagAmountMeta,
+          tagAmount.isAcceptableOrUnknown(data['tag_amount'], _tagAmountMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {dataId};
+  @override
+  TagChartRecord map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return TagChartRecord.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $TagChartRecordsTable createAlias(String alias) {
+    return $TagChartRecordsTable(_db, alias);
+  }
+}
+
 abstract class _$ComparisonItemDB extends GeneratedDatabase {
   _$ComparisonItemDB(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $ComparisonOverviewRecordsTable _comparisonOverviewRecords;
@@ -2110,6 +2349,9 @@ abstract class _$ComparisonItemDB extends GeneratedDatabase {
       _way2DemeritRecords ??= $Way2DemeritRecordsTable(this);
   $TagRecordsTable _tagRecords;
   $TagRecordsTable get tagRecords => _tagRecords ??= $TagRecordsTable(this);
+  $TagChartRecordsTable _tagChartRecords;
+  $TagChartRecordsTable get tagChartRecords =>
+      _tagChartRecords ??= $TagChartRecordsTable(this);
   ComparisonItemDao _comparisonItemDao;
   ComparisonItemDao get comparisonItemDao =>
       _comparisonItemDao ??= ComparisonItemDao(this as ComparisonItemDB);
@@ -2122,6 +2364,7 @@ abstract class _$ComparisonItemDB extends GeneratedDatabase {
         way1DemeritRecords,
         way2MeritRecords,
         way2DemeritRecords,
-        tagRecords
+        tagRecords,
+        tagChartRecords
       ];
 }

@@ -3,6 +3,7 @@ import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
+import 'package:compare_2way/views/common/nav_bar_icon_title.dart';
 import 'package:compare_2way/views/compare/components/sub/tag_chips.dart';
 import 'package:compare_2way/views/compare/components/sub/candidate_tag.dart';
 import 'package:compare_2way/views/tag/components/tag_list.dart';
@@ -29,9 +30,10 @@ class TagDialogPage extends StatelessWidget {
                 CupertinoIcons.clear_thick_circled,
                 color: Colors.white,
               ),
-              onTap: () =>Navigator.pop(context)
+              onTap: () =>_cancelPage(context),
           ),
-          middle: const Text('タグの追加・編集',style: middleTextStyle),
+          middle: const NavBarIconTitle(tagTitle:'タグの追加・削除',
+            titleIcon: CupertinoIcons.tag,),
 
           //CupertinoButtotonに変更でtrailingの'完了'の下が切れない..
           // 完了ボタン押した時にTagInputChip入力中の項目も追加されるように(キーボード完了よりこっちをおしてしまう)
@@ -40,12 +42,13 @@ class TagDialogPage extends StatelessWidget {
             child: const Text('完了',style: trailingTextStyle,),
             onPressed: () async {
               //完了を押したらinput内容(List<String>)とcomparisonIdを基にtagクラスをDB登録
-              //todo 完了時createdAtを更新
               ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
 //              print('tagDialogPageの完了ボタン！');
             //tempoInputTagに入力がある場合はviewModelの_tagNameListに追加
+              //todo candidateからの選択だとtempoInputに入らない
               await viewModel.createTag(comparisonOverview);//DBと重複してないものを登録
               //削除リストとDBリストで重複してるものを削除
+              //todo 削除完了時にTagChart側も削除(Tag削除されてもTagPage側(TagChart表示側)は残っている)
               await viewModel.deleteTag(comparisonOverview.comparisonItemId);
               //TagPage側更新
               await viewModel.updateSelectTagPage();
@@ -97,13 +100,14 @@ class TagDialogPage extends StatelessWidget {
                             //_tempoDisplayListをviewModelへset
                             viewModel.setTempoDisplayList(tempoDisplayList);
                           },
-                          onDeleted: (tempoDeleteLabels) {
+
+                          onDeleted: (tempoDeleteLabels,tempoDisplayList) {
                       //削除項目抽出：viewModelにsetしてある_tagNameListと
                             // tempoDeleteLabels比較し、重複しているものだけを抜き出す
-                            viewModel.createDeleteList(tempoDeleteLabels);
+                            viewModel.createDeleteList(tempoDeleteLabels,tempoDisplayList);
                           },
                     //candidateが空か否かでContainer or ListView.builderで場合わけ
-                          candidateTagNameList: viewModel.candidateTagNameList,
+                          candidateTagNameList: snapshot.data,
                         );
                       }
                     }),
@@ -113,6 +117,13 @@ class TagDialogPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _cancelPage(BuildContext context) {
+    Navigator.pop(context);
+    //viewModel側のtempoDisplayList,tempoDeleteListは削除が必要
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+    ..clearTempoList();
   }
 
 }

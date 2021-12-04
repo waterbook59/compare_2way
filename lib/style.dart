@@ -27,7 +27,8 @@ TextStyle(fontFamily: regularFontJa, fontSize: 18, color: Colors.red);
 //CompareScreenタイトル
 const itemTitleTextStyle = TextStyle(
   fontFamily: regularFontJa,
-  fontSize: 18,
+  fontSize: 20,
+  fontWeight: FontWeight.bold,
 );
 
 //アコーディオンの丸み

@@ -1,6 +1,7 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/dragging_item_data.dart';
 import 'package:compare_2way/data_models/tag.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:moor/moor.dart';
 import 'comparison_item_database.dart';
 
@@ -13,6 +14,7 @@ part 'comparison_item_dao.g.dart';
   Way2MeritRecords,
   Way2DemeritRecords,
   TagRecords,
+  TagChartRecords,
 ])
 class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
     with _$ComparisonItemDaoMixin {
@@ -251,7 +253,6 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   ///新規作成:List<TagRecord>:batchでやると重複登録されてしまうので
   ///1行ずつdao側でinsertOnConflictUpdate
   Future<void> insertTagRecordList(List<TagRecord> tagRecordList) async{
-    
     await batch((batch) {
       batch.insertAll(tagRecords, tagRecordList);
     });
@@ -285,6 +286,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   ///削除：List<Tag> comparisonItemIdとtagTitleの２つの条件のもののみ削除
   //todo forEach=>map.toList
+  //todo TagDialogPageの削除はdeleteSingleTagListとかに名前変更
   Future<void> deleteTagList(List<TagRecord> deleteTagRecordList){
     deleteTagRecordList.forEach((tag) {
       (delete(tagRecords)..where(
@@ -338,6 +340,17 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
         ..where((tbl) => tbl.tagTitle.equals(deleteTagRecord.tagTitle)))
           .go();
 
+  ///削除：Tag tagPageでの選択したtagTitleを削除
+  Future<void> deleteSelectTagList(List<TagRecord> deleteTagRecordList)async{
+    await Future.forEach(deleteTagRecordList,(TagRecord tag) {
+      (delete(tagRecords)
+        ..where((tbl) => tbl.tagTitle.equals(tag.tagTitle)))
+          .go();
+    });
+
+  }
+
+
   ///並び替え保存:comparisonOverview
   Future<void> changeCompareListOrder(
       String comparisonItemId,
@@ -349,9 +362,67 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
         .write(overviewCompanion);
   }
 
+  ///新規作成:List<TagChart>登録(dataIdはincrement)&tagTitle同じものは更新
+  Future<void> createTagChart(
+      List<TagChartRecord> tagChartRecordList) async {
+    await Future.forEach(tagChartRecordList,(TagChartRecord tagChart){
+      into(tagChartRecords).insertOnConflictUpdate(tagChart);
+    });
+  }
 
+  ///更新:List<TagChart>tagTitleに紐づいて数量を更新
+  Future<void> updateTagChart(
+      List<TagChartRecord> tagChartRecordList,
+      TagChartRecordsCompanion updateTagRecordCompanion
+      ) async {
+    await Future.forEach(tagChartRecordList,(TagChartRecord tagChart) {
+      (update(tagChartRecords)
+        ..where((tbl) => tbl.tagTitle.equals(tagChart.tagTitle)
+        ))
+          .write(updateTagRecordCompanion);
+    });
+  }
+  ///読込：tagTitleからTagChart返す(１行だけ取ってくる)
+  Future<TagChartRecord> getTagChart(String title) {
+    return (select(tagChartRecords)
+      ..where((t) => t.tagTitle.equals(title)
+      )).getSingle();
+  }
 
+  ///削除：TagChart tagTitleから削除
+  Future<void> removeTagChart(List<TagChartRecord> removeTagChartRecordList
+      )async{
+    await Future.forEach(removeTagChartRecordList,(TagChartRecord tagChart) {
+      (delete(tagChartRecords)
+        ..where((tbl) => tbl.tagTitle.equals(tagChart.tagTitle)))
+          .go();
+    });
+  }
 
+  ///読込：全TagChart情報取得
+  Future<List<TagChartRecord>>  getAllTagChartList() =>
+      select(tagChartRecords).get();
+
+  ///並び替え保存:TagChart
+  Future<void> changeTagListOrder(String itemTagTitle,
+      TagChartRecordsCompanion tagChartCompanion) async{
+    return (update(tagChartRecords)
+      ..where((it) => it.tagTitle.equals(itemTagTitle)))
+        .write(tagChartCompanion);
+  }
+
+  ///削除：TagChart 全削除
+  Future<void> allDeleteTagChartList()async{
+    await delete(tagChartRecords).go();
+  }
+///新規作成：TagChart全登録
+  Future<void> allCreateTagChartList(List<TagChartRecord> tagChartRecordList)
+  async{
+    await batch((batch) {
+      batch.insertAll(tagChartRecords, tagChartRecordList);
+    });
+//    print('dao/insertTagRecordList:${tagChartRecordList.map((e) => e.tagTitle)}');
+  }
 
 
 }

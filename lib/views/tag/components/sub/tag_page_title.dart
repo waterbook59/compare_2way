@@ -13,7 +13,7 @@ class TagPageTitle extends StatelessWidget {
       builder:(context, tagEditMode, child){
         switch(tagEditMode){
           case TagEditMode.normal:
-            return  const Text('タグ', style: middleJaTextStyle);
+            return  const Text('タグリスト', style: middleJaTextStyle);
             break;
           case TagEditMode.tagTitleEdit:
             return  const Text('タグ名を編集', style: middleJaTextStyle);

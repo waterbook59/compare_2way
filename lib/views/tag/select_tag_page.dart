@@ -26,8 +26,9 @@ class SelectTagPage extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         actionsForegroundColor: Colors.white,
         backgroundColor: primaryColor,
-        /// tagアイコン追加(アイコン+文字を中心にもっていくため右を48空ける)
-        middle:NavBarIconTitle(tagTitle:tagTitle,titleIcon: CupertinoIcons.tag),
+        // tagアイコン追加(アイコン+文字を中心にもっていくため右を48空ける)
+        middle:NavBarIconTitle(tagTitle:tagTitle,titleIcon: CupertinoIcons.tag,
+        rightPadding: 48,),
       ),
       //materialのScaffoldで問題なし
       child:Scaffold(
