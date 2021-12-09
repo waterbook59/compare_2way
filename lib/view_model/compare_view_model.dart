@@ -589,16 +589,11 @@ class CompareViewModel extends ChangeNotifier {
   ///ListPage編集並び替え後のDBの順番入れ替え、まずdataIdで行ってみる
   Future<void> changeCompareListOrder(List<DraggingItemData> draggingItems)
   async{
-
-    //todo draggingItemのcompareItemId順にDBから新たにcomparisonItemのリストを取得
-    final draggingIdList = draggingItems.map((item)=>item.comparisonItemId).toList();//[b,a,c]
-    final newCompareItemList = await _compareRepository.getNewOrderList(draggingIdList);
-    print('viewModel/changeCompareListOrder/comparisonOverviews:${comparisonOverviews.map((e) => e.itemTitle)}');
-    print('viewModel/changeCompareListOrder/draggingItems:${draggingItems.map((e) => e.title)}');
-    print('viewModel/changeCompareListOrder/draggingItems:${draggingItems.map((e) => e.orderId)}');
-    print('viewModel/changeCompareListOrder/newCompareItemList:${newCompareItemList.map((e) => e.itemTitle)}');
-    print('viewModel/changeCompareListOrder/newCompareItemList:${newCompareItemList.map((e) => e.dataId)}');
-
+    //draggingItemのcompareItemId順にDBから新たにcomparisonItemのリストを取得
+    final draggingIdList =
+    draggingItems.map((item)=>item.comparisonItemId).toList();
+    final newCompareItemList =
+    await _compareRepository.getNewOrderList(draggingIdList);
     //draggingItemsをrepositoryにそのまま渡してcomparisonItemId順にdataIdを更新する
     await _compareRepository.changeCompareListOrder(newCompareItemList);
     ///_comparisonOverviewsを新たな順番で取得できてればOK

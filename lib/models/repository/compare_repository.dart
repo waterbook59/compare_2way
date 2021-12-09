@@ -716,12 +716,9 @@ class CompareRepository {
     }
   }
   /// ListPage編集並び替え後のDBの順番入れ替え、dataIdで行う
-  //todo comparisonOverviewsはRecordへ,draggingItemsも変換した方がよい
-  //todo 順番入れ替えは全削除・全登録の方法に変更
+  //順番入れ替えは全削除・全登録の方法に変更
   Future<void> changeCompareListOrder(
-      List<ComparisonOverview> newCompareItemList,//い,あ,う
-      ) async{//い,あ,う
-
+      List<ComparisonOverview> newCompareItemList) async{
     //comparisonOverviewsのdataIdとdaragginItemsのorderIdが同じものをComparisonOverviewに
     try{
       final newOrderOverviews = <ComparisonOverview>[];
@@ -752,37 +749,7 @@ class CompareRepository {
       //並び替えだけなので、comparisonOverviewRecordsの削除だけで良い
       await _comparisonItemDao.allDeleteItemtList();
       await _comparisonItemDao.allCreateItemList(itemRecordList);
-
-
-//      final itemId = draggingItems[i].comparisonItemId;
-//      ///並び替え時のdataIdの重複さけるのにリスト数を足して外す
-//      final newDataId = comparisonOverviews[i].dataId+ draggingItems.length;
-
-//      final overviewCompanion = ComparisonOverviewRecordsCompanion(
-//        ///ここにcomparisonOverviewsのdataIdを割り当てる
-//      // dataIdに同じ値があるとautoIncrementしてるので、UNIQUE制約でエラー
-//        dataId: Value(newDataId),
-//      );
-//      print('newId:$newDataId/id:$itemId/companion:$overviewCompanion');
-//            print('draggingItems.length:${draggingItems.length}/plusId:$newDataId/id:$itemId');
-//      await _comparisonItemDao.changeCompareListOrder(
-//          itemId, overviewCompanion);
     }
-
-    ///comparisonOverviewのdataIdから引くのではなく、そのまま登録
-//    for (var u = 0; u < draggingItems.length; ++u) {
-//      final itemId = draggingItems[u].comparisonItemId;
-//      //引くならcomparisonOverviews[u].dataIdではなく、上でDB登録したnewDataIdから
-//      final dataId = comparisonOverviews[u].dataId;
-//      final overviewCompanion = ComparisonOverviewRecordsCompanion(
-//        dataId: Value(dataId),
-//      );
-////      print('draggingItems.length:${draggingItems.length}/minusId:$dataId/id:$itemId');
-//      await _comparisonItemDao.changeCompareListOrder(
-//          itemId, overviewCompanion);
-//    }
-
-
     }on SqliteException catch (e) {
       print('repository更新エラー:${e.toString()}');
     }
