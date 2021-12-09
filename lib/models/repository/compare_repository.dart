@@ -719,37 +719,68 @@ class CompareRepository {
   //todo comparisonOverviewsはRecordへ,draggingItemsも変換した方がよい
   //todo 順番入れ替えは全削除・全登録の方法に変更
   Future<void> changeCompareListOrder(
-      List<ComparisonOverview> comparisonOverviews,
-      List<DraggingItemData> draggingItems) async{
+      List<ComparisonOverview> newCompareItemList,//い,あ,う
+      ) async{//い,あ,う
+
+    //comparisonOverviewsのdataIdとdaragginItemsのorderIdが同じものをComparisonOverviewに
     try{
+      final newOrderOverviews = <ComparisonOverview>[];
       //draggingItemsをrepositoryにそのまま渡してcomparisonItemId順にdataIdを更新する
-    for (var i = 0; i < draggingItems.length; ++i) {
-      final itemId = draggingItems[i].comparisonItemId;
-      ///並び替え時のdataIdの重複さけるのにリスト数を足して外す
-      final newDataId = comparisonOverviews[i].dataId+ draggingItems.length;
-      final overviewCompanion = ComparisonOverviewRecordsCompanion(
-        ///ここにcomparisonOverviewsのdataIdを割り当てる
-      // dataIdに同じ値があるとautoIncrementしてるので、UNIQUE制約でエラー
-        dataId: Value(newDataId),
+    for (var i = 0; i < newCompareItemList.length; ++i) {
+      newOrderOverviews.add(
+        ComparisonOverview(
+          dataId: i,//ここだけdraggingItemから
+          comparisonItemId: newCompareItemList[i].comparisonItemId,
+          itemTitle: newCompareItemList[i].itemTitle,
+          way1Title: newCompareItemList[i].way1Title,
+          way1MeritEvaluate:newCompareItemList[i].way1MeritEvaluate,
+          way1DemeritEvaluate: newCompareItemList[i].way1DemeritEvaluate,
+          way2Title: newCompareItemList[i].way2Title,
+          way2MeritEvaluate: newCompareItemList[i].way2MeritEvaluate,
+          way2DemeritEvaluate: newCompareItemList[i].way1DemeritEvaluate,
+          //todo favorite,way3追加
+//          way3Title: newCompareItemList[i].way3Title,
+//          way3MeritEvaluate: newCompareItemList[i].way3MeritEvaluate,
+//          way3DemeritEvaluate: newCompareItemList[i].way3DemeritEvaluate,
+        createdAt: newCompareItemList[i].createdAt,
+          conclusion: newCompareItemList[i].conclusion,
+        )
       );
+
+      final itemRecordList =
+      newOrderOverviews.toComparisonOverviewRecords(newOrderOverviews);
+      //並び替えだけなので、comparisonOverviewRecordsの削除だけで良い
+      await _comparisonItemDao.allDeleteItemtList();
+      await _comparisonItemDao.allCreateItemList(itemRecordList);
+
+
+//      final itemId = draggingItems[i].comparisonItemId;
+//      ///並び替え時のdataIdの重複さけるのにリスト数を足して外す
+//      final newDataId = comparisonOverviews[i].dataId+ draggingItems.length;
+
+//      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+//        ///ここにcomparisonOverviewsのdataIdを割り当てる
+//      // dataIdに同じ値があるとautoIncrementしてるので、UNIQUE制約でエラー
+//        dataId: Value(newDataId),
+//      );
 //      print('newId:$newDataId/id:$itemId/companion:$overviewCompanion');
 //            print('draggingItems.length:${draggingItems.length}/plusId:$newDataId/id:$itemId');
-      await _comparisonItemDao.changeCompareListOrder(
-          itemId, overviewCompanion);
+//      await _comparisonItemDao.changeCompareListOrder(
+//          itemId, overviewCompanion);
     }
 
     ///comparisonOverviewのdataIdから引くのではなく、そのまま登録
-    for (var u = 0; u < draggingItems.length; ++u) {
-      final itemId = draggingItems[u].comparisonItemId;
-      //引くならcomparisonOverviews[u].dataIdではなく、上でDB登録したnewDataIdから
-      final dataId = comparisonOverviews[u].dataId;
-      final overviewCompanion = ComparisonOverviewRecordsCompanion(
-        dataId: Value(dataId),
-      );
-//      print('draggingItems.length:${draggingItems.length}/minusId:$dataId/id:$itemId');
-      await _comparisonItemDao.changeCompareListOrder(
-          itemId, overviewCompanion);
-    }
+//    for (var u = 0; u < draggingItems.length; ++u) {
+//      final itemId = draggingItems[u].comparisonItemId;
+//      //引くならcomparisonOverviews[u].dataIdではなく、上でDB登録したnewDataIdから
+//      final dataId = comparisonOverviews[u].dataId;
+//      final overviewCompanion = ComparisonOverviewRecordsCompanion(
+//        dataId: Value(dataId),
+//      );
+////      print('draggingItems.length:${draggingItems.length}/minusId:$dataId/id:$itemId');
+//      await _comparisonItemDao.changeCompareListOrder(
+//          itemId, overviewCompanion);
+//    }
 
 
     }on SqliteException catch (e) {
@@ -794,6 +825,19 @@ class CompareRepository {
     }
 
 
+  }
+
+  Future<List<ComparisonOverview>> getNewOrderList(List<String> deleteItemIdList) async{
+
+    final itemRecordList = <ComparisonOverviewRecord>[];
+
+    await  Future.forEach(deleteItemIdList,(String id)async{
+      final  itemRecord = await _comparisonItemDao.getOverviewRecord(id);
+      itemRecordList.add(itemRecord);
+    });
+    print('repo/getNewOrderList:${itemRecordList.map((e) => e.itemTitle)}');
+    return
+      _overviewResults = itemRecordList.toComparisonOverviews(itemRecordList);
   }
 
 
