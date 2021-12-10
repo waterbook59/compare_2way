@@ -425,4 +425,31 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   }
 
 
+  ///読込：comparisonItemIdからList<ComparisonOverviewRecord>を(１行だけ取ってくる)
+  Future<ComparisonOverviewRecord> getOverviewRecord(
+      String comparisonItemId) {
+    return (select(comparisonOverviewRecords)
+      ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)
+      )).getSingle();
+  }
+
+  ///削除：List<ComparisonOverviewRecord> 全削除
+  Future<void> allDeleteItemtList()async{
+    await delete(comparisonOverviewRecords).go();
+    }
+  ///新規作成:List<ComparisonOverviewRecord> 全登録
+  Future<void> allCreateItemList(
+      List<ComparisonOverviewRecord> itemRecordList) async {
+    //2行以上の可能性あり
+    await batch((batch) {
+      batch.insertAll(comparisonOverviewRecords, itemRecordList);
+    });
+  }
+
+
+
+
+
+
+
 }

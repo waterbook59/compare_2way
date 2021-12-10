@@ -589,9 +589,13 @@ class CompareViewModel extends ChangeNotifier {
   ///ListPage編集並び替え後のDBの順番入れ替え、まずdataIdで行ってみる
   Future<void> changeCompareListOrder(List<DraggingItemData> draggingItems)
   async{
+    //draggingItemのcompareItemId順にDBから新たにcomparisonItemのリストを取得
+    final draggingIdList =
+    draggingItems.map((item)=>item.comparisonItemId).toList();
+    final newCompareItemList =
+    await _compareRepository.getNewOrderList(draggingIdList);
     //draggingItemsをrepositoryにそのまま渡してcomparisonItemId順にdataIdを更新する
-    await _compareRepository.changeCompareListOrder(
-     _comparisonOverviews,draggingItems);
+    await _compareRepository.changeCompareListOrder(newCompareItemList);
     ///_comparisonOverviewsを新たな順番で取得できてればOK
     _comparisonOverviews =await _compareRepository.getOverviewList();
   }

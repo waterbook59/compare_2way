@@ -38,6 +38,35 @@ extension ConvertToComparisonOverviewRecords on List<ComparisonOverviewRecord> {
   }
 }
 
+///(model=>DB):List<ComparisonOverview>=>List<ComparisonOverviewRecord>
+extension ConvertToComparisonOverviews on List<ComparisonOverview> {
+  List<ComparisonOverviewRecord> toComparisonOverviewRecords(
+      List<ComparisonOverview> comparisonOverviews) {
+    final comparisonOverviewRecords =
+    comparisonOverviews.map((comparisonOverview) {
+      return  ComparisonOverviewRecord(
+        dataId: comparisonOverview.dataId ?? 0,
+        comparisonItemId: comparisonOverview.comparisonItemId ?? '',
+        itemTitle: comparisonOverview.itemTitle ?? '',
+        way1Title: comparisonOverview.way1Title ?? '',
+        way1MeritEvaluate: comparisonOverview.way1MeritEvaluate ?? 0,
+        way1DemeritEvaluate: comparisonOverview.way1DemeritEvaluate ?? 0,
+        way2Title: comparisonOverview.way2Title ?? '',
+        way2MeritEvaluate: comparisonOverview.way2MeritEvaluate ?? 0,
+        way2DemeritEvaluate: comparisonOverview.way2DemeritEvaluate ?? 0,
+//todo way3追加
+//            way3Title:  comparisonOverviewRecord.way3Title ?? '',
+//            way3Evaluate: comparisonOverviewRecord.way3Evaluate ?? 0,
+        favorite: comparisonOverview.favorite ?? false,
+        conclusion: comparisonOverview.conclusion ?? '',
+        ///取得時のcreatedAt追加
+        createdAt: comparisonOverview.createdAt ,
+      );
+    }).toList();
+    return comparisonOverviewRecords;
+  }
+}
+
 ///保存・単独読込の場合はリスト型でやりとり必要ない
 ///(model=>DB):ComparisonOverview=>ComparisonOverviewRecordCompanion
 extension ConvertToComparisonOverview on ComparisonOverview {
