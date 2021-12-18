@@ -97,7 +97,7 @@ class TagEditButtonAction extends StatelessWidget {
                         width: 4,
                       ),
                       CupertinoButton(
-                        child: const Text('戻る', style: trailingTextStyle),
+                        child: const Text('完了', style: trailingTextStyle),
                         onPressed: () => _changeEdit(context),//押したら通常モードへ変更
                         //押したら通常モードへ変更
                         padding: const EdgeInsets.all(8),
