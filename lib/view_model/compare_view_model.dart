@@ -381,6 +381,13 @@ class CompareViewModel extends ChangeNotifier {
         break;
     }
 
+    ///変更時の時間更新
+    final updateOverview = ComparisonOverview(
+      comparisonItemId: comparisonOverview.comparisonItemId,
+      createdAt: DateTime.now(),
+    );
+    await _compareRepository.updateTime(updateOverview);
+
     notifyListeners();
   }
 
