@@ -476,7 +476,12 @@ class CompareViewModel extends ChangeNotifier {
       case DisplayList.way3Merit:
       case DisplayList.way3Demerit:
     }
-
+    ///削除時の時間更新
+    final updateOverview = ComparisonOverview(
+      comparisonItemId: comparisonOverview.comparisonItemId,
+      createdAt: DateTime.now(),
+    );
+    await _compareRepository.updateTime(updateOverview);
 //    notifyListeners();
   }
 
