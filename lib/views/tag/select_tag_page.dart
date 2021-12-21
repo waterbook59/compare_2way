@@ -10,6 +10,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import "package:intl/intl.dart";
 
+import 'components/select_item_list.dart';
+
 
 class SelectTagPage extends StatelessWidget {
   const SelectTagPage({this.tagTitle});
@@ -50,7 +52,7 @@ class SelectTagPage extends StatelessWidget {
                     final formatter = DateFormat('yyyy/MM/dd(E) HH:mm:ss', 'ja_JP');
                     final formatted = formatter.format(overview.createdAt);
 
-                    return OverViewList(
+                    return SelectItemList(
                       title: overview.itemTitle,
                       conclusion: overview.conclusion,
                       createdAt: formatted,
