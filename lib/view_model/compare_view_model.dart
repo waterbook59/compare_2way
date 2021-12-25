@@ -558,8 +558,29 @@ class CompareViewModel extends ChangeNotifier {
   }
   //ListPage単一行削除
   Future<void> deleteItem(String comparisonItemId) async {
+    ///tagChart更新
+    //itemIdをもとにList<Tag>取得(tagList拝借)=>tagNameからList<tagChartt>取得=>agAmountの数でtagChart更新
+    _tagList = await _compareRepository.getTagList(comparisonItemId);
+    _tagNameList = _tagList.map((e) => e.tagTitle).toList();
+    final tagChartDBList=
+    await _compareRepository.getTagChartList(_tagNameList);
+    print('tagChartDBList：${tagChartDBList.map((e) => e.tagTitle)}');
+    await Future.forEach(tagChartDBList, (TagChart tagChart) async{
+      if(tagChart.tagAmount > 1){//Value更新
+        final decreaseTagChartList =<TagChart>[]..add(
+            TagChart(tagTitle: tagChart.tagTitle,tagAmount: tagChart.tagAmount-1));
+        await _compareRepository.updateTagChart(decreaseTagChartList);
+      }else{//削除
+        final removeTagChartList =<TagChart>[]..add(
+            TagChart(tagTitle: tagChart.tagTitle,tagAmount: tagChart.tagAmount));
+        await _compareRepository.removeTagChart(removeTagChartList);
+      }
+    });
     //削除
     await _compareRepository.deleteItem(comparisonItemId);
+
+    _tagList = [];
+    _tagNameList =[];
     //データ取得?
     notifyListeners();
   }
