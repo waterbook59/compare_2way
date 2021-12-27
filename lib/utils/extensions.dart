@@ -450,6 +450,30 @@ extension ConvertToTagChartList on List<TagChartRecord>{
   }
 }
 
+///読込時(DB=>model) TagChartRecord=>TagChart
+extension ConvertToTagChart on TagChartRecord{
+  TagChart toTagChart(TagChartRecord tagChartRecord){
+      return TagChart(
+        dataId: tagChartRecord.dataId ?? 0,
+        tagTitle: tagChartRecord.tagTitle ??'',
+        tagAmount: tagChartRecord.tagAmount ?? 0,
+      );
+  }
+}
+
+///更新時(model=>DB) TagChart=>TagChartRecord
+extension ConvertToTagChartRecord on TagChart{
+  TagChartRecord toTagChartRecord(TagChart tagChart){
+    return TagChartRecord(
+      dataId: tagChart.dataId ?? 0,
+      tagTitle: tagChart.tagTitle ??'',
+      tagAmount: tagChart.tagAmount ?? 0,
+    );
+  }
+}
+
+
+
 ///新規挿入時(model=>DB):List<draggingTag>=>List<TagChartRecord>
 extension FromDraggingTagConvertToTagChartRecordList on List<DraggingTagChart>{
   List<TagChartRecord> dragToTagChartRecordList(

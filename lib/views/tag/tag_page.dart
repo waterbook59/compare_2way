@@ -174,7 +174,7 @@ class TagPage extends StatelessWidget {
         //tagTitleからcomparisonItemIdをviewModelへ格納する
         await viewModel.getTagTitleId(tagTitle);
         break;
-    /// 削除モード タップでタグ削除
+    /// 削除モード タップでタグ削除 //todo タップ削除はなくなったのでこの部分はいらない
       case TagEditMode.tagDelete:
         await showDialog<Widget>(
             context: context,
