@@ -88,12 +88,11 @@ class CompareViewModel extends ChangeNotifier {
   List<TagChart> get tagChartList => _tagChartList;
   List<Tag> _selectTagList = <Tag>[];//TagPage=>SelectTagPageへtagTitleで紐づいたタグリスト
   List<Tag> get selectTagList => _selectTagList;
-  List<TagChart> _selectTagChartList = <TagChart>[];//TagPageでtagTitle編集時に選択したtagChartを格納
-  List<TagChart> get selectTagChartList => _selectTagChartList;
+  TagChart selectTagChart;//TagPageでtagTitle編集時に選択したtagChartを格納
   List<ComparisonOverview> _selectOverviews = <ComparisonOverview>[];
   List<ComparisonOverview> get selectOverviews => _selectOverviews;
   String selectTagTitle= '';
-  TagChart selectTagChart;
+
 //  List<String> idList=[];//ComparisonItemIdのリスト
 
   ListEditMode editStatus = ListEditMode.display;
@@ -1110,11 +1109,6 @@ class CompareViewModel extends ChangeNotifier {
         createAtToString:tag.createAtToString,
       );
     }).toList();
-
-    print('viewModel/updateTagTitle/_selectTagListのtitle:${_selectTagList.map((e) => e.tagTitle)}');
-    print('/_selectTagListのcomparisonItemId:${_selectTagList.map((e) => e.comparisonItemId)}');
-    print('_selectTagListのtagId:${_selectTagList.map((e) => e.tagId)}');
-
     await _compareRepository.updateTagTitle(_selectTagList,newTagTitle);
     //tagChartのタグ名も更新
     await _compareRepository.updateTagChartTitle(selectTagChart,newTagTitle);
