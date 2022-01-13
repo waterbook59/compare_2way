@@ -603,8 +603,37 @@ class CompareViewModel extends ChangeNotifier {
 
   //ListPage選択行削除
   Future<void> deleteItemList() async {
+    print('viewModel/deleteItemList選択行削除tagList:${_tagList.map((e) => e.tagTitle)}');
+    _tagList = [];
+    //アイテムとTagを削除
       _compareRepository.deleteItemList(deleteItemIdList);
+      print('viewModel/deleteItemList選択行削除deleteItemIdList:$deleteItemIdList');
+    //idListからList<Tag>取得=>tagNameList変換=>List<TagChart>取得=>tagAmountの数でtagChart更新
+      await Future.forEach(deleteItemIdList, (String itemId) async{
+        final singleIdTagList = await _compareRepository.getTagList(itemId);
+        print('viewModel/deleteItemList選択行削除singleIdTagList:${singleIdTagList.map((e) => e.tagTitle)}');
+        singleIdTagList.map((tag) => _tagList.add(tag)).toList();
+      });
+      _tagNameList = _tagList.map((e) => e.tagTitle).toList();
+      print('viewModel/deleteItemList選択行削除_tagNameList:$_tagNameList');
+
+      // tagNameList１つずつgetSingleTagChartして、それぞれtagAmount>1かを判別して更新・削除
+    await Future.forEach(_tagNameList, (String tagName) async{
+      final selectTag = await _compareRepository.getSingleTagChart(tagName);
+      if(selectTag.tagAmount > 1){//Value更新
+        final decreaseTagChartList =<TagChart>[]..add(
+      TagChart(tagTitle: selectTag.tagTitle,tagAmount: selectTag.tagAmount-1));
+        await _compareRepository.updateTagChart(decreaseTagChartList);
+      }else{//削除
+        final removeTagChartList =<TagChart>[]..add(
+        TagChart(tagTitle: selectTag.tagTitle,tagAmount: selectTag.tagAmount));
+        await _compareRepository.removeTagChart(removeTagChartList);
+      }
+    });
+
      deleteItemIdList =[];
+      _tagList = [];
+      _tagNameList =[];
      ///NavBarで削除おしてもListView反映されない
       ///=>snapshot<List<DraggingItemData>>を変更しないと通知されない
       ///>comparisonOverviewsを変更するのに同時にgetOverviewListが必要

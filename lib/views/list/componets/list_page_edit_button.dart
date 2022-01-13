@@ -33,7 +33,7 @@ class ListPageEditButton extends StatelessWidget {
                             fontSize: 16,
                             color: Colors.redAccent),
                       ),
-                      onPressed: () => _deleteItem(context), //押したら通常モードへ変更
+                      onPressed: () => _deleteItem(context), //押したら選択行削除
                       padding: const EdgeInsets.all(8),
                     ),
                     const SizedBox(
