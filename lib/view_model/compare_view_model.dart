@@ -88,10 +88,11 @@ class CompareViewModel extends ChangeNotifier {
   List<TagChart> get tagChartList => _tagChartList;
   List<Tag> _selectTagList = <Tag>[];//TagPage=>SelectTagPageへtagTitleで紐づいたタグリスト
   List<Tag> get selectTagList => _selectTagList;
+  TagChart selectTagChart;//TagPageでtagTitle編集時に選択したtagChartを格納
   List<ComparisonOverview> _selectOverviews = <ComparisonOverview>[];
   List<ComparisonOverview> get selectOverviews => _selectOverviews;
   String selectTagTitle= '';
-  TagChart updateTagChart;
+
 //  List<String> idList=[];//ComparisonItemIdのリスト
 
   ListEditMode editStatus = ListEditMode.display;
@@ -558,8 +559,29 @@ class CompareViewModel extends ChangeNotifier {
   }
   //ListPage単一行削除
   Future<void> deleteItem(String comparisonItemId) async {
+    ///tagChart更新//todo tagChartのidList格納できればもっとシンプルに書ける
+    //itemIdをもとにList<Tag>取得(tagList拝借)=>
+    // tagNameからList<tagChartt>取得=>agAmountの数でtagChart更新
+    _tagList = await _compareRepository.getTagList(comparisonItemId);
+    _tagNameList = _tagList.map((e) => e.tagTitle).toList();
+    final tagChartDBList=
+    await _compareRepository.getTagChartList(_tagNameList);
+    await Future.forEach(tagChartDBList, (TagChart tagChart) async{
+      if(tagChart.tagAmount > 1){//Value更新
+        final decreaseTagChartList =<TagChart>[]..add(
+        TagChart(tagTitle: tagChart.tagTitle,tagAmount: tagChart.tagAmount-1));
+        await _compareRepository.updateTagChart(decreaseTagChartList);
+      }else{//削除
+        final removeTagChartList =<TagChart>[]..add(
+        TagChart(tagTitle: tagChart.tagTitle,tagAmount: tagChart.tagAmount));
+        await _compareRepository.removeTagChart(removeTagChartList);
+      }
+    });
     //削除
     await _compareRepository.deleteItem(comparisonItemId);
+
+    _tagList = [];
+    _tagNameList =[];
     //データ取得?
     notifyListeners();
   }
@@ -581,8 +603,33 @@ class CompareViewModel extends ChangeNotifier {
 
   //ListPage選択行削除
   Future<void> deleteItemList() async {
+    _tagList = [];
+    //アイテムとTagを削除
       _compareRepository.deleteItemList(deleteItemIdList);
+    //idListからList<Tag>取得=>tagNameList変換=>1つずつTag取得=>tagAmountの数でtagChart更新
+      await Future.forEach(deleteItemIdList, (String itemId) async{
+        final singleIdTagList = await _compareRepository.getTagList(itemId);
+        singleIdTagList.map((tag) => _tagList.add(tag)).toList();
+      });
+      _tagNameList = _tagList.map((e) => e.tagTitle).toList();
+
+      // tagNameList１つずつgetSingleTagChartして、それぞれtagAmount>1かを判別して更新・削除
+    await Future.forEach(_tagNameList, (String tagName) async{
+      final selectTag = await _compareRepository.getSingleTagChart(tagName);
+      if(selectTag.tagAmount > 1){//Value更新
+        final decreaseTagChartList =<TagChart>[]..add(
+      TagChart(tagTitle: selectTag.tagTitle,tagAmount: selectTag.tagAmount-1));
+        await _compareRepository.updateTagChart(decreaseTagChartList);
+      }else{//削除
+        final removeTagChartList =<TagChart>[]..add(
+        TagChart(tagTitle: selectTag.tagTitle,tagAmount: selectTag.tagAmount));
+        await _compareRepository.removeTagChart(removeTagChartList);
+      }
+    });
+
      deleteItemIdList =[];
+      _tagList = [];
+      _tagNameList =[];
      ///NavBarで削除おしてもListView反映されない
       ///=>snapshot<List<DraggingItemData>>を変更しないと通知されない
       ///>comparisonOverviewsを変更するのに同時にgetOverviewListが必要
@@ -1069,12 +1116,10 @@ class CompareViewModel extends ChangeNotifier {
   //updateTagTitleと２こ１
   //todo getAllTagListの方法1でList<TagChart>内にcomparisonItemId格納できればこのメソッドいらない
   Future<void> getTagTitleId(String tagTitle) async{
-
-    print('viewModel/getTagTitleId/tagTitle:$tagTitle');
-    print('viewModel/getTagTitled/_selectTagList:Before:${_selectTagList.map((e) => e.tagTitle)}');
     //tagTitleからList<Tag>読取
     _selectTagList =await _compareRepository.onSelectTag(tagTitle);
     print('viewModel/getTagTitled/_selectTagList:${_selectTagList.map((e) => e.tagTitle)}');
+    selectTagChart= await _compareRepository.getSingleTagChart(tagTitle);
   }
 
   ///タグ名編集画面でtextFieldに変更があればDBを更新
@@ -1089,12 +1134,9 @@ class CompareViewModel extends ChangeNotifier {
         createAtToString:tag.createAtToString,
       );
     }).toList();
-
-    print('viewModel/updateTagTitle/_selectTagListのtitle:${_selectTagList.map((e) => e.tagTitle)}');
-    print('/_selectTagListのcomparisonItemId:${_selectTagList.map((e) => e.comparisonItemId)}');
-    print('_selectTagListのtagId:${_selectTagList.map((e) => e.tagId)}');
-
     await _compareRepository.updateTagTitle(_selectTagList,newTagTitle);
+    //tagChartのタグ名も更新
+    await _compareRepository.updateTagChartTitle(selectTagChart,newTagTitle);
   }
 
   //TagPageの削除・並び替え画面時切り替え  //initStateの役割をここで行う

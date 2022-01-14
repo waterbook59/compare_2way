@@ -382,6 +382,20 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
           .write(updateTagRecordCompanion);
     });
   }
+
+  ///更新:TagChart tagTitle編集・更新
+  Future<void> updateTagChartTitle(
+      TagChartRecord tagChartRecord,
+      TagChartRecordsCompanion updateTagRecordCompanion
+      ) async {
+//    await Future.forEach(tagChartRecordList,(TagChartRecord tagChart) {
+      await (update(tagChartRecords)
+        ..where((tbl) => tbl.dataId.equals(tagChartRecord.dataId)
+        ))
+          .write(updateTagRecordCompanion);
+//    });
+  }
+
   ///読込：tagTitleからTagChart返す(１行だけ取ってくる)
   Future<TagChartRecord> getTagChart(String title) {
     return (select(tagChartRecords)

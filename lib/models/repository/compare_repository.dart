@@ -25,6 +25,7 @@ class CompareRepository {
   List<Tag> _tagList = <Tag>[];
   List<Tag> _selectTagList = <Tag>[];
   List<TagChart> _tagChartList = <TagChart>[];
+  TagChart _selectTagChart;
 
 
   ///新規作成 comparisonOverview
@@ -649,6 +650,27 @@ class CompareRepository {
     }
   }
 
+  ///Update List<TagChart>=>TagChartRecordsCompanion
+  Future<void> updateTagChartTitle(TagChart tagChart,String newTagTitle)async{
+    //TagChart=>TaChartRecord
+    final tagChartRecord =
+    tagChart.toTagChartRecord(tagChart);
+    try{
+      //TagChartRecordsCompanionのリストで数量更新
+//      tagChartRecordList.map((tagChartRecord){
+        final updateTagRecordCompanion =TagChartRecordsCompanion(
+            tagTitle: Value(newTagTitle));
+        _comparisonItemDao.updateTagChartTitle(
+            tagChartRecord, updateTagRecordCompanion);
+//      }).toList();
+      print('repository/updateTagChart:更新完了');
+
+    }on SqliteException catch (e) {
+      print('repository更新エラー/updateTagChart:${e.toString()}');
+    }
+  }
+
+
 
   ///Read List<TagChart>のtitleのみ(vieModel側で書くと行数多くなるので)
   Future<List<String>> getTagChartDBTitle() async{
@@ -657,6 +679,18 @@ class CompareRepository {
     tagChartRecordList.map((tagChart) => tagChart.tagTitle).toList();
     return tagChartDBTitle;
   }
+
+  ///Read List<TagChart>編集用にtitle検索からtagChartList読み込み
+  Future<TagChart> getSingleTagChart(String title) async{
+//    final tagChartRecordList = <TagChartRecord>[];
+    final tagChartRecord = await _comparisonItemDao.getTagChart(title);
+//      tagChartRecordList.add(tagChartRecord);
+
+//    print('repo/getTagChartList:${tagChartRecordList.map((e) => e.tagTitle)}');
+    return
+      _selectTagChart = tagChartRecord.toTagChart(tagChartRecord);
+  }
+
 
   ///Read List<TagChart>削除更新用にtitle検索からtagChartList読み込み
   Future<List<TagChart>> getTagChartList(List<String> titleList) async{
