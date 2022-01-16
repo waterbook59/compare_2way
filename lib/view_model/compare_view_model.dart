@@ -626,7 +626,6 @@ class CompareViewModel extends ChangeNotifier {
         await _compareRepository.removeTagChart(removeTagChartList);
       }
     });
-
      deleteItemIdList =[];
       _tagList = [];
       _tagNameList =[];
@@ -1019,7 +1018,6 @@ class CompareViewModel extends ChangeNotifier {
 
    // Tag内のcomparisonItemIdを元にoverViewを取得しリスト化
     final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
-
 
 ///forEach内の非同期処理でcomparisonIdからList<overview>取得
     ///参照:https://qiita.com/hisw/items/2df0052a400263d5863e

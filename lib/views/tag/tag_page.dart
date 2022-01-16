@@ -160,7 +160,8 @@ class TagPage extends StatelessWidget {
       case TagEditMode.normal:
       //IdからcomparisonOverview.titleを取得し表示
         await viewModel.onSelectTag(tagTitle);
-        await Navigator.push(context,
+    ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
+        await Navigator.of(context,rootNavigator: true).push(
             MaterialPageRoute<void>(
                 builder: (context) => SelectTagPage(tagTitle: tagTitle,
                 )));
