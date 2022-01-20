@@ -113,8 +113,7 @@ class ListPage extends StatelessWidget {
 
               ///編集時  ListTile→ReorderableListView&CheckboxListTile
               //todo Consumerにしないと編集時リストがなくなる
-              :
-          LayoutBuilder(
+              : LayoutBuilder(
                   builder: (context, constraints) => SingleChildScrollView(
                         child: ConstrainedBox(
                             constraints: BoxConstraints(

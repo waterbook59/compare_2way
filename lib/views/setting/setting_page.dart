@@ -2,6 +2,7 @@ import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
+import 'package:compare_2way/views/common/page_title.dart';
 import 'package:compare_2way/views/compare/components/accordion_part.dart';
 import 'package:compare_2way/views/compare/components/sub/desc_form.dart';
 import 'package:compare_2way/views/compare/components/sub/desc_form_and_button.dart';
@@ -10,6 +11,7 @@ import 'package:compare_2way/views/tag/components/tag_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getwidget/components/accordian/gf_accordian.dart';
+import 'package:settings_ui/settings_ui.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -17,142 +19,19 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  final _tagTitleController = TextEditingController();
-  List<TextEditingController> myControllers = [
-    TextEditingController(),
-    TextEditingController(),
-    TextEditingController(),
-    TextEditingController(),
+  List<String> settingList = [
+    '要望・不具合に関する報告',
+'このアプリを評価する',
+ '利用規約',
+'プライバシーポリシー',
+    'ライセンス',
+    'バージョン'
   ];
-  List<TextEditingController> my2ndControllers = [
-    TextEditingController(),
-    TextEditingController(),
-    TextEditingController(),
-    TextEditingController(),
-  ];
-  List<TagChart> testTagChart = [
-    TagChart(
-      tagTitle: 'オラオラオラオラ',
-      tagAmount: 2,
-    ),
-    TagChart(
-      tagTitle: '無駄無駄無駄無駄',
-      tagAmount: 3,
-    ),
-    TagChart(
-      tagTitle: 'ゴールドエクスペリエンス',
-      tagAmount: 1,
-    ),
-    TagChart(
-      tagTitle: 'クレイジーダイヤモンド',
-      tagAmount: 7,
-    ),
-  ];
-  List<TagChart> test2ndTagChart = [
-    TagChart(
-      tagTitle: 'スタープラチナ',
-      tagAmount: 20,
-    ),
-    TagChart(
-      tagTitle: 'ディオ・ブランドーTHE WORLD',
-      tagAmount: 99,
-    ),
-    TagChart(
-      tagTitle: 'ゴールドエクスペリエンス・レクイエム',
-      tagAmount: 15,
-    ),
-    TagChart(
-      tagTitle: '東方仗助',
-      tagAmount: 16,
-    ),
-  ];
-  List<FocusNode> myFocusNodes =[
-   FocusNode(),
-   FocusNode(),
-   FocusNode(),
-   FocusNode(),
-  ];
-  List<FocusNode> my2ndFocusNodes =[
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-  ];
-
-  int _selectedIndex ;
-//  int _selected2ndIndex ;
-
-//表示切り替え選択ボタン
-  String value = '1';
-
-
-//  Map<String,Widget> segmentList =
-//  {'1':SizedBox(child: Center(child: Text('All')),),
-//    '2':SizedBox(child: Center(child: Text('way1')),),
-//    '3':SizedBox(child: Center(child: Text('way2')),)
-//  };
-
-  Map<String,Text> segmentList =
-  {'1': Text('All'),
-    '2':Text('way1'),
-    '3':Text('way2'),
-  };
-
-
-
-  static List<Way1Merit> testItems = [
-    Way1Merit(
-      way1MeritId: 1,
-      comparisonItemId: '1',
-      way1MeritDesc: 'Content 1',
-    ),
-  ];
-
-  final myFocusNode = FocusNode();
-  bool isDisplayIcon = false;
-  bool is2ndDisplayIcon =false;
-  bool isReturnText = true;
-  bool is2ndReturnText = true;
-
-  @override
-  void initState() {
-//
-    myControllers.asMap().forEach((index, controller) {
-      controller.text = testTagChart[index].tagTitle;
-    });
-    my2ndControllers.asMap().forEach((index, controller) {
-      controller.text = test2ndTagChart[index].tagTitle;
-    });
-//    final tagChartMap = testTagChart.asMap().forEach((index, tagChart) {
-//      print('$index,$tagChart');
-//    });
-    print('myControllers:$myControllers');
-
-//    myFocusNode.addListener(() {
-//     print('Has focus: ${myFocusNode.hasFocus}');
-//                    });
-
-    super.initState();
-  }
-
-@override
-  void dispose() {
-    ///controllerやFocusNodeがリスト型の場合のdispose方法
-    myControllers.map((e) => e.dispose()).toList();
-    print('myControllersをdispose:$myControllers');
-    myFocusNodes.map((e) => e.dispose()).toList();
-    print('myFocusNodesをdispose:$myFocusNodes');
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor= Theme.of(context).accentColor;
-
-
-//    List<bool>
-   final _selected = List.generate(testTagChart.length, (i) => false);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -167,189 +46,134 @@ class _SettingPageState extends State<SettingPage> {
             Icons.keyboard_hide,
             color: Colors.white,
           ),
-          onTap:()=> _unFocusTap(context),
         ),
       ),
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
-        body:GestureDetector(
-          onTap: () {
-            ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
-            FocusScope.of(context).unfocus();
-            //setStateいらない
-              isDisplayIcon = false;
-              is2ndDisplayIcon = false;
-              isReturnText = false;
-              is2ndReturnText = false;
-          },
-          child: SingleChildScrollView(
-            child: Column(children: [
-              const SizedBox(height: 16,),
-              ///表示切り替えボタン
-              SizedBox(
-                width: double.infinity,
-                child: CupertinoSegmentedControl(
-                  children:segmentList,
-                  onValueChanged: (String newValue){
-                    print('$newValue');
-                    setState(() {
-                      value = newValue;
-                    });
-                  },
-                  groupValue: value,
-                  padding: EdgeInsets.only(right: 24,left: 24,bottom: 16),
-                borderColor: Colors.grey,
-//                unselectedColor: primaryColor,
-//                pressedColor: accentColor,
-                selectedColor: primaryColor,
-                ),
-              ),
-              ///Accordionテスト
-              GFAccordion(
-                title: 'テスト',
-                titleBorderRadius: accordionTopBorderRadius,
-                contentBorderRadius:
-                accordionBottomBorderRadius,
-                showAccordion:true,
-                collapsedTitleBackgroundColor:
-                const Color(0xFFE0E0E0),
-//            content: 'GFAccordion content',
-                contentChild:
-                    //todo contentChildの中でボタン押す=>DescFormAndButtonへ変更
-                 IconButton(icon: const Icon(Icons.add),onPressed: (){},),
-//                DescFormAndButton(
-//                  displayList: DisplayList.way1Merit,
-//                        way1MeritList: testItems,
-//                  controllers: myControllers,
-//                      ),
-              ),
+        body:
+        Column(
+          children: [
+            const SizedBox(height: 16,),
+            SettingsList(
+              shrinkWrap: true,
+              sections: [
+                SettingsSection(
+                  title: 'このアプリについて',
+                  tiles: [
+                    SettingsTile(
+                      title: '要望・不具合に関する報告',
+//                      subtitle: 'English',
+                      leading: const Icon(CupertinoIcons.envelope),
+                      trailing:const Icon(Icons.arrow_forward_ios),
+                      onPressed: (context) {
+//                    Navigator.of(context).push(MaterialPageRoute(
+//                      builder: (_) => LanguagesScreen(),
+//                    ));
+                      },
+                    ),
+                    SettingsTile(
+                      title: 'このアプリを評価する',
+//                      subtitle: 'English',
+                      leading: const Icon(CupertinoIcons.star_circle_fill),
+                      trailing:const Icon(Icons.arrow_forward_ios),
+                      onPressed: (context) {
+//                    Navigator.of(context).push(MaterialPageRoute(
+//                      builder: (_) => LanguagesScreen(),
+//                    ));
+                      },
+                    ),
+                    SettingsTile(
+                      title: '利用規約',
+//                      subtitle: 'English',
+                      leading: const Icon(CupertinoIcons.text_justify),
+                      trailing:const Icon(Icons.arrow_forward_ios),
+                      onPressed: (context) {
+//                    Navigator.of(context).push(MaterialPageRoute(
+//                      builder: (_) => LanguagesScreen(),
+//                    ));
+                      },
+                    ),
+                    SettingsTile(
+                      title: 'プライバシーポリシー',
+//                      subtitle: 'English',
+                      leading: const Icon(CupertinoIcons.doc_text),
+                      trailing:const Icon(Icons.arrow_forward_ios),
+                      onPressed: (context) {
+//                    Navigator.of(context).push(MaterialPageRoute(
+//                      builder: (_) => LanguagesScreen(),
+//                    ));
+                      },
+                    ),
+                    SettingsTile(
+                      title: 'ライセンス',
+//                      subtitle: 'English',
+                      leading: Image.asset('assets/images/license.png',width: 26,color: Colors.black54,),
+                      trailing:const Icon(Icons.arrow_forward_ios),
+                      onPressed: (context) {
+//                    Navigator.of(context).push(MaterialPageRoute(
+//                      builder: (_) => LanguagesScreen(),
+//                    ));
+                      },
+                    ),
+                    SettingsTile(
+                      title: 'バージョン',
+//                      subtitle: 'English',
+                      leading: const Icon(Icons.language),
+                      trailing:const Icon(Icons.arrow_forward_ios),
+                      onPressed: (context) {
+//                    Navigator.of(context).push(MaterialPageRoute(
+//                      builder: (_) => LanguagesScreen(),
+//                    ));
+                      },
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ],
+        ),
 
-              const SizedBox(height: 16,),
-              const Text('ListView/ListTileテスト'),
-              ListView.builder(
-                  itemCount: testTagChart.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index){
-                    return Container(
-                      decoration: BoxDecoration(
-                        color:
-                        _selectedIndex == index && isReturnText
-//                    index == _selectedIndex
-//                    _selected[index]
-                          ?Colors.grey[400]
-                            :Colors.transparent,
-                      ),
-                      child: ListTile(
-                        title: _selectedIndex == index && isReturnText
-                        ?  Stack(
-                          alignment: Alignment.centerRight,
-                          children: [
-                            CupertinoTextField(
-                            controller: myControllers[index],
-                            focusNode: myFocusNodes[index],
-                            maxLines: null,
-                          ),
-                            _selectedIndex == index && isDisplayIcon
-//                              myFocusNodes[index].hasFocus
-                            ?IconButton(
-                              icon: const Icon(
-                                Icons.remove_circle_outline,
-                                color: Colors.grey,
-                                size: 24,
-                              ),
-                              onPressed: (){},
-                            )
-                                :Container(),
-                        ]
-                        )
-
-                        :Text(testTagChart[index].tagTitle),
-                        subtitle:Text('アイテム数:${testTagChart[index].tagAmount}'),
-                        onTap: (){
-                          print('ListTileのリスト onTap!');
-                          setState(() {
-                            _selectedIndex = index;
-                            myFocusNodes[index].requestFocus();
-                            isDisplayIcon = true;
-                            isReturnText = true;
-                            is2ndReturnText =false;
-                          });
-                        },
-
-                      ),
-                    );
-
-                  }),
-              const SizedBox(height: 16,),
-              const Text('ListView/ListTileテスト2'),
-              ListView.builder(
-                  itemCount: test2ndTagChart.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index){
-                    return Container(
-                      decoration: BoxDecoration(
-                        color:
-                        _selectedIndex == index && is2ndReturnText
-                            ?Colors.grey[400]
-                            :Colors.transparent,
-                      ),
-                        child: ListTile(
-                          title: _selectedIndex == index && is2ndReturnText
-                              ?  Stack(
-                              alignment: Alignment.centerRight,
-                              children: [
-                                CupertinoTextField(
-                                  controller: my2ndControllers[index],
-                                  focusNode:
-                                  my2ndFocusNodes[index],
-                                  maxLines: null,
-                                ),
-                                ///hasFocus使うと初回でてこないので、isDisplayIcon設定
-                        _selectedIndex == index && is2ndDisplayIcon
-//                            || my2ndFocusNodes[index].hasFocus
-                                    ?IconButton(
-                                  icon: const Icon(
-                                    Icons.remove_circle_outline,
-                                    color: Colors.grey,
-                                    size: 24,
-                                  ),
-                                  //ここではvoidCallbackでindexのみ渡して具体的なロジックはDescFormAndButtonで
-                                  onPressed: (){},
-                                )
-                                    :Container(),
-                              ]
-                          )
-                              :Text(test2ndTagChart[index].tagTitle),
-                          subtitle:Text('アイテム数:${test2ndTagChart[index].tagAmount}'),
-                          onTap: (){
-                            print('ListTile2ndのリストonTap!:_selectedIndex:$_selectedIndex,isReturnText:$isReturnText,is2ndReturnText:$is2ndReturnText');
-                            setState(() {
-                              _selectedIndex = index;
-                              my2ndFocusNodes[index].requestFocus();
-                              is2ndDisplayIcon = true;
-                              isReturnText = false;
-                              is2ndReturnText = true;
-                            });
-                          },
-
-                        ),
-                    );
-                  }),
-
-            ],),
-          ),
-        )
-//        Container(child: const Center(child: Text('設定ページ')),
+//        GestureDetector(
+//          onTap: () {
+//            ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
+//            FocusScope.of(context).unfocus();
+//            //setStateいらない
+//          },
+//          child: SingleChildScrollView(
+//            child: Column(
+//              crossAxisAlignment: CrossAxisAlignment.start,
+//              children: [
+//              const PageTitle(title: 'タグ',),
+//              const SizedBox(height: 8,),
+//              const Divider(color: Colors.grey,height: 0,),
+//              ListView.builder(
+//                  shrinkWrap: true,
+//                  physics: const NeverScrollableScrollPhysics(),
+//                  itemCount: 6,
+//                  itemBuilder: (BuildContext context, int index){
+//                    return ListTile(
+//                      title: Text(settingList[index]),
+////                      subtitle:Text('アイテム数:${testTagChart[index].tagAmount}'),
+////                      onTap: (){
+////                        print('ListTileのリスト onTap!');
+////                        setState(() {
+////                          _selectedIndex = index;
+////                          myFocusNodes[index].requestFocus();
+////                          isDisplayIcon = true;
+////                          isReturnText = true;
+////                          is2ndReturnText =false;
+////                        }
+//                        );},
+//                    ),
+//
+////                  }),
+//
+//            ],),
+//          ),
+//        )
       ),
     );
   }
 
-  void _unFocusTap(BuildContext context) {
-    //setStateしてない
-    print('unFocus!');
-        FocusScope.of(context).unfocus();
-  }
 
 }
