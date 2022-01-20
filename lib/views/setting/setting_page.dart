@@ -1,16 +1,7 @@
-import 'package:compare_2way/data_models/merit_demerit.dart';
-import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/style.dart';
-import 'package:compare_2way/utils/constants.dart';
-import 'package:compare_2way/views/common/page_title.dart';
-import 'package:compare_2way/views/compare/components/accordion_part.dart';
-import 'package:compare_2way/views/compare/components/sub/desc_form.dart';
-import 'package:compare_2way/views/compare/components/sub/desc_form_and_button.dart';
-import 'package:compare_2way/views/tag/components/sub/edit_tag_title.dart';
-import 'package:compare_2way/views/tag/components/tag_list.dart';
+import 'package:compare_2way/views/setting/license_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class SettingPage extends StatefulWidget {
@@ -19,14 +10,6 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  List<String> settingList = [
-    '要望・不具合に関する報告',
-'このアプリを評価する',
- '利用規約',
-'プライバシーポリシー',
-    'ライセンス',
-    'バージョン'
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -110,9 +93,19 @@ class _SettingPageState extends State<SettingPage> {
                       leading: Image.asset('assets/images/license.png',width: 26,color: Colors.black54,),
                       trailing:const Icon(Icons.arrow_forward_ios),
                       onPressed: (context) {
-//                    Navigator.of(context).push(MaterialPageRoute(
-//                      builder: (_) => LanguagesScreen(),
-//                    ));
+
+//                        Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
+//                            builder: (context) => CompareScreen(
+//                              comparisonOverview: updateOverview,
+//                              screenEditMode: ScreenEditMode.fromListPage,
+//                            )));
+
+
+
+
+                    Navigator.of(context).push(MaterialPageRoute<void>(
+                      builder: (_) => MyLicensePage(),
+                    ));
                       },
                     ),
                     SettingsTile(
