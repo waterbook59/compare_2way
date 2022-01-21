@@ -35,13 +35,19 @@ class _SettingPageState extends State<SettingPage> {
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
         body:
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16,),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Text('このアプリについて', textAlign: TextAlign.left,
+                style: subTitleTextStyle,),
+            ),
             SettingsList(
               shrinkWrap: true,
               sections: [
                 SettingsSection(
-                  title: 'このアプリについて',
+//                  title: 'このアプリについて',
                   tiles: [
                     SettingsTile(
                       title: '要望・不具合に関する報告',
