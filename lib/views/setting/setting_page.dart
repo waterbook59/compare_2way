@@ -1,5 +1,7 @@
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/views/setting/license_page.dart';
+import 'package:compare_2way/views/setting/privacy_policy_screen.dart';
+import 'package:compare_2way/views/setting/user_policy_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -32,28 +34,30 @@ class _SettingPageState extends State<SettingPage> {
         ),
       ),
       child: Scaffold(
-        backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
+//        backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
         body:
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16,),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Text('このアプリについて', textAlign: TextAlign.left,
-                style: subTitleTextStyle,),
-            ),
+            ///Androidはこちらがいい
+//            const Padding(
+//              padding: EdgeInsets.symmetric(horizontal: 8),
+//              child: Text('このアプリについて', textAlign: TextAlign.left,
+//                style: subTitleTextStyle,),
+//            ),
             SettingsList(
               shrinkWrap: true,
               sections: [
                 SettingsSection(
-//                  title: 'このアプリについて',
+                  title: 'このアプリについて',///iOSはこちらがいい
+                  titleTextStyle: subTitleTextStyle,
                   tiles: [
                     SettingsTile(
                       title: '要望・不具合に関する報告',
 //                      subtitle: 'English',
                       leading: const Icon(CupertinoIcons.envelope),
-                      trailing:const Icon(Icons.arrow_forward_ios),
+//                      trailing:const Icon(Icons.arrow_forward_ios),
                       onPressed: (context) {
 //                    Navigator.of(context).push(MaterialPageRoute(
 //                      builder: (_) => LanguagesScreen(),
@@ -64,7 +68,7 @@ class _SettingPageState extends State<SettingPage> {
                       title: 'このアプリを評価する',
 //                      subtitle: 'English',
                       leading: const Icon(CupertinoIcons.star_circle_fill),
-                      trailing:const Icon(Icons.arrow_forward_ios),
+//                      trailing:const Icon(Icons.arrow_forward_ios),
                       onPressed: (context) {
 //                    Navigator.of(context).push(MaterialPageRoute(
 //                      builder: (_) => LanguagesScreen(),
@@ -75,40 +79,30 @@ class _SettingPageState extends State<SettingPage> {
                       title: '利用規約',
 //                      subtitle: 'English',
                       leading: const Icon(CupertinoIcons.text_justify),
-                      trailing:const Icon(Icons.arrow_forward_ios),
+//                      trailing:const Icon(Icons.arrow_forward_ios),
                       onPressed: (context) {
-//                    Navigator.of(context).push(MaterialPageRoute(
-//                      builder: (_) => LanguagesScreen(),
-//                    ));
+                      Navigator.of(context).push(MaterialPageRoute<void>(
+                          builder: (_) => UserPolicyScreen(),
+                        ));
                       },
                     ),
                     SettingsTile(
                       title: 'プライバシーポリシー',
 //                      subtitle: 'English',
                       leading: const Icon(CupertinoIcons.doc_text),
-                      trailing:const Icon(Icons.arrow_forward_ios),
+//                      trailing:const Icon(Icons.arrow_forward_ios),
                       onPressed: (context) {
-//                    Navigator.of(context).push(MaterialPageRoute(
-//                      builder: (_) => LanguagesScreen(),
-//                    ));
+                        Navigator.of(context).push(MaterialPageRoute<void>(
+                          builder: (_) => PrivacyPolicyScreen(),
+                        ));
                       },
                     ),
                     SettingsTile(
                       title: 'ライセンス',
 //                      subtitle: 'English',
                       leading: Image.asset('assets/images/license.png',width: 26,color: Colors.black54,),
-                      trailing:const Icon(Icons.arrow_forward_ios),
+//                      trailing:const Icon(Icons.arrow_forward_ios),
                       onPressed: (context) {
-
-//                        Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
-//                            builder: (context) => CompareScreen(
-//                              comparisonOverview: updateOverview,
-//                              screenEditMode: ScreenEditMode.fromListPage,
-//                            )));
-
-
-
-
                     Navigator.of(context).push(MaterialPageRoute<void>(
                       builder: (_) => MyLicensePage(),
                     ));
@@ -118,7 +112,7 @@ class _SettingPageState extends State<SettingPage> {
                       title: 'バージョン',
 //                      subtitle: 'English',
                       leading: const Icon(Icons.language),
-                      trailing:const Icon(Icons.arrow_forward_ios),
+//                      trailing:const Icon(Icons.arrow_forward_ios),
                       onPressed: (context) {
 //                    Navigator.of(context).push(MaterialPageRoute(
 //                      builder: (_) => LanguagesScreen(),
