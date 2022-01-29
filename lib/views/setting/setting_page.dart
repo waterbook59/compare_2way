@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:settings_ui/settings_ui.dart';
 
+import 'inquiry_screen.dart';
+
 class SettingPage extends StatefulWidget {
   @override
   _SettingPageState createState() => _SettingPageState();
@@ -59,9 +61,9 @@ class _SettingPageState extends State<SettingPage> {
                       leading: const Icon(CupertinoIcons.envelope),
 //                      trailing:const Icon(Icons.arrow_forward_ios),
                       onPressed: (context) {
-//                    Navigator.of(context).push(MaterialPageRoute(
-//                      builder: (_) => LanguagesScreen(),
-//                    ));
+                        Navigator.of(context,rootNavigator: true).push(MaterialPageRoute<void>(
+                          builder: (_) => InquiryScreen(),
+                        ));
                       },
                     ),
                     SettingsTile(

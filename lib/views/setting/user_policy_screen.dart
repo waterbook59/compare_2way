@@ -13,6 +13,7 @@ class UserPolicyScreen extends StatelessWidget {
         child: CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(
             backgroundColor: primaryColor,
+            actionsForegroundColor: Colors.white,
             middle: const Text(
               '利用規約',
               style: middleTextStyle,

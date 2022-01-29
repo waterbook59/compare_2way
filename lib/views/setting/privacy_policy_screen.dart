@@ -13,6 +13,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
         child: CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(
             backgroundColor: primaryColor,
+            actionsForegroundColor: Colors.white,
             middle: const Text(
               'プライバシーポリシー',
               style: middleTextStyle,

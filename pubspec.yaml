@@ -47,8 +47,9 @@ flutter_icons:
   ios: true
   image_path: "assets/images/icon_image.png"
 
-  adaptive_icon_background: "#FFFFFF"
-  adaptive_icon_foreground: "assets/images/icon_image.png"
+#adaptive_icon使うと丸くなってforegroundの画像も大きすぎる
+#  adaptive_icon_background: "#FFFFFF"
+#  adaptive_icon_foreground: "assets/images/icon_image.png"
 
 
 dependency_overrides:
