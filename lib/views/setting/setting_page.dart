@@ -27,13 +27,13 @@ class _SettingPageState extends State<SettingPage> {
           '設定',
           style: middleTextStyle,
         ),
-        trailing:  GestureDetector(
-          child: const Icon(
-            //CupertinoIcons.keyboard_chevron_compact_downない
-            Icons.keyboard_hide,
-            color: Colors.white,
-          ),
-        ),
+//        trailing:  GestureDetector(
+//          child: const Icon(
+//            //CupertinoIcons.keyboard_chevron_compact_downない
+//            Icons.keyboard_hide,
+//            color: Colors.white,
+//          ),
+//        ),
       ),
       child: Scaffold(
 //        backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,

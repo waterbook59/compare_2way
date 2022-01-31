@@ -65,8 +65,9 @@ class _InquiryScreenState extends State {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               backgroundColor: primaryColor,
+              actionsForegroundColor: Colors.white,
               middle: const Text(
-                '設定',
+                'お問い合わせ',
                 style: middleTextStyle,
               ),
             ),
