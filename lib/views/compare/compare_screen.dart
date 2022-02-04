@@ -151,17 +151,14 @@ class CompareScreen extends StatelessWidget {
 //                Selector<CompareViewModel, String>(
 //                    selector: (context, viewModel) => viewModel.way1Title,
                     builder: (context, viewModel, child) {
-                      return //todo nullの場合AccrodionWidget使用=>文頭取得後のAccordionの中のDescFormAndButtonがはじめ出ない(snapshot.data =nullの時にaccordionPartのinitStateが回ってしまう)
+                      return
                         (viewModel.segmentValue == '0'||viewModel.segmentValue == '1')
                         ? FutureBuilder( //material
                         future: viewModel
                         .getWay1MeritDesc(comparisonOverview.comparisonItemId),
                         builder:
                             (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
-//                          print('CompareScreenのWay1Meritのsnapshot.hasData:${snapshot.hasData}/snapshot.data:${snapshot.data}');
-//                          if (snapshot.hasData && snapshot.data.isNotEmpty) {
                             //todo 変更時、createdAtを更新
-//                          print('CompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画');
     return
     snapshot.hasData && snapshot.data.isNotEmpty
                             ? AccordionPart(
@@ -180,10 +177,8 @@ class CompareScreen extends StatelessWidget {
                                         DisplayList.way1Merit,
                                         way1MeritIdIndex,comparisonOverview),
                             )
-//                          } else {
-//                            print('CompareScreenのWay1Merit(null側)のsnapshot.hasData:${snapshot.hasData}/snapshot.data:${snapshot.data}');
-//                            return
                             ///SegmentedControl切替時nullの時、文頭で取得した値表示
+//AccordionPartにするとsnapshot.data =nullの時にAccordionPartのinitStateが回ってしまう)
                               :AccordionSubPart(
                                 title: viewModel.way1Title,
                                 displayList: DisplayList.way1Merit,
@@ -218,11 +213,8 @@ class CompareScreen extends StatelessWidget {
                         .getWay2MeritDesc(comparisonOverview.comparisonItemId),
                       builder:
                           (context, AsyncSnapshot<List<Way2Merit>> snapshot) {
-//                            print('CompareScreenのWay2Meritのsnapshot:${snapshot.data}');
-                        return
-                          snapshot.hasData && snapshot.data.isNotEmpty
-                        ?
-                          AccordionPart(
+                        return snapshot.hasData && snapshot.data.isNotEmpty
+                        ? AccordionPart(
                             title: viewModel.way2Title,
                             displayList: DisplayList.way2Merit,
                             inputChanged: (newDesc, index) =>
@@ -238,7 +230,7 @@ class CompareScreen extends StatelessWidget {
                                     DisplayList.way2Merit,
                                     way2MeritIdIndex,comparisonOverview),
                           )
-                          : AccordionSubPart(
+                        : AccordionSubPart(
                             title: viewModel.way2Title,
                             displayList: DisplayList.way2Merit,
                             inputChanged: (newDesc, index) =>
@@ -254,15 +246,12 @@ class CompareScreen extends StatelessWidget {
                                     DisplayList.way2Merit,
                                     way2MeritIdIndex,comparisonOverview),
                           );
-//                          :Container(child: Text('nullの時/FutureBuilder  Merit way2みえない'),);
                       },
                     )
                     :Container();
                   },
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
+                const SizedBox(height: 8,),
               ///デメリットアイコン
                 IconTitle(
                   title: 'デメリット',
@@ -274,15 +263,12 @@ class CompareScreen extends StatelessWidget {
                   builder: (context, viewModel, child) {
                     return
                       (viewModel.segmentValue == '0'||viewModel.segmentValue == '1')
-                      ? FutureBuilder(
-                      future:
-                      viewModel.getWay1DemeritDesc(
+                      ? FutureBuilder(future: viewModel.getWay1DemeritDesc(
                           comparisonOverview.comparisonItemId),
                       builder:
                           (context, AsyncSnapshot<List<Way1Demerit>> snapshot) {
                         return snapshot.hasData && snapshot.data.isNotEmpty
-                            ?
-                        AccordionPart(
+                            ? AccordionPart(
                           title: viewModel.way1Title,
                           displayList: DisplayList.way1Demerit,
                           inputChanged: (newDesc, index) =>
@@ -324,15 +310,12 @@ class CompareScreen extends StatelessWidget {
                   builder: (context, viewModel, child) {
                     return
                       (viewModel.segmentValue == '0'||viewModel.segmentValue == '2')
-                      ? FutureBuilder(
-                      future:
-                      viewModel.getWay2DemeritDesc(
+                      ? FutureBuilder(future: viewModel.getWay2DemeritDesc(
                           comparisonOverview.comparisonItemId),
                       builder:
                           (context, AsyncSnapshot<List<Way2Demerit>> snapshot) {
                         return snapshot.hasData && snapshot.data.isNotEmpty
-                            ?
-                        AccordionPart(
+                            ? AccordionPart(
                           title: viewModel.way2Title,
                           displayList: DisplayList.way2Demerit,
                           inputChanged: (newDesc, index) =>

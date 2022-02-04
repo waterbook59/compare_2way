@@ -78,11 +78,6 @@ class _AccordionPartState extends State<AccordionPart> {
 
 
     }
-//    print('accordionPartのinitState/widget.displayList:${widget.displayList}');
-//    print('accordionPartのinitState/widget.way1MeritList:${widget.way1MeritList}');
-//    print('accordionPartのinitState/widget.way2MeritList:${widget.way2MeritList}');
-//    print('accordionPartのinitState/widget.way1DemeritList:${widget.way1DemeritList}');
-//    print('accordionPartのinitState/widget.way2DemeritList:${widget.way2DemeritList}');
     super.initState();
   }
 

@@ -53,17 +53,11 @@ class _AccordionSubPartState extends State<AccordionSubPart> {
       case DisplayList.way1Merit:
         widget.way1MeritList.isNotEmpty
             ? createWay1MeritList()
-//        controllers = widget.way1MeritList.map((item) {
-//          return TextEditingController(text: item.way1MeritDesc);
-//        }).toList()
             : controllers = [];
         break;
       case DisplayList.way2Merit:
         widget.way2MeritList.isNotEmpty
             ? createWay2MeritList()
-//        controllers = widget.way2MeritList.map((item) {
-//          return TextEditingController(text: item.way2MeritDesc);
-//        }).toList()
             : controllers = [];
         break;
       case DisplayList.way1Demerit:
@@ -76,9 +70,8 @@ class _AccordionSubPartState extends State<AccordionSubPart> {
             ? createWay2DemeritList()
             : controllers = [];
         break;
-
-
     }
+
     super.initState();
   }
 
