@@ -6,6 +6,7 @@ import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/common/nav_bar_button.dart';
 import 'package:compare_2way/views/common/nav_bar_icon_title.dart';
 import 'package:compare_2way/views/compare/components/accordion_part.dart';
+import 'package:compare_2way/views/compare/components/sub/accrodion_sub_part.dart';
 import 'package:compare_2way/views/compare/components/tag_chip_part.dart';
 import 'package:compare_2way/views/compare/components/conclusion_input_part.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,6 @@ class CompareScreen extends StatelessWidget {
       print('compareScreenのFuture通過');
       Future(() async {
         await viewModel.setOverview(comparisonOverview);
-        //todo notifyListenersは１回でいいかも
         //viewModelで全てのAccordion中のリストとる
         await viewModel.getAccordionList(comparisonOverview.comparisonItemId);
         //viewModelにcomparisonIdを元に取って来たtagListを格納
@@ -151,17 +151,20 @@ class CompareScreen extends StatelessWidget {
 //                Selector<CompareViewModel, String>(
 //                    selector: (context, viewModel) => viewModel.way1Title,
                     builder: (context, viewModel, child) {
-                      return
+                      return //todo nullの場合AccrodionWidget使用=>文頭取得後のAccordionの中のDescFormAndButtonがはじめ出ない(snapshot.data =nullの時にaccordionPartのinitStateが回ってしまう)
                         (viewModel.segmentValue == '0'||viewModel.segmentValue == '1')
                         ? FutureBuilder( //material
                         future: viewModel
                         .getWay1MeritDesc(comparisonOverview.comparisonItemId),
                         builder:
                             (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
-                          if (snapshot.hasData && snapshot.data.isNotEmpty) {
+//                          print('CompareScreenのWay1Meritのsnapshot.hasData:${snapshot.hasData}/snapshot.data:${snapshot.data}');
+//                          if (snapshot.hasData && snapshot.data.isNotEmpty) {
                             //todo 変更時、createdAtを更新
 //                          print('CompareScreen/Way1MeritSelector/FutureBuilder/AccordionPart描画');
-                            return AccordionPart(
+    return
+    snapshot.hasData && snapshot.data.isNotEmpty
+                            ? AccordionPart(
                               title: viewModel.way1Title,
                               displayList: DisplayList.way1Merit,
                               inputChanged: (newDesc, index) =>
@@ -176,13 +179,32 @@ class CompareScreen extends StatelessWidget {
                                   _accordionDeleteList(context,
                                         DisplayList.way1Merit,
                                         way1MeritIdIndex,comparisonOverview),
-                            );
-                          } else {
-                            return Container();
+                            )
+//                          } else {
+//                            print('CompareScreenのWay1Merit(null側)のsnapshot.hasData:${snapshot.hasData}/snapshot.data:${snapshot.data}');
+//                            return
+                            ///SegmentedControl切替時nullの時、文頭で取得した値表示
+                              :AccordionSubPart(
+                                title: viewModel.way1Title,
+                                displayList: DisplayList.way1Merit,
+                                inputChanged: (newDesc, index) =>
+                                    _accordionInputChange(
+                                        context,DisplayList.way1Merit,
+                                        newDesc, index,comparisonOverview),
+                                way1MeritList: viewModel.way1MeritList,
+                                addList: () =>
+                                    _accordionAddList(context,
+                                        DisplayList.way1Merit, comparisonOverview),
+                                deleteList: (way1MeritIdIndex)=>
+                                    _accordionDeleteList(context,
+                                        DisplayList.way1Merit,
+                                        way1MeritIdIndex,comparisonOverview),
+                              );
+//                              :Container(child: Text('nullの時/FutureBuilder  Merit way1みえない'),);
                           }
-                        },
+//                        },
                       )
-                      :Container();
+                      : Container();
                     }),
                 ///way2 メリット
                 Consumer<CompareViewModel>(
@@ -196,7 +218,9 @@ class CompareScreen extends StatelessWidget {
                         .getWay2MeritDesc(comparisonOverview.comparisonItemId),
                       builder:
                           (context, AsyncSnapshot<List<Way2Merit>> snapshot) {
-                        return snapshot.hasData && snapshot.data.isNotEmpty
+//                            print('CompareScreenのWay2Meritのsnapshot:${snapshot.data}');
+                        return
+                          snapshot.hasData && snapshot.data.isNotEmpty
                         ?
                           AccordionPart(
                             title: viewModel.way2Title,
@@ -214,7 +238,23 @@ class CompareScreen extends StatelessWidget {
                                     DisplayList.way2Merit,
                                     way2MeritIdIndex,comparisonOverview),
                           )
-                          : Container();
+                          : AccordionSubPart(
+                            title: viewModel.way2Title,
+                            displayList: DisplayList.way2Merit,
+                            inputChanged: (newDesc, index) =>
+                                _accordionInputChange(
+                                    context,DisplayList.way2Merit,
+                                    newDesc, index,comparisonOverview),
+                            way2MeritList: viewModel.way2MeritList,
+                            addList: () =>
+                                _accordionAddList(context,
+                                    DisplayList.way2Merit,comparisonOverview),
+                            deleteList: (way2MeritIdIndex)=>
+                                _accordionDeleteList(context,
+                                    DisplayList.way2Merit,
+                                    way2MeritIdIndex,comparisonOverview),
+                          );
+//                          :Container(child: Text('nullの時/FutureBuilder  Merit way2みえない'),);
                       },
                     )
                     :Container();
@@ -258,7 +298,22 @@ class CompareScreen extends StatelessWidget {
                                   DisplayList.way1Demerit,
                                   way1DemeritIdIndex,comparisonOverview),
                         )
-                            : Container();
+                            : AccordionSubPart(
+                          title: viewModel.way1Title,
+                          displayList: DisplayList.way1Demerit,
+                          inputChanged: (newDesc, index) =>
+                              _accordionInputChange(
+                                  context,DisplayList.way1Demerit,
+                                  newDesc, index,comparisonOverview),
+                          way1DemeritList: viewModel.way1DemeritList,
+                          addList: () =>
+                              _accordionAddList(context,
+                                  DisplayList.way1Demerit,comparisonOverview),
+                          deleteList: (way1DemeritIdIndex)=>
+                              _accordionDeleteList(context,
+                                  DisplayList.way1Demerit,
+                                  way1DemeritIdIndex,comparisonOverview),
+                        );
                       },
                     )
                     :Container();
@@ -293,7 +348,22 @@ class CompareScreen extends StatelessWidget {
                                   DisplayList.way2Demerit,
                                   way1DemeritIdIndex,comparisonOverview),
                         )
-                            : Container();
+                            : AccordionSubPart(
+                          title: viewModel.way2Title,
+                          displayList: DisplayList.way2Demerit,
+                          inputChanged: (newDesc, index) =>
+                              _accordionInputChange(
+                                  context,DisplayList.way2Demerit,
+                                  newDesc, index,comparisonOverview),
+                          way2DemeritList: viewModel.way2DemeritList,
+                          addList: () =>
+                              _accordionAddList(context,
+                                  DisplayList.way2Demerit,comparisonOverview),
+                          deleteList: (way1DemeritIdIndex)=>
+                              _accordionDeleteList(context,
+                                  DisplayList.way2Demerit,
+                                  way1DemeritIdIndex,comparisonOverview),
+                        );
                       },
                     )
                     :Container();

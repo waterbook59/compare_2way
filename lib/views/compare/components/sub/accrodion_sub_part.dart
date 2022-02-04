@@ -4,16 +4,17 @@ import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/sub/desc_form.dart';
 import 'package:compare_2way/views/compare/components/sub/desc_form_and_button.dart';
+import 'package:compare_2way/views/compare/components/sub/gf_accordian.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 //import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
 
-import 'sub/gf_accordian.dart' as custom;
+//import 'sub/gf_accordian.dart' as custom;
 
-class AccordionPart extends StatefulWidget {
+class AccordionSubPart extends StatefulWidget {
 
-  const AccordionPart({
+  const AccordionSubPart({
     this.title,
     this.displayList,
     this.way1MeritList,
@@ -36,10 +37,10 @@ class AccordionPart extends StatefulWidget {
   final Function(int) deleteList;
 
   @override
-  _AccordionPartState createState() => _AccordionPartState();
+  _AccordionSubPartState createState() => _AccordionSubPartState();
 }
 
-class _AccordionPartState extends State<AccordionPart> {
+class _AccordionSubPartState extends State<AccordionSubPart> {
 
   List<TextEditingController> controllers = <TextEditingController>[];
   List<FocusNode> focusNodes = <FocusNode>[];
@@ -78,11 +79,6 @@ class _AccordionPartState extends State<AccordionPart> {
 
 
     }
-//    print('accordionPartのinitState/widget.displayList:${widget.displayList}');
-//    print('accordionPartのinitState/widget.way1MeritList:${widget.way1MeritList}');
-//    print('accordionPartのinitState/widget.way2MeritList:${widget.way2MeritList}');
-//    print('accordionPartのinitState/widget.way1DemeritList:${widget.way1DemeritList}');
-//    print('accordionPartのinitState/widget.way2DemeritList:${widget.way2DemeritList}');
     super.initState();
   }
 
@@ -100,63 +96,63 @@ class _AccordionPartState extends State<AccordionPart> {
     return Stack(
       children: [
 
-        custom.GFAccordion(
-            title: widget.title,
-            titleBorderRadius: accordionTopBorderRadius,
-            contentBorderRadius:
-            accordionBottomBorderRadius,
-            showAccordion: true,
-            collapsedTitleBackgroundColor:
-            const Color(0xFFE0E0E0),
+        GFAccordion(
+          title: widget.title,
+          titleBorderRadius: accordionTopBorderRadius,
+          contentBorderRadius:
+          accordionBottomBorderRadius,
+          showAccordion: true,
+          collapsedTitleBackgroundColor:
+          const Color(0xFFE0E0E0),
           // collapsed時にDB再読込,更新される場合されない場合のエラー回避
-            onToggleCollapsed: (value){
-              FocusScope.of(context).unfocus();
-              //accordionpart=>descFormのiconButtonの非表示
-              viewModel
-                ..isWay1MeritDeleteIcon  = false
-                ..isWay1DemeritDeleteIcon  = false
-                ..isWay2MeritDeleteIcon  = false
-                ..isWay2DemeritDeleteIcon  = false
-                ..isWay3MeritDeleteIcon  = false
-                ..isWay3DemeritDeleteIcon  = false
+          onToggleCollapsed: (value){
+            FocusScope.of(context).unfocus();
+            //accordionpart=>descFormのiconButtonの非表示
+            viewModel
+              ..isWay1MeritDeleteIcon  = false
+              ..isWay1DemeritDeleteIcon  = false
+              ..isWay2MeritDeleteIcon  = false
+              ..isWay2DemeritDeleteIcon  = false
+              ..isWay3MeritDeleteIcon  = false
+              ..isWay3DemeritDeleteIcon  = false
 
-                ..isWay1MeritFocusList = false//settingPageでやったisReturnText
-                ..isWay2MeritFocusList = false
-                ..isWay3MeritFocusList = false
+              ..isWay1MeritFocusList = false//settingPageでやったisReturnText
+              ..isWay2MeritFocusList = false
+              ..isWay3MeritFocusList = false
               ..isWay1DemeritFocusList = false
               ..isWay2DemeritFocusList = false
-                ..isWay3DemeritFocusList = false;
+              ..isWay3DemeritFocusList = false;
 
-            },
-            contentChild:
+          },
+          contentChild:
           //リストが増えていくとDescFormButtonがタイトル部分にはみ出している
-            ///=>custom.GFAccordion設定で初期位置修正
-            //todo way3追加
-            DescFormAndButton(
-              displayList: widget.displayList,
-              way1MeritList: widget.way1MeritList,
-              way1DemeritList: widget.way1DemeritList,
-              way2MeritList: widget.way2MeritList,
-              way2DemeritList: widget.way2DemeritList,
-              inputChanged: widget.inputChanged,
-              addList: (){
-                widget.addList();
-              },
-              deleteList: widget.deleteList,
-              controllers: controllers,
-              focusNodes: focusNodes,
-            ),
+          ///=>custom.GFAccordion設定で初期位置修正
+          //todo way3追加
+          DescFormAndButton(
+            displayList: widget.displayList,
+            way1MeritList: widget.way1MeritList,
+            way1DemeritList: widget.way1DemeritList,
+            way2MeritList: widget.way2MeritList,
+            way2DemeritList: widget.way2DemeritList,
+            inputChanged: widget.inputChanged,
+            addList: (){
+              widget.addList();
+            },
+            deleteList: widget.deleteList,
+            controllers: controllers,
+            focusNodes: focusNodes,
+          ),
           contentPadding: const EdgeInsets.only(top: 1,left: 8,right: 8),
         ),
 
-    //todo ボタン押しやすいサイズに
+        //todo ボタン押しやすいサイズに
         Positioned(
           right: 64,
           top: 20,
           child: GestureDetector(
               child: const Icon(
                 CupertinoIcons.plus_circled, color: Colors.black,),
-        // DescFormAndButtonのsetStateで実行していることをここでやる
+              // DescFormAndButtonのsetStateで実行していることをここでやる
               onTap: () {
                 setState(() {
                   widget.addList();
