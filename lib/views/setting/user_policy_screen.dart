@@ -21,7 +21,7 @@ class UserPolicyScreen extends StatelessWidget {
           ),
           child: const Scaffold(
             body:  WebView(
-              initialUrl: 'https://waterboook.com/privacy-policy',
+              initialUrl: 'https://waterboook.com/terms_of_service',
               javascriptMode: JavascriptMode.unrestricted,
             ),
           ),
