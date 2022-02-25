@@ -1,9 +1,7 @@
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/views/setting/license_page.dart';
 import 'package:compare_2way/views/setting/privacy_policy_screen.dart';
-import 'package:compare_2way/views/setting/privacy_policy_screen_state.dart';
 import 'package:compare_2way/views/setting/user_policy_screen.dart';
-import 'package:compare_2way/views/setting/user_policy_screen_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -86,7 +84,7 @@ class _SettingPageState extends State<SettingPage> {
 //                      trailing:const Icon(Icons.arrow_forward_ios),
                       onPressed: (context) {
                       Navigator.of(context).push(MaterialPageRoute<void>(
-                          builder: (_) => UserPolicy(),
+                          builder: (_) => UserPolicyScreen(),
                         ));
                       },
                     ),
@@ -97,7 +95,7 @@ class _SettingPageState extends State<SettingPage> {
 //                      trailing:const Icon(Icons.arrow_forward_ios),
                       onPressed: (context) {
                         Navigator.of(context).push(MaterialPageRoute<void>(
-                          builder: (_) => PrivacyPolicy(),
+                          builder: (_) => PrivacyPolicyScreen(),
                         ));
                       },
                     ),
