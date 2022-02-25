@@ -64,6 +64,24 @@ class _InquiryScreenState extends State {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           return CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
+              /// 戻る時にエラー:A RenderFlex overflowed by 114 pixels on the bottom.
+              /// =>先にキーボードを閉じてから戻りたいがunFocusきかない
+//              trailing: GestureDetector(
+////                behavior: HitTestBehavior.opaque,
+//                child: const Icon(
+//                  //CupertinoIcons.keyboard_chevron_compact_downない
+//                  Icons.keyboard_hide,
+//                  color: Colors.white,
+//                ),
+//                onTap:(){
+//                  setState(() {
+//                    FocusManager.instance.primaryFocus?.unfocus();
+//                    print('unFocus!');
+//                  });
+////                  _unFocusTap(context);
+////                  Navigator.pop(context);
+//                  },
+//              ),
               backgroundColor: primaryColor,
               actionsForegroundColor: Colors.white,
               middle: const Text(
@@ -130,6 +148,14 @@ class _InquiryScreenState extends State {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty('connectionStatus', connectionStatus));
+  }
+
+  void _unFocusTap(BuildContext context) {
+    print('unFocus!');
+    setState(() {
+      FocusScope.of(context).unfocus();
+    });
+
   }
 
 }
