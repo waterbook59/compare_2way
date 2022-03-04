@@ -50,7 +50,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
                 backgroundColor: primaryColor,
                 actionsForegroundColor: Colors.white,
                 middle: const Text(
-                  '利用規約',
+                  'プライバシーポリシー',
                   style: middleTextStyle,
                 ),
               ),
