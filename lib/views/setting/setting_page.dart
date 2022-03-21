@@ -1,3 +1,4 @@
+import 'package:app_review/app_review.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/views/setting/license_page.dart';
 import 'package:compare_2way/views/setting/privacy_policy_screen.dart';
@@ -71,11 +72,7 @@ class _SettingPageState extends State<SettingPage> {
 //                      subtitle: 'English',
                       leading: const Icon(CupertinoIcons.star_circle_fill),
 //                      trailing:const Icon(Icons.arrow_forward_ios),
-                      onPressed: (context) {
-//                    Navigator.of(context).push(MaterialPageRoute(
-//                      builder: (_) => LanguagesScreen(),
-//                    ));
-                      },
+                      onPressed: (context)=>_requestReview(),
                     ),
                     SettingsTile(
                       title: '利用規約',
@@ -168,6 +165,10 @@ class _SettingPageState extends State<SettingPage> {
 //        )
       ),
     );
+  }
+
+  void _requestReview() {
+    AppReview.requestReview.then(print);
   }
 
 

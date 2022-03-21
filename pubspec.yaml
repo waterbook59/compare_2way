@@ -31,6 +31,7 @@ dependencies:
   settings_ui: ^0.6.0
   flutter_launcher_icons: ^0.8.1
   webview_flutter: ^1.0.7
+  app_review: ^2.0.1
 
 dev_dependencies:
   flutter_test:
@@ -41,15 +42,15 @@ dev_dependencies:
   build_runner: ^1.10.1
 
 
-
 flutter_icons:
-  android: "launcher_icon"
+  android: true
+#  "launcher_icon"
   ios: true
   image_path: "assets/images/icon_image.png"
 
 #adaptive_icon使うと丸くなってforegroundの画像も大きすぎる
-#  adaptive_icon_background: "#FFFFFF"
-#  adaptive_icon_foreground: "assets/images/icon_image.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/icon_image.png"
 
 
 dependency_overrides:
