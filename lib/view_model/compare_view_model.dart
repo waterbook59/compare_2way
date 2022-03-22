@@ -626,7 +626,6 @@ class CompareViewModel extends ChangeNotifier {
         await _compareRepository.removeTagChart(removeTagChartList);
       }
     });
-
      deleteItemIdList =[];
       _tagList = [];
       _tagNameList =[];
@@ -680,7 +679,7 @@ class CompareViewModel extends ChangeNotifier {
     _way2MeritEvaluate = comparisonOverview.way2MeritEvaluate;
     _way2DemeritEvaluate = comparisonOverview.way2DemeritEvaluate;
     conclusion = comparisonOverview.conclusion;
-    print('文頭のsetOverview/notifyListeners');
+//    print('文頭のsetOverview');
 //    notifyListeners();
   }
 
@@ -696,8 +695,8 @@ class CompareViewModel extends ChangeNotifier {
     _way2DemeritList =
     await _compareRepository.getWay2DemeritList(comparisonItemId);
     //todo way3入力
-    print('getWay1/Way2MeritList/notifyListeners');
-    notifyListeners();
+//    print('文頭のgetWay1/Way2MeritList');
+//    notifyListeners();
   }
 
 
@@ -877,10 +876,10 @@ class CompareViewModel extends ChangeNotifier {
 //    print('viewModel.getTagList:${_tagList.map((e) => e.tagTitle)}');
     //_tagNameListにもtagTitle格納
     _tagNameList = _tagList.map((tag)=>tag.tagTitle).toList();
-    print('viewModel.getTagList/_tagNameList:$_tagNameList');
+//    print('viewModel.getTagList/_tagNameList:$_tagNameList');
 
     _tempoDisplayList = _tagNameList;
-    print('viewModel.getTagList/_tempoDisplayList:$_tempoDisplayList');
+//    print('viewModel.getTagList/_tempoDisplayList:$_tempoDisplayList');
     //List<Tag>=>List<Chips>へ変更
     _displayChipList = _tagList.map((tag) {
       return Chip(
@@ -890,6 +889,7 @@ class CompareViewModel extends ChangeNotifier {
 
     //ここでSelectTaPage更新するとComPareScreenへ映る毎に読み込まれてしまうのでやめる
 //    await onSelectTag(selectTagTitle);
+//    print('文頭のgetTagList');
     notifyListeners();
   }
 
@@ -1019,7 +1019,6 @@ class CompareViewModel extends ChangeNotifier {
 
    // Tag内のcomparisonItemIdを元にoverViewを取得しリスト化
     final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
-
 
 ///forEach内の非同期処理でcomparisonIdからList<overview>取得
     ///参照:https://qiita.com/hisw/items/2df0052a400263d5863e

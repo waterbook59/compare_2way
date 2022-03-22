@@ -3,7 +3,7 @@ import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/tag/components/reorderable_tag_list.dart';
-import 'package:compare_2way/views/tag/components/sub/page_title.dart';
+import 'package:compare_2way/views/common/page_title.dart';
 import 'package:compare_2way/views/tag/components/sub/tag_page_title.dart';
 import 'package:compare_2way/views/tag/select_tag_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -160,7 +160,8 @@ class TagPage extends StatelessWidget {
       case TagEditMode.normal:
       //IdからcomparisonOverview.titleを取得し表示
         await viewModel.onSelectTag(tagTitle);
-        await Navigator.push(context,
+    ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
+        await Navigator.of(context,rootNavigator: true).push(
             MaterialPageRoute<void>(
                 builder: (context) => SelectTagPage(tagTitle: tagTitle,
                 )));
