@@ -14,6 +14,8 @@ class InquiryScreen extends StatefulWidget {
 }
 
 class _InquiryScreenState extends State {
+//  final focusNode = FocusNode();
+
   final Completer _controller = Completer<dynamic>();
    bool connectionStatus;
   int position = 1;
@@ -66,21 +68,28 @@ class _InquiryScreenState extends State {
             navigationBar: CupertinoNavigationBar(
               /// 戻る時にエラー:A RenderFlex overflowed by 114 pixels on the bottom.
               /// =>先にキーボードを閉じてから戻りたいがunFocusきかない
-//              trailing: GestureDetector(
-////                behavior: HitTestBehavior.opaque,
-//                child: const Icon(
-//                  //CupertinoIcons.keyboard_chevron_compact_downない
-//                  Icons.keyboard_hide,
-//                  color: Colors.white,
-//                ),
-//                onTap:(){
-//                  setState(() {
-//                    FocusManager.instance.primaryFocus?.unfocus();
-//                    print('unFocus!');
-//                  });
-////                  _unFocusTap(context);
-////                  Navigator.pop(context);
-//                  },
+              trailing:
+//              Focus(
+//                focusNode: focusNode,
+//                child:
+                GestureDetector(
+//                behavior: HitTestBehavior.opaque,
+                  child: const Icon(
+                    //CupertinoIcons.keyboard_chevron_compact_downない
+                    Icons.keyboard_hide,
+                    color: Colors.white,
+                  ),
+                  onTap:
+                      (){
+                    setState(() {
+//                      focusNode.requestFocus;
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      print('unFocus!');
+                    });
+//                  _unFocusTap(context);
+//                  Navigator.pop(context);
+                    },
+                ),
 //              ),
               backgroundColor: primaryColor,
               actionsForegroundColor: Colors.white,

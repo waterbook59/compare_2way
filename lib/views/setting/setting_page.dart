@@ -5,9 +5,11 @@ import 'package:compare_2way/views/setting/privacy_policy_screen.dart';
 import 'package:compare_2way/views/setting/user_policy_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import 'inquiry_screen.dart';
+import 'inquiry_test.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -62,8 +64,16 @@ class _SettingPageState extends State<SettingPage> {
                       leading: const Icon(CupertinoIcons.envelope),
 //                      trailing:const Icon(Icons.arrow_forward_ios),
                       onPressed: (context) {
+
+
+
+//                   PageTransition<void>(
+//                     child: InquiryScreen(),
+//                     type: PageTransitionType.rightToLeft,
+//                   );
+
                         Navigator.of(context,rootNavigator: true).push(MaterialPageRoute<void>(
-                          builder: (_) => InquiryScreen(),
+                          builder: (_) => InquiryTest(),
                         ));
                       },
                     ),

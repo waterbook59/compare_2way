@@ -35,7 +35,15 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFF5F5F5),
         // フォントとしてヒラギノ使う 'Hiragino Sans'も選択肢
         fontFamily: 'Hiragino Kaku Gothic ProN',
+        ///iOS風ページ遷移
+        pageTransitionsTheme:const PageTransitionsTheme(
+          builders: <TargetPlatform, PageTransitionsBuilder>{
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(), // iOS風
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+          },
         ),
+      ),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
