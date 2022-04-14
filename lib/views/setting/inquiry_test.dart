@@ -141,6 +141,7 @@ class _InquiryTestState extends State<InquiryTest> {
                 urlLauncherMail();
               },
             ),
+            ///email_senderを選択
             RaisedButton(
               child: Text('flutter_email_senderで送る'),
               onPressed: () {
