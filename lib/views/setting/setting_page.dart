@@ -6,7 +6,6 @@ import 'package:compare_2way/views/setting/user_policy_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 

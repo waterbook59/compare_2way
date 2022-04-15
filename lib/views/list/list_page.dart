@@ -177,6 +177,8 @@ class ListPage extends StatelessWidget {
     ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
     Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
       builder: (context) => const AddScreen(displayMode: AddScreenMode.add),
+      ///下から上への遷移
+      fullscreenDialog: true,
     ));
   }
 

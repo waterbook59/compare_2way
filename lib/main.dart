@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFF5F5F5),
         // フォントとしてヒラギノ使う 'Hiragino Sans'も選択肢
         fontFamily: 'Hiragino Kaku Gothic ProN',
-        ///iOS風ページ遷移
+        ///iOS風ページ遷移(右からスワイプ、下から上は個別設定)
         pageTransitionsTheme:const PageTransitionsTheme(
           builders: <TargetPlatform, PageTransitionsBuilder>{
             TargetPlatform.android: CupertinoPageTransitionsBuilder(), // iOS風
