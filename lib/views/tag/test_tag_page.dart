@@ -6,7 +6,7 @@ import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/tag/components/reorderable_tag_list.dart';
 import 'package:compare_2way/views/common/page_title.dart';
 import 'package:compare_2way/views/tag/components/sub/tag_page_title.dart';
-import 'package:compare_2way/views/tag/components/sub/test_tag_list.dart';
+import 'package:compare_2way/views/tag/components/test_tag_list.dart';
 import 'package:compare_2way/views/tag/select_tag_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import 'components/sub/tag_edit_botton_action.dart';
-import 'components/tag_list.dart';
 
 ///List<Tag>で一覧のデータ取得しつつ、tagTitleで重複するものを削除するのにtoSet()を使う
 ///削除したlistをタグ一覧として表示する（tagChips参照）
@@ -71,12 +70,13 @@ class TestTagPage extends StatelessWidget {
                             child:
                             const Center(child: Text('タグづけされたアイテムはありません')));
                       } else {
+                        //todo まとめてスクロール sliver使用 https://kabochapo.hateblo.jp/entry/2021/05/10/190621
                         return
                           Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const PageTitle(
-                              title: 'テストタグ',
+                              title: 'タグ',
                             ),
                             const SizedBox(height: 8,),
                             const Divider(color: Colors.grey,height: 0,),
