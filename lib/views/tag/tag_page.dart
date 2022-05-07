@@ -1,12 +1,11 @@
 import 'package:compare_2way/data_models/dragging_tag_chart.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
-import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/tag/components/reorderable_tag_list.dart';
 import 'package:compare_2way/views/common/page_title.dart';
 import 'package:compare_2way/views/tag/components/sub/tag_page_title.dart';
-import 'package:compare_2way/views/tag/components/test_tag_list.dart';
+import 'package:compare_2way/views/tag/components/tag_list.dart';
 import 'package:compare_2way/views/tag/select_tag_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +17,7 @@ import 'components/sub/tag_edit_botton_action.dart';
 ///List<Tag>で一覧のデータ取得しつつ、tagTitleで重複するものを削除するのにtoSet()を使う
 ///削除したlistをタグ一覧として表示する（tagChips参照）
 
-class TestTagPage extends StatelessWidget {
+class TagPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
@@ -92,27 +91,7 @@ class TestTagPage extends StatelessWidget {
 //                                print('tagPage/snapshot:$overview');
                                   //DateTime=>String変換
                                   return
-//                                 Container(
-//                                     decoration: listDecoration,
-//                                     child: ListTile(
-//                                       title: Text(overview.tagTitle,),
-//                                       leading: Icon(
-//                                         CupertinoIcons.tag_solid,
-//                                         size: 36,
-//                                         color: primaryColor,
-//                                       ),
-////                                       subtitle: Text('アイテム数：${overview.tagAmount}アイテム'),
-////                                     subtitle: Text('テスト'),
-//                                       subtitle:Column(
-//                                       crossAxisAlignment: CrossAxisAlignment.start,
-//                                       children: [
-//                                         Text('',style: TextStyle(fontSize: 9),),
-//                                         Text('結論：'),
-//                                         SizedBox(height: 4,),
-//                                       ],
-//                                     ),
-//                                     ));
-                                    TestTagList(
+                                    TagList(
                                     title: overview.tagTitle,
                                     selectTagIdList: overview.itemIdList,
                                     tagAmount: overview.tagAmount,

@@ -7,8 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
-class TestTagList extends StatelessWidget {
-  const TestTagList({
+class TagList extends StatelessWidget {
+  const TagList({
     this.title,
     this.tagAmount,
     this.createdAt,
