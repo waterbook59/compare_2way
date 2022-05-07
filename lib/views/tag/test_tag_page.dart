@@ -1,5 +1,6 @@
 import 'package:compare_2way/data_models/dragging_tag_chart.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
+import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/tag/components/reorderable_tag_list.dart';
@@ -18,7 +19,7 @@ import 'components/tag_list.dart';
 ///List<Tag>で一覧のデータ取得しつつ、tagTitleで重複するものを削除するのにtoSet()を使う
 ///削除したlistをタグ一覧として表示する（tagChips参照）
 
-class TagPage extends StatelessWidget {
+class TestTagPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
@@ -32,28 +33,27 @@ class TagPage extends StatelessWidget {
         trailing:
         //タグ名編集時にキーボードunFocusできるアイコン追加(viewModel経由=>Consumerに訴える)
         //編集モード(true)の時はリストをタップするとTagListのtagTitle部を編集する形に
-         TagEditButtonAction(),
+        TagEditButtonAction(),
       ),
 
       ///Scaffoldで全く問題なし
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
         body:
-///Selectorに変更するとbuilder:(context,allTagList,child)になって、
+        ///Selectorに変更するとbuilder:(context,allTagList,child)になって、
         ///FutureBuilderのfuture:でエラーがでる
 //        Selector<CompareViewModel,List<Tag>>(
 //          selector: (context, compareViewModel) => compareViewModel.allTagList,
-          Consumer<CompareViewModel>(
+        Consumer<CompareViewModel>(
           builder: (context, compareViewModel, child) {
             return (viewModel.tagEditMode == TagEditMode.normal
                 ||viewModel.tagEditMode == TagEditMode.tagTitleEdit)
             //ここでnormal&editとdeleteModeで表示変更
             //todo normal&tagTitleEdit内のdeleteModeの表示削除
             //normal&tagTitleEdit
-              ?LayoutBuilder(
-                builder: (context, constraints) {
-                  return SingleChildScrollView(
-                child: ConstrainedBox(
+                ?LayoutBuilder(
+              builder: (context, constraints) {
+                return ConstrainedBox(
                   constraints:
                   BoxConstraints(minHeight: constraints.maxHeight),
                   child: FutureBuilder(
@@ -69,49 +69,72 @@ class TagPage extends StatelessWidget {
                         print('TagPage/EmptyView側通って描画');
                         return Container(
                             child:
-                                const Center(child: Text('タグづけされたアイテムはありません')));
+                            const Center(child: Text('タグづけされたアイテムはありません')));
                       } else {
-                        return Column(
+                        return
+                          Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const PageTitle(
-                              title: 'タグ',
+                              title: 'テストタグ',
                             ),
                             const SizedBox(height: 8,),
                             const Divider(color: Colors.grey,height: 0,),
-                            ListView.builder(
-                              //ListView.builderの高さを自動指定
-                              shrinkWrap: true,
-                              //リストが縦方向にスクロールできるようになる
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final overview = snapshot.data[index];
+                            Flexible(
+                              child: ListView.builder(
+                                //ListView.builderの高さを自動指定
+//                              shrinkWrap: true,
+                                //リストが縦方向にスクロールできるようになる
+//                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final overview = snapshot.data[index];
 //                                print('tagPage/snapshot:$overview');
-                                //DateTime=>String変換
-                                return TagList(
-                                title: overview.tagTitle,
-                                selectTagIdList: overview.itemIdList,
-                                tagAmount: overview.tagAmount,
-                                createdAt: '登録時間',
-                                onDelete: ()=> _onDeleteTag(
-                                    context, overview.tagTitle),
-                                onTap: ()=>_onSelectTag(
-                                    context,overview.tagTitle,overview.myFocusNode),
+                                  //DateTime=>String変換
+                                  return
+//                                 Container(
+//                                     decoration: listDecoration,
+//                                     child: ListTile(
+//                                       title: Text(overview.tagTitle,),
+//                                       leading: Icon(
+//                                         CupertinoIcons.tag_solid,
+//                                         size: 36,
+//                                         color: primaryColor,
+//                                       ),
+////                                       subtitle: Text('アイテム数：${overview.tagAmount}アイテム'),
+////                                     subtitle: Text('テスト'),
+//                                       subtitle:Column(
+//                                       crossAxisAlignment: CrossAxisAlignment.start,
+//                                       children: [
+//                                         Text('',style: TextStyle(fontSize: 9),),
+//                                         Text('結論：'),
+//                                         SizedBox(height: 4,),
+//                                       ],
+//                                     ),
+//                                     ));
+                                    TestTagList(
+                                    title: overview.tagTitle,
+                                    selectTagIdList: overview.itemIdList,
+                                    tagAmount: overview.tagAmount,
+                                    createdAt: '登録時間',
+                                    onDelete: ()=> _onDeleteTag(
+                                        context, overview.tagTitle),
+                                    onTap: ()=>_onSelectTag(
+                                        context,overview.tagTitle,overview.myFocusNode),
 //                            listDecoration: listDecoration,
-                                listNumber: index,
-                                myFocusNode:overview.myFocusNode,
-                                );
-                              },
+                                    listNumber: index,
+                                    myFocusNode:overview.myFocusNode,
+                                  );
+                                },
+                              ),
                             ),
                           ],
                         );
                       }
                     },
                   ),
-                ),
-              );
-                },
+                );
+              },
             )
             //削除モード
                 :LayoutBuilder(
@@ -123,7 +146,7 @@ class TagPage extends StatelessWidget {
                       child: FutureBuilder(
                         future: compareViewModel.getTagChartList(),
                         builder: (context,
-                        AsyncSnapshot<List<DraggingTagChart>>snapshot) {
+                            AsyncSnapshot<List<DraggingTagChart>>snapshot) {
                           if (snapshot.data == null) {
                             return Container();
                           }
@@ -161,7 +184,7 @@ class TagPage extends StatelessWidget {
       case TagEditMode.normal:
       //IdからcomparisonOverview.titleを取得し表示
         await viewModel.onSelectTag(tagTitle);
-    ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
+        ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
         await Navigator.of(context,rootNavigator: true).push(
             MaterialPageRoute<void>(
                 builder: (context) => SelectTagPage(tagTitle: tagTitle,
@@ -189,7 +212,7 @@ class TagPage extends StatelessWidget {
                     child: const Text('削除'),
                     isDestructiveAction: true,
                     onPressed: () {
-                        viewModel.onDeleteTag(tagTitle);
+                      viewModel.onDeleteTag(tagTitle);
                       Navigator.pop(context);
                       Fluttertoast.showToast(
                         msg: '削除完了',
