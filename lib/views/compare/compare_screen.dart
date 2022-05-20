@@ -72,7 +72,7 @@ class CompareScreen extends StatelessWidget {
 //            : Text(tagTitle,style: middleTextStyle,),
           //todo 右に保存完了ボタンがあるのでNavBarIconTitleの左側にスペース追加
         :NavBarIconTitle(tagTitle:tagTitle,titleIcon: CupertinoIcons.tag,
-          rightPadding: 0,),
+        leftFlex: 1,centerFlex: 10,rightFlex: 1,),
 
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
           ///保存完了ボタン
