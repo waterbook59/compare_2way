@@ -22,6 +22,8 @@ class NavBarIconTitle extends StatelessWidget {
             Text(
               tagTitle,
               style: middleTextStyle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
