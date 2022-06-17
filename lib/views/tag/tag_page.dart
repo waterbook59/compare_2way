@@ -240,6 +240,35 @@ class TagPage extends StatelessWidget {
 
   //tagTitleを元に削除
   Future<void> _onDeleteTag(BuildContext context, String tagTitle) async{
+    //Slidable削除のとき確認ダイアログ出す
+    return  showDialog<Widget>(context: context,
+        builder: (context){
+          return CupertinoAlertDialog(
+            title: Text('「$tagTitle」の削除'),
+            content:const Text('削除してもいいですか？'),
+            actions: [
+              CupertinoDialogAction(
+                child: const Text('Delete'),
+                isDestructiveAction: true,
+                onPressed: (){
+                  final viewModel =
+                  Provider.of<CompareViewModel>(context, listen: false)
+                    ..onDeleteTag(tagTitle);
+                  Fluttertoast.showToast(
+                    msg: '削除完了',
+                  );
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoDialogAction(
+                child: const Text('キャンセル'),
+                onPressed: ()=>Navigator.pop(context),
+              ),
+            ],
+          );
+        });
+
+    //確認ダイアログなし削除
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.onDeleteTag(tagTitle);
 

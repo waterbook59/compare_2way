@@ -197,7 +197,6 @@ class ListPage extends StatelessWidget {
               final viewModel =
               Provider.of<CompareViewModel>(context, listen: false)
                 ..deleteItem(comparisonItemId);
-//              Navigator.pop(context);
               Fluttertoast.showToast(
                 msg: '削除完了',
               );
