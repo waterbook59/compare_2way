@@ -105,7 +105,7 @@ class EditBottomAction extends StatelessWidget {
                 content:const Text('削除してもいいですか？'),
                 actions: [
                   CupertinoDialogAction(
-                    child: const Text('Delete'),
+                    child: const Text('削除'),
                     isDestructiveAction: true,
                     onPressed: (){
         final viewModel = Provider.of<CompareViewModel>(context, listen: false)

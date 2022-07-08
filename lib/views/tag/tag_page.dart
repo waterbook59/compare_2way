@@ -244,11 +244,11 @@ class TagPage extends StatelessWidget {
     return  showDialog<Widget>(context: context,
         builder: (context){
           return CupertinoAlertDialog(
-            title: Text('「$tagTitle」の削除'),
+            title: Text('「$tagTitle」タグの削除'),
             content:const Text('削除してもいいですか？'),
             actions: [
               CupertinoDialogAction(
-                child: const Text('Delete'),
+                child: const Text('削除'),
                 isDestructiveAction: true,
                 onPressed: (){
                   final viewModel =

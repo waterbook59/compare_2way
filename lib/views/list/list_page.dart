@@ -185,13 +185,13 @@ class ListPage extends StatelessWidget {
     ///Slidable削除のとき確認ダイアログ出す
     return  showDialog<Widget>(context: context,
         builder: (context){
-      return       CupertinoAlertDialog(
+      return CupertinoAlertDialog(
         title: Text('「$itemTitle」の削除'),
 //      Text('「${comparisonOverview.itemTitle}」の削除'),
         content:const Text('削除してもいいですか？'),
         actions: [
           CupertinoDialogAction(
-            child: const Text('Delete'),
+            child: const Text('削除'),
             isDestructiveAction: true,
             onPressed: (){
               final viewModel =
