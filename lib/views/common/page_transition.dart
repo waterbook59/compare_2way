@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 class PageTransition extends StatefulWidget {
 
   PageTransition({
-    @required this.dialogWidget,
-    @required this.animationController});
+    required this.dialogWidget,
+    required this.animationController});
 
    Widget dialogWidget;
   AnimationController animationController;
@@ -24,6 +24,12 @@ class _PageTransitionState extends State<PageTransition>
     );
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: animationController dispose
+    super.dispose();
   }
 
   @override

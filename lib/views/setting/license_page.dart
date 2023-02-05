@@ -29,6 +29,12 @@ class _MyLicensePageState extends State<MyLicensePage> {
   }
 
   @override
+  void dispose() {
+    // TODO: licenses dispose?
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     return CupertinoPageScaffold(

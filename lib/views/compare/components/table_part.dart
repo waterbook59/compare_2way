@@ -69,7 +69,8 @@ class _TablePartState extends State<TablePart> {
   }
   @override
   void dispose() {
-
+    //todo way1MeritDisplay,way1DemeritDisplay,way2MeritDisplay,
+    // way2DemeritDisplayインスタンス破棄?
     super.dispose();
   }
 

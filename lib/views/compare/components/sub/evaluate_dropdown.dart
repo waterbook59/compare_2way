@@ -20,7 +20,11 @@ class _EvaluateDropdownState extends State<EvaluateDropdown> {
     displayValue = widget.initialValue;
     super.initState();
   }
-
+@override
+  void dispose() {
+    // TODO:  displayValueインスタンス？
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

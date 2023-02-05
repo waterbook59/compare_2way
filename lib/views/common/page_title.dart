@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 
 class PageTitle extends StatelessWidget {
 
-  const PageTitle({this.title});
+  const PageTitle({required this.title});
   final String title;
 
   @override

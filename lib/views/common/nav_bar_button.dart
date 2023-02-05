@@ -5,8 +5,8 @@ class NavBarButton extends StatelessWidget {
 
   const NavBarButton({this.navBarIcon,this.onTap});
 
-final IconData navBarIcon;
-final VoidCallback onTap;
+final IconData? navBarIcon;
+final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
