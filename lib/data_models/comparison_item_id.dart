@@ -1,4 +1,4 @@
 class ComparisonItemId{
   ComparisonItemId({this.comparisonItemId});
-  final String comparisonItemId;
+  final String? comparisonItemId;
 }

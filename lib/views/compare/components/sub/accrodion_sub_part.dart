@@ -15,15 +15,15 @@ import 'package:provider/provider.dart';
 class AccordionSubPart extends StatefulWidget {
 
   const AccordionSubPart({
-    this.title,
-    this.displayList,
-    this.way1MeritList,
-    this.way2MeritList,
-    this.way1DemeritList,
-    this.way2DemeritList,
-    this.inputChanged,
-    this.addList,
-    this.deleteList,
+    required this.title,
+    required this.displayList,
+    required this.way1MeritList,
+    required this.way2MeritList,
+    required this.way1DemeritList,
+    required this.way2DemeritList,
+    required this.inputChanged,
+    required this.addList,
+    required this.deleteList,
   });
 
   final String title;

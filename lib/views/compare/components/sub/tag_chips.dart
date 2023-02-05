@@ -66,6 +66,7 @@ if(widget.candidateTagNameList==null){
 
   @override
   void dispose() {
+    //todo disposeしなくてい良い??
     _tempoCandidateLabels = [];
     _tempoDisplayList = [];
     _tempoInput ='';//tagChips破棄時に空にする

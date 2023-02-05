@@ -12,7 +12,7 @@ class CandidateTag extends StatelessWidget {
     this.listNumber,
   });
 
-  final String title;
+   final String title;
 //  final int tagAmount;
 //  final String createdAt;
 //  final VoidCallback onTapAddTag;

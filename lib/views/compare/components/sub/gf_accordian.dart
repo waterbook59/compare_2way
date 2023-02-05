@@ -120,6 +120,7 @@ class _GFAccordionState extends State<GFAccordion>
   void dispose() {
     animationController.dispose();
     controller.dispose();
+    //todo showAccordion,offsetインスタンスdispose?
     super.dispose();
   }
 

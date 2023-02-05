@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 class NavBarIconTitle extends StatelessWidget {
 
-  const NavBarIconTitle({this.tagTitle,this.titleIcon,
-    this.leftFlex,this.centerFlex,this.rightFlex});
+  const NavBarIconTitle({required this.tagTitle,this.titleIcon,
+    required this.leftFlex,required this.centerFlex,required this.rightFlex});
   final String tagTitle;
-  final IconData titleIcon;
+  final IconData? titleIcon;
   final int leftFlex;
   final int centerFlex;
   final int rightFlex;

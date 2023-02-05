@@ -36,6 +36,7 @@ class _TagInputChipState extends State<TagInputChip> {
   @override
   void dispose() {
     _tagTitleController.dispose();
+    //todo _focus dispose?
     super.dispose();
   }
 

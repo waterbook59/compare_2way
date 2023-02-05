@@ -7,7 +7,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.8.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -15,33 +15,33 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  cupertino_icons: ^1.0.0
+  cupertino_icons: ^1.0.5
 
-  getwidget: ^1.2.4
-  flutter_icons: ^1.1.0
-  provider: ^4.3.3
-  moor: ^3.4.0
-  sqlite3_flutter_libs: ^0.3.0
-  path_provider: ^1.6.27
-  path: ^1.7.0
-  uuid: ^2.2.2
-  fluttertoast: ^7.1.8
-  flutter_slidable: ^0.5.7
-  flutter_reorderable_list: ^0.1.5
-  settings_ui: ^0.6.0
-  flutter_launcher_icons: ^0.8.1
-  webview_flutter: ^1.0.7
-  app_review: ^2.0.1
-  flutter_email_sender: ^4.0.0
-  url_launcher: ^5.7.10
+  getwidget: ^3.0.1
+  flutter_icons_null_safety: ^1.1.0
+  provider: ^6.0.5
+  moor: ^4.6.1+1
+  sqlite3_flutter_libs: ^0.5.12
+  path_provider: ^2.0.11
+  path: ^1.8.2
+  uuid: ^3.0.7
+  fluttertoast: ^8.1.2
+  flutter_slidable: ^2.0.0
+  flutter_reorderable_list: ^1.2.0
+  settings_ui: ^2.0.2
+  flutter_launcher_icons: ^0.11.0
+  webview_flutter: ^4.0.1
+  app_review: ^2.1.2+1
+  flutter_email_sender: ^5.2.0
+  url_launcher: ^6.1.7
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  pedantic_mono: ^1.10.0+3
-  moor_generator: ^3.3.1
-  build_runner: ^1.10.1
+  pedantic_mono: ^1.20.1
+  moor_generator: ^4.6.0+1
+  build_runner: ^2.3.3
 
 
 flutter_icons:
@@ -55,8 +55,8 @@ flutter_icons:
   adaptive_icon_foreground: "assets/images/icon_image.png"
 
 
-dependency_overrides:
-  analyzer: ^0.39.14
+#dependency_overrides:
+#  analyzer: ^0.39.14
 
 
 flutter:
