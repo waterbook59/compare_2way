@@ -5,6 +5,7 @@ import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/tag/components/reorderable_tag_list.dart';
 import 'package:compare_2way/views/common/page_title.dart';
 import 'package:compare_2way/views/tag/components/sub/tag_page_title.dart';
+import 'package:compare_2way/views/tag/components/tag_list.dart';
 import 'package:compare_2way/views/tag/select_tag_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import 'components/sub/tag_edit_botton_action.dart';
-import 'components/tag_list.dart';
 
 ///List<Tag>で一覧のデータ取得しつつ、tagTitleで重複するものを削除するのにtoSet()を使う
 ///削除したlistをタグ一覧として表示する（tagChips参照）
@@ -31,28 +31,27 @@ class TagPage extends StatelessWidget {
         trailing:
         //タグ名編集時にキーボードunFocusできるアイコン追加(viewModel経由=>Consumerに訴える)
         //編集モード(true)の時はリストをタップするとTagListのtagTitle部を編集する形に
-         TagEditButtonAction(),
+        TagEditButtonAction(),
       ),
 
       ///Scaffoldで全く問題なし
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
         body:
-///Selectorに変更するとbuilder:(context,allTagList,child)になって、
+        ///Selectorに変更するとbuilder:(context,allTagList,child)になって、
         ///FutureBuilderのfuture:でエラーがでる
 //        Selector<CompareViewModel,List<Tag>>(
 //          selector: (context, compareViewModel) => compareViewModel.allTagList,
-          Consumer<CompareViewModel>(
+        Consumer<CompareViewModel>(
           builder: (context, compareViewModel, child) {
             return (viewModel.tagEditMode == TagEditMode.normal
                 ||viewModel.tagEditMode == TagEditMode.tagTitleEdit)
             //ここでnormal&editとdeleteModeで表示変更
             //todo normal&tagTitleEdit内のdeleteModeの表示削除
             //normal&tagTitleEdit
-              ?LayoutBuilder(
-                builder: (context, constraints) {
-                  return SingleChildScrollView(
-                child: ConstrainedBox(
+                ?LayoutBuilder(
+              builder: (context, constraints) {
+                return ConstrainedBox(
                   constraints:
                   BoxConstraints(minHeight: constraints.maxHeight),
                   child: FutureBuilder(
@@ -68,9 +67,11 @@ class TagPage extends StatelessWidget {
                         print('TagPage/EmptyView側通って描画');
                         return Container(
                             child:
-                                const Center(child: Text('タグづけされたアイテムはありません')));
+                            const Center(child: Text('タグづけされたアイテムはありません')));
                       } else {
-                        return Column(
+                        //todo まとめてスクロール sliver使用 https://kabochapo.hateblo.jp/entry/2021/05/10/190621
+                        return
+                          Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const PageTitle(
@@ -78,39 +79,41 @@ class TagPage extends StatelessWidget {
                             ),
                             const SizedBox(height: 8,),
                             const Divider(color: Colors.grey,height: 0,),
-                            ListView.builder(
-                              //ListView.builderの高さを自動指定
-                              shrinkWrap: true,
-                              //リストが縦方向にスクロールできるようになる
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final overview = snapshot.data[index];
+                            Flexible(
+                              child: ListView.builder(
+                                //ListView.builderの高さを自動指定
+//                              shrinkWrap: true,
+                                //リストが縦方向にスクロールできるようになる
+//                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final overview = snapshot.data[index];
 //                                print('tagPage/snapshot:$overview');
-                                //DateTime=>String変換
-                                return TagList(
-                                title: overview.tagTitle,
-                                selectTagIdList: overview.itemIdList,
-                                tagAmount: overview.tagAmount,
-                                createdAt: '登録時間',
-                                onDelete: ()=> _onDeleteTag(
-                                    context, overview.tagTitle),
-                                onTap: ()=>_onSelectTag(
-                                    context,overview.tagTitle,overview.myFocusNode),
+                                  //DateTime=>String変換
+                                  return
+                                    TagList(
+                                    title: overview.tagTitle,
+                                    selectTagIdList: overview.itemIdList,
+                                    tagAmount: overview.tagAmount,
+                                    createdAt: '登録時間',
+                                    onDelete: ()=> _onDeleteTag(
+                                        context, overview.tagTitle),
+                                    onTap: ()=>_onSelectTag(
+                                        context,overview.tagTitle,overview.myFocusNode),
 //                            listDecoration: listDecoration,
-                                listNumber: index,
-                                myFocusNode:overview.myFocusNode,
-                                );
-                              },
+                                    listNumber: index,
+                                    myFocusNode:overview.myFocusNode,
+                                  );
+                                },
+                              ),
                             ),
                           ],
                         );
                       }
                     },
                   ),
-                ),
-              );
-                },
+                );
+              },
             )
             //削除モード
                 :LayoutBuilder(
@@ -122,7 +125,7 @@ class TagPage extends StatelessWidget {
                       child: FutureBuilder(
                         future: compareViewModel.getTagChartList(),
                         builder: (context,
-                        AsyncSnapshot<List<DraggingTagChart>>snapshot) {
+                            AsyncSnapshot<List<DraggingTagChart>>snapshot) {
                           if (snapshot.data == null) {
                             return Container();
                           }
@@ -160,7 +163,7 @@ class TagPage extends StatelessWidget {
       case TagEditMode.normal:
       //IdからcomparisonOverview.titleを取得し表示
         await viewModel.onSelectTag(tagTitle);
-    ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
+        ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
         await Navigator.of(context,rootNavigator: true).push(
             MaterialPageRoute<void>(
                 builder: (context) => SelectTagPage(tagTitle: tagTitle,
@@ -188,7 +191,7 @@ class TagPage extends StatelessWidget {
                     child: const Text('削除'),
                     isDestructiveAction: true,
                     onPressed: () {
-                        viewModel.onDeleteTag(tagTitle);
+                      viewModel.onDeleteTag(tagTitle);
                       Navigator.pop(context);
                       Fluttertoast.showToast(
                         msg: '削除完了',
@@ -237,6 +240,35 @@ class TagPage extends StatelessWidget {
 
   //tagTitleを元に削除
   Future<void> _onDeleteTag(BuildContext context, String tagTitle) async{
+    //Slidable削除のとき確認ダイアログ出す
+    return  showDialog<Widget>(context: context,
+        builder: (context){
+          return CupertinoAlertDialog(
+            title: Text('「$tagTitle」タグの削除'),
+            content:const Text('削除してもいいですか？'),
+            actions: [
+              CupertinoDialogAction(
+                child: const Text('削除'),
+                isDestructiveAction: true,
+                onPressed: (){
+                  final viewModel =
+                  Provider.of<CompareViewModel>(context, listen: false)
+                    ..onDeleteTag(tagTitle);
+                  Fluttertoast.showToast(
+                    msg: '削除完了',
+                  );
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoDialogAction(
+                child: const Text('キャンセル'),
+                onPressed: ()=>Navigator.pop(context),
+              ),
+            ],
+          );
+        });
+
+    //確認ダイアログなし削除
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.onDeleteTag(tagTitle);
 

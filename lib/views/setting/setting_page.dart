@@ -5,9 +5,9 @@ import 'package:compare_2way/views/setting/privacy_policy_screen.dart';
 import 'package:compare_2way/views/setting/user_policy_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-import 'inquiry_screen.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -60,11 +60,8 @@ class _SettingPageState extends State<SettingPage> {
                       title: '要望・不具合に関する報告',
 //                      subtitle: 'English',
                       leading: const Icon(CupertinoIcons.envelope),
-//                      trailing:const Icon(Icons.arrow_forward_ios),
                       onPressed: (context) {
-                        Navigator.of(context,rootNavigator: true).push(MaterialPageRoute<void>(
-                          builder: (_) => InquiryScreen(),
-                        ));
+                        flutterEmailSenderMail();
                       },
                     ),
                     SettingsTile(
@@ -125,44 +122,6 @@ class _SettingPageState extends State<SettingPage> {
           ],
         ),
 
-//        GestureDetector(
-//          onTap: () {
-//            ///任意の場所をタップするだけでフォーカス外せる(キーボード閉じれる)
-//            FocusScope.of(context).unfocus();
-//            //setStateいらない
-//          },
-//          child: SingleChildScrollView(
-//            child: Column(
-//              crossAxisAlignment: CrossAxisAlignment.start,
-//              children: [
-//              const PageTitle(title: 'タグ',),
-//              const SizedBox(height: 8,),
-//              const Divider(color: Colors.grey,height: 0,),
-//              ListView.builder(
-//                  shrinkWrap: true,
-//                  physics: const NeverScrollableScrollPhysics(),
-//                  itemCount: 6,
-//                  itemBuilder: (BuildContext context, int index){
-//                    return ListTile(
-//                      title: Text(settingList[index]),
-////                      subtitle:Text('アイテム数:${testTagChart[index].tagAmount}'),
-////                      onTap: (){
-////                        print('ListTileのリスト onTap!');
-////                        setState(() {
-////                          _selectedIndex = index;
-////                          myFocusNodes[index].requestFocus();
-////                          isDisplayIcon = true;
-////                          isReturnText = true;
-////                          is2ndReturnText =false;
-////                        }
-//                        );},
-//                    ),
-//
-////                  }),
-//
-//            ],),
-//          ),
-//        )
       ),
     );
   }
@@ -171,5 +130,21 @@ class _SettingPageState extends State<SettingPage> {
     AppReview.requestReview.then(print);
   }
 
+//flutter_email_senderを使ってメールを送信
+  Future<void> flutterEmailSenderMail() async {
+    final Email email = Email(
+      body: '${Template().text}',
+      subject: '転ばぬ先の2way：サポート',
+      recipients: ['waterbook.tokyo@gmail.com'],
+    );
 
+    await FlutterEmailSender.send(email);
+  }
+
+}
+
+//本文のテンプレート的な
+class Template {
+  String text =
+      'ご意見・ご要望をこちらにご記入ください';
 }

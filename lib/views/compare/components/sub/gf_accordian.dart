@@ -148,6 +148,7 @@ class _GFAccordionState extends State<GFAccordion>
                           ? Text(widget.title, style: widget.textStyle)
                           : (widget.titleChild ?? Container()),
                     ),
+                    Container(width: 44,),
                     showAccordion ? widget.expandedIcon : widget.collapsedIcon
                   ],
                 ),

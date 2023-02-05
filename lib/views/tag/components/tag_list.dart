@@ -1,3 +1,4 @@
+import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/tag/components/sub/edit_tag_title.dart';
@@ -48,12 +49,12 @@ class TagList extends StatelessWidget {
           },
         )
       ],
-      child: Container(
-        //todo Container内部の余白調整でListTile幅をタイトに
-        //flutterのverが低いのでListTileのtileColorなし
-        decoration: BoxDecoration(
-          color: //ここでswitch使えない=>即時関数:https://yumanoblog.com/flutter-if-switch/
-              (() {
+      child:
+      Container(
+        decoration:listDecoration,
+        child:
+        ListTile(
+          tileColor:     (() { //ここでswitch使えない=>即時関数:https://yumanoblog.com/flutter-if-switch/
             switch (viewModel.tagEditMode) {
               case TagEditMode.normal:
                 return Colors.transparent;
@@ -70,19 +71,9 @@ class TagList extends StatelessWidget {
                 break;
             }
           })(),
-
-//          viewModel.tagEditMode
-//              ? Colors.transparent
-//              : viewModel.selectedIndex == listNumber
-//                  ? Colors.grey[300]
-//                  : const Color(0xFFFBE9E7),
-          border:
-              const Border(bottom: BorderSide(width: 0.5, color: Colors.grey)),
-        ),
-        child: ListTile(
           leading: Icon(
             CupertinoIcons.tag_solid,
-            size: 36,
+            size: 32,
             color: primaryColor,
           ),
           title: (() {
@@ -93,32 +84,28 @@ class TagList extends StatelessWidget {
               case TagEditMode.tagTitleEdit:
                 return viewModel.selectedIndex == listNumber
                     ? EditTagTitle(
-                        tagTitle: title,
-                        selectTagIdList: selectTagIdList,
-                        myFocusNode: myFocusNode,
-                      )
+                  tagTitle: title,
+                  selectTagIdList: selectTagIdList,
+                  myFocusNode: myFocusNode,
+                )
                     : Text(title);
               case TagEditMode.tagDelete:
               ///編集必要ないので、Text(title)に変更
-              return Text(title);
+                return Text(title);
             }
           })(),
-//          viewModel.tagEditMode
-//              ? Text(title)
-//              : viewModel.selectedIndex == listNumber
-//                  ? EditTagTitle(
-//                      tagTitle: title,
-//                      selectTagIdList: selectTagIdList,
-//                      myFocusNode: myFocusNode,
-//                    )
-//                  : Text(title),
           //tagTitleの編集
-          subtitle: Column(
+          /// ListTile幅をタイトにするのにsubtitle=>Columnへ変更
+          subtitle:
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const Text('',style: TextStyle(fontSize: 9),),
               Text('アイテム数：$tagAmountアイテム'),
+              const SizedBox(height: 4,),
             ],
           ),
+
           trailing: (() {
             switch (viewModel.tagEditMode) {
               case TagEditMode.normal:
@@ -142,16 +129,19 @@ class TagList extends StatelessWidget {
           ///getTagTitleIdしつlistTileのonTapでfocusNode設定(tagEditModeで場合わけ)
           ///ListTileだけを再ビルドしても反映されない(notifyListenersしてListView含め再ビルド)
           onTap: () {
-            getTitleAndFocus(context, onTap, myFocusNode, listNumber);
+            getTitleAndFocus(context, onTap,
+                myFocusNode,
+                listNumber);
           },
           //          isThreeLine: true,
         ),
-      ),
+      ),//Container
     );
   }
 
   Future<void> getTitleAndFocus(BuildContext context, VoidCallback onTap,
-      FocusNode myFocusNode, int listNumber) async {
+      FocusNode myFocusNode,
+      int listNumber) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.changeEditFocus(listNumber);
     onTap();

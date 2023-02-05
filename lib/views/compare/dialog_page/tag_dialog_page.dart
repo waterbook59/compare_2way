@@ -6,7 +6,6 @@ import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/common/nav_bar_icon_title.dart';
 import 'package:compare_2way/views/compare/components/sub/tag_chips.dart';
 import 'package:compare_2way/views/compare/components/sub/candidate_tag.dart';
-import 'package:compare_2way/views/tag/components/tag_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';

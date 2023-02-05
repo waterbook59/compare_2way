@@ -5,16 +5,13 @@ import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/compare_screen.dart';
 import 'package:compare_2way/views/list/add_screen.dart';
-import 'package:compare_2way/views/list/componets/edit_list_tile.dart';
 import 'package:compare_2way/views/list/componets/overview_list.dart';
 import 'package:compare_2way/views/list/componets/reorderable_edit_lsit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/components/checkbox/gf_checkbox.dart';
-import 'package:getwidget/getwidget.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import "package:intl/intl.dart";
-
 import 'componets/list_page_edit_button.dart';
 
 class ListPage extends StatelessWidget {
@@ -97,8 +94,8 @@ class ListPage extends StatelessWidget {
                                 title: overview.itemTitle,
                                 conclusion: overview.conclusion,
                                 createdAt: formatted,
-                                onDelete: () => _deleteItem(
-                                    context, overview.comparisonItemId),
+                                onDelete: () => _deleteItem(context,
+                                  overview.comparisonItemId,overview.itemTitle,),
                                 onTap: () => _updateList(context, overview),
                                 listDecoration: listDecoration,
                               );
@@ -177,14 +174,46 @@ class ListPage extends StatelessWidget {
     ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
     Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
       builder: (context) => const AddScreen(displayMode: AddScreenMode.add),
+      ///下から上への遷移
+      fullscreenDialog: true,
     ));
   }
 
   //ListPage単一行削除
   Future<void> _deleteItem(
-      BuildContext context, String comparisonItemId) async {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.deleteItem(comparisonItemId);
+      BuildContext context, String comparisonItemId,String itemTitle) async {
+    ///Slidable削除のとき確認ダイアログ出す
+    return  showDialog<Widget>(context: context,
+        builder: (context){
+      return CupertinoAlertDialog(
+        title: Text('「$itemTitle」の削除'),
+//      Text('「${comparisonOverview.itemTitle}」の削除'),
+        content:const Text('削除してもいいですか？'),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text('削除'),
+            isDestructiveAction: true,
+            onPressed: (){
+              final viewModel =
+              Provider.of<CompareViewModel>(context, listen: false)
+                ..deleteItem(comparisonItemId);
+              Fluttertoast.showToast(
+                msg: '削除完了',
+              );
+              Navigator.pop(context);
+            },
+          ),
+          CupertinoDialogAction(
+            child: const Text('キャンセル'),
+            onPressed: ()=>Navigator.pop(context),
+          ),
+        ],
+      );
+        });
+    //確認ダイアログなし削除
+//    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+//    await viewModel.deleteItem(comparisonItemId);
+
   }
 
   void _updateList(BuildContext context, ComparisonOverview updateOverview) {

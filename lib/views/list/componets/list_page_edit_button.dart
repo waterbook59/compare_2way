@@ -3,6 +3,7 @@ import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class ListPageEditButton extends StatelessWidget {
@@ -57,7 +58,35 @@ class ListPageEditButton extends StatelessWidget {
   }
 
   //ListPage選択行削除
+  //todo 選択されている時だけshowDialogだけ出す
   Future<void> _deleteItem(BuildContext context) async{
+///選択削除のとき確認ダイアログ出す(選択ゼロのときは出さない)
+//    return  showDialog<Widget>(context: context,
+//        builder: (context){
+//          return CupertinoAlertDialog(
+//            title: const Text('タイトル削除'),
+//            content:const Text('削除してもいいですか？'),
+//            actions: [
+//              CupertinoDialogAction(
+//                child: const Text('Delete'),
+//                isDestructiveAction: true,
+//                onPressed: (){
+//                  final viewModel =
+//                  Provider.of<CompareViewModel>(context, listen: false)
+//                    ..deleteItemList();
+//                  Fluttertoast.showToast(
+//                    msg: '削除完了',
+//                  );
+//                  Navigator.pop(context);
+//                },
+//              ),
+//              CupertinoDialogAction(
+//                child: const Text('キャンセル'),
+//                onPressed: ()=>Navigator.pop(context),
+//              ),
+//            ],
+//          );
+//        });
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.deleteItemList();
   }
