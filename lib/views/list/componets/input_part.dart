@@ -10,10 +10,10 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class InputPart extends StatelessWidget {
+  const InputPart({this.displayMode, this.comparisonOverview});
 
-  const InputPart({this.displayMode,this.comparisonOverview});
-  final AddScreenMode displayMode;
-  final ComparisonOverview comparisonOverview;
+  final AddScreenMode? displayMode;
+  final ComparisonOverview? comparisonOverview;
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +23,14 @@ class InputPart extends StatelessWidget {
     return Column(
       children: [
         ///タイトル
-      //AddScreenMode.editの場合、controllerはviewModelのitemTitle,way1Title,way2Titleを代入
+        //AddScreenMode.editの場合、controllerはviewModelのitemTitle,way1Title,way2Titleを代入
         TextFieldPart(
           label: 'タイトル',
           placeholder: 'タイトルを入力',
-          autofocus: displayMode == AddScreenMode.add
-              ?true:false,
+          autofocus: displayMode == AddScreenMode.add ? true : false,
           textEditingController: viewModel.titleController,
           //テキスト入力があるかどうかを下のRaisedButtonを押せる押せないのために通知するだけ
-          didChanged: (text)=>viewModel.itemTitleChanged(),
+          didChanged: (text) => viewModel.itemTitleChanged(),
           iconData: CupertinoIcons.squares_below_rectangle,
         ),
         const SizedBox(height: 8),
@@ -43,7 +42,7 @@ class InputPart extends StatelessWidget {
           autofocus: false,
           textEditingController: viewModel.way1Controller,
           //テキスト入力があるかどうかを下のRaisedButtonを押せる押せないのために通知するだけ
-          didChanged: (text)=>viewModel.itemTitleChanged(),
+          didChanged: (text) => viewModel.itemTitleChanged(),
           iconData: CupertinoIcons.arrow_uturn_left,
         ),
 //        const SizedBox(height: 8),
@@ -57,7 +56,7 @@ class InputPart extends StatelessWidget {
           autofocus: false,
           textEditingController: viewModel.way2Controller,
           //テキスト入力があるかどうかを下のRaisedButtonを押せる押せないのために通知するだけ
-          didChanged: (text)=>viewModel.itemTitleChanged(),
+          didChanged: (text) => viewModel.itemTitleChanged(),
           iconData: CupertinoIcons.arrow_uturn_right,
 //          iconData: CupertinoIcons.chevron_left_2 ,
 //          iconData: CupertinoIcons.arrowshape_turn_up_left_2 ,
@@ -68,25 +67,24 @@ class InputPart extends StatelessWidget {
 //todo way3のアイコン
 //          iconData: CupertinoIcons.arrow_uturn_up ,
         ///button
-        Consumer<CompareViewModel>(
-        builder: (context, compareViewModel, child) {
-          return RaisedButton(
+        Consumer<CompareViewModel>(builder: (context, compareViewModel, child) {
+          return ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: accentColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),),
+              ),
+              onPressed: viewModel.titleController.text.isNotEmpty &&
+                      viewModel.way1Controller.text.isNotEmpty &&
+                      viewModel.way2Controller.text.isNotEmpty
+                  ? displayMode == AddScreenMode.add
+                      ? () => _createComparisonItems(context)
+                      : () => _updateComparisonItems(context)
+                  : null,
               child: displayMode == AddScreenMode.add
-              ?const Text('作成')
-              :const Text('更新'),
-              color: accentColor,
-              shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              onPressed:
-              viewModel.titleController.text.isNotEmpty &&
-                  viewModel.way1Controller.text.isNotEmpty &&
-                  viewModel.way2Controller.text.isNotEmpty
-              ? displayMode == AddScreenMode.add
-                ?() => _createComparisonItems(context)
-                :()=>_updateComparisonItems(context)
-              :null
-        );
-  }),
+                  ? const Text('作成')
+                  : const Text('更新'));
+        }),
       ],
     );
   }
@@ -94,7 +92,7 @@ class InputPart extends StatelessWidget {
   ///新規作成
   Future<void> _createComparisonItems(BuildContext context) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-    //初期表示は読み込みさせる
+      //初期表示は読み込みさせる
       ..compareScreenStatus = CompareScreenStatus.set;
 
     //Uuid渡したいので、view側でcomparisonOverview作成
@@ -127,40 +125,41 @@ class InputPart extends StatelessWidget {
 
     ///DB登録
     ///viewModel側でcontroller.textを入力してDB登録
-   await viewModel.createNewItem(newComparisonOverview);
+    await viewModel.createNewItem(newComparisonOverview);
     //DB登録 Merit/Demeritの1行だけをUuidでつけたComparisonIdを入れて登録する
     await viewModel.createDesc(
-        initWay1Merit, initWay2Merit,initWay1Demerit,initWay2Demerit);
+        initWay1Merit, initWay2Merit, initWay1Demerit, initWay2Demerit);
 
     //DBからUuidでつけたComparisonIdを元に1行だけ読込(overviewDBへ格納)=>compareScreenへ渡す
     ///Merit/DemeritのリストはCompareScreenでFutureBuilderから読込のでviewModel側への格納はなし
-    await viewModel.getComparisonOverview(
-        newComparisonOverview.comparisonItemId);
+    await viewModel
+        .getComparisonOverview(newComparisonOverview.comparisonItemId);
 
     ///DBに登録されたcomparisonOverviewをCompareScreenへ渡したい
     await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
             builder: (context) => CompareScreen(
-              screenEditMode: ScreenEditMode.fromListPage,
+                  screenEditMode: ScreenEditMode.fromListPage,
 //                  comparisonOverview: comparisonOverview,
-              comparisonOverview: viewModel.overviewDB,
-            )));
+                  comparisonOverview: viewModel.overviewDB,
+                )));
     //DB登録後controllerクリア
-   await viewModel.itemControllerClear();
+    await viewModel.itemControllerClear();
 
     //この時点でcontrollerが破棄されるので、CompareScreenから戻るときにclearメソッドがあると、
     //Once you have called dispose() on a TextEditingController,のエラー出る
   }
 
   ///更新メソッド
-  Future<void>_updateComparisonItems(BuildContext context,
-      ) async{
+  Future<void> _updateComparisonItems(
+    BuildContext context,
+  ) async {
     //テキスト入力したものをviewModel側へ格納
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.updateItem(comparisonOverview);
+    ///更新時は必ずcomparisonOverviewが入ってくるので強制呼び出し
+    await viewModel.updateItem(comparisonOverview!);
     //CompareScreenへ
     Navigator.pop(context);
   }
-
 }

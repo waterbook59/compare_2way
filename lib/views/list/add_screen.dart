@@ -17,8 +17,8 @@ class AddScreen extends StatelessWidget {
     this.displayMode,
     this.comparisonOverview,
   });
-  final AddScreenMode displayMode;
-  final ComparisonOverview comparisonOverview;
+  final AddScreenMode? displayMode;
+  final ComparisonOverview? comparisonOverview;
 
 
   @override
@@ -55,23 +55,22 @@ class AddScreen extends StatelessWidget {
                   viewModel.way2Controller.text.isNotEmpty
             //入力されているとき
              ? CupertinoButton(
-                child: displayMode == AddScreenMode.add
-                    ? Text('作成',style: TextStyle(color: accentColor),)
-                    : Text('更新',style: TextStyle(color: accentColor),),
                 padding: const EdgeInsets.all(8),
                 onPressed:
                     displayMode == AddScreenMode.add
                     ?() => _createComparisonItems(context)
-                    :()=>_updateComparisonItems(context)
+                    :()=>_updateComparisonItems(context),
+                child: displayMode == AddScreenMode.add
+                    ? Text('作成',style: TextStyle(color: accentColor),)
+                    : Text('更新',style: TextStyle(color: accentColor),)
             )
               //入力されていないとき
              : CupertinoButton(
+                padding: const EdgeInsets.all(8),
+                onPressed: null,
                 child:displayMode == AddScreenMode.add
                     ? const Text('作成',style: TextStyle(color: Colors.grey),)
-                    :const Text('更新',style: TextStyle(color: Colors.grey),),
-         /// 編集ボタンの下切れるのを防ぐ
-                 padding: const EdgeInsets.all(8),
-                onPressed: null,);
+                    :const Text('更新',style: TextStyle(color: Colors.grey),),);
           }),
 
       ),
@@ -111,7 +110,7 @@ class AddScreen extends StatelessWidget {
 
     //Uuid渡したいので、view側でcomparisonOverview作成
     final newComparisonOverview = ComparisonOverview(
-      comparisonItemId: Uuid().v1(),
+      comparisonItemId: const Uuid().v1(),
       itemTitle: viewModel.titleController.text,
       way1Title: viewModel.way1Controller.text,
       way2Title: viewModel.way2Controller.text,
@@ -142,12 +141,12 @@ class AddScreen extends StatelessWidget {
     await viewModel.createNewItem(newComparisonOverview);
     //DB登録 Merit/Demeritの1行だけをUuidでつけたComparisonIdを入れて登録する
     await viewModel.createDesc(
-        initWay1Merit, initWay2Merit,initWay1Demerit,initWay2Demerit);
+        initWay1Merit, initWay2Merit,initWay1Demerit,initWay2Demerit,);
 
     //DBからUuidでつけたComparisonIdを元に1行だけ読込(overviewDBへ格納)=>compareScreenへ渡す
     ///Merit/DemeritのリストはCompareScreenでFutureBuilderから読込のでviewModel側への格納はなし
     await viewModel.getComparisonOverview(
-        newComparisonOverview.comparisonItemId);
+        newComparisonOverview.comparisonItemId,);
 
     ///DBに登録されたcomparisonOverviewをCompareScreenへ渡したい
     await Navigator.pushReplacement(
@@ -170,7 +169,8 @@ class AddScreen extends StatelessWidget {
       ) async{
     //テキスト入力したものをviewModel側へ格納
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.updateItem(comparisonOverview);
+    ///更新時は必ずcomparisonOverviewが入ってくるので強制呼び出し
+    await viewModel.updateItem(comparisonOverview!);
     //CompareScreenへ
     Navigator.pop(context);
   }

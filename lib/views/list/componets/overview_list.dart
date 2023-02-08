@@ -4,7 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 class OverViewList extends StatelessWidget {
   const OverViewList(
-      {this.title,
+      {required this.title,
       this.conclusion,
       this.createdAt,
       this.onDelete,
@@ -12,7 +12,7 @@ class OverViewList extends StatelessWidget {
       this.listDecoration});
 
   final String title;
-  final String conclusion;
+  final String? conclusion;
   final String createdAt;
   final VoidCallback onDelete;
   final VoidCallback onTap;

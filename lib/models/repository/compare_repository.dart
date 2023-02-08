@@ -30,7 +30,7 @@ class CompareRepository {
 
   ///新規作成 comparisonOverview
   Future<void> createComparisonOverview(
-      ComparisonOverview comparisonOverview) async {
+      ComparisonOverview comparisonOverview,) async {
     try {
       //comparisonOverview=>ComparisonOverviewRecordへ変換保存
       final comparisonOverviewRecord =

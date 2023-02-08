@@ -1,8 +1,8 @@
 class ComparisonOverview {
   ComparisonOverview(
       {this.dataId,
-        this.comparisonItemId,
-        this.itemTitle,
+        required this.comparisonItemId,
+        required this.itemTitle,
         this.way1Title,
         this.way1MeritEvaluate,
         this.way1DemeritEvaluate,
@@ -14,11 +14,11 @@ class ComparisonOverview {
         this.way3DemeritEvaluate,
         this.favorite,
         this.conclusion,
-      this.createdAt});
+      required this.createdAt});
 
   final int? dataId;
-  final String? comparisonItemId;
-  final String? itemTitle;
+  final String comparisonItemId;
+  final String itemTitle;
 
   final String? way1Title;
   final int? way1MeritEvaluate;
@@ -34,5 +34,5 @@ class ComparisonOverview {
 
   final bool? favorite;
   final String? conclusion;
-  final DateTime? createdAt;
+  final DateTime createdAt;
 }

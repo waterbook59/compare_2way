@@ -60,7 +60,7 @@ class ListPage extends StatelessWidget {
                     child: FutureBuilder(
                       future: viewModel.getList(),
                       builder: (context,
-                          AsyncSnapshot<List<ComparisonOverview>> snapshot) {
+                          AsyncSnapshot<List<ComparisonOverview>> snapshot,) {
                         if (snapshot.data == null) {
                           print('List<ComparisonOverview>>snapshotがnull');
                           return Container();
@@ -71,7 +71,7 @@ class ListPage extends StatelessWidget {
 //                          print('ListPage/EmptyView側通って描画');
                           return Container(
                               child:
-                                  const Center(child: Text('アイテムを追加してください')));
+                                  const Center(child: Text('アイテムを追加してください')),);
                         } else {
 //print('ListView側通って描画');
                           return
@@ -82,9 +82,11 @@ class ListPage extends StatelessWidget {
                             shrinkWrap: true,
                             //リストが縦方向にスクロールできるようになる
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: snapshot.data.length,
+                            ///itemCount安全呼び出し
+                            itemCount: snapshot.data?.length,
                             itemBuilder: (BuildContext context, int index) {
-                              final overview = snapshot.data[index];
+                              ///snapshot.data強制呼び出し
+                              final overview = snapshot.data![index];
                               //DateTime=>String変換
                               final formatter =
                                   DateFormat('yyyy/MM/dd(E) HH:mm:ss', 'ja_JP');
@@ -105,7 +107,7 @@ class ListPage extends StatelessWidget {
                         }
                       },
                     ),
-                  )),
+                  ),),
                 )
 
               ///編集時  ListTile→ReorderableListView&CheckboxListTile
@@ -114,7 +116,7 @@ class ListPage extends StatelessWidget {
                   builder: (context, constraints) => SingleChildScrollView(
                         child: ConstrainedBox(
                             constraints: BoxConstraints(
-                                minHeight: constraints.maxHeight),
+                                minHeight: constraints.maxHeight,),
 //reorderable使用でStatefulに変更
 ///NavBarの削除ボタンを押した時にReorderableEditListをsetStateするには、
 ///initStateを使わず、インスタンスで渡した値をStateWidget側で使用する
@@ -132,12 +134,13 @@ class ListPage extends StatelessWidget {
                                 if (snapshot.hasData && snapshot.data.isEmpty) {
                                   return Container(
                                       child: const Center(
-                                          child: Text('アイテムはありません')));
+                                          child: Text('アイテムはありません'),),);
                                       } else {
                                        return
                                          ReorderableEditList(
+                                           ///snapshot.data 強制呼び出し
                                              draggedItems:
-                                           snapshot.data
+                                           snapshot.data!
                                          );
                                 }
                               }
@@ -180,7 +183,8 @@ class ListPage extends StatelessWidget {
   }
 
   //ListPage単一行削除
-  Future<void> _deleteItem(
+  ///Future<void>ではなく、Future<Widget?>へ変更
+  Future<Widget?> _deleteItem(
       BuildContext context, String comparisonItemId,String itemTitle) async {
     ///Slidable削除のとき確認ダイアログ出す
     return  showDialog<Widget>(context: context,
