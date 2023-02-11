@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 class DescFormAndButton extends StatefulWidget {
   const DescFormAndButton({
-    this.displayList,
+    required this.displayList,
     this.way1MeritList,
     this.way2MeritList,
     this.way1DemeritList,
@@ -17,18 +17,18 @@ class DescFormAndButton extends StatefulWidget {
     //todo
 //    this.way3MeritList,
 //    this.way3DemeritList,
-    this.inputChanged,
-    this.addList,
-    this.deleteList,
-    this.controllers,
-    this.focusNodes,
+    required this.inputChanged,
+    required this.addList,
+    required this.deleteList,
+    required this.controllers,
+    required this.focusNodes,
   });
 
   final DisplayList displayList;
-  final List<Way1Merit> way1MeritList;
-  final List<Way2Merit> way2MeritList;
-  final List<Way1Demerit> way1DemeritList;
-  final List<Way2Demerit> way2DemeritList;
+  final List<Way1Merit>? way1MeritList;
+  final List<Way2Merit>? way2MeritList;
+  final List<Way1Demerit>? way1DemeritList;
+  final List<Way2Demerit>? way2DemeritList;
   final Function(String, int) inputChanged;
   final Function() addList;
   final Function(int) deleteList;

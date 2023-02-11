@@ -14,23 +14,24 @@ import 'sub/gf_accordian.dart' as custom;
 class AccordionPart extends StatefulWidget {
 
   const AccordionPart({
-    this.title,
-    this.displayList,
+    required this.title,
+    required this.displayList,
     this.way1MeritList,
     this.way2MeritList,
     this.way1DemeritList,
     this.way2DemeritList,
-    this.inputChanged,
-    this.addList,
-    this.deleteList,
+    required this.inputChanged,
+    required this.addList,
+    required this.deleteList,
   });
 
+  ///way1&way2のMerit/Demeritを共通して使っているのでway xxx List箇所は安全呼び出し
   final String title;
   final DisplayList displayList;
-  final List<Way1Merit> way1MeritList;
-  final List<Way2Merit> way2MeritList;
-  final List<Way1Demerit> way1DemeritList;
-  final List<Way2Demerit> way2DemeritList;
+  final List<Way1Merit>? way1MeritList;
+  final List<Way2Merit>? way2MeritList;
+  final List<Way1Demerit>? way1DemeritList;
+  final List<Way2Demerit>? way2DemeritList;
   final Function(String, int) inputChanged;
   final Function() addList;
   final Function(int) deleteList;
@@ -41,6 +42,7 @@ class AccordionPart extends StatefulWidget {
 
 class _AccordionPartState extends State<AccordionPart> {
 
+  ///way1&way2のMerit/DemeritのListは必ずcompareScreenから値くるので?付けない
   List<TextEditingController> controllers = <TextEditingController>[];
   List<FocusNode> focusNodes = <FocusNode>[];
 
@@ -50,7 +52,7 @@ class _AccordionPartState extends State<AccordionPart> {
     //todo way3Merit,Demerit分作成
     switch (widget.displayList) {
       case DisplayList.way1Merit:
-        widget.way1MeritList.isNotEmpty
+        widget.way1MeritList!.isNotEmpty
             ? createWay1MeritList()
 //        controllers = widget.way1MeritList.map((item) {
 //          return TextEditingController(text: item.way1MeritDesc);
@@ -58,7 +60,7 @@ class _AccordionPartState extends State<AccordionPart> {
             : controllers = [];
         break;
       case DisplayList.way2Merit:
-        widget.way2MeritList.isNotEmpty
+        widget.way2MeritList!.isNotEmpty
             ? createWay2MeritList()
 //        controllers = widget.way2MeritList.map((item) {
 //          return TextEditingController(text: item.way2MeritDesc);
@@ -66,12 +68,12 @@ class _AccordionPartState extends State<AccordionPart> {
             : controllers = [];
         break;
       case DisplayList.way1Demerit:
-        widget.way1DemeritList.isNotEmpty
+        widget.way1DemeritList!.isNotEmpty
             ? createWay1DemeritList()
             : controllers = [];
         break;
       case DisplayList.way2Demerit:
-        widget.way2DemeritList.isNotEmpty
+        widget.way2DemeritList!.isNotEmpty
             ? createWay2DemeritList()
             : controllers = [];
         break;
@@ -165,29 +167,29 @@ class _AccordionPartState extends State<AccordionPart> {
 
   //todo way3Merit,Demerit分作成
   void createWay1MeritList() {
-    controllers = widget.way1MeritList.map((item) {
+    controllers = widget.way1MeritList!.map((item) {
       return TextEditingController(text: item.way1MeritDesc);
     }).toList();
-    focusNodes = widget.way1MeritList.map((item) => FocusNode()).toList();
+    focusNodes = widget.way1MeritList!.map((item) => FocusNode()).toList();
   }
 
   void createWay2MeritList() {
-    controllers = widget.way2MeritList.map((item) {
+    controllers = widget.way2MeritList!.map((item) {
       return TextEditingController(text: item.way2MeritDesc);
     }).toList();
-    focusNodes = widget.way2MeritList.map((item) => FocusNode()).toList();
+    focusNodes = widget.way2MeritList!.map((item) => FocusNode()).toList();
   }
   void createWay1DemeritList() {
-    controllers = widget.way1DemeritList.map((item) {
+    controllers = widget.way1DemeritList!.map((item) {
       return TextEditingController(text: item.way1DemeritDesc);
     }).toList();
-    focusNodes = widget.way1DemeritList.map((item) => FocusNode()).toList();
+    focusNodes = widget.way1DemeritList!.map((item) => FocusNode()).toList();
   }
   void createWay2DemeritList() {
-    controllers = widget.way2DemeritList.map((item) {
+    controllers = widget.way2DemeritList!.map((item) {
       return TextEditingController(text: item.way2DemeritDesc);
     }).toList();
-    focusNodes = widget.way2DemeritList.map((item) => FocusNode()).toList();
+    focusNodes = widget.way2DemeritList!.map((item) => FocusNode()).toList();
   }
 
 

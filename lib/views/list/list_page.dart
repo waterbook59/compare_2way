@@ -67,7 +67,8 @@ class ListPage extends StatelessWidget {
                         }
                         ///viewModel.comparisonOverviews.isEmptyだとEmptyView通ってしまう
                         ///あくまでFutureBuilderで待った結果（snapshot.data）で条件分けすべき
-                        if (snapshot.hasData && snapshot.data.isEmpty) {
+                        ///isEmpty箇所は強制呼び出しでエラー消える
+                        if (snapshot.hasData && snapshot.data!.isEmpty) {
 //                          print('ListPage/EmptyView側通って描画');
                           return Container(
                               child:
@@ -127,12 +128,13 @@ class ListPage extends StatelessWidget {
                                 viewModel.getItemDataList(),
                               builder: (context,
                                   AsyncSnapshot<List<DraggingItemData>>
-                                  snapshot) {
+                                  snapshot,) {
                                 if (snapshot.data == null) {
                                         return Container();
                                       }
-                                if (snapshot.hasData && snapshot.data.isEmpty) {
-                                  return Container(
+                                ///inEmpty箇所は強制呼び出しでエラー消える
+                                if (snapshot.hasData && snapshot.data!.isEmpty)
+                                {return Container(
                                       child: const Center(
                                           child: Text('アイテムはありません'),),);
                                       } else {
@@ -141,7 +143,7 @@ class ListPage extends StatelessWidget {
                                            ///snapshot.data 強制呼び出し
                                              draggedItems:
                                            snapshot.data!
-                                         );
+                                         ,);
                                 }
                               }
                             ),

@@ -12,7 +12,7 @@ import 'package:compare_2way/views/compare/components/conclusion_input_part.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:getwidget/components/accordian/gf_accordian.dart';
+// import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
 import 'components/sub/edit_bottom_action.dart';
 import 'components/icon_title.dart';
@@ -21,14 +21,15 @@ import 'components/table_part.dart';
 ///Table=>conclusionの順で編集するとTableリセットされる問題を解決
 class CompareScreen extends StatelessWidget {
   const CompareScreen({
-    this.comparisonOverview,
+    ///comparisonOverviewは必ずページ遷移で入るはず
+    required this.comparisonOverview,
     this.tagTitle,
     this.screenEditMode,
   });
 
   final ComparisonOverview comparisonOverview;
-  final String tagTitle;
-  final ScreenEditMode screenEditMode;
+  final String? tagTitle;
+  final ScreenEditMode? screenEditMode;
 
   @override
   Widget build(BuildContext context) {
@@ -147,6 +148,7 @@ class CompareScreen extends StatelessWidget {
                   iconColor: accentColor,
                 ),
              ///リストのDeleteIconの表示をリスト跨ぎで再ビルドが必要なので、Selector=>Consumer
+                ///way1 メリット
                 Consumer<CompareViewModel>(
 //                Selector<CompareViewModel, String>(
 //                    selector: (context, viewModel) => viewModel.way1Title,
@@ -160,7 +162,8 @@ class CompareScreen extends StatelessWidget {
                             (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
                             //todo 変更時、createdAtを更新
                               return
-                                snapshot.hasData && snapshot.data.isNotEmpty
+                                ///inNotEmpty箇所は強制呼び出しでエラー消える
+                                snapshot.hasData && snapshot.data!.isNotEmpty
                             ? AccordionPart(
                               title: viewModel.way1Title,
                               displayList: DisplayList.way1Merit,
@@ -213,7 +216,7 @@ class CompareScreen extends StatelessWidget {
                         .getWay2MeritDesc(comparisonOverview.comparisonItemId),
                       builder:
                           (context, AsyncSnapshot<List<Way2Merit>> snapshot) {
-                        return snapshot.hasData && snapshot.data.isNotEmpty
+                        return snapshot.hasData && snapshot.data!.isNotEmpty
                         ? AccordionPart(
                             title: viewModel.way2Title,
                             displayList: DisplayList.way2Merit,
@@ -267,7 +270,7 @@ class CompareScreen extends StatelessWidget {
                           comparisonOverview.comparisonItemId),
                       builder:
                           (context, AsyncSnapshot<List<Way1Demerit>> snapshot) {
-                        return snapshot.hasData && snapshot.data.isNotEmpty
+                        return snapshot.hasData && snapshot.data!.isNotEmpty
                             ? AccordionPart(
                           title: viewModel.way1Title,
                           displayList: DisplayList.way1Demerit,
@@ -314,7 +317,7 @@ class CompareScreen extends StatelessWidget {
                           comparisonOverview.comparisonItemId),
                       builder:
                           (context, AsyncSnapshot<List<Way2Demerit>> snapshot) {
-                        return snapshot.hasData && snapshot.data.isNotEmpty
+                        return snapshot.hasData && snapshot.data!.isNotEmpty
                             ? AccordionPart(
                           title: viewModel.way2Title,
                           displayList: DisplayList.way2Demerit,
@@ -423,18 +426,17 @@ class CompareScreen extends StatelessWidget {
                  ),
               ///保存ボタン
                 Center(
-                  child: RaisedButton(
-                      child: const Text('保存'),
-                      color: accentColor,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: accentColor,
                       shape:
                       RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      onPressed: () {
-                        return _saveItem(
-                          context,
-                          comparisonOverview,
-                        );
-                      }),
+                          borderRadius: BorderRadius.circular(20),),
+                    ),
+                      onPressed: () async {
+                      ///戻り値Future<void>のメソッド定義の場合、呼び出しはawait必要
+                         await _saveItem(context,comparisonOverview,);},
+                      child: const Text('保存')),
                 ),
                 const SizedBox(height: 16,),
               ],
@@ -447,7 +449,7 @@ class CompareScreen extends StatelessWidget {
   }
 
   Future<void> _saveItem(
-      BuildContext context, ComparisonOverview comparisonOverview) async {
+      BuildContext context, ComparisonOverview comparisonOverview,) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false)
     ..compareScreenStatus = CompareScreenStatus.update;
 
