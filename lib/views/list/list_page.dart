@@ -181,7 +181,7 @@ class ListPage extends StatelessWidget {
       builder: (context) => const AddScreen(displayMode: AddScreenMode.add),
       ///下から上への遷移
       fullscreenDialog: true,
-    ));
+    ),);
   }
 
   //ListPage単一行削除

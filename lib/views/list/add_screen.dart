@@ -109,11 +109,17 @@ class AddScreen extends StatelessWidget {
       ..compareScreenStatus = CompareScreenStatus.set;
 
     //Uuid渡したいので、view側でcomparisonOverview作成
+    //null safty対応でEvaluateの初期値入力
     final newComparisonOverview = ComparisonOverview(
       comparisonItemId: const Uuid().v1(),
       itemTitle: viewModel.titleController.text,
       way1Title: viewModel.way1Controller.text,
       way2Title: viewModel.way2Controller.text,
+      way1MeritEvaluate: 0,
+      way1DemeritEvaluate: 0,
+      way2MeritEvaluate: 0,
+      way2DemeritEvaluate: 0,
+      //todo way3追加
       createdAt: DateTime.now(),
     );
 

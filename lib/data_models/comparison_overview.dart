@@ -3,12 +3,12 @@ class ComparisonOverview {
       {this.dataId,
         required this.comparisonItemId,
         required this.itemTitle,
-        this.way1Title,
-        this.way1MeritEvaluate,
-        this.way1DemeritEvaluate,
-        this.way2Title,
-        this.way2MeritEvaluate,
-        this.way2DemeritEvaluate,
+        required this.way1Title,
+        required this.way1MeritEvaluate,
+        required this.way1DemeritEvaluate,
+        required this.way2Title,
+        required this.way2MeritEvaluate,
+        required this.way2DemeritEvaluate,
         this.way3Title,
         this.way3MeritEvaluate,
         this.way3DemeritEvaluate,
@@ -20,13 +20,13 @@ class ComparisonOverview {
   final String comparisonItemId;
   final String itemTitle;
 
-  final String? way1Title;
-  final int? way1MeritEvaluate;
-  final int? way1DemeritEvaluate;
+  final String way1Title;
+  final int way1MeritEvaluate;
+  final int way1DemeritEvaluate;
 
-  final String? way2Title;
-  final int? way2MeritEvaluate;
-  final int? way2DemeritEvaluate;
+  final String way2Title;
+  final int way2MeritEvaluate;
+  final int way2DemeritEvaluate;
 
   final String? way3Title;
   final int? way3MeritEvaluate;
