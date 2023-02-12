@@ -9,17 +9,18 @@ import 'package:provider/provider.dart';
 ///Statefulへ変更:余裕あればSelector導入
 class TablePart extends StatefulWidget {
    const TablePart({
-     this.comparisonItemId,
-     this.way1Title,
-     this.way1MeritEvaluate,
-     this.way1DemeritEvaluate,
-     this.way2Title,
-     this.way2MeritEvaluate,
-     this.way2DemeritEvaluate,
+     required this.comparisonItemId,
+     required this.way1Title,
+     required this.way1MeritEvaluate,
+     required this.way1DemeritEvaluate,
+     required this.way2Title,
+     required this.way2MeritEvaluate,
+     required this.way2DemeritEvaluate,
   });
 
     final String comparisonItemId;
     final String way1Title;
+    //初期compareScreen登録時には値nullなので、?
     final int way1MeritEvaluate;
     final int way1DemeritEvaluate;
     final String way2Title;
