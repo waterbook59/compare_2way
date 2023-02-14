@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class ConclusionInputPart extends StatefulWidget {
   const ConclusionInputPart(
       {
-        this.conclusion,
+        required this.conclusion,
 //      this.conclusionController,
       this.inputChanged,
 //      this.onEditingCompleted,
@@ -22,7 +22,7 @@ class ConclusionInputPart extends StatefulWidget {
   ///CompareScreenへ新しく入力した文字を渡す
   ///final Function(String) inputChangedでも良い(ValueChangedは引数を<>で記載)
 
-  final Function(String) inputChanged;
+  final Function(String)? inputChanged;
 //  final Function(String) onEditingCompleted;
 //  final Function(String) onFieldSubmitted;
 //  final Function(String) onSaved;
@@ -72,9 +72,9 @@ class _ConclusionInputPartState extends State<ConclusionInputPart> {
   }
 
   void _onInputChanged() {
-    final viewModel=Provider.of<CompareViewModel>(context, listen: false);
-    viewModel.conclusion= _conclusionController.text;
-    viewModel.compareScreenStatus = CompareScreenStatus.update;
+    final viewModel=Provider.of<CompareViewModel>(context, listen: false)
+    ..conclusion= _conclusionController.text
+    ..compareScreenStatus = CompareScreenStatus.update;
     print('viewModel.conclusion:${viewModel.conclusion}');
     setState(() {
     });

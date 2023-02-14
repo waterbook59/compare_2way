@@ -42,15 +42,15 @@ class _HomeScreenState extends State<HomeScreen> {
             items: const [
                  BottomNavigationBarItem(
                    icon:Icon(CupertinoIcons.news),
-                   title:Text('リスト'),
+                   label:'リスト',
                  ),
                  BottomNavigationBarItem(
                    icon: Icon(CupertinoIcons.tag),
-                   title: Text('タグ'),
+                   label: 'タグ',
                  ),
                 BottomNavigationBarItem(
                   icon: Icon(CupertinoIcons.settings),
-                  title: Text('設定'),
+                  label: '設定',
                 ),
               ],
              ),

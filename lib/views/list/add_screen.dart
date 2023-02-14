@@ -120,6 +120,7 @@ class AddScreen extends StatelessWidget {
       way2MeritEvaluate: 0,
       way2DemeritEvaluate: 0,
       //todo way3追加
+      conclusion: '',
       createdAt: DateTime.now(),
     );
 

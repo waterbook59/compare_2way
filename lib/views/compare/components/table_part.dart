@@ -20,7 +20,6 @@ class TablePart extends StatefulWidget {
 
     final String comparisonItemId;
     final String way1Title;
-    //初期compareScreen登録時には値nullなので、?
     final int way1MeritEvaluate;
     final int way1DemeritEvaluate;
     final String way2Title;

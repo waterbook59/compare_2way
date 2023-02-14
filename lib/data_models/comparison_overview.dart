@@ -13,7 +13,7 @@ class ComparisonOverview {
         this.way3MeritEvaluate,
         this.way3DemeritEvaluate,
         this.favorite,
-        this.conclusion,
+        required this.conclusion,
       required this.createdAt});
 
   final int? dataId;
@@ -33,6 +33,6 @@ class ComparisonOverview {
   final int? way3DemeritEvaluate;
 
   final bool? favorite;
-  final String? conclusion;
+  final String conclusion;
   final DateTime createdAt;
 }
