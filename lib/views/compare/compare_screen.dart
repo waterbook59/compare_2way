@@ -58,7 +58,8 @@ class CompareScreen extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
         ///leadingの戻るアイコンの色を変更するだけならこれでOK
-        actionsForegroundColor: Colors.white,
+        //todo actionsForegroundColorが廃止
+        // actionsForegroundColor: Colors.white,
         middle:
         screenEditMode ==ScreenEditMode.fromListPage
             ?  Selector<CompareViewModel, String>(
@@ -72,7 +73,8 @@ class CompareScreen extends StatelessWidget {
         )
 //            : Text(tagTitle,style: middleTextStyle,),
           //todo 右に保存完了ボタンがあるのでNavBarIconTitleの左側にスペース追加
-        :NavBarIconTitle(tagTitle:tagTitle,titleIcon: CupertinoIcons.tag,
+        ///fromSelectTagPageの場合、tagTitle必ず入ってくるので強制呼び出し
+        :NavBarIconTitle(tagTitle:tagTitle!,titleIcon: CupertinoIcons.tag,
         leftFlex: 1,centerFlex: 10,rightFlex: 1,),
 
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
