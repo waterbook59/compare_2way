@@ -7,13 +7,16 @@ import 'package:flutter/material.dart';
 class TagChipPart extends StatelessWidget {
 
   const TagChipPart({
-    this.comparisonOverview,this.displayChipList});
+    required this.comparisonOverview,this.displayChipList});
   final ComparisonOverview comparisonOverview;
-  final List<Chip> displayChipList;
+  final List<Chip>? displayChipList;
 
 
   @override
   Widget build(BuildContext context) {
+    ///初期値でdisplayChipListがnullになるはずなので[]を代入
+    final dCL=displayChipList??[];
+
     return Padding(//cupertino
       padding: const EdgeInsets.symmetric(horizontal:25),
       child: Column(
@@ -28,7 +31,7 @@ class TagChipPart extends StatelessWidget {
                     spacing: 8,
                     runSpacing: 0,
                     direction: Axis.horizontal,
-                    children: displayChipList,)
+                    children: dCL,)
               ),
             ],
           ),

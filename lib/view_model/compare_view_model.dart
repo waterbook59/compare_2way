@@ -909,10 +909,12 @@ class CompareViewModel extends ChangeNotifier {
 
   ///CompareScreenでのList<Tag>取得(文頭取得用)
   Future<void> getTagList(String comparisonItemId) async {
+    //todo 初期は_tagListはnullになる？？
     _tagList = await _compareRepository.getTagList(comparisonItemId);
 //    print('viewModel.getTagList:${_tagList.map((e) => e.tagTitle)}');
     //_tagNameListにもtagTitle格納
-    _tagNameList = _tagList.map((tag) => tag.tagTitle).toList();
+    ///null safety mapの後ろに型追加、tag.tagTitleは強制呼び出し
+    _tagNameList = _tagList.map<String>((tag) => tag.tagTitle!).toList();
 //    print('viewModel.getTagList/_tagNameList:$_tagNameList');
 
     _tempoDisplayList = _tagNameList;
@@ -920,7 +922,8 @@ class CompareViewModel extends ChangeNotifier {
     //List<Tag>=>List<Chips>へ変更
     _displayChipList = _tagList.map((tag) {
       return Chip(
-        label: Text(tag.tagTitle),
+        ///tag.tagTitleは強制呼び出し
+        label: Text(tag.tagTitle!),
       );
     }).toList();
 

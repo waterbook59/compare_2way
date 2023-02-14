@@ -355,7 +355,7 @@ class CompareScreen extends StatelessWidget {
                     :Container();
                   },
                 ),
-                //todo 自己評価&TablePart widget分割
+                //todo 自己評価&TablePart widget分割(スッキリ書く)
                 const SizedBox(height: 4,),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
@@ -381,7 +381,7 @@ class CompareScreen extends StatelessWidget {
                       );
                     }
                 ),
-                //todo 結論&ConclusionInputPart widget分割
+                //todo 結論&ConclusionInputPart widget分割(スッキリ書く)
                 const SizedBox(
                   height: 16,
                 ),
@@ -421,6 +421,7 @@ class CompareScreen extends StatelessWidget {
                      builder: (context, displayChipList, child) {
                        return TagChipPart(
                          comparisonOverview: comparisonOverview,
+                         //todo 初期はタグのリストはないのでnullになる？？
                          displayChipList:displayChipList,);
                      }
                  ),
