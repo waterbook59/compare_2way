@@ -166,6 +166,7 @@ class _AccordionPartState extends State<AccordionPart> {
   }
 
   //todo way3Merit,Demerit分作成
+  ///initStateでの条件分岐があり必ず各リストが入るので強制呼び出し
   void createWay1MeritList() {
     controllers = widget.way1MeritList!.map((item) {
       return TextEditingController(text: item.way1MeritDesc);
