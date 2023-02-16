@@ -29,124 +29,134 @@ class TagPage extends StatelessWidget {
         backgroundColor: primaryColor,
         middle: TagPageTitle(),
         trailing:
-        //タグ名編集時にキーボードunFocusできるアイコン追加(viewModel経由=>Consumerに訴える)
-        //編集モード(true)の時はリストをタップするとTagListのtagTitle部を編集する形に
-        TagEditButtonAction(),
+            //タグ名編集時にキーボードunFocusできるアイコン追加(viewModel経由=>Consumerに訴える)
+            //編集モード(true)の時はリストをタップするとTagListのtagTitle部を編集する形に
+            TagEditButtonAction(),
       ),
 
       ///Scaffoldで全く問題なし
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
         body:
-        ///Selectorに変更するとbuilder:(context,allTagList,child)になって、
-        ///FutureBuilderのfuture:でエラーがでる
+
+            ///Selectorに変更するとbuilder:(context,allTagList,child)になって、
+            ///FutureBuilderのfuture:でエラーがでる
 //        Selector<CompareViewModel,List<Tag>>(
 //          selector: (context, compareViewModel) => compareViewModel.allTagList,
-        Consumer<CompareViewModel>(
+            Consumer<CompareViewModel>(
           builder: (context, compareViewModel, child) {
-            return (viewModel.tagEditMode == TagEditMode.normal
-                ||viewModel.tagEditMode == TagEditMode.tagTitleEdit)
-            //ここでnormal&editとdeleteModeで表示変更
-            //todo normal&tagTitleEdit内のdeleteModeの表示削除
-            //normal&tagTitleEdit
-                ?LayoutBuilder(
-              builder: (context, constraints) {
-                return ConstrainedBox(
-                  constraints:
-                  BoxConstraints(minHeight: constraints.maxHeight),
-                  child: FutureBuilder(
-                    future:
-                    compareViewModel.getAllTagChartList(),
-                    //compareViewModel.allTagList,
-                    builder: (context, AsyncSnapshot<List<TagChart>> snapshot) {
-                      if (snapshot.data == null) {
-                        print('AsyncSnapshot<List<TagChart>> snapshotがnull');
-                        return Container();
-                      }
-                      if (snapshot.hasData && snapshot.data.isEmpty) {
-                        print('TagPage/EmptyView側通って描画');
-                        return Container(
-                            child:
-                            const Center(child: Text('タグづけされたアイテムはありません')));
-                      } else {
-                        //todo まとめてスクロール sliver使用 https://kabochapo.hateblo.jp/entry/2021/05/10/190621
-                        return
-                          Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const PageTitle(
-                              title: 'タグ',
-                            ),
-                            const SizedBox(height: 8,),
-                            const Divider(color: Colors.grey,height: 0,),
-                            Flexible(
-                              child: ListView.builder(
-                                //ListView.builderの高さを自動指定
+            return (viewModel.tagEditMode == TagEditMode.normal ||
+                    viewModel.tagEditMode == TagEditMode.tagTitleEdit)
+                //ここでnormal&editとdeleteModeで表示変更
+                //todo normal&tagTitleEdit内のdeleteModeの表示削除
+                //normal&tagTitleEdit
+                ? LayoutBuilder(
+                    builder: (context, constraints) {
+                      return ConstrainedBox(
+                        constraints:
+                            BoxConstraints(minHeight: constraints.maxHeight),
+                        child: FutureBuilder(
+                          future: compareViewModel.getAllTagChartList(),
+                          //compareViewModel.allTagList,
+                          builder: (context,
+                              AsyncSnapshot<List<TagChart>> snapshot) {
+                            if (snapshot.data == null) {
+                              print(
+                                  'AsyncSnapshot<List<TagChart>> snapshotがnull');
+                              return Container();
+                            }
+
+                            ///nullで場合分けしているので、snapshot.data強制呼び出し
+                            if (snapshot.hasData && snapshot.data!.isEmpty) {
+                              print('TagPage/EmptyView側通って描画');
+                              return Container(
+                                  child: const Center(
+                                      child: Text('タグづけされたアイテムはありません')));
+                            } else {
+                              //todo まとめてスクロール sliver使用 https://kabochapo.hateblo.jp/entry/2021/05/10/190621
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const PageTitle(
+                                    title: 'タグ',
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  const Divider(
+                                    color: Colors.grey,
+                                    height: 0,
+                                  ),
+                                  Flexible(
+                                    child: ListView.builder(
+                                      //ListView.builderの高さを自動指定
 //                              shrinkWrap: true,
-                                //リストが縦方向にスクロールできるようになる
+                                      //リストが縦方向にスクロールできるようになる
 //                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: snapshot.data.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  final overview = snapshot.data[index];
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        final taChart = snapshot.data![index];
 //                                print('tagPage/snapshot:$overview');
-                                  //DateTime=>String変換
-                                  return
-                                    TagList(
-                                    title: overview.tagTitle,
-                                    selectTagIdList: overview.itemIdList,
-                                    tagAmount: overview.tagAmount,
-                                    createdAt: '登録時間',
-                                    onDelete: ()=> _onDeleteTag(
-                                        context, overview.tagTitle),
-                                    onTap: ()=>_onSelectTag(
-                                        context,overview.tagTitle,overview.myFocusNode),
+                                        //DateTime=>String変換
+                                        return TagList(
+                                          title: taChart.tagTitle,
+                                          selectTagIdList: taChart.itemIdList,
+                                          tagAmount: taChart.tagAmount,
+                                          createdAt: '登録時間',
+                                          onDelete: () => _onDeleteTag(
+                                              context, taChart.tagTitle),
+                                          onTap: () => _onSelectTag(
+                                            context,
+                                            taChart.tagTitle,
+                                            taChart.myFocusNode,
+                                          ),
 //                            listDecoration: listDecoration,
-                                    listNumber: index,
-                                    myFocusNode:overview.myFocusNode,
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        );
-                      }
-                    },
-                  ),
-                );
-              },
-            )
-            //削除モード
-                :LayoutBuilder(
-                builder: (context, constraints) {
-                  return SingleChildScrollView(
-                    child: ConstrainedBox(
-                      constraints:
-                      BoxConstraints(minHeight: constraints.maxHeight),
-                      child: FutureBuilder(
-                        future: compareViewModel.getTagChartList(),
-                        builder: (context,
-                            AsyncSnapshot<List<DraggingTagChart>>snapshot) {
-                          if (snapshot.data == null) {
-                            return Container();
-                          }
-                          if (snapshot.hasData && snapshot.data.isEmpty) {
-                            return Container(
-                                child: const Center(
-                                    child: Text('アイテムはありません')));
-                          } else {
-                            return
-                              ReorderableTagList(
-                                  draggedTags: snapshot.data
+                                          listNumber: index,
+                                          myFocusNode: taChart.myFocusNode,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
                               );
-                          }
-                        },
+                            }
+                          },
+                        ),
+                      );
+                    },
+                  )
+                //削除モード
+                : LayoutBuilder(builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      child: ConstrainedBox(
+                        constraints:
+                            BoxConstraints(minHeight: constraints.maxHeight),
+                        child: FutureBuilder(
+                          future: compareViewModel.getTagChartList(),
+                          builder: (
+                            context,
+                            AsyncSnapshot<List<DraggingTagChart>> snapshot,
+                          ) {
+                            if (snapshot.data == null) {
+                              return Container();
+                            }
+                            if (snapshot.hasData && snapshot.data!.isEmpty) {
+                              return Container(
+                                child: const Center(child: Text('アイテムはありません')),
+                              );
+                            } else {
+                              return ReorderableTagList(
+                                draggedTags: snapshot.data!,
+                              );
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                  );
-                });
+                    );
+                  });
           },
         ),
-
       ),
     );
   }
@@ -154,41 +164,47 @@ class TagPage extends StatelessWidget {
   //ListTile内のTagを押したら
   ///通常：タグ登録されたCompareList一覧表示
   ///編集：タグ名変更のためのフォーカス
-  Future<void>_onSelectTag(BuildContext context,
-      String tagTitle, FocusNode myFocusNode ) async{
+  Future<void> _onSelectTag(
+    BuildContext context,
+    String tagTitle,
+    FocusNode myFocusNode,
+  ) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     //3モードのとき
-    switch(viewModel.tagEditMode){
-    ///通常モード：タップでDB検索=>SelectTagPage
+    switch (viewModel.tagEditMode) {
+      ///通常モード：タップでDB検索=>SelectTagPage
       case TagEditMode.normal:
-      //IdからcomparisonOverview.titleを取得し表示
+        //IdからcomparisonOverview.titleを取得し表示
         await viewModel.onSelectTag(tagTitle);
+
         ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
-        await Navigator.of(context,rootNavigator: true).push(
-            MaterialPageRoute<void>(
-                builder: (context) => SelectTagPage(tagTitle: tagTitle,
-                )));
+        await Navigator.of(context, rootNavigator: true)
+            .push(MaterialPageRoute<void>(
+                builder: (context) => SelectTagPage(
+                      tagTitle: tagTitle,
+                    )));
         break;
-    ///編集モード：タップでタイトルをeditTagTitleへ変更=>onSubmittedでitemIdListを元にDBをupdate
-    //編集モードでリストの１つをタップ=>tagTitleからList<Tag>をviewModelへ格納
-    //タグ名を編集=>新しいTagTitleからList<Tag>上書き、tagIdとcomparisonItemIdの2つからtagTitleを上書き
+
+      ///編集モード：タップでタイトルをeditTagTitleへ変更=>onSubmittedでitemIdListを元にDBをupdate
+      //編集モードでリストの１つをタップ=>tagTitleからList<Tag>をviewModelへ格納
+      //タグ名を編集=>新しいTagTitleからList<Tag>上書き、tagIdとcomparisonItemIdの2つからtagTitleを上書き
       case TagEditMode.tagTitleEdit:
-      // タップでtextFieldにfocus
+        // タップでtextFieldにfocus
         myFocusNode.requestFocus();
         //tagTitleからcomparisonItemIdをviewModelへ格納する
         await viewModel.getTagTitleId(tagTitle);
         break;
-    /// 削除モード タップでタグ削除 //todo タップ削除はなくなったのでこの部分はいらない
+
+      /// 削除モード タップでタグ削除 //todo タップ削除はなくなったのでこの部分はいらない
       case TagEditMode.tagDelete:
         await showDialog<Widget>(
             context: context,
-            builder: (context){
+            builder: (context) {
               return CupertinoAlertDialog(
                 title: Text('「$tagTitle」タグ'),
-                content:const Text('削除してもいいですか？'),
+                content: const Text('削除してもいいですか？'),
                 actions: [
                   CupertinoDialogAction(
-                    child: const Text('削除'),
                     isDestructiveAction: true,
                     onPressed: () {
                       viewModel.onDeleteTag(tagTitle);
@@ -197,10 +213,11 @@ class TagPage extends StatelessWidget {
                         msg: '削除完了',
                       );
                     },
+                    child: const Text('削除'),
                   ),
                   CupertinoDialogAction(
                     child: const Text('キャンセル'),
-                    onPressed: (){
+                    onPressed: () {
                       //キャンセル押した時に_selectedIndexをデフォルトに(選択状態解除)
                       viewModel.unFocusTagPageList();
                       Navigator.pop(context);
@@ -228,8 +245,6 @@ class TagPage extends StatelessWidget {
 //      //tagTitleからcomparisonItemIdをviewModelへ格納する
 //    await viewModel.getTagTitleId(tagTitle);
 //    }
-
-
   }
 
   //編集タップでtagEditMode切替(trueが通常モード)
@@ -239,30 +254,32 @@ class TagPage extends StatelessWidget {
 //  }
 
   //tagTitleを元に削除
-  Future<void> _onDeleteTag(BuildContext context, String tagTitle) async{
+  Future<Future<Widget?>> _onDeleteTag(
+      BuildContext context, String tagTitle) async {
     //Slidable削除のとき確認ダイアログ出す
-    return  showDialog<Widget>(context: context,
-        builder: (context){
+    return showDialog<Widget>(
+        context: context,
+        builder: (context) {
           return CupertinoAlertDialog(
             title: Text('「$tagTitle」タグの削除'),
-            content:const Text('削除してもいいですか？'),
+            content: const Text('削除してもいいですか？'),
             actions: [
               CupertinoDialogAction(
-                child: const Text('削除'),
                 isDestructiveAction: true,
-                onPressed: (){
+                onPressed: () {
                   final viewModel =
-                  Provider.of<CompareViewModel>(context, listen: false)
-                    ..onDeleteTag(tagTitle);
+                      Provider.of<CompareViewModel>(context, listen: false)
+                        ..onDeleteTag(tagTitle);
                   Fluttertoast.showToast(
                     msg: '削除完了',
                   );
                   Navigator.pop(context);
                 },
+                child: const Text('削除'),
               ),
               CupertinoDialogAction(
                 child: const Text('キャンセル'),
-                onPressed: ()=>Navigator.pop(context),
+                onPressed: () => Navigator.pop(context),
               ),
             ],
           );
@@ -271,8 +288,5 @@ class TagPage extends StatelessWidget {
     //確認ダイアログなし削除
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.onDeleteTag(tagTitle);
-
   }
-
-
 }

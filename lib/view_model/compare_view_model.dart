@@ -1291,11 +1291,12 @@ class CompareViewModel extends ChangeNotifier {
     _allTagList = await _compareRepository.getAllTagList();
     final candidateTitleSet = <String>{};
     _allTagList.map((tag) {
+      ///null safety tagTitle初回はnullになるはず、、、
       return candidateTitleSet.add(tag.tagTitle);
     }).toSet();
     final choiceTitleSet = <String>{};
     tagList.map((tag) {
-      return choiceTitleSet.add(tag.tagTitle);
+      return choiceTitleSet.add(tag.tagTitle!);
     }).toSet();
 
     ///removeAll使うにはListはダメでSetを用いる

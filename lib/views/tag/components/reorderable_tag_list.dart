@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 class ReorderableTagList extends StatefulWidget {
 
-  const ReorderableTagList({this.draggedTags});
+  const ReorderableTagList({required this.draggedTags});
 //   final List<ComparisonOverview> allItemList;
   final List<DraggingTagChart> draggedTags;
 
@@ -22,7 +22,12 @@ class _ReorderableTagListState extends State<ReorderableTagList> {
 
   @override
   Widget build(BuildContext context) {
-    return ReorderableList(
+    return
+      // ReorderableList(child: child, onReorder: onReorder);
+
+
+      //todo ReorderableListのpackageがnull safety未対応
+      ReorderableList(
       onReorder: _reorderCallback,
       onReorderDone: _reorderDone,
       child: ListView.builder(

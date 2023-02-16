@@ -9,19 +9,19 @@ import 'package:provider/provider.dart';
 
 class TagList extends StatelessWidget {
   const TagList({
-    this.title,
-    this.tagAmount,
+    required this.title,
+    required this.tagAmount,
     this.createdAt,
-    this.onDelete,
-    this.onTap,
-    this.selectTagIdList,
-    this.listNumber,
-    this.myFocusNode,
+    required this.onDelete,
+    required this.onTap,
+    required this.selectTagIdList,
+    required this.listNumber,
+    required this.myFocusNode,
   });
 
   final String title;
   final int tagAmount;
-  final String createdAt;
+  final String? createdAt;
   final VoidCallback onDelete;
   final VoidCallback onTap;
 
