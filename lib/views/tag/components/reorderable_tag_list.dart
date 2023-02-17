@@ -1,11 +1,11 @@
-import 'package:compare_2way/data_models/comparison_overview.dart';
-import 'package:compare_2way/data_models/dragging_item_data.dart';
 import 'package:compare_2way/data_models/dragging_tag_chart.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/list/componets/edit_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
+import 'package:flutter_reorderable_list/flutter_reorderable_list.dart'as pk;
+//packageではなく、公式のreorderable_list
+// import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
 import 'package:provider/provider.dart';
 
 class ReorderableTagList extends StatefulWidget {
@@ -23,11 +23,8 @@ class _ReorderableTagListState extends State<ReorderableTagList> {
   @override
   Widget build(BuildContext context) {
     return
-      // ReorderableList(child: child, onReorder: onReorder);
-
-
-      //todo ReorderableListのpackageがnull safety未対応
-      ReorderableList(
+      ///公式ReorderableListではなく、packageのReorderableListを使用
+      pk.ReorderableList(
       onReorder: _reorderCallback,
       onReorderDone: _reorderDone,
       child: ListView.builder(
@@ -42,15 +39,15 @@ class _ReorderableTagListState extends State<ReorderableTagList> {
               isLast: index == widget.draggedTags.length - 1,
               onTap: (){
                 final viewModel = Provider.of<CompareViewModel>(
-                    context, listen: false)
-                  ..checkDeleteTag(widget.draggedTags[index].tagTitle,
+                    context, listen: false,)
+                  ..checkDeleteTag(widget.draggedTags[index].tagTitle!,
 //                      widget.draggedTags[index].itemIdList IdList中は空
                   );
               },
             );
 
           }
-      ),
+      ,),
     );
   }
 
@@ -84,10 +81,10 @@ class _ReorderableTagListState extends State<ReorderableTagList> {
 
 class Item extends StatelessWidget {
   const Item({
-    this.data,
-    this.isFirst,
-    this.isLast,
-    this.onTap,
+    required this.data,
+    required this.isFirst,
+    required this.isLast,
+    required this.onTap,
   });
 
   final DraggingTagChart data;
@@ -95,19 +92,19 @@ class Item extends StatelessWidget {
   final bool isLast;
   final VoidCallback onTap;
 
-  Widget _buildChild(BuildContext context, ReorderableItemState state) {
+  Widget _buildChild(BuildContext context, pk.ReorderableItemState state,) {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     BoxDecoration decoration;
 
-    if (state == ReorderableItemState.dragProxy ||
-        state == ReorderableItemState.dragProxyFinished) {
+    if (state == pk.ReorderableItemState.dragProxy ||
+        state == pk.ReorderableItemState.dragProxyFinished) {
       // slightly transparent background white dragging (just like on iOS)
       decoration = const BoxDecoration(color: Color(0xD0FFFFFF));
     } else {
-      final placeholder = state == ReorderableItemState.placeholder;
+      final placeholder = state == pk.ReorderableItemState.placeholder;
       decoration = BoxDecoration(
           border: Border(
               top: isFirst && !placeholder
@@ -115,13 +112,13 @@ class Item extends StatelessWidget {
                   : BorderSide.none,
               bottom: isLast && placeholder
                   ? BorderSide.none //
-                  : Divider.createBorderSide(context)),
-          color: placeholder ? null : Colors.white);
+                  : Divider.createBorderSide(context),),
+          color: placeholder ? null : Colors.white,);
     }
 
     ///ListTile右側の並び替え部
     final dragHandle =
-    ReorderableListener(
+    pk.ReorderableListener(
       child: Container(
         padding: const EdgeInsets.only(right: 18, left: 18),
         color: const Color(0x08000000),
@@ -138,7 +135,7 @@ class Item extends StatelessWidget {
           bottom: false,
           child: Opacity(
             // hide content for placeholder
-            opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
+            opacity: state == pk.ReorderableItemState.placeholder ? 0.0 : 1.0,
             child: IntrinsicHeight(
               ///ListTile部分
               child: Row(
@@ -149,7 +146,7 @@ class Item extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       //todo 表示用編集(tagAmount項目を加える)
                       child: EditListTile(
-                          title: data.tagTitle,
+                          title: data.tagTitle!,
                           onTap: onTap,
                           icon:
                           viewModel.tempoDeleteList.contains(data.tagTitle)
@@ -179,8 +176,8 @@ class Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ReorderableItem(
-        key: data.key, //
-        childBuilder: _buildChild);
+    return pk.ReorderableItem(
+        key: data.key!, //
+        childBuilder: _buildChild,);
   }
 }
