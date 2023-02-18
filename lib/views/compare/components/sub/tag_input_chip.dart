@@ -4,11 +4,11 @@ import 'package:flutter/cupertino.dart';
 class TagInputChip extends StatefulWidget {
 
   const TagInputChip({
-    this.onSubmitted,
-    this.setTempoInput,
-    this.onFocusChange,
-  this.isInput,
-  this.onChangeInputMode,});
+    required this.onSubmitted,
+    required this.setTempoInput,
+    required this.onFocusChange,
+  required this.isInput,
+  required this.onChangeInputMode,});
   //入力値をtagChipsへ上げる
   final ValueChanged<String> onSubmitted;
   final ValueChanged<String> setTempoInput;
