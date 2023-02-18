@@ -7,18 +7,18 @@ import 'package:flutter/cupertino.dart';
 class TagChips extends StatefulWidget {
 
   const TagChips({
-    this.tagNameList,
-    this.onSubmitted,
-    this.onDeleted,
-    this.addTagTitle,
-    this.candidateTagNameList,
-    this.setTempoInput,
+    required this.tagNameList,
+    required this.onSubmitted,
+    required this.onDeleted,
+    // this.addTagTitle,
+    required this.candidateTagNameList,
+    required this.setTempoInput,
   });
   final List<String> tagNameList;//DBからのtagTitleのリスト
   final ValueChanged<List<String>> onSubmitted;
 //  final ValueChanged<List<String>,List<String>> onDeleted;
   final Function(List<String>,List<String>) onDeleted;
-  final String addTagTitle;
+  // final String addTagTitle;
   final List<String> candidateTagNameList;
   final ValueChanged<String> setTempoInput;
 
@@ -34,8 +34,8 @@ class _TagChipsState extends State<TagChips> {
   List<String> _tempoDeleteLabels =<String>[];
   List<String> _tempoCandidateLabels = <String>[];
 
-  int value;
-  bool isCandidate;
+  int value=0;
+  bool isCandidate=false;
   bool isFocus = false;
   String _tempoInput ='';
   bool isInput= false;//TagInputChipの入力表示(true)とActionChip(false)
@@ -49,6 +49,7 @@ class _TagChipsState extends State<TagChips> {
 //    print('TagChips/initState/tagTitles(Set):$tagNameListSet');
     _tempoDisplayList  = tagNameListSet.toList();
 
+    //todo view層で場合分けが必要か、viewModel層以下での場合分必要か
 if(widget.candidateTagNameList==null){
   isCandidate =false;
 }else{
@@ -159,7 +160,7 @@ if(widget.candidateTagNameList==null){
                     onSubmitted: (input){
                       ///inputが既存の仮tagクラス内またはDB内に存在しないのかvalidation
                       //入力なしは登録されないようvalidation(input =''の時登録なし)
-                      if(input == ''||input == ' '||input ==null ){
+                      if(input == ''||input == ' ' ){
                       }else{
                         ///tagNameList内に重複がないかのvalidation
                         //まずは入力値を文字リストに入れる

@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 //tagDialogPageの下のタブ候補
 class CreateTag extends StatelessWidget {
   const CreateTag({
-    this.title,
-    this.onTapAddTag,
+    required this.title,
+    required this.onTapAddTag,
   });
 
   final String title;

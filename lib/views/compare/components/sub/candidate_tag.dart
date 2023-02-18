@@ -4,12 +4,12 @@ import 'package:flutter/cupertino.dart';
 //tagDialogPageの下のタブ候補
 class CandidateTag extends StatelessWidget {
   const CandidateTag({
-    this.title,
+    required this.title,
 //    this.tagAmount,
 //    this.createdAt,
-    this.onTap,
+    required this.onTap,
 //    this.selectTagIdList,
-    this.listNumber,
+    required this.listNumber,
   });
 
    final String title;
