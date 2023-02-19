@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 class EditBottomAction extends StatelessWidget {
 
   const EditBottomAction({
-    this.comparisonOverview,
+    required this.comparisonOverview,
 //    this.tagTitle,this.itemTitleEditMode,
   });
 
@@ -65,14 +65,14 @@ class EditBottomAction extends StatelessWidget {
 
                 ),
               );
-            });
+            },);
       },
     );
   }
 
 
-  void _onPopupMenuSelected({BuildContext context,
-      CompareEditMenu selectedMenu,
+  void _onPopupMenuSelected({required BuildContext context,
+      required CompareEditMenu selectedMenu,
 //    String tagTitle,
 //      ItemTitleEditMode itemTitleEditMode
   }) {
@@ -92,7 +92,7 @@ class EditBottomAction extends StatelessWidget {
             //comparisonItemIdしか使わない
             comparisonOverview:comparisonOverview,
           ),
-        ));
+        ),);
         break;
       case CompareEditMenu.allListDelete:
         //todo 必要なら非同期に変更
@@ -105,11 +105,11 @@ class EditBottomAction extends StatelessWidget {
                 content:const Text('削除してもいいですか？'),
                 actions: [
                   CupertinoDialogAction(
-                    child: const Text('削除'),
                     isDestructiveAction: true,
                     onPressed: (){
-        final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-                        ..deleteItem(comparisonOverview.comparisonItemId);
+        // final viewModel =
+        Provider.of<CompareViewModel>(context, listen: false)
+                        .deleteItem(comparisonOverview.comparisonItemId);
                       Navigator.pop(context);
                       Fluttertoast.showToast(
                         msg: '削除完了',
@@ -119,8 +119,9 @@ class EditBottomAction extends StatelessWidget {
                           context,
                           MaterialPageRoute<void>(
                               builder: (context) => HomeScreen(
-                              )));
+                              ),),);
                     },
+                    child: const Text('削除'),
                   ),
                   CupertinoDialogAction(
                     child: const Text('キャンセル'),
@@ -128,7 +129,7 @@ class EditBottomAction extends StatelessWidget {
                   ),
                 ],
               );
-        });
+        },);
         break;
     }
   }
