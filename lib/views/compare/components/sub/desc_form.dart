@@ -10,12 +10,12 @@ import 'package:provider/provider.dart';
 class DescForm extends StatefulWidget {
   const DescForm(
       {
-      this.inputChanged,
-      this.index,
-      this.controllers,
-      this.deleteList,
-      this.focusNode,
-        this.displayList,
+      required this.inputChanged,
+      required this.index,
+      required this.controllers,
+      required this.deleteList,
+      required this.focusNode,
+        required this.displayList,
       });
 
   final Function(String) inputChanged;
@@ -190,6 +190,11 @@ class _DescFormState extends State<DescForm> {
           ],
         );
         break;
+    //todo way3Merit,Demerit分作成
+      case DisplayList.way3Merit:
+        return Container();
+      case DisplayList.way3Demerit:
+        return Container();
     }
 
 
