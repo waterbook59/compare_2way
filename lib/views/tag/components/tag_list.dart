@@ -2,8 +2,8 @@ import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/tag/components/sub/edit_tag_title.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
@@ -33,7 +33,7 @@ class TagList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    final accentColor = Theme.of(context).accentColor;
+    // final accentColor = Theme.of(context).accentColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return Slidable(
@@ -66,7 +66,7 @@ class TagList extends StatelessWidget {
       //     },
       //   )
       // ],
-      child: Container(
+      child: DecoratedBox(
         decoration: listDecoration,
         child: ListTile(
           tileColor: (() {
@@ -74,17 +74,14 @@ class TagList extends StatelessWidget {
             switch (viewModel.tagEditMode) {
               case TagEditMode.normal:
                 return Colors.transparent;
-                break;
               case TagEditMode.tagTitleEdit:
                 return viewModel.selectedIndex == listNumber
                     ? Colors.grey[300]
                     : const Color(0xFFFBE9E7);
-                break;
               case TagEditMode.tagDelete:
                 return viewModel.selectedIndex == listNumber
                     ? Colors.grey[300]
                     : const Color(0xFFFBE9E7);
-                break;
             }
           })(),
           leading: Icon(
@@ -96,7 +93,6 @@ class TagList extends StatelessWidget {
             switch (viewModel.tagEditMode) {
               case TagEditMode.normal:
                 return Text(title);
-                break;
               case TagEditMode.tagTitleEdit:
                 return viewModel.selectedIndex == listNumber
                     ? EditTagTitle(
@@ -131,12 +127,10 @@ class TagList extends StatelessWidget {
             switch (viewModel.tagEditMode) {
               case TagEditMode.normal:
                 return const Icon(Icons.arrow_forward_ios);
-                break;
               case TagEditMode.tagTitleEdit:
                 return Container(
                   width: 24,
                 );
-                break;
               case TagEditMode.tagDelete:
                 return Container(
                   width: 24,
@@ -159,7 +153,7 @@ class TagList extends StatelessWidget {
   }
 
   Future<void> getTitleAndFocus(BuildContext context, VoidCallback onTap,
-      FocusNode myFocusNode, int listNumber) async {
+      FocusNode myFocusNode, int listNumber,) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.changeEditFocus(listNumber);
     onTap();

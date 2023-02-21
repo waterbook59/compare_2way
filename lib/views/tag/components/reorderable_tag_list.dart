@@ -38,9 +38,9 @@ class _ReorderableTagListState extends State<ReorderableTagList> {
               isFirst: index == 0,
               isLast: index == widget.draggedTags.length - 1,
               onTap: (){
-                final viewModel = Provider.of<CompareViewModel>(
+                Provider.of<CompareViewModel>(
                     context, listen: false,)
-                  ..checkDeleteTag(widget.draggedTags[index].tagTitle!,
+                  .checkDeleteTag(widget.draggedTags[index].tagTitle!,
 //                      widget.draggedTags[index].itemIdList IdList中は空
                   );
               },
@@ -72,8 +72,8 @@ class _ReorderableTagListState extends State<ReorderableTagList> {
 
   void _reorderDone(Key item) {
     ///TagPage並び替え後のDBの順番入れ替え、dataIdで行う
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-      ..changeTagListOrder(widget.draggedTags);
+     Provider.of<CompareViewModel>(context, listen: false)
+      .changeTagListOrder(widget.draggedTags);
   }
 
 }
@@ -94,7 +94,7 @@ class Item extends StatelessWidget {
 
   Widget _buildChild(BuildContext context, pk.ReorderableItemState state,) {
     final primaryColor = Theme.of(context).primaryColor;
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     BoxDecoration decoration;
@@ -128,7 +128,7 @@ class Item extends StatelessWidget {
       ),
     );
 
-    final content = Container(
+    final content = DecoratedBox(
       decoration: decoration,
       child: SafeArea(
           top: false,
@@ -160,7 +160,7 @@ class Item extends StatelessWidget {
                             size: 30,
                             color: primaryColor,
                           )
-                      ),
+                      ,),
                     ),
                   ),
                   ///ListTile右側の並び替え部
@@ -168,7 +168,7 @@ class Item extends StatelessWidget {
                 ],
               ),
             ),
-          )),
+          ),),
     );
 
     return content;

@@ -21,7 +21,7 @@ class TagPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    final accentColor = CupertinoTheme.of(context).primaryContrastingColor;
+    // final accentColor = CupertinoTheme.of(context).primaryContrastingColor;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return CupertinoPageScaffold(
@@ -42,7 +42,7 @@ class TagPage extends StatelessWidget {
             ///Selectorに変更するとbuilder:(context,allTagList,child)になって、
             ///FutureBuilderのfuture:でエラーがでる
 //        Selector<CompareViewModel,List<Tag>>(
-//          selector: (context, compareViewModel) => compareViewModel.allTagList,
+//         selector: (context, compareViewModel) => compareViewModel.allTagList,
             Consumer<CompareViewModel>(
           builder: (context, compareViewModel, child) {
             return (viewModel.tagEditMode == TagEditMode.normal ||
@@ -59,10 +59,10 @@ class TagPage extends StatelessWidget {
                           future: compareViewModel.getAllTagChartList(),
                           //compareViewModel.allTagList,
                           builder: (context,
-                              AsyncSnapshot<List<TagChart>> snapshot) {
+                              AsyncSnapshot<List<TagChart>> snapshot,) {
                             if (snapshot.data == null) {
                               print(
-                                  'AsyncSnapshot<List<TagChart>> snapshotがnull');
+                                'AsyncSnapshot<List<TagChart>> snapshotがnull',);
                               return Container();
                             }
 
@@ -105,7 +105,7 @@ class TagPage extends StatelessWidget {
                                           tagAmount: taChart.tagAmount,
                                           createdAt: '登録時間',
                                           onDelete: () => _onDeleteTag(
-                                              context, taChart.tagTitle),
+                                              context, taChart.tagTitle,),
                                           onTap: () => _onSelectTag(
                                             context,
                                             taChart.tagTitle,
@@ -154,7 +154,7 @@ class TagPage extends StatelessWidget {
                         ),
                       ),
                     );
-                  });
+                  },);
           },
         ),
       ),
@@ -182,12 +182,12 @@ class TagPage extends StatelessWidget {
             .push(MaterialPageRoute<void>(
                 builder: (context) => SelectTagPage(
                       tagTitle: tagTitle,
-                    )));
+                    ),),);
         break;
 
       ///編集モード：タップでタイトルをeditTagTitleへ変更=>onSubmittedでitemIdListを元にDBをupdate
       //編集モードでリストの１つをタップ=>tagTitleからList<Tag>をviewModelへ格納
-      //タグ名を編集=>新しいTagTitleからList<Tag>上書き、tagIdとcomparisonItemIdの2つからtagTitleを上書き
+    //タグ名を編集=>新しいTagTitleからList<Tag>上書き、tagIdとcomparisonItemIdの2つからtagTitleを上書き
       case TagEditMode.tagTitleEdit:
         // タップでtextFieldにfocus
         myFocusNode.requestFocus();
@@ -225,7 +225,7 @@ class TagPage extends StatelessWidget {
                   ),
                 ],
               );
-            });
+            },);
         break;
     }
 
@@ -255,7 +255,7 @@ class TagPage extends StatelessWidget {
 
   //tagTitleを元に削除
   Future<Future<Widget?>> _onDeleteTag(
-      BuildContext context, String tagTitle) async {
+      BuildContext context, String tagTitle,) async {
     //Slidable削除のとき確認ダイアログ出す
     return showDialog<Widget>(
         context: context,
@@ -267,9 +267,9 @@ class TagPage extends StatelessWidget {
               CupertinoDialogAction(
                 isDestructiveAction: true,
                 onPressed: () {
-                  final viewModel =
+                  // final viewModel =
                       Provider.of<CompareViewModel>(context, listen: false)
-                        ..onDeleteTag(tagTitle);
+                        .onDeleteTag(tagTitle);
                   Fluttertoast.showToast(
                     msg: '削除完了',
                   );
@@ -283,10 +283,10 @@ class TagPage extends StatelessWidget {
               ),
             ],
           );
-        });
+        },);
 
     //確認ダイアログなし削除
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.onDeleteTag(tagTitle);
+    // final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    // await viewModel.onDeleteTag(tagTitle);
   }
 }

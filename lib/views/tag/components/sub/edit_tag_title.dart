@@ -1,14 +1,14 @@
 import 'package:compare_2way/view_model/compare_view_model.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 ///変更した値を上を渡すのではなく、ここでDB更新までもっていく
 class EditTagTitle extends StatefulWidget {
   const EditTagTitle({
-    this.tagTitle,
-    this.selectTagIdList,
-    this.myFocusNode,
+    required this.tagTitle,
+    required this.selectTagIdList,
+    required this.myFocusNode,
   });
 
   final String tagTitle;
@@ -53,14 +53,14 @@ class _EditTagTitleState extends State<EditTagTitle> {
   }
 
   void _onInputChanged() {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-      ..tagTitle = _tagTitleController.text;
+    Provider.of<CompareViewModel>(context, listen: false)
+      .tagTitle = _tagTitleController.text;
 
   }
 
   Future<void> updateTagTile(
       BuildContext context,String newTagTitle
-      ) async{
+      ,) async{
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     //viewModelに既に値格納されているので、newTagTitleは渡さなくて良い
     await  viewModel.updateTagTitle(newTagTitle);

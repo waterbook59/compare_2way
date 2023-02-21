@@ -1,8 +1,8 @@
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TagPageTitle extends StatelessWidget {
@@ -14,15 +14,12 @@ class TagPageTitle extends StatelessWidget {
         switch(tagEditMode){
           case TagEditMode.normal:
             return  const Text('タグリスト', style: middleJaTextStyle);
-            break;
           case TagEditMode.tagTitleEdit:
             return  const Text('タグ名を編集', style: middleJaTextStyle);
-            break;
           case TagEditMode.tagDelete:
             return const Text('タグを削除', style: middleJaTextStyle);
-            break;
         }
-        return null;//null safety有効にするとエラー出ない
+        // return null;//null safety有効にするとエラー出ない
         ///https://zenn.dev/mono/articles/082dde5601ab4de858a1
 
       },
