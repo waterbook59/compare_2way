@@ -2,8 +2,8 @@ import 'package:compare_2way/data_models/dragging_tag_chart.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
-import 'package:compare_2way/views/tag/components/reorderable_tag_list.dart';
 import 'package:compare_2way/views/common/page_title.dart';
+import 'package:compare_2way/views/tag/components/reorderable_tag_list.dart';
 import 'package:compare_2way/views/tag/components/sub/tag_page_title.dart';
 import 'package:compare_2way/views/tag/components/tag_list.dart';
 import 'package:compare_2way/views/tag/select_tag_page.dart';
@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-import 'components/sub/tag_edit_botton_action.dart';
+import 'components/sub/tag_edit_button_action.dart';
 
 ///List<Tag>で一覧のデータ取得しつつ、tagTitleで重複するものを削除するのにtoSet()を使う
 ///削除したlistをタグ一覧として表示する（tagChips参照）
