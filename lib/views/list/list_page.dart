@@ -10,15 +10,16 @@ import 'package:compare_2way/views/list/componets/reorderable_edit_lsit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import "package:intl/intl.dart";
+
 import 'componets/list_page_edit_button.dart';
 
 class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return CupertinoPageScaffold(
@@ -36,7 +37,7 @@ class ListPage extends StatelessWidget {
                       'アイテムの並び替え・削除',
                       style: middleTextStyle,
                     );
-            }),
+            },),
         trailing: ListPageEditButton(),
       ),
       child: Scaffold(
@@ -65,7 +66,7 @@ class ListPage extends StatelessWidget {
                           print('List<ComparisonOverview>>snapshotがnull');
                           return Container();
                         }
-                        ///viewModel.comparisonOverviews.isEmptyだとEmptyView通ってしまう
+                      ///viewModel.comparisonOverviews.isEmptyだとEmptyView通ってしまう
                         ///あくまでFutureBuilderで待った結果（snapshot.data）で条件分けすべき
                         ///isEmpty箇所は強制呼び出しでエラー消える
                         if (snapshot.hasData && snapshot.data!.isEmpty) {
@@ -98,7 +99,8 @@ class ListPage extends StatelessWidget {
                                 conclusion: overview.conclusion,
                                 createdAt: formatted,
                                 onDelete: () => _deleteItem(context,
-                                  overview.comparisonItemId,overview.itemTitle,),
+                                  overview.comparisonItemId,
+                                  overview.itemTitle,),
                                 onTap: () => _updateList(context, overview),
                                 listDecoration: listDecoration,
                               );
@@ -146,11 +148,11 @@ class ListPage extends StatelessWidget {
                                          ,);
                                 }
                               }
-                            ),
+                            ,),
                         ),
                       )
-          );
-        }),
+          ,);
+        },),
         floatingActionButton: Consumer<CompareViewModel>(
             builder: (context, compareViewModel, child) {
           return (viewModel.editStatus == ListEditMode.display)
@@ -159,7 +161,7 @@ class ListPage extends StatelessWidget {
                   height: 56,
                   child: FloatingActionButton(
                     ///heroTag設定しないとエラー：
-                    ///There are multiple heroes that share the same tag within a subtree.
+          ///There are multiple heroes that share the same tag within a subtree.
                     ///https://qiita.com/rei_012/items/c07e95b5793d943229e3
                     heroTag: 'hero1',
                     backgroundColor: accentColor,
@@ -168,7 +170,7 @@ class ListPage extends StatelessWidget {
                   ),
                 )
               : Container();
-        }),
+        },),
       ),
     );
   } //buildはここまで
@@ -187,7 +189,7 @@ class ListPage extends StatelessWidget {
   //ListPage単一行削除
   ///Future<void>ではなく、Future<Widget?>へ変更
   Future<Widget?> _deleteItem(
-      BuildContext context, String comparisonItemId,String itemTitle) async {
+      BuildContext context, String comparisonItemId,String itemTitle,) async {
     ///Slidable削除のとき確認ダイアログ出す
     return  showDialog<Widget>(context: context,
         builder: (context){
@@ -197,17 +199,16 @@ class ListPage extends StatelessWidget {
         content:const Text('削除してもいいですか？'),
         actions: [
           CupertinoDialogAction(
-            child: const Text('削除'),
             isDestructiveAction: true,
             onPressed: (){
-              final viewModel =
               Provider.of<CompareViewModel>(context, listen: false)
-                ..deleteItem(comparisonItemId);
+                .deleteItem(comparisonItemId);
               Fluttertoast.showToast(
                 msg: '削除完了',
               );
               Navigator.pop(context);
             },
+            child: const Text('削除'),
           ),
           CupertinoDialogAction(
             child: const Text('キャンセル'),
@@ -215,7 +216,7 @@ class ListPage extends StatelessWidget {
           ),
         ],
       );
-        });
+        },);
     //確認ダイアログなし削除
 //    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 //    await viewModel.deleteItem(comparisonItemId);
@@ -223,21 +224,20 @@ class ListPage extends StatelessWidget {
   }
 
   void _updateList(BuildContext context, ComparisonOverview updateOverview) {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-
-      ///初期表示は読み込みさせる
-      ..compareScreenStatus = CompareScreenStatus.set;
+    ///初期表示は読み込みさせる
+      Provider.of<CompareViewModel>(context, listen: false)
+      .compareScreenStatus = CompareScreenStatus.set;
 
     ///画面遷移時、bottomNavbarを外す
     Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
         builder: (context) => CompareScreen(
               comparisonOverview: updateOverview,
               screenEditMode: ScreenEditMode.fromListPage,
-            )));
+            ),),);
   }
 
   void checkDeleteIcon(BuildContext context, String itemId) {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-      ..checkDeleteIcon(itemId);
+     Provider.of<CompareViewModel>(context, listen: false)
+      .checkDeleteIcon(itemId);
   }
 }

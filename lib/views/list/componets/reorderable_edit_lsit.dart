@@ -1,15 +1,14 @@
-import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/dragging_item_data.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/list/componets/edit_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
+import 'package:flutter_reorderable_list/flutter_reorderable_list.dart' as pk;
 import 'package:provider/provider.dart';
 
 class ReorderableEditList extends StatefulWidget {
 
-  const ReorderableEditList({this.draggedItems});
+  const ReorderableEditList({required this.draggedItems});
 //   final List<ComparisonOverview> allItemList;
   final List<DraggingItemData> draggedItems;
 
@@ -21,7 +20,7 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
 
   @override
   Widget build(BuildContext context) {
-    return ReorderableList(
+    return pk.ReorderableList(
       onReorder: _reorderCallback,
       onReorderDone: _reorderDone,
       child: ListView.builder(
@@ -35,14 +34,14 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
               isFirst: index == 0,
               isLast: index == widget.draggedItems.length - 1,
               onTap: (){
-        final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-                ..checkDeleteIcon(widget.draggedItems[index].comparisonItemId);
+        Provider.of<CompareViewModel>(context, listen: false)
+                .checkDeleteIcon(widget.draggedItems[index].comparisonItemId!);
               },
 
             );
 
           }
-      ),
+      ,),
     );
   }
 
@@ -68,8 +67,8 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
   void _reorderDone(Key item) {
 //    final draggedItem = widget.draggedItems[_indexOfKey(item)];
 //    debugPrint('Reordering finished for ${draggedItem.title}&$item}');
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-    ..changeCompareListOrder(widget.draggedItems);
+    Provider.of<CompareViewModel>(context, listen: false)
+    .changeCompareListOrder(widget.draggedItems);
   }
 
 }
@@ -77,10 +76,10 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
 
 class Item extends StatelessWidget {
   const Item({
-    this.data,
-    this.isFirst,
-    this.isLast,
-    this.onTap,
+    required this.data,
+    required this.isFirst,
+    required this.isLast,
+    required this.onTap,
   });
 
   final DraggingItemData data;
@@ -88,19 +87,19 @@ class Item extends StatelessWidget {
   final bool isLast;
   final VoidCallback onTap;
 
-  Widget _buildChild(BuildContext context, ReorderableItemState state) {
+  Widget _buildChild(BuildContext context, pk.ReorderableItemState state) {
     final primaryColor = Theme.of(context).primaryColor;
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     BoxDecoration decoration;
 
-    if (state == ReorderableItemState.dragProxy ||
-        state == ReorderableItemState.dragProxyFinished) {
+    if (state == pk.ReorderableItemState.dragProxy ||
+        state == pk.ReorderableItemState.dragProxyFinished) {
       // slightly transparent background white dragging (just like on iOS)
       decoration = const BoxDecoration(color: Color(0xD0FFFFFF));
     } else {
-      final placeholder = state == ReorderableItemState.placeholder;
+      final placeholder = state == pk.ReorderableItemState.placeholder;
       decoration = BoxDecoration(
           border: Border(
               top: isFirst && !placeholder
@@ -108,13 +107,13 @@ class Item extends StatelessWidget {
                   : BorderSide.none,
               bottom: isLast && placeholder
                   ? BorderSide.none //
-                  : Divider.createBorderSide(context)),
-          color: placeholder ? null : Colors.white);
+                  : Divider.createBorderSide(context),),
+          color: placeholder ? null : Colors.white,);
     }
 
     ///ListTile右側の並び替え部
     final dragHandle =
-    ReorderableListener(
+    pk.ReorderableListener(
       child: Container(
         padding: const EdgeInsets.only(right: 18, left: 18),
         color: const Color(0x08000000),
@@ -124,14 +123,14 @@ class Item extends StatelessWidget {
       ),
     );
 
-    final content = Container(
+    final content = DecoratedBox(
       decoration: decoration,
       child: SafeArea(
           top: false,
           bottom: false,
           child: Opacity(
             // hide content for placeholder
-            opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
+            opacity: state == pk.ReorderableItemState.placeholder ? 0.0 : 1.0,
             child: IntrinsicHeight(
               ///ListTile部分
               child: Row(
@@ -141,7 +140,7 @@ class Item extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: EditListTile(
-                        title: data.title,
+                        title: data.title!,
                         onTap: onTap,
                         icon:
                       viewModel.deleteItemIdList.contains(data.comparisonItemId)
@@ -155,7 +154,7 @@ class Item extends StatelessWidget {
                           size: 30,
                           color: primaryColor,
                         )
-                      ),
+                      ,),
                     ),
                   ),
                   ///ListTile右側の並び替え部
@@ -163,7 +162,7 @@ class Item extends StatelessWidget {
                 ],
               ),
             ),
-          )),
+          ),),
     );
 
     return content;
@@ -171,8 +170,8 @@ class Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ReorderableItem(
-        key: data.key, //
-        childBuilder: _buildChild);
+    return pk.ReorderableItem(
+        key: data.key!, //
+        childBuilder: _buildChild,);
   }
 }
