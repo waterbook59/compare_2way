@@ -71,7 +71,7 @@ class TagPage extends StatelessWidget {
                               print('TagPage/EmptyView側通って描画');
                               return Container(
                                   child: const Center(
-                                      child: Text('タグづけされたアイテムはありません')));
+                                      child: Text('タグづけされたアイテムはありません'),),);
                             } else {
                               //todo まとめてスクロール sliver使用 https://kabochapo.hateblo.jp/entry/2021/05/10/190621
                               return Column(

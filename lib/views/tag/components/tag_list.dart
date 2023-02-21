@@ -28,7 +28,7 @@ class TagList extends StatelessWidget {
 //  final Function(FocusNode) onTap;
   final List<String> selectTagIdList; //tagTitle編集時に更新するIDリスト
   final int listNumber;
-  final FocusNode myFocusNode;//todo 完了押した時にfocusNodeのdispose必要かも
+  final FocusNode myFocusNode; //todo 完了押した時にfocusNodeのdispose必要かも
 
   @override
   Widget build(BuildContext context) {
@@ -37,24 +37,40 @@ class TagList extends StatelessWidget {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return Slidable(
-      actionPane: const SlidableScrollActionPane(),
-      secondaryActions: [
-        IconSlideAction(
-          caption: 'タグを削除',
-          color: Colors.red,
-          icon: Icons.remove_circle_outline,
-          onTap: () {
-            print('削除します');
-            onDelete();
-          },
-        )
-      ],
-      child:
-      Container(
-        decoration:listDecoration,
-        child:
-        ListTile(
-          tileColor:     (() { //ここでswitch使えない=>即時関数:https://yumanoblog.com/flutter-if-switch/
+      startActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        children: [
+          SlidableAction(
+///onPressedがSlidableActionCallback = void Function(BuildContext context);なので
+            ///()空だとNG=>(_):void Function(BuildContext)?に変更
+            onPressed: (_) {
+              print('削除します');
+              onDelete();
+            },
+            backgroundColor: Colors.red,
+            icon: Icons.remove_circle_outline,
+            label: 'タグを削除',
+          ),
+        ],
+      ),
+      ///ver.0.6.0以下で使用
+      // actionPane: const SlidableScrollActionPane(),
+      // secondaryActions: [
+      //   IconSlideAction(
+      //     caption: 'タグを削除',
+      //     color: Colors.red,
+      //     icon: Icons.remove_circle_outline,
+      //     onTap: () {
+      //       print('削除します');
+      //       onDelete();
+      //     },
+      //   )
+      // ],
+      child: Container(
+        decoration: listDecoration,
+        child: ListTile(
+          tileColor: (() {
+            //ここでswitch使えない=>即時関数:https://yumanoblog.com/flutter-if-switch/
             switch (viewModel.tagEditMode) {
               case TagEditMode.normal:
                 return Colors.transparent;
@@ -84,25 +100,30 @@ class TagList extends StatelessWidget {
               case TagEditMode.tagTitleEdit:
                 return viewModel.selectedIndex == listNumber
                     ? EditTagTitle(
-                  tagTitle: title,
-                  selectTagIdList: selectTagIdList,
-                  myFocusNode: myFocusNode,
-                )
+                        tagTitle: title,
+                        selectTagIdList: selectTagIdList,
+                        myFocusNode: myFocusNode,
+                      )
                     : Text(title);
               case TagEditMode.tagDelete:
-              ///編集必要ないので、Text(title)に変更
+
+                ///編集必要ないので、Text(title)に変更
                 return Text(title);
             }
           })(),
           //tagTitleの編集
           /// ListTile幅をタイトにするのにsubtitle=>Columnへ変更
-          subtitle:
-          Column(
+          subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('',style: TextStyle(fontSize: 9),),
+              const Text(
+                '',
+                style: TextStyle(fontSize: 9),
+              ),
               Text('アイテム数：$tagAmountアイテム'),
-              const SizedBox(height: 4,),
+              const SizedBox(
+                height: 4,
+              ),
             ],
           ),
 
@@ -129,19 +150,16 @@ class TagList extends StatelessWidget {
           ///getTagTitleIdしつlistTileのonTapでfocusNode設定(tagEditModeで場合わけ)
           ///ListTileだけを再ビルドしても反映されない(notifyListenersしてListView含め再ビルド)
           onTap: () {
-            getTitleAndFocus(context, onTap,
-                myFocusNode,
-                listNumber);
+            getTitleAndFocus(context, onTap, myFocusNode, listNumber);
           },
           //          isThreeLine: true,
         ),
-      ),//Container
+      ), //Container
     );
   }
 
   Future<void> getTitleAndFocus(BuildContext context, VoidCallback onTap,
-      FocusNode myFocusNode,
-      int listNumber) async {
+      FocusNode myFocusNode, int listNumber) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.changeEditFocus(listNumber);
     onTap();
