@@ -7,8 +7,9 @@ import 'package:flutter_reorderable_list/flutter_reorderable_list.dart' as pk;
 import 'package:provider/provider.dart';
 
 class ReorderableEditList extends StatefulWidget {
+  const ReorderableEditList({Key? key, required this.draggedItems})
+      : super(key: key);
 
-  const ReorderableEditList({required this.draggedItems});
 //   final List<ComparisonOverview> allItemList;
   final List<DraggingItemData> draggedItems;
 
@@ -17,7 +18,6 @@ class ReorderableEditList extends StatefulWidget {
 }
 
 class _ReorderableEditListState extends State<ReorderableEditList> {
-
   @override
   Widget build(BuildContext context) {
     return pk.ReorderableList(
@@ -26,22 +26,21 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
       child: ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-          itemCount: widget.draggedItems.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Item(
-              data: widget.draggedItems[index],
-              // first and last attributes affect border drawn during dragging
-              isFirst: index == 0,
-              isLast: index == widget.draggedItems.length - 1,
-              onTap: (){
-        Provider.of<CompareViewModel>(context, listen: false)
-                .checkDeleteIcon(widget.draggedItems[index].comparisonItemId!);
-              },
-
-            );
-
-          }
-      ,),
+        itemCount: widget.draggedItems.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Item(
+            data: widget.draggedItems[index],
+            // first and last attributes affect border drawn during dragging
+            isFirst: index == 0,
+            isLast: index == widget.draggedItems.length - 1,
+            onTap: () {
+              Provider.of<CompareViewModel>(context, listen: false)
+                  .checkDeleteIcon(
+                      widget.draggedItems[index].comparisonItemId!);
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -53,7 +52,7 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
     final draggingIndex = _indexOfKey(item);
     final newPositionIndex = _indexOfKey(newPosition);
 
-    final draggedItem =  widget.draggedItems[draggingIndex];
+    final draggedItem = widget.draggedItems[draggingIndex];
     //リストの位置を変更した形でDBへ保存が必要(comparisonItemIdからDB検索してdataIdを書き換えする)
     setState(() {
 //      debugPrint('Reordering $item -> $newPosition');
@@ -68,11 +67,9 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
 //    final draggedItem = widget.draggedItems[_indexOfKey(item)];
 //    debugPrint('Reordering finished for ${draggedItem.title}&$item}');
     Provider.of<CompareViewModel>(context, listen: false)
-    .changeCompareListOrder(widget.draggedItems);
+        .changeCompareListOrder(widget.draggedItems);
   }
-
 }
-
 
 class Item extends StatelessWidget {
   const Item({
@@ -101,19 +98,20 @@ class Item extends StatelessWidget {
     } else {
       final placeholder = state == pk.ReorderableItemState.placeholder;
       decoration = BoxDecoration(
-          border: Border(
-              top: isFirst && !placeholder
-                  ? Divider.createBorderSide(context) //
-                  : BorderSide.none,
-              bottom: isLast && placeholder
-                  ? BorderSide.none //
-                  : Divider.createBorderSide(context),),
-          color: placeholder ? null : Colors.white,);
+        border: Border(
+          top: isFirst && !placeholder
+              ? Divider.createBorderSide(context) //
+              : BorderSide.none,
+          bottom: isLast && placeholder
+              ? BorderSide.none //
+              : Divider.createBorderSide(context),
+        ),
+        color: placeholder ? null : Colors.white,
+      );
     }
 
     ///ListTile右側の並び替え部
-    final dragHandle =
-    pk.ReorderableListener(
+    final dragHandle = pk.ReorderableListener(
       child: Container(
         padding: const EdgeInsets.only(right: 18, left: 18),
         color: const Color(0x08000000),
@@ -126,43 +124,45 @@ class Item extends StatelessWidget {
     final content = DecoratedBox(
       decoration: decoration,
       child: SafeArea(
-          top: false,
-          bottom: false,
-          child: Opacity(
-            // hide content for placeholder
-            opacity: state == pk.ReorderableItemState.placeholder ? 0.0 : 1.0,
-            child: IntrinsicHeight(
-              ///ListTile部分
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: EditListTile(
-                        title: data.title!,
-                        onTap: onTap,
-                        icon:
-                      viewModel.deleteItemIdList.contains(data.comparisonItemId)
-                       ? Icon(
-                          CupertinoIcons.checkmark_circle_fill,
-                          size: 30,
-                          color: accentColor,
-                        )
-                            :Icon(
-                          CupertinoIcons.circle,
-                          size: 30,
-                          color: primaryColor,
-                        )
-                      ,),
+        top: false,
+        bottom: false,
+        child: Opacity(
+          // hide content for placeholder
+          opacity: state == pk.ReorderableItemState.placeholder ? 0.0 : 1.0,
+          child: IntrinsicHeight(
+            ///ListTile部分
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: EditListTile(
+                      title: data.title!,
+                      onTap: onTap,
+                      icon: viewModel.deleteItemIdList
+                              .contains(data.comparisonItemId)
+                          ? Icon(
+                              CupertinoIcons.checkmark_circle_fill,
+                              size: 30,
+                              color: accentColor,
+                            )
+                          : Icon(
+                              CupertinoIcons.circle,
+                              size: 30,
+                              color: primaryColor,
+                            ),
                     ),
                   ),
-                  ///ListTile右側の並び替え部
-                  dragHandle,
-                ],
-              ),
+                ),
+
+                ///ListTile右側の並び替え部
+                dragHandle,
+              ],
             ),
-          ),),
+          ),
+        ),
+      ),
     );
 
     return content;
@@ -171,7 +171,8 @@ class Item extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return pk.ReorderableItem(
-        key: data.key!, //
-        childBuilder: _buildChild,);
+      key: data.key!, //
+      childBuilder: _buildChild,
+    );
   }
 }

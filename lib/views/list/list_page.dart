@@ -16,6 +16,8 @@ import 'package:provider/provider.dart';
 import 'componets/list_page_edit_button.dart';
 
 class ListPage extends StatelessWidget {
+  const ListPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
@@ -38,7 +40,7 @@ class ListPage extends StatelessWidget {
                       style: middleTextStyle,
                     );
             },),
-        trailing: ListPageEditButton(),
+        trailing: const ListPageEditButton(),
       ),
       child: Scaffold(
         //todo Consumer=>Selectorへ変更を検討
