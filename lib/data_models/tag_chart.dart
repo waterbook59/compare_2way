@@ -4,7 +4,7 @@ class TagChart{
   TagChart({
     this.dataId,
     required this.tagTitle,
-    this.tagAmount,
+    required this.tagAmount,
     this.itemIdList,
     required this.myFocusNode,
 //    this.createdAt,
@@ -14,7 +14,7 @@ class TagChart{
   final String tagTitle;
   final int tagAmount;//同じタグをもつリストの総数
   //todo itemIdListを格納できるようにする
-  final List<String> itemIdList;//同じタグをもつcomparisonItemIdのリスト
+  final List<String>? itemIdList;//同じタグをもつcomparisonItemIdのリスト
   final FocusNode myFocusNode;
 //  final DateTime createdAt;
 

@@ -1030,7 +1030,8 @@ class CompareViewModel extends ChangeNotifier {
         dataId: tagChart.dataId,
         tagTitle: tagChart.tagTitle,
         tagAmount: tagChart.tagAmount,
-        myFocusNode: FocusNode())));
+        itemIdList: tagChart.itemIdList,
+        myFocusNode: FocusNode(),),),);
 
 //    _tagChartList.map((tagChart){
 //      TagChart(dataId: tagChart.dataId,

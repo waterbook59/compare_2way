@@ -8,7 +8,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
 class TagList extends StatelessWidget {
-  const TagList({
+  const TagList({Key? key,
     required this.title,
     required this.tagAmount,
     this.createdAt,
@@ -17,7 +17,7 @@ class TagList extends StatelessWidget {
     required this.selectTagIdList,
     required this.listNumber,
     required this.myFocusNode,
-  });
+  }) : super(key: key);
 
   final String title;
   final int tagAmount;

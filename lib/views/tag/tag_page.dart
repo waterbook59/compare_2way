@@ -96,24 +96,24 @@ class TagPage extends StatelessWidget {
                                       itemCount: snapshot.data!.length,
                                       itemBuilder:
                                           (BuildContext context, int index) {
-                                        final taChart = snapshot.data![index];
+                                        final tagChart = snapshot.data![index];
 //                                print('tagPage/snapshot:$overview');
                                         //DateTime=>String変換
                                         return TagList(
-                                          title: taChart.tagTitle,
-                                          selectTagIdList: taChart.itemIdList,
-                                          tagAmount: taChart.tagAmount,
+                                          title: tagChart.tagTitle,
+                                          selectTagIdList: tagChart.itemIdList!,
+                                          tagAmount: tagChart.tagAmount,
                                           createdAt: '登録時間',
                                           onDelete: () => _onDeleteTag(
-                                              context, taChart.tagTitle,),
+                                              context, tagChart.tagTitle,),
                                           onTap: () => _onSelectTag(
                                             context,
-                                            taChart.tagTitle,
-                                            taChart.myFocusNode,
+                                            tagChart.tagTitle,
+                                            tagChart.myFocusNode,
                                           ),
 //                            listDecoration: listDecoration,
                                           listNumber: index,
-                                          myFocusNode: taChart.myFocusNode,
+                                          myFocusNode: tagChart.myFocusNode,
                                         );
                                       },
                                     ),
