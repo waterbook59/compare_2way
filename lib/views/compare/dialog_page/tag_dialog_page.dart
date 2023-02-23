@@ -11,7 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 class TagDialogPage extends StatelessWidget {
-  const TagDialogPage({this.comparisonOverview});
+  const TagDialogPage({required this.comparisonOverview});
 
   final ComparisonOverview comparisonOverview;
 
@@ -32,7 +32,8 @@ class TagDialogPage extends StatelessWidget {
               onTap: () =>_cancelPage(context),
           ),
           middle: const NavBarIconTitle(tagTitle:'タグの追加・削除',
-            titleIcon: CupertinoIcons.tag,),
+            titleIcon: CupertinoIcons.tag,leftFlex: 1,centerFlex: 10,
+            rightFlex: 1,),
 
           //CupertinoButtotonに変更でtrailingの'完了'の下が切れない..
           // 完了ボタン押した時にTagInputChip入力中の項目も追加されるように(キーボード完了よりこっちをおしてしまう)
@@ -106,7 +107,8 @@ class TagDialogPage extends StatelessWidget {
                             viewModel.createDeleteList(tempoDeleteLabels,tempoDisplayList);
                           },
                     //candidateが空か否かでContainer or ListView.builderで場合わけ
-                          candidateTagNameList: snapshot.data,
+                          ///null場合分しているので強制呼び出し
+                          candidateTagNameList: snapshot.data!,
                         );
                       }
                     }),

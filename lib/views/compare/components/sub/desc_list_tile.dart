@@ -8,12 +8,12 @@ import 'package:provider/provider.dart';
 
 class DescListTile extends StatelessWidget {
   const DescListTile({
-    this.inputChanged,
-    this.index,
-    this.controllers,
-    this.deleteList,
-    this.focusNode,
-    this.displayList,
+    required this.inputChanged,
+    required this.index,
+    required this.controllers,
+    required this.deleteList,
+    required this.focusNode,
+    required this.displayList,
   });
 
   final Function(String) inputChanged;
@@ -27,7 +27,6 @@ class DescListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
-    //todo way3Merit,Demerit分作成
     switch (displayList) {
       case DisplayList.way1Merit:
         return viewModel.selectedDescListIndex == index &&
@@ -42,7 +41,9 @@ class DescListTile extends StatelessWidget {
               )
             : controllers[index].text.isNotEmpty
                 ? DescDisplay(
-                    description: '${controllers[index].text}',
+                    description: controllers[index].text,
+                    //todo 文字色blac12で良いか確認
+                    textColor: Colors.black12,
                   )
                 : const DescDisplay(
                     description: 'メリットを入力',
@@ -62,7 +63,8 @@ class DescListTile extends StatelessWidget {
               )
             : controllers[index].text.isNotEmpty
                 ? DescDisplay(
-                    description: '${controllers[index].text}',
+                    description: controllers[index].text,
+                    textColor: Colors.black12,
                   )
                 : const DescDisplay(
                     description: 'メリットを入力',
@@ -71,44 +73,51 @@ class DescListTile extends StatelessWidget {
         break;
       case DisplayList.way1Demerit:
         return viewModel.selectedDescListIndex == index &&
-            viewModel.isWay1DemeritFocusList
+                viewModel.isWay1DemeritFocusList
             ? DescForm(
-          inputChanged: inputChanged,
-          controllers: controllers,
-          index: index,
-          deleteList: deleteList,
-          focusNode: focusNode,
-          displayList: displayList,
-        )
+                inputChanged: inputChanged,
+                controllers: controllers,
+                index: index,
+                deleteList: deleteList,
+                focusNode: focusNode,
+                displayList: displayList,
+              )
             : controllers[index].text.isNotEmpty
-            ? DescDisplay(
-          description: '${controllers[index].text}',
-        )
-            : const DescDisplay(
-          description: 'デメリットを入力',
-          textColor: Colors.grey,
-        );
+                ? DescDisplay(
+                    description: controllers[index].text,
+                    textColor: Colors.black12,
+                  )
+                : const DescDisplay(
+                    description: 'デメリットを入力',
+                    textColor: Colors.grey,
+                  );
         break;
       case DisplayList.way2Demerit:
         return viewModel.selectedDescListIndex == index &&
-            viewModel.isWay2DemeritFocusList
+                viewModel.isWay2DemeritFocusList
             ? DescForm(
-          inputChanged: inputChanged,
-          controllers: controllers,
-          index: index,
-          deleteList: deleteList,
-          focusNode: focusNode,
-          displayList: displayList,
-        )
+                inputChanged: inputChanged,
+                controllers: controllers,
+                index: index,
+                deleteList: deleteList,
+                focusNode: focusNode,
+                displayList: displayList,
+              )
             : controllers[index].text.isNotEmpty
-            ? DescDisplay(
-          description: '${controllers[index].text}',
-        )
-            : const DescDisplay(
-          description: 'デメリットを入力',
-          textColor: Colors.grey,
-        );
+                ? DescDisplay(
+                    description: controllers[index].text,
+                    textColor: Colors.black12,
+                  )
+                : const DescDisplay(
+                    description: 'デメリットを入力',
+                    textColor: Colors.grey,
+                  );
         break;
+      //todo way3Merit,Demerit分作成
+      case DisplayList.way3Merit:
+        return Container();
+      case DisplayList.way3Demerit:
+        return Container();
     }
   }
 }

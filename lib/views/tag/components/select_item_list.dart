@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class SelectItemList extends StatelessWidget {
   const SelectItemList(
-      {this.title,
-        this.conclusion,
-        this.createdAt,
+      {required this.title,
+        required this.conclusion,
+        required this.createdAt,
         this.onDelete,
-        this.onTap,
-        this.listDecoration});
+        required this.onTap,
+        required this.listDecoration,});
 
   final String title;
   final String conclusion;
   final String createdAt;
-  final VoidCallback onDelete;
+  final VoidCallback? onDelete;
   final VoidCallback onTap;
   final BoxDecoration listDecoration;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: listDecoration,
       child: ListTile(
         onTap: onTap,

@@ -6,29 +6,31 @@ import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/common/nav_bar_button.dart';
 import 'package:compare_2way/views/common/nav_bar_icon_title.dart';
 import 'package:compare_2way/views/compare/components/accordion_part.dart';
+import 'package:compare_2way/views/compare/components/conclusion_input_part.dart';
 import 'package:compare_2way/views/compare/components/sub/accrodion_sub_part.dart';
 import 'package:compare_2way/views/compare/components/tag_chip_part.dart';
-import 'package:compare_2way/views/compare/components/conclusion_input_part.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:getwidget/components/accordian/gf_accordian.dart';
+// import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
-import 'components/sub/edit_bottom_action.dart';
+
 import 'components/icon_title.dart';
+import 'components/sub/edit_bottom_action.dart';
 import 'components/table_part.dart';
 
 ///Table=>conclusionの順で編集するとTableリセットされる問題を解決
 class CompareScreen extends StatelessWidget {
   const CompareScreen({
-    this.comparisonOverview,
+    ///comparisonOverviewは必ずページ遷移で入るはず
+    required this.comparisonOverview,
     this.tagTitle,
     this.screenEditMode,
   });
 
   final ComparisonOverview comparisonOverview;
-  final String tagTitle;
-  final ScreenEditMode screenEditMode;
+  final String? tagTitle;
+  final ScreenEditMode? screenEditMode;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +59,8 @@ class CompareScreen extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
         ///leadingの戻るアイコンの色を変更するだけならこれでOK
-        actionsForegroundColor: Colors.white,
+        //todo actionsForegroundColorが廃止
+        // actionsForegroundColor: Colors.white,
         middle:
         screenEditMode ==ScreenEditMode.fromListPage
             ?  Selector<CompareViewModel, String>(
@@ -71,7 +74,8 @@ class CompareScreen extends StatelessWidget {
         )
 //            : Text(tagTitle,style: middleTextStyle,),
           //todo 右に保存完了ボタンがあるのでNavBarIconTitleの左側にスペース追加
-        :NavBarIconTitle(tagTitle:tagTitle,titleIcon: CupertinoIcons.tag,
+        ///fromSelectTagPageの場合、tagTitle必ず入ってくるので強制呼び出し
+        :NavBarIconTitle(tagTitle:tagTitle!,titleIcon: CupertinoIcons.tag,
         leftFlex: 1,centerFlex: 10,rightFlex: 1,),
 
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -81,7 +85,7 @@ class CompareScreen extends StatelessWidget {
           const SizedBox(width: 8,),
           ///編集ボタン
           EditBottomAction(comparisonOverview: comparisonOverview,),
-        ]),
+        ],),
       ),
       ///Fab使わないけどScaffold必須
       child: Scaffold(
@@ -107,7 +111,7 @@ class CompareScreen extends StatelessWidget {
                           child: Text(
                         itemTitle,
                         style: itemTitleTextStyle,
-                      )),
+                      ),),
                         const SizedBox(height: 8),
                       ],
                     );
@@ -127,18 +131,18 @@ class CompareScreen extends StatelessWidget {
                           '1': Text('way1'),
                           '2': Text('way2'),},
                         onValueChanged: (String newValue){
-                          print('$newValue');
+                          print(newValue);
                           _selectSegment(context,newValue);
                         },
                         groupValue: segmentValue,
                         padding: const EdgeInsets.only(
-                            right: 24,left: 24,bottom: 16),
+                            right: 24,left: 24,bottom: 16,),
                         borderColor: Colors.grey,
                         selectedColor: primaryColor,
                       );
                       }
 
-                  ),
+                  ,),
                 ),
               ///メリットアイコン
                 IconTitle(
@@ -147,6 +151,7 @@ class CompareScreen extends StatelessWidget {
                   iconColor: accentColor,
                 ),
              ///リストのDeleteIconの表示をリスト跨ぎで再ビルドが必要なので、Selector=>Consumer
+                ///way1 メリット
                 Consumer<CompareViewModel>(
 //                Selector<CompareViewModel, String>(
 //                    selector: (context, viewModel) => viewModel.way1Title,
@@ -160,22 +165,23 @@ class CompareScreen extends StatelessWidget {
                             (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
                             //todo 変更時、createdAtを更新
                               return
-                                snapshot.hasData && snapshot.data.isNotEmpty
+                                ///inNotEmpty箇所は強制呼び出しでエラー消える
+                                snapshot.hasData && snapshot.data!.isNotEmpty
                             ? AccordionPart(
                               title: viewModel.way1Title,
                               displayList: DisplayList.way1Merit,
                               inputChanged: (newDesc, index) =>
                                   _accordionInputChange(
                                   context,DisplayList.way1Merit,
-                                      newDesc, index,comparisonOverview),
+                                      newDesc, index,comparisonOverview,),
                               way1MeritList: snapshot.data,
                               addList: () =>
                                   _accordionAddList(context,
-                                    DisplayList.way1Merit, comparisonOverview),
+                                    DisplayList.way1Merit, comparisonOverview,),
                               deleteList: (way1MeritIdIndex)=>
                                   _accordionDeleteList(context,
                                         DisplayList.way1Merit,
-                                        way1MeritIdIndex,comparisonOverview),
+                                        way1MeritIdIndex,comparisonOverview,),
                             )
                             ///SegmentedControl切替時nullの時、文頭で取得した値表示
 //AccordionPartにするとsnapshot.data =nullの時にAccordionPartのinitStateが回ってしまう)
@@ -185,50 +191,52 @@ class CompareScreen extends StatelessWidget {
                                 inputChanged: (newDesc, index) =>
                                     _accordionInputChange(
                                         context,DisplayList.way1Merit,
-                                        newDesc, index,comparisonOverview),
+                                        newDesc, index,comparisonOverview,),
                                 way1MeritList: viewModel.way1MeritList,
                                 addList: () =>
                                     _accordionAddList(context,
-                                        DisplayList.way1Merit, comparisonOverview),
+                                        DisplayList.way1Merit,
+                                        comparisonOverview,),
                                 deleteList: (way1MeritIdIndex)=>
                                     _accordionDeleteList(context,
                                         DisplayList.way1Merit,
-                                        way1MeritIdIndex,comparisonOverview),
+                                        way1MeritIdIndex,comparisonOverview,),
                               );
 //                              :Container(child: Text('nullの時/FutureBuilder  Merit way1みえない'),);
                           }
 //                        },
-                      )
+                      ,)
                       : Container();
-                    }),
+                    },),
                 ///way2 メリット
                 Consumer<CompareViewModel>(
 //                Selector<CompareViewModel, String>(
 //                  selector: (context, viewModel) => viewModel.way2Title,
                   builder: (context, viewModel, child) {
                     return
-                      (viewModel.segmentValue == '0'||viewModel.segmentValue == '2')
+                      (viewModel.segmentValue == '0'||
+                          viewModel.segmentValue == '2')
                       ? FutureBuilder(
                       future: viewModel
                         .getWay2MeritDesc(comparisonOverview.comparisonItemId),
                       builder:
                           (context, AsyncSnapshot<List<Way2Merit>> snapshot) {
-                        return snapshot.hasData && snapshot.data.isNotEmpty
+                        return snapshot.hasData && snapshot.data!.isNotEmpty
                         ? AccordionPart(
                             title: viewModel.way2Title,
                             displayList: DisplayList.way2Merit,
                             inputChanged: (newDesc, index) =>
                                 _accordionInputChange(
                                     context,DisplayList.way2Merit,
-                                    newDesc, index,comparisonOverview),
+                                    newDesc, index,comparisonOverview,),
                             way2MeritList: snapshot.data,
                             addList: () =>
                                 _accordionAddList(context,
-                                    DisplayList.way2Merit,comparisonOverview),
+                                    DisplayList.way2Merit,comparisonOverview,),
                             deleteList: (way2MeritIdIndex)=>
                                 _accordionDeleteList(context,
                                     DisplayList.way2Merit,
-                                    way2MeritIdIndex,comparisonOverview),
+                                    way2MeritIdIndex,comparisonOverview,),
                           )
                         : AccordionSubPart(
                             title: viewModel.way2Title,
@@ -236,15 +244,15 @@ class CompareScreen extends StatelessWidget {
                             inputChanged: (newDesc, index) =>
                                 _accordionInputChange(
                                     context,DisplayList.way2Merit,
-                                    newDesc, index,comparisonOverview),
+                                    newDesc, index,comparisonOverview,),
                             way2MeritList: viewModel.way2MeritList,
                             addList: () =>
                                 _accordionAddList(context,
-                                    DisplayList.way2Merit,comparisonOverview),
+                                    DisplayList.way2Merit,comparisonOverview,),
                             deleteList: (way2MeritIdIndex)=>
                                 _accordionDeleteList(context,
                                     DisplayList.way2Merit,
-                                    way2MeritIdIndex,comparisonOverview),
+                                    way2MeritIdIndex,comparisonOverview,),
                           );
                       },
                     )
@@ -262,27 +270,28 @@ class CompareScreen extends StatelessWidget {
                 Consumer<CompareViewModel>(
                   builder: (context, viewModel, child) {
                     return
-                      (viewModel.segmentValue == '0'||viewModel.segmentValue == '1')
+                      (viewModel.segmentValue == '0'||
+                          viewModel.segmentValue == '1')
                       ? FutureBuilder(future: viewModel.getWay1DemeritDesc(
-                          comparisonOverview.comparisonItemId),
+                          comparisonOverview.comparisonItemId,),
                       builder:
                           (context, AsyncSnapshot<List<Way1Demerit>> snapshot) {
-                        return snapshot.hasData && snapshot.data.isNotEmpty
+                        return snapshot.hasData && snapshot.data!.isNotEmpty
                             ? AccordionPart(
                           title: viewModel.way1Title,
                           displayList: DisplayList.way1Demerit,
                           inputChanged: (newDesc, index) =>
                               _accordionInputChange(
                                   context,DisplayList.way1Demerit,
-                                  newDesc, index,comparisonOverview),
+                                  newDesc, index,comparisonOverview,),
                           way1DemeritList: snapshot.data,
                           addList: () =>
                               _accordionAddList(context,
-                                  DisplayList.way1Demerit,comparisonOverview),
+                                  DisplayList.way1Demerit,comparisonOverview,),
                           deleteList: (way1DemeritIdIndex)=>
                               _accordionDeleteList(context,
                                   DisplayList.way1Demerit,
-                                  way1DemeritIdIndex,comparisonOverview),
+                                  way1DemeritIdIndex,comparisonOverview,),
                         )
                             : AccordionSubPart(
                           title: viewModel.way1Title,
@@ -290,15 +299,15 @@ class CompareScreen extends StatelessWidget {
                           inputChanged: (newDesc, index) =>
                               _accordionInputChange(
                                   context,DisplayList.way1Demerit,
-                                  newDesc, index,comparisonOverview),
+                                  newDesc, index,comparisonOverview,),
                           way1DemeritList: viewModel.way1DemeritList,
                           addList: () =>
                               _accordionAddList(context,
-                                  DisplayList.way1Demerit,comparisonOverview),
+                                  DisplayList.way1Demerit,comparisonOverview,),
                           deleteList: (way1DemeritIdIndex)=>
                               _accordionDeleteList(context,
                                   DisplayList.way1Demerit,
-                                  way1DemeritIdIndex,comparisonOverview),
+                                  way1DemeritIdIndex,comparisonOverview,),
                         );
                       },
                     )
@@ -309,27 +318,28 @@ class CompareScreen extends StatelessWidget {
                 Consumer<CompareViewModel>(
                   builder: (context, viewModel, child) {
                     return
-                      (viewModel.segmentValue == '0'||viewModel.segmentValue == '2')
+                      (viewModel.segmentValue == '0'||
+                          viewModel.segmentValue == '2')
                       ? FutureBuilder(future: viewModel.getWay2DemeritDesc(
-                          comparisonOverview.comparisonItemId),
+                          comparisonOverview.comparisonItemId,),
                       builder:
                           (context, AsyncSnapshot<List<Way2Demerit>> snapshot) {
-                        return snapshot.hasData && snapshot.data.isNotEmpty
+                        return snapshot.hasData && snapshot.data!.isNotEmpty
                             ? AccordionPart(
                           title: viewModel.way2Title,
                           displayList: DisplayList.way2Demerit,
                           inputChanged: (newDesc, index) =>
                               _accordionInputChange(
                                   context,DisplayList.way2Demerit,
-                                  newDesc, index,comparisonOverview),
+                                  newDesc, index,comparisonOverview,),
                           way2DemeritList: snapshot.data,
                           addList: () =>
                               _accordionAddList(context,
-                                  DisplayList.way2Demerit,comparisonOverview),
+                                  DisplayList.way2Demerit,comparisonOverview,),
                           deleteList: (way1DemeritIdIndex)=>
                               _accordionDeleteList(context,
                                   DisplayList.way2Demerit,
-                                  way1DemeritIdIndex,comparisonOverview),
+                                  way1DemeritIdIndex,comparisonOverview,),
                         )
                             : AccordionSubPart(
                           title: viewModel.way2Title,
@@ -337,22 +347,22 @@ class CompareScreen extends StatelessWidget {
                           inputChanged: (newDesc, index) =>
                               _accordionInputChange(
                                   context,DisplayList.way2Demerit,
-                                  newDesc, index,comparisonOverview),
+                                  newDesc, index,comparisonOverview,),
                           way2DemeritList: viewModel.way2DemeritList,
                           addList: () =>
                               _accordionAddList(context,
-                                  DisplayList.way2Demerit,comparisonOverview),
+                                  DisplayList.way2Demerit,comparisonOverview,),
                           deleteList: (way1DemeritIdIndex)=>
                               _accordionDeleteList(context,
                                   DisplayList.way2Demerit,
-                                  way1DemeritIdIndex,comparisonOverview),
+                                  way1DemeritIdIndex,comparisonOverview,),
                         );
                       },
                     )
                     :Container();
                   },
                 ),
-                //todo 自己評価&TablePart widget分割
+                //todo 自己評価&TablePart widget分割(スッキリ書く)
                 const SizedBox(height: 4,),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
@@ -377,8 +387,8 @@ class CompareScreen extends StatelessWidget {
                       comparisonOverview.way2DemeritEvaluate,
                       );
                     }
-                ),
-                //todo 結論&ConclusionInputPart widget分割
+                ,),
+                //todo 結論&ConclusionInputPart widget分割(スッキリ書く)
                 const SizedBox(
                   height: 16,
                 ),
@@ -404,7 +414,7 @@ class CompareScreen extends StatelessWidget {
                             comparisonOverview.comparisonItemId,),
                     );
                     }
-                ),
+                ,),
                 const SizedBox(height: 16,),
               ///タグエリア
                 const Padding(
@@ -418,23 +428,23 @@ class CompareScreen extends StatelessWidget {
                      builder: (context, displayChipList, child) {
                        return TagChipPart(
                          comparisonOverview: comparisonOverview,
+                         //todo 初期はタグのリストはないのでnullになる？？
                          displayChipList:displayChipList,);
                      }
-                 ),
+                 ,),
               ///保存ボタン
                 Center(
-                  child: RaisedButton(
-                      child: const Text('保存'),
-                      color: accentColor,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: accentColor,
                       shape:
                       RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      onPressed: () {
-                        return _saveItem(
-                          context,
-                          comparisonOverview,
-                        );
-                      }),
+                          borderRadius: BorderRadius.circular(20),),
+                    ),
+                      onPressed: () async {
+                      ///戻り値Future<void>のメソッド定義の場合、呼び出しはawait必要
+                         await _saveItem(context,comparisonOverview,);},
+                      child: const Text('保存'),),
                 ),
                 const SizedBox(height: 16,),
               ],
@@ -447,7 +457,7 @@ class CompareScreen extends StatelessWidget {
   }
 
   Future<void> _saveItem(
-      BuildContext context, ComparisonOverview comparisonOverview) async {
+      BuildContext context, ComparisonOverview comparisonOverview,) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false)
     ..compareScreenStatus = CompareScreenStatus.update;
 
@@ -469,7 +479,7 @@ class CompareScreen extends StatelessWidget {
   async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.setConclusion(newConclusion:newConclusion,
-        comparisonItemId: comparisonItemId);
+        comparisonItemId: comparisonItemId,);
   }
 
   ///Accordion中の選択したリストの詳細が変更されたらset
@@ -477,10 +487,10 @@ class CompareScreen extends StatelessWidget {
       BuildContext context,
       DisplayList displayList,
       String newDesc, int index,
-      ComparisonOverview comparisonOverview) async {
+      ComparisonOverview comparisonOverview,) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
       await viewModel.setChangeListDesc(
-          comparisonOverview,displayList,newDesc, index);
+          comparisonOverview,displayList,newDesc, index,);
     }
 
 
@@ -488,7 +498,7 @@ class CompareScreen extends StatelessWidget {
   Future<void> _accordionAddList(
       BuildContext context,
       DisplayList displayList,
-      ComparisonOverview comparisonOverview) async {
+      ComparisonOverview comparisonOverview,) async {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.accordionAddList(comparisonOverview,displayList);
     }
@@ -498,10 +508,10 @@ class CompareScreen extends StatelessWidget {
       BuildContext context,
       DisplayList displayList,
       int accordionIdIndex,
-      ComparisonOverview comparisonOverview) async{
+      ComparisonOverview comparisonOverview,) async{
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     await viewModel.accordionDeleteList(
-        displayList,accordionIdIndex,comparisonOverview);
+        displayList,accordionIdIndex,comparisonOverview,);
   }
 
   void _onTapUnFocus(BuildContext context) {
@@ -534,6 +544,3 @@ class CompareScreen extends StatelessWidget {
 
 
   }
-
-
-

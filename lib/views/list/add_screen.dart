@@ -13,12 +13,12 @@ import 'package:uuid/uuid.dart';
 
 class AddScreen extends StatelessWidget {
 
-  const AddScreen({
+  const AddScreen({Key? key,
     this.displayMode,
     this.comparisonOverview,
-  });
-  final AddScreenMode displayMode;
-  final ComparisonOverview comparisonOverview;
+  }) : super(key: key);
+  final AddScreenMode? displayMode;
+  final ComparisonOverview? comparisonOverview;
 
 
   @override
@@ -26,7 +26,7 @@ class AddScreen extends StatelessWidget {
     final primaryColor = Theme
         .of(context)
         .primaryColor;
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return CupertinoPageScaffold(
@@ -36,7 +36,7 @@ class AddScreen extends StatelessWidget {
         CupertinoIcons.clear_thick_circled,
         color: Colors.white,
     ),
-          onTap: () =>_cancelTitleEdit(context)),
+          onTap: () =>_cancelTitleEdit(context),),
         backgroundColor: primaryColor,
         middle:displayMode == AddScreenMode.add
         ? const Text(
@@ -55,24 +55,23 @@ class AddScreen extends StatelessWidget {
                   viewModel.way2Controller.text.isNotEmpty
             //入力されているとき
              ? CupertinoButton(
-                child: displayMode == AddScreenMode.add
-                    ? Text('作成',style: TextStyle(color: accentColor),)
-                    : Text('更新',style: TextStyle(color: accentColor),),
                 padding: const EdgeInsets.all(8),
                 onPressed:
                     displayMode == AddScreenMode.add
                     ?() => _createComparisonItems(context)
-                    :()=>_updateComparisonItems(context)
-            )
+                    :()=>_updateComparisonItems(context),
+                child: displayMode == AddScreenMode.add
+                    ? Text('作成',style: TextStyle(color: accentColor),)
+                    : Text('更新',style: TextStyle(color: accentColor),)
+            ,)
               //入力されていないとき
              : CupertinoButton(
+                padding: const EdgeInsets.all(8),
+                onPressed: null,
                 child:displayMode == AddScreenMode.add
                     ? const Text('作成',style: TextStyle(color: Colors.grey),)
-                    :const Text('更新',style: TextStyle(color: Colors.grey),),
-         /// 編集ボタンの下切れるのを防ぐ
-                 padding: const EdgeInsets.all(8),
-                onPressed: null,);
-          }),
+                    :const Text('更新',style: TextStyle(color: Colors.grey),),);
+          },),
 
       ),
       child: Scaffold(
@@ -110,11 +109,18 @@ class AddScreen extends StatelessWidget {
       ..compareScreenStatus = CompareScreenStatus.set;
 
     //Uuid渡したいので、view側でcomparisonOverview作成
+    //null safty対応でEvaluateの初期値入力
     final newComparisonOverview = ComparisonOverview(
-      comparisonItemId: Uuid().v1(),
+      comparisonItemId: const Uuid().v1(),
       itemTitle: viewModel.titleController.text,
       way1Title: viewModel.way1Controller.text,
       way2Title: viewModel.way2Controller.text,
+      way1MeritEvaluate: 0,
+      way1DemeritEvaluate: 0,
+      way2MeritEvaluate: 0,
+      way2DemeritEvaluate: 0,
+      //todo way3追加
+      conclusion: '',
       createdAt: DateTime.now(),
     );
 
@@ -142,13 +148,17 @@ class AddScreen extends StatelessWidget {
     await viewModel.createNewItem(newComparisonOverview);
     //DB登録 Merit/Demeritの1行だけをUuidでつけたComparisonIdを入れて登録する
     await viewModel.createDesc(
-        initWay1Merit, initWay2Merit,initWay1Demerit,initWay2Demerit);
+        initWay1Merit, initWay2Merit,initWay1Demerit,initWay2Demerit,);
 
     //DBからUuidでつけたComparisonIdを元に1行だけ読込(overviewDBへ格納)=>compareScreenへ渡す
     ///Merit/DemeritのリストはCompareScreenでFutureBuilderから読込のでviewModel側への格納はなし
     await viewModel.getComparisonOverview(
-        newComparisonOverview.comparisonItemId);
+        newComparisonOverview.comparisonItemId,);
 
+    //todo この書き方でBuildContextを非同期処理内で使っても良いか
+    if (context.mounted) {
+      return;
+    }
     ///DBに登録されたcomparisonOverviewをCompareScreenへ渡したい
     await Navigator.pushReplacement(
         context,
@@ -157,7 +167,7 @@ class AddScreen extends StatelessWidget {
               screenEditMode: ScreenEditMode.fromListPage,
 //                  comparisonOverview: comparisonOverview,
               comparisonOverview: viewModel.overviewDB,
-            )));
+            ),),);
     //DB登録後controllerクリア
     await viewModel.itemControllerClear();
 
@@ -170,7 +180,13 @@ class AddScreen extends StatelessWidget {
       ) async{
     //テキスト入力したものをviewModel側へ格納
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    await viewModel.updateItem(comparisonOverview);
+    ///更新時は必ずcomparisonOverviewが入ってくるので強制呼び出し
+    await viewModel.updateItem(comparisonOverview!);
+
+    //todo この書き方でBuildContextを非同期処理内で使っても良いか
+    if (context.mounted) {
+      return;
+    }
     //CompareScreenへ
     Navigator.pop(context);
   }

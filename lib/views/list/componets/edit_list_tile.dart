@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class EditListTile extends StatelessWidget {
-
-  const EditListTile({this.title,this.onTap,this.icon});
+  const EditListTile(
+      {Key? key, required this.title, required this.onTap, required this.icon,})
+      : super(key: key);
 
   final String title;
   final VoidCallback onTap;
+
 //  final Widget icon;
   final Icon icon;
 

@@ -3,19 +3,17 @@ import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/common/nav_bar_icon_title.dart';
-import 'package:compare_2way/views/common/nav_bar_icon_title.dart';
 import 'package:compare_2way/views/compare/compare_screen.dart';
-import 'package:compare_2way/views/list/componets/overview_list.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import "package:intl/intl.dart";
 
 import 'components/select_item_list.dart';
 
 
 class SelectTagPage extends StatelessWidget {
-  const SelectTagPage({this.tagTitle});
+  const SelectTagPage({required this.tagTitle});
 
   final String tagTitle;
 
@@ -27,7 +25,8 @@ class SelectTagPage extends StatelessWidget {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        actionsForegroundColor: Colors.white,
+        //todo actionsForegroundColorが廃止
+        // actionsForegroundColor: Colors.white,
         backgroundColor: primaryColor,
         // tagアイコン追加(アイコン+文字を中心にもっていくため右を48空ける)
         middle:
@@ -64,22 +63,23 @@ class SelectTagPage extends StatelessWidget {
                       listDecoration: listDecoration,
                     );
 
-                  });
+                  },);
 
     }
-        ),
+        ,),
 
 
       )
 
-    );
+    ,);
   }
 
   void _updateList(BuildContext context, ComparisonOverview updateOverview,
-      String tagTitle) {
+      String tagTitle,) {
     ///初期表示は読み込みさせる
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-      ..compareScreenStatus =CompareScreenStatus.set;
+    // final viewModel =
+    Provider.of<CompareViewModel>(context, listen: false)
+      .compareScreenStatus =CompareScreenStatus.set;
     ///画面遷移時、bottomNavbarを外す
     Navigator.of(context, rootNavigator: true).push(
         MaterialPageRoute<void>(
@@ -87,7 +87,7 @@ class SelectTagPage extends StatelessWidget {
               comparisonOverview: updateOverview,
               tagTitle: tagTitle,
               screenEditMode: ScreenEditMode.fromSelectTagPage,
-            )));
+            ),),);
 
   }
 }

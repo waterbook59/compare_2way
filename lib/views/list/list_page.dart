@@ -10,15 +10,18 @@ import 'package:compare_2way/views/list/componets/reorderable_edit_lsit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import "package:intl/intl.dart";
+
 import 'componets/list_page_edit_button.dart';
 
 class ListPage extends StatelessWidget {
+  const ListPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return CupertinoPageScaffold(
@@ -36,8 +39,8 @@ class ListPage extends StatelessWidget {
                       'アイテムの並び替え・削除',
                       style: middleTextStyle,
                     );
-            }),
-        trailing: ListPageEditButton(),
+            },),
+        trailing: const ListPageEditButton(),
       ),
       child: Scaffold(
         //todo Consumer=>Selectorへ変更を検討
@@ -60,18 +63,19 @@ class ListPage extends StatelessWidget {
                     child: FutureBuilder(
                       future: viewModel.getList(),
                       builder: (context,
-                          AsyncSnapshot<List<ComparisonOverview>> snapshot) {
+                          AsyncSnapshot<List<ComparisonOverview>> snapshot,) {
                         if (snapshot.data == null) {
                           print('List<ComparisonOverview>>snapshotがnull');
                           return Container();
                         }
-                        ///viewModel.comparisonOverviews.isEmptyだとEmptyView通ってしまう
+                      ///viewModel.comparisonOverviews.isEmptyだとEmptyView通ってしまう
                         ///あくまでFutureBuilderで待った結果（snapshot.data）で条件分けすべき
-                        if (snapshot.hasData && snapshot.data.isEmpty) {
+                        ///isEmpty箇所は強制呼び出しでエラー消える
+                        if (snapshot.hasData && snapshot.data!.isEmpty) {
 //                          print('ListPage/EmptyView側通って描画');
                           return Container(
                               child:
-                                  const Center(child: Text('アイテムを追加してください')));
+                                  const Center(child: Text('アイテムを追加してください')),);
                         } else {
 //print('ListView側通って描画');
                           return
@@ -82,9 +86,11 @@ class ListPage extends StatelessWidget {
                             shrinkWrap: true,
                             //リストが縦方向にスクロールできるようになる
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: snapshot.data.length,
+                            ///itemCount安全呼び出し
+                            itemCount: snapshot.data?.length,
                             itemBuilder: (BuildContext context, int index) {
-                              final overview = snapshot.data[index];
+                              ///snapshot.data強制呼び出し
+                              final overview = snapshot.data![index];
                               //DateTime=>String変換
                               final formatter =
                                   DateFormat('yyyy/MM/dd(E) HH:mm:ss', 'ja_JP');
@@ -95,7 +101,8 @@ class ListPage extends StatelessWidget {
                                 conclusion: overview.conclusion,
                                 createdAt: formatted,
                                 onDelete: () => _deleteItem(context,
-                                  overview.comparisonItemId,overview.itemTitle,),
+                                  overview.comparisonItemId,
+                                  overview.itemTitle,),
                                 onTap: () => _updateList(context, overview),
                                 listDecoration: listDecoration,
                               );
@@ -105,7 +112,7 @@ class ListPage extends StatelessWidget {
                         }
                       },
                     ),
-                  )),
+                  ),),
                 )
 
               ///編集時  ListTile→ReorderableListView&CheckboxListTile
@@ -114,7 +121,7 @@ class ListPage extends StatelessWidget {
                   builder: (context, constraints) => SingleChildScrollView(
                         child: ConstrainedBox(
                             constraints: BoxConstraints(
-                                minHeight: constraints.maxHeight),
+                                minHeight: constraints.maxHeight,),
 //reorderable使用でStatefulに変更
 ///NavBarの削除ボタンを押した時にReorderableEditListをsetStateするには、
 ///initStateを使わず、インスタンスで渡した値をStateWidget側で使用する
@@ -125,27 +132,29 @@ class ListPage extends StatelessWidget {
                                 viewModel.getItemDataList(),
                               builder: (context,
                                   AsyncSnapshot<List<DraggingItemData>>
-                                  snapshot) {
+                                  snapshot,) {
                                 if (snapshot.data == null) {
                                         return Container();
                                       }
-                                if (snapshot.hasData && snapshot.data.isEmpty) {
-                                  return Container(
+                                ///inEmpty箇所は強制呼び出しでエラー消える
+                                if (snapshot.hasData && snapshot.data!.isEmpty)
+                                {return Container(
                                       child: const Center(
-                                          child: Text('アイテムはありません')));
+                                          child: Text('アイテムはありません'),),);
                                       } else {
                                        return
                                          ReorderableEditList(
+                                           ///snapshot.data 強制呼び出し
                                              draggedItems:
-                                           snapshot.data
-                                         );
+                                           snapshot.data!
+                                         ,);
                                 }
                               }
-                            ),
+                            ,),
                         ),
                       )
-          );
-        }),
+          ,);
+        },),
         floatingActionButton: Consumer<CompareViewModel>(
             builder: (context, compareViewModel, child) {
           return (viewModel.editStatus == ListEditMode.display)
@@ -154,7 +163,7 @@ class ListPage extends StatelessWidget {
                   height: 56,
                   child: FloatingActionButton(
                     ///heroTag設定しないとエラー：
-                    ///There are multiple heroes that share the same tag within a subtree.
+          ///There are multiple heroes that share the same tag within a subtree.
                     ///https://qiita.com/rei_012/items/c07e95b5793d943229e3
                     heroTag: 'hero1',
                     backgroundColor: accentColor,
@@ -163,7 +172,7 @@ class ListPage extends StatelessWidget {
                   ),
                 )
               : Container();
-        }),
+        },),
       ),
     );
   } //buildはここまで
@@ -176,12 +185,13 @@ class ListPage extends StatelessWidget {
       builder: (context) => const AddScreen(displayMode: AddScreenMode.add),
       ///下から上への遷移
       fullscreenDialog: true,
-    ));
+    ),);
   }
 
   //ListPage単一行削除
-  Future<void> _deleteItem(
-      BuildContext context, String comparisonItemId,String itemTitle) async {
+  ///Future<void>ではなく、Future<Widget?>へ変更
+  Future<Widget?> _deleteItem(
+      BuildContext context, String comparisonItemId,String itemTitle,) async {
     ///Slidable削除のとき確認ダイアログ出す
     return  showDialog<Widget>(context: context,
         builder: (context){
@@ -191,17 +201,16 @@ class ListPage extends StatelessWidget {
         content:const Text('削除してもいいですか？'),
         actions: [
           CupertinoDialogAction(
-            child: const Text('削除'),
             isDestructiveAction: true,
             onPressed: (){
-              final viewModel =
               Provider.of<CompareViewModel>(context, listen: false)
-                ..deleteItem(comparisonItemId);
+                .deleteItem(comparisonItemId);
               Fluttertoast.showToast(
                 msg: '削除完了',
               );
               Navigator.pop(context);
             },
+            child: const Text('削除'),
           ),
           CupertinoDialogAction(
             child: const Text('キャンセル'),
@@ -209,7 +218,7 @@ class ListPage extends StatelessWidget {
           ),
         ],
       );
-        });
+        },);
     //確認ダイアログなし削除
 //    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 //    await viewModel.deleteItem(comparisonItemId);
@@ -217,21 +226,20 @@ class ListPage extends StatelessWidget {
   }
 
   void _updateList(BuildContext context, ComparisonOverview updateOverview) {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-
-      ///初期表示は読み込みさせる
-      ..compareScreenStatus = CompareScreenStatus.set;
+    ///初期表示は読み込みさせる
+      Provider.of<CompareViewModel>(context, listen: false)
+      .compareScreenStatus = CompareScreenStatus.set;
 
     ///画面遷移時、bottomNavbarを外す
     Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(
         builder: (context) => CompareScreen(
               comparisonOverview: updateOverview,
               screenEditMode: ScreenEditMode.fromListPage,
-            )));
+            ),),);
   }
 
   void checkDeleteIcon(BuildContext context, String itemId) {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-      ..checkDeleteIcon(itemId);
+     Provider.of<CompareViewModel>(context, listen: false)
+      .checkDeleteIcon(itemId);
   }
 }

@@ -19,8 +19,6 @@ class TagEditButtonAction extends StatelessWidget {
               case TagEditMode.normal:
               //CupertinoButtonに変更すると黄色二十線出ない
                return  CupertinoButton(
-                  child: const Text('編集',
-                      style: trailingTextStyle),
                   onPressed: (){
                     showCupertinoModalPopup<CupertinoActionSheet>(
                         context: context,
@@ -57,10 +55,11 @@ class TagEditButtonAction extends StatelessWidget {
 
                             ),
                           );
-                        });
+                        },);
                   },//押したら長いActionSheet選択
-                  padding: const EdgeInsets.all(8),);
-                break;
+                  padding: const EdgeInsets.all(8),
+                  child: const Text('編集',
+                      style: trailingTextStyle,),);
               case TagEditMode.tagTitleEdit:
                return  Row(
                  mainAxisSize: MainAxisSize.min,
@@ -71,47 +70,40 @@ class TagEditButtonAction extends StatelessWidget {
                    ),
                    const SizedBox(width: 4,),
                    CupertinoButton(
-              child: const Text('完了', style: trailingTextStyle),
-          onPressed: ()=> _changeEdit(context),//押したら通常モードへ変更
-            padding: const EdgeInsets.all(8),),
+              onPressed: ()=> _changeEdit(context),//押したら通常モードへ変更
+            padding: const EdgeInsets.all(8),
+              child: const Text('完了', style: trailingTextStyle),),
                  ],
                );
-                break;
               case TagEditMode.tagDelete:
                 return
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CupertinoButton(
+                        onPressed: () => _deleteSelectTagList(context),
+                        padding: const EdgeInsets.all(8),
                         child: const Text(
                           '削除',
                           style: TextStyle(
                               fontFamily: regularFontJa,
                               fontSize: 16,
-                              color: Colors.redAccent),
+                              color: Colors.redAccent,),
                         ),
-                        onPressed: () => _deleteSelectTagList(context),
-                        padding: const EdgeInsets.all(8),
                       ),
                       const SizedBox(
                         width: 4,
                       ),
                       CupertinoButton(
-                        child: const Text('完了', style: trailingTextStyle),
                         onPressed: () => _changeEdit(context),//押したら通常モードへ変更
                         //押したら通常モードへ変更
                         padding: const EdgeInsets.all(8),
+                        child: const Text('完了', style: trailingTextStyle),
                       ),
                     ],
                   );
-
-                  CupertinoButton(
-                  child: const Text('完了', style: trailingTextStyle),
-                  onPressed: ()=>_changeEdit(context),//押したら通常モードへ変更
-                  padding: const EdgeInsets.all(8),);
-                break;
             }
-            return null;//null safety有効にするとエラー出ない
+            // return null;//null safety有効にするとエラー出ない
         ///https://zenn.dev/mono/articles/082dde5601ab4de858a1
 
 //              ?  CupertinoButton(
@@ -179,8 +171,8 @@ class TagEditButtonAction extends StatelessWidget {
   }
 
 
-  void _onPopupMenuSelected({BuildContext context,
-    TagEditMode selectedMenu,
+  void _onPopupMenuSelected({required BuildContext context,
+    required TagEditMode selectedMenu,
   }) {
     switch (selectedMenu) {
       case TagEditMode.tagTitleEdit:
@@ -193,17 +185,22 @@ class TagEditButtonAction extends StatelessWidget {
         final viewModel = Provider.of<CompareViewModel>(context, listen: false);
         viewModel.changeToTagDelete();
         break;
+      case TagEditMode.normal:
+        // TODO: Handle this case.
+        break;
     }
   }
 
   void _changeEdit(BuildContext context) {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-    ..changeToNormal();
+    // final viewModel =
+    Provider.of<CompareViewModel>(context, listen: false)
+    .changeToNormal();
   }
 
   void _unFocusTap(BuildContext context) {
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-      ..unFocusTagPageList();
+    // final viewModel =
+    Provider.of<CompareViewModel>(context, listen: false)
+      .unFocusTagPageList();
   }
 
   //TagPage選択行削除

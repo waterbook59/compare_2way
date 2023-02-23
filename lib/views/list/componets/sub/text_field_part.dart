@@ -1,13 +1,17 @@
 import 'package:compare_2way/views/compare/components/icon_title.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class TextFieldPart extends StatelessWidget {
-
   const TextFieldPart(
-      {this.label, this.textEditingController,
-        this.errorText, this.didChanged, this.placeholder, this.autofocus,
-      this.iconData});
+      {Key? key, required this.label,
+      required this.textEditingController,
+      required this.errorText,
+      required this.didChanged,
+      required this.placeholder,
+      required this.autofocus,
+      required this.iconData}) : super(key: key);
+
   final String label;
   final String placeholder;
   final bool autofocus;
@@ -16,18 +20,17 @@ class TextFieldPart extends StatelessWidget {
   final ValueChanged<String> didChanged;
   final IconData iconData;
 
-
   @override
   Widget build(BuildContext context) {
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
     return Column(
       //TextとTextField左寄せ、デフォルトは中央よせ
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(left:40),
+          padding: const EdgeInsets.only(left: 40),
           child: //todo Text=>アイコンタイトルへ変更
-          IconTitle(
+              IconTitle(
             title: label,
             iconData: iconData,
             iconColor: accentColor,
@@ -38,14 +41,14 @@ class TextFieldPart extends StatelessWidget {
 //            textAlign: TextAlign.start,),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 8,left: 40,right: 40),
+          padding: const EdgeInsets.only(top: 8, left: 40, right: 40),
           child: CupertinoTextField(
             controller: textEditingController,
             placeholder: placeholder,
             autofocus: autofocus,
 //            enabled: isTextInputEnabled,
             //todo style設定
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
 //            style: inputTextStyle,
             keyboardType: TextInputType.text,
             //decoration:InputDecoration()をいれるとバリデーション後エラーメッセージ表示

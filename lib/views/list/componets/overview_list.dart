@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class OverViewList extends StatelessWidget {
   const OverViewList(
-      {this.title,
+      {Key? key, required this.title,
       this.conclusion,
-      this.createdAt,
-      this.onDelete,
-      this.onTap,
-      this.listDecoration});
+      required this.createdAt,
+      required this.onDelete,
+      required this.onTap,
+      required this.listDecoration,}) : super(key: key);
 
   final String title;
-  final String conclusion;
+  final String? conclusion;
   final String createdAt;
   final VoidCallback onDelete;
   final VoidCallback onTap;
@@ -21,19 +20,32 @@ class OverViewList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      actionPane: const SlidableScrollActionPane(),
-      secondaryActions: [
-        IconSlideAction(
-          caption: '削除',
-          color: Colors.red,
-          icon: Icons.remove_circle_outline,
-          onTap: () {
-            print('削除します');
-            onDelete();
+      startActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        children: [
+          SlidableAction(onPressed: (_) {
+          print('削除します');
+          onDelete();
           },
-        )
-      ],
-      child: Container(
+            backgroundColor: Colors.red,
+            icon: Icons.remove_circle_outline,
+            label: '削除',)
+        ],
+      ),
+      ///ver.0.6.0以下で使用
+      // actionPane: const SlidableScrollActionPane(),
+      // secondaryActions: [
+      //   IconSlideAction(
+      //     caption: '削除',
+      //     color: Colors.red,
+      //     icon: Icons.remove_circle_outline,
+      //     onTap: () {
+      //       print('削除します');
+      //       onDelete();
+      //     },
+      //   )
+      // ],
+      child: DecoratedBox(
         decoration: listDecoration,
         child: ListTile(
           onTap: onTap,

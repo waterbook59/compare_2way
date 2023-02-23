@@ -25,7 +25,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   ///新規作成:ComparisonOverview
   Future<void> insertComparisonOverviewDB(
-      ComparisonOverviewRecord comparisonOverviewRecord) =>
+      ComparisonOverviewRecord comparisonOverviewRecord,) =>
       into(comparisonOverviewRecords).insert(comparisonOverviewRecord);
 
   ///読込:ComparisonOverview(comparisonItemIdをもとにway1タイトル、way2タイトルをとってくる)
@@ -36,7 +36,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   ///読込：comparisonItemIdからComparisonOverview１行だけ取ってくる
   Future<ComparisonOverviewRecord> getComparisonOverview(
-      String comparisonItemId) =>
+      String comparisonItemId,) =>
       (select(comparisonOverviewRecords)
         ..where((tbl) => tbl.comparisonItemId.equals(comparisonItemId)))
           .getSingle();
