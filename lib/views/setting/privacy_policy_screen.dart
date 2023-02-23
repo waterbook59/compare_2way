@@ -37,6 +37,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
       ..loadRequest(Uri.parse('https://waterboook.com/privacy-policy'));
   }
 
+  //todo disposeでcontroller破棄?
 
   void doneLoading(String A) {
     setState(() {

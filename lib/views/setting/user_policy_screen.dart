@@ -38,6 +38,7 @@ class _UserPolicyScreenState extends State<UserPolicyScreen> {
     ..loadRequest(Uri.parse('https://waterboook.com/terms_of_service'));
   }
 
+  //todo disposeでcontroller破棄?
 
   void doneLoading(String A) {
     setState(() {

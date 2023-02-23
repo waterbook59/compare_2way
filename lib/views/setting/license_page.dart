@@ -1,10 +1,12 @@
 import 'package:compare_2way/style.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 //ライセンスページ作成参照：https://zenn.dev/razokulover/articles/735ed893898d66
 
 class MyLicensePage extends StatefulWidget {
+  const MyLicensePage({Key? key}) : super(key: key);
+
   @override
   _MyLicensePageState createState() => _MyLicensePageState();
 }
@@ -20,7 +22,7 @@ class _MyLicensePageState extends State<MyLicensePage> {
       // license.packagesとlicense.paragraphsの返り値がIterableなのでtoList()してる
       final packages = license.packages.toList();
       final paragraphs = license.paragraphs.toList();
-      final packageName = packages.map((e) => e).join('');
+      final packageName = packages.map((e) => e).join();
       final paragraphText = paragraphs.map((e) => e.text).join('\n');
       // この辺の状態更新とかは環境に合わせてお好みで
       licenses.add([packageName, paragraphText]);
@@ -39,7 +41,7 @@ class _MyLicensePageState extends State<MyLicensePage> {
     final primaryColor = Theme.of(context).primaryColor;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        actionsForegroundColor: Colors.white,
+        // actionsForegroundColor: Colors.white,
         backgroundColor: primaryColor,
         middle: const Text(
           'ライセンス',
@@ -57,12 +59,12 @@ class _MyLicensePageState extends State<MyLicensePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${license[0]}',
+                    license[0],
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    '${license[1]}',
+                    license[1],
                     style: const TextStyle(fontSize: 12),
                   )
                 ],
