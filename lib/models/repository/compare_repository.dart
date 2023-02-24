@@ -1,5 +1,4 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
-import 'package:compare_2way/data_models/dragging_item_data.dart';
 import 'package:compare_2way/data_models/dragging_tag_chart.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
@@ -12,12 +11,12 @@ import 'package:moor/ffi.dart';
 import 'package:moor/moor.dart';
 
 class CompareRepository {
-  CompareRepository({ComparisonItemDao comparisonItemDao})
+  CompareRepository({required ComparisonItemDao comparisonItemDao})
       : _comparisonItemDao = comparisonItemDao;
 
   final ComparisonItemDao _comparisonItemDao;
   List<ComparisonOverview> _overviewResults = <ComparisonOverview>[];
-  ComparisonOverview _overviewResult;
+  ComparisonOverview? _overviewResult;
   List<Way1Merit> _way1MeritList = <Way1Merit>[];
   List<Way2Merit> _way2MeritList = <Way2Merit>[];
   List<Way1Demerit> _way1DemeritList = <Way1Demerit>[];
@@ -25,7 +24,7 @@ class CompareRepository {
   List<Tag> _tagList = <Tag>[];
   List<Tag> _selectTagList = <Tag>[];
   List<TagChart> _tagChartList = <TagChart>[];
-  TagChart _selectTagChart;
+  TagChart? _selectTagChart;
 
 
   ///新規作成 comparisonOverview
@@ -58,7 +57,7 @@ class CompareRepository {
       createdAt: Value(comparisonOverviewRecord.createdAt),
     );
     await _comparisonItemDao.saveComparisonOverviewDB(
-        comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+        comparisonOverviewRecord.comparisonItemId, overviewCompanion,);
 
   }on SqliteException catch (e) {
     print('repository更新エラー:${e.toString()}');
@@ -103,7 +102,7 @@ class CompareRepository {
       );
 
       await _comparisonItemDao.saveComparisonOverviewDB(
-          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion,);
       print('comparisonOverviewRecord保存完了');
     } on SqliteException catch (e) {
       print('repository保存エラー:${e.toString()}');
@@ -134,6 +133,7 @@ class CompareRepository {
   }
 
   ///Delete ListPage選択行
+  //todo forEach修正
   void deleteItemList(List<String> deleteItemIdList)  {
     deleteItemIdList.forEach((id) async{
       await _comparisonItemDao.deleteItem(id);
@@ -152,7 +152,7 @@ class CompareRepository {
 
   ///List<ComparisonOverview>ではなく、comparisonItemIdからComparisonOverview１行だけ取ってくる
   Future<ComparisonOverview> getComparisonOverview(
-      String comparisonItemId) async {
+      String comparisonItemId,) async {
     final comparisonOverviewRecord =
         await _comparisonItemDao.getComparisonOverview(comparisonItemId);
 
@@ -178,7 +178,7 @@ class CompareRepository {
         createdAt: Value(comparisonOverviewRecord.createdAt),
       );
       await _comparisonItemDao.saveComparisonOverviewDB(
-          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion,);
     }on SqliteException catch (e) {
       print('repository保存エラー:${e.toString()}');
     }
@@ -195,7 +195,7 @@ class CompareRepository {
         createdAt: Value(comparisonOverviewRecord.createdAt),
       );
       await _comparisonItemDao.saveComparisonOverviewDB(
-          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion,);
     }on SqliteException catch (e) {
       print('repository保存エラー:${e.toString()}');
     }
@@ -212,7 +212,7 @@ class CompareRepository {
         createdAt: Value(comparisonOverviewRecord.createdAt),
       );
       await _comparisonItemDao.saveComparisonOverviewDB(
-          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion,);
     }on SqliteException catch (e) {
       print('repository保存エラー:${e.toString()}');
     }
@@ -230,7 +230,7 @@ class CompareRepository {
         createdAt: Value(comparisonOverviewRecord.createdAt),
       );
       await _comparisonItemDao.saveComparisonOverviewDB(
-          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion,);
     }on SqliteException catch (e) {
       print('repository保存エラー:${e.toString()}');
     }
@@ -247,7 +247,7 @@ class CompareRepository {
         createdAt: Value(comparisonOverviewRecord.createdAt),
       );
       await _comparisonItemDao.saveComparisonOverviewDB(
-          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion,);
     }on SqliteException catch (e) {
       print('repository保存エラー:${e.toString()}');
     }
@@ -263,7 +263,7 @@ class CompareRepository {
         createdAt: Value(comparisonOverviewRecord.createdAt),
       );
       await _comparisonItemDao.saveComparisonOverviewDB(
-          comparisonOverviewRecord.comparisonItemId, overviewCompanion);
+          comparisonOverviewRecord.comparisonItemId, overviewCompanion,);
     }on SqliteException catch (e) {
       print('repository保存エラー:${e.toString()}');
     }
@@ -296,9 +296,9 @@ class CompareRepository {
       await _comparisonItemDao.insertWay2MeritRecordDB(way2MeritItemRecords);
 //    await _comparisonItemDao.insertWay3MeritRecordDB(way3MeritItemRecords);
       await _comparisonItemDao.insertWay1DemeritRecordDB(
-          way1DemeritItemRecords);
+          way1DemeritItemRecords,);
       await _comparisonItemDao.insertWay2DemeritRecordDB(
-          way2DemeritItemRecords);
+          way2DemeritItemRecords,);
 //    await _comparisonItemDao.insertWay3DemeritRecordDB(
 //          way3DemeritItemRecords);
 
@@ -345,7 +345,8 @@ class CompareRepository {
         way2DemeritRecordList.toWay2DemeritList(way2DemeritRecordList);
   }
   ///Read List<Way3DeMerit>
-//  Future<List<Way3Demerit>> getWay3DemeritList(String comparisonItemId) async {
+//  Future<List<Way3Demerit>> getWay3DemeritList(String comparisonItemId) async
+//  {
 //    final way3DemeritRecordList =
 //    await _comparisonItemDao.getWay3DemeritList(comparisonItemId);
 //    return _way3DemeritList =
@@ -365,7 +366,7 @@ class CompareRepository {
           updateWay1Merit.toUpdateWay1MeritRecord(updateWay1Merit);
       await _comparisonItemDao.updateWay1MeritRecordDB(
 //          way1MeritItemRecords[index]);
-          way1MeritRecord);
+          way1MeritRecord,);
     } on SqliteException catch (e) {
       print('repositoryエラー:${e.toString()}');
     }
@@ -376,7 +377,7 @@ class CompareRepository {
       final way2MeritRecord =
       updateWay2Merit.toUpdateWay2MeritRecord(updateWay2Merit);
       await _comparisonItemDao.updateWay2MeritRecordDB(
-          way2MeritRecord);
+          way2MeritRecord,);
     }on SqliteException catch (e) {
       print('repository/setWay2MeritDescエラー:${e.toString()}');
     }
@@ -399,7 +400,7 @@ class CompareRepository {
       final way1DemeritRecord =
       updateWay1Demerit.toUpdateWay1DemeritRecord(updateWay1Demerit);
       await _comparisonItemDao.updateWay1DemeritRecordDB(
-          way1DemeritRecord);
+          way1DemeritRecord,);
     } on SqliteException catch (e) {
       print('repositoryエラー:${e.toString()}');
     }
@@ -411,7 +412,7 @@ class CompareRepository {
       final way2DemeritRecord =
       updateWay2Demerit.toUpdateWay2DemeritRecord(updateWay2Demerit);
       await _comparisonItemDao.updateWay2DemeritRecordDB(
-          way2DemeritRecord);
+          way2DemeritRecord,);
     } on SqliteException catch (e) {
       print('repositoryエラー:${e.toString()}');
     }
@@ -494,7 +495,8 @@ class CompareRepository {
 //    try {
 //      final way3DemeritRecord =
 //      initWay3Demerit.toCreateWay3DemeritRecord(initWay3Demerit);
-//      await _comparisonItemDao.insertWay3DemeritRecordSingle(way3DemeritRecord);
+//      await _comparisonItemDao.insertWay3DemeritRecordSingle
+//      (way3DemeritRecord);
 //      print('repository:リスト１行新規追加');
 //    } on SqliteException catch (e) {
 //      print('Way3Demerit追加エラー:${e.toString()}');
@@ -532,7 +534,8 @@ class CompareRepository {
   ///新規作成 List<Tag>
   // repo側でupdateOverview作成してDatetime更新(deleteTagメソッドでも同じ)
   ///同一comparisonItemId & 同一tagTitleは登録しないが、同一tagTitleは登録できるように変更
-  Future<void> createTag(Set<String> extractionDisplayTag, String comparisonItemId)
+  Future<void> createTag(Set<String> extractionDisplayTag,
+      String comparisonItemId,)
   async {
     try {
 //      ///既に登録されているTagListをgetし、Setへ変換
@@ -615,7 +618,8 @@ class CompareRepository {
   Future<void> createTagChart(List<TagChart> tagChartList)async{
     try{
       //List<TagChart>=>List<TagChartDB>
-      final tagChartRecordList = tagChartList.toTagChartRecordList(tagChartList);
+      final tagChartRecordList = tagChartList.toTagChartRecordList
+        (tagChartList);
       await _comparisonItemDao.createTagChart(tagChartRecordList);
       print('repository/createTagChartも作成');
     }on SqliteException catch (e) {
@@ -639,9 +643,9 @@ class CompareRepository {
       //TagChartRecordsCompanionのリストで数量更新
       tagChartRecordList.map((tagChartRecord){
         final updateTagRecordCompanion =TagChartRecordsCompanion(
-            tagAmount: Value(tagChartRecord.tagAmount));
+            tagAmount: Value(tagChartRecord.tagAmount),);
          _comparisonItemDao.updateTagChart(
-            tagChartRecordList, updateTagRecordCompanion);
+            tagChartRecordList, updateTagRecordCompanion,);
       }).toList();
       print('repository/updateTagChart:更新完了');
 
@@ -659,9 +663,9 @@ class CompareRepository {
       //TagChartRecordsCompanionのリストで数量更新
 //      tagChartRecordList.map((tagChartRecord){
         final updateTagRecordCompanion =TagChartRecordsCompanion(
-            tagTitle: Value(newTagTitle));
-        _comparisonItemDao.updateTagChartTitle(
-            tagChartRecord, updateTagRecordCompanion);
+            tagTitle: Value(newTagTitle),);
+        await _comparisonItemDao.updateTagChartTitle(
+            tagChartRecord, updateTagRecordCompanion,);
 //      }).toList();
       print('repository/updateTagChart:更新完了');
 
@@ -721,7 +725,7 @@ class CompareRepository {
 
   ///更新 Tag List<Tag>=>TagRecordsCompanion
   Future<void> updateTagTitle(
-      List<Tag> selectTagList,String newTagTitle) async{
+      List<Tag> selectTagList,String newTagTitle,) async{
     //List<Tag>=>List<TagRecord>
     final selectTagRecordList =
     selectTagList.toUpdateTagRecordList(selectTagList);
@@ -729,10 +733,10 @@ class CompareRepository {
     try{
       final updateTagRecordCompanion =TagRecordsCompanion(
             tagTitle: Value(newTagTitle)
-          );
+          ,);
       //saveComparisonOverviewDB参考 idとcompanion渡し
       await _comparisonItemDao.updateTagTitle(
-          selectTagRecordList, updateTagRecordCompanion);
+          selectTagRecordList, updateTagRecordCompanion,);
 
     }on SqliteException catch (e) {
       print('repository更新エラー:${e.toString()}');
@@ -752,7 +756,7 @@ class CompareRepository {
   /// ListPage編集並び替え後のDBの順番入れ替え、dataIdで行う
   //順番入れ替えは全削除・全登録の方法に変更
   Future<void> changeCompareListOrder(
-      List<ComparisonOverview> newCompareItemList) async{
+      List<ComparisonOverview> newCompareItemList,) async{
     //comparisonOverviewsのdataIdとdaragginItemsのorderIdが同じものをComparisonOverviewに
     try{
       final newOrderOverviews = <ComparisonOverview>[];
@@ -776,7 +780,7 @@ class CompareRepository {
         createdAt: newCompareItemList[i].createdAt,
           conclusion: newCompareItemList[i].conclusion,
         )
-      );
+      ,);
 
       final itemRecordList =
       newOrderOverviews.toComparisonOverviewRecords(newOrderOverviews);
@@ -801,7 +805,7 @@ class CompareRepository {
             tagTitle:draggingTag.tagTitle,
             key:ValueKey(i),
             tagAmount:draggingTag.tagAmount,
-            orderId: i));
+            orderId: i,),);
       }
       //idのみの更新はやめて、draggingTagsとしてList全てを削除=>再登録する
       //draggingTags=>TagChartRecordList
@@ -828,7 +832,8 @@ class CompareRepository {
 
   }
 
-  Future<List<ComparisonOverview>> getNewOrderList(List<String> deleteItemIdList) async{
+  Future<List<ComparisonOverview>> getNewOrderList(
+      List<String> deleteItemIdList,) async{
 
     final itemRecordList = <ComparisonOverviewRecord>[];
 
