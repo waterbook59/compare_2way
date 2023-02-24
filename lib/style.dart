@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cupertino_icons/cupertino_icons.dart';
 
 //const titleFontJa = 'Hiragino Kaku Gothic w6';
 //const titleFontEn = 'SF Pro Display Medium';
@@ -36,15 +34,15 @@ const itemTitleTextStyle = TextStyle(
 
 //アコーディオンの丸み
 const accordionTopBorderRadius = BorderRadius.only(
-    topLeft: Radius.circular(5), topRight: Radius.circular(5));
+    topLeft: Radius.circular(5), topRight: Radius.circular(5),);
 const accordionBottomBorderRadius = BorderRadius.only(
-    bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5));
+    bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5),);
 
 //比較のRaisedButton
 //var  createButtonBorderRadius = RoundedRectangleBorder(
 //  borderRadius: BorderRadius.circular(5),);
 
 const listDecoration = BoxDecoration(
-    border: Border(bottom: BorderSide(width: 0.5, color: Colors.grey)));
+    border: Border(bottom: BorderSide(width: 0.5, color: Colors.grey)),);
 
 const accordionBackgroundColor = Color(0xFFE0E0E0);
