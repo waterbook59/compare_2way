@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class TagViewModel extends ChangeNotifier{
 
   TagViewModel({
-    CompareRepository compareRepository,
+    required CompareRepository compareRepository,
   }) : _compareRepository = compareRepository;
 
   final CompareRepository _compareRepository;

@@ -102,18 +102,18 @@ class TagPage extends StatelessWidget {
                                         return TagList(
                                           title: tagChart.tagTitle,
                                           selectTagIdList: tagChart.itemIdList!,
-                                          tagAmount: tagChart.tagAmount,
+                                          tagAmount: tagChart.tagAmount!,
                                           createdAt: '登録時間',
                                           onDelete: () => _onDeleteTag(
                                               context, tagChart.tagTitle,),
                                           onTap: () => _onSelectTag(
                                             context,
                                             tagChart.tagTitle,
-                                            tagChart.myFocusNode,
+                                            tagChart.myFocusNode!,
                                           ),
 //                            listDecoration: listDecoration,
                                           listNumber: index,
-                                          myFocusNode: tagChart.myFocusNode,
+                                          myFocusNode: tagChart.myFocusNode!,
                                         );
                                       },
                                     ),
