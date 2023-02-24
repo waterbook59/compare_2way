@@ -13,7 +13,7 @@ import 'components/select_item_list.dart';
 
 
 class SelectTagPage extends StatelessWidget {
-  const SelectTagPage({required this.tagTitle});
+  const SelectTagPage({Key? key, required this.tagTitle}) : super(key: key);
 
   final String tagTitle;
 
@@ -54,8 +54,8 @@ class SelectTagPage extends StatelessWidget {
                     final formatted = formatter.format(overview.createdAt);
 
                     return SelectItemList(
-                      title: overview.itemTitle,
-                      conclusion: overview.conclusion,
+                      title: overview.itemTitle!,
+                      conclusion: overview.conclusion!,
                       createdAt: formatted,
 //              onDelete: () => _deleteList(
 //                  context, overview.comparisonItemId),

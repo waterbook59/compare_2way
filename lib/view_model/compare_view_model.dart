@@ -152,8 +152,8 @@ class CompareViewModel extends ChangeNotifier {
         await _compareRepository.getOverview(comparisonItemId);
 
     ///way1Title強制呼び出し
-    way1Title = comparisonOverviews[0].way1Title;
-    way2Title = comparisonOverviews[0].way2Title;
+    way1Title = comparisonOverviews[0].way1Title!;
+    way2Title = comparisonOverviews[0].way2Title!;
     notifyListeners();
   }
 
@@ -165,14 +165,14 @@ class CompareViewModel extends ChangeNotifier {
         await _compareRepository.getOverview(comparisonItemId);
 
     ///強制呼び出し
-    itemTitle = comparisonOverviews[0].itemTitle;
-    way1Title = comparisonOverviews[0].way1Title;
-    way2Title = comparisonOverviews[0].way2Title;
-    _way1MeritEvaluate = comparisonOverviews[0].way1MeritEvaluate;
-    _way1DemeritEvaluate = comparisonOverviews[0].way1DemeritEvaluate;
-    _way2MeritEvaluate = comparisonOverviews[0].way2MeritEvaluate;
-    _way2DemeritEvaluate = comparisonOverviews[0].way2DemeritEvaluate;
-    _conclusionController.text = comparisonOverviews[0].conclusion;
+    itemTitle = comparisonOverviews[0].itemTitle!;
+    way1Title = comparisonOverviews[0].way1Title!;
+    way2Title = comparisonOverviews[0].way2Title!;
+    _way1MeritEvaluate = comparisonOverviews[0].way1MeritEvaluate!;
+    _way1DemeritEvaluate = comparisonOverviews[0].way1DemeritEvaluate!;
+    _way2MeritEvaluate = comparisonOverviews[0].way2MeritEvaluate!;
+    _way2DemeritEvaluate = comparisonOverviews[0].way2DemeritEvaluate!;
+    _conclusionController.text = comparisonOverviews[0].conclusion!;
 
     //todo way3Evaluate
 //    print('FutureBuilderのway2のタイトル:$_way2Title');
@@ -491,28 +491,28 @@ class CompareViewModel extends ChangeNotifier {
     switch (displayList) {
       case DisplayList.way1Merit:
         final deleteWay1MeritId = _way1MeritList[accordionIdIndex].way1MeritId;
-        await _compareRepository.deleteWay1Merit(deleteWay1MeritId);
+        await _compareRepository.deleteWay1Merit(deleteWay1MeritId!);
         //再取得しないとDescFormAndButtonでのListViewの認識している長さと削除するindexが異なりエラー
         _way1MeritList = await _compareRepository
             .getWay1MeritList(comparisonOverview.comparisonItemId);
         break;
       case DisplayList.way2Merit:
         final deleteWay2MeritId = _way2MeritList[accordionIdIndex].way2MeritId;
-        await _compareRepository.deleteWay2Merit(deleteWay2MeritId);
+        await _compareRepository.deleteWay2Merit(deleteWay2MeritId!);
         _way2MeritList = await _compareRepository
             .getWay2MeritList(comparisonOverview.comparisonItemId);
         break;
       case DisplayList.way1Demerit:
         final deleteWay1DemeritId =
             _way1DemeritList[accordionIdIndex].way1DemeritId;
-        await _compareRepository.deleteWay1Demerit(deleteWay1DemeritId);
+        await _compareRepository.deleteWay1Demerit(deleteWay1DemeritId!);
         _way1DemeritList = await _compareRepository
             .getWay1DemeritList(comparisonOverview.comparisonItemId);
         break;
       case DisplayList.way2Demerit:
         final deleteWay2DemeritId =
             _way2DemeritList[accordionIdIndex].way2DemeritId;
-        await _compareRepository.deleteWay2Demerit(deleteWay2DemeritId);
+        await _compareRepository.deleteWay2Demerit(deleteWay2DemeritId!);
         _way2DemeritList = await _compareRepository
             .getWay2DemeritList(comparisonOverview.comparisonItemId);
         break;
@@ -594,12 +594,12 @@ class CompareViewModel extends ChangeNotifier {
     final tagChartDBList =
         await _compareRepository.getTagChartList(_tagNameList);
     await Future.forEach(tagChartDBList, (TagChart tagChart) async {
-      if (tagChart.tagAmount > 1) {
+      if (tagChart.tagAmount! > 1) {
         //Value更新
         // final decreaseTagChartList = <TagChart>[]..add(TagChart(
         //   tagTitle: tagChart.tagTitle, tagAmount: tagChart.tagAmount - 1,),);
         final decreaseTagChartList = <TagChart>[TagChart(
-          tagTitle: tagChart.tagTitle, tagAmount: tagChart.tagAmount - 1,)];
+          tagTitle: tagChart.tagTitle, tagAmount: tagChart.tagAmount! - 1,)];
 
         await _compareRepository.updateTagChart(decreaseTagChartList);
       } else {
@@ -648,10 +648,10 @@ class CompareViewModel extends ChangeNotifier {
     // tagNameList１つずつgetSingleTagChartして、それぞれtagAmount>1かを判別して更新・削除
     await Future.forEach(_tagNameList, (String tagName) async {
       final selectTag = await _compareRepository.getSingleTagChart(tagName);
-      if (selectTag.tagAmount > 1) {
+      if (selectTag.tagAmount! > 1) {
         //Value更新
         final decreaseTagChartList = <TagChart>[TagChart(
-            tagTitle: selectTag.tagTitle, tagAmount: selectTag.tagAmount - 1,)];
+            tagTitle: selectTag.tagTitle, tagAmount: selectTag.tagAmount! - 1,)];
         await _compareRepository.updateTagChart(decreaseTagChartList);
       } else {
         //削除
@@ -707,14 +707,14 @@ class CompareViewModel extends ChangeNotifier {
 
   //todo way3追加
   Future<void> setOverview(ComparisonOverview comparisonOverview) async {
-    itemTitle = comparisonOverview.itemTitle;
-    way1Title = comparisonOverview.way1Title;
-    _way1MeritEvaluate = comparisonOverview.way1MeritEvaluate;
-    _way1DemeritEvaluate = comparisonOverview.way1DemeritEvaluate;
-    way2Title = comparisonOverview.way2Title;
-    _way2MeritEvaluate = comparisonOverview.way2MeritEvaluate;
-    _way2DemeritEvaluate = comparisonOverview.way2DemeritEvaluate;
-    conclusion = comparisonOverview.conclusion;
+    itemTitle = comparisonOverview.itemTitle!;
+    way1Title = comparisonOverview.way1Title!;
+    _way1MeritEvaluate = comparisonOverview.way1MeritEvaluate!;
+    _way1DemeritEvaluate = comparisonOverview.way1DemeritEvaluate!;
+    way2Title = comparisonOverview.way2Title!;
+    _way2MeritEvaluate = comparisonOverview.way2MeritEvaluate!;
+    _way2DemeritEvaluate = comparisonOverview.way2DemeritEvaluate!;
+    conclusion = comparisonOverview.conclusion!;
 //    print('文頭のsetOverview');
 //    notifyListeners();
   }
@@ -845,11 +845,11 @@ class CompareViewModel extends ChangeNotifier {
       final tagChartDBList =
           await _compareRepository.getTagChartList(extractRemoveTagList);
       await Future.forEach(tagChartDBList, (TagChart tagChart) async {
-        if (tagChart.tagAmount > 1) {
+        if (tagChart.tagAmount! > 1) {
           //Value更新
 //          print('削除更新でtagAmount−１の方');
           final decreaseTagChartList = <TagChart>[TagChart(
-              tagTitle: tagChart.tagTitle, tagAmount: tagChart.tagAmount - 1,)];
+              tagTitle: tagChart.tagTitle, tagAmount: tagChart.tagAmount! - 1,)];
           await _compareRepository.updateTagChart(decreaseTagChartList);
         } else {
           //削除

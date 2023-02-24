@@ -97,12 +97,12 @@ class ListPage extends StatelessWidget {
                               final formatted =
                                   formatter.format(overview.createdAt);
                               return OverViewList(
-                                title: overview.itemTitle,
+                                title: overview.itemTitle!,
                                 conclusion: overview.conclusion,
                                 createdAt: formatted,
                                 onDelete: () => _deleteItem(context,
                                   overview.comparisonItemId,
-                                  overview.itemTitle,),
+                                  overview.itemTitle!,),
                                 onTap: () => _updateList(context, overview),
                                 listDecoration: listDecoration,
                               );

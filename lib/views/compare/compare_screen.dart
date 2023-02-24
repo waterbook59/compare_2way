@@ -378,13 +378,13 @@ class CompareScreen extends StatelessWidget {
                     TablePart(
                       comparisonItemId: comparisonOverview.comparisonItemId,
                       way1Title: viewModel.way1Title,
-                      way1MeritEvaluate: comparisonOverview.way1MeritEvaluate,
+                      way1MeritEvaluate: comparisonOverview.way1MeritEvaluate!,
                       way1DemeritEvaluate:
-                      comparisonOverview.way1DemeritEvaluate,
+                      comparisonOverview.way1DemeritEvaluate!,
                       way2Title: viewModel.way2Title,
-                      way2MeritEvaluate: comparisonOverview.way2MeritEvaluate,
+                      way2MeritEvaluate: comparisonOverview.way2MeritEvaluate!,
                       way2DemeritEvaluate:
-                      comparisonOverview.way2DemeritEvaluate,
+                      comparisonOverview.way2DemeritEvaluate!,
                       );
                     }
                 ,),
@@ -407,7 +407,7 @@ class CompareScreen extends StatelessWidget {
                   selector: (context, viewModel) => viewModel.conclusion,
                     builder: (context, conclusion, child) {
                     return ConclusionInputPart(
-                      conclusion: comparisonOverview.conclusion,
+                      conclusion: comparisonOverview.conclusion!,
                       //非同期でviewModelへ設定しにいかないと値保存できない
                       inputChanged: (newConclusion) =>
                           _conclusionInputChanged(context, newConclusion,
