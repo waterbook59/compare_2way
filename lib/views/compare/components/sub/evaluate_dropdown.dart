@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class EvaluateDropdown extends StatefulWidget {
   const EvaluateDropdown(
-      {required this.initialValue, required this.onSelected});
+      {Key? key, required this.initialValue, required this.onSelected,})
+      : super(key: key);
 
   final int initialValue;
 
@@ -44,7 +44,7 @@ class _EvaluateDropdownState extends State<EvaluateDropdown> {
                   child: Text(
                 '-',
                 style: TextStyle(fontSize: 40),
-              )),
+              ),),
             ),
             const PopupMenuItem(
               value: 1,
@@ -52,7 +52,7 @@ class _EvaluateDropdownState extends State<EvaluateDropdown> {
                   child: Text(
                 '◎',
                 style: TextStyle(fontSize: 40),
-              )),
+              ),),
             ),
             const PopupMenuItem(
               value: 2,
@@ -60,7 +60,7 @@ class _EvaluateDropdownState extends State<EvaluateDropdown> {
                   child: Text(
                 '○',
                 style: TextStyle(fontSize: 40),
-              )),
+              ),),
             ),
             const PopupMenuItem(
               value: 3,
@@ -68,7 +68,7 @@ class _EvaluateDropdownState extends State<EvaluateDropdown> {
                   child: Text(
                 '△',
                 style: TextStyle(fontSize: 40),
-              )),
+              ),),
             ),
             PopupMenuItem(
               value: 4,

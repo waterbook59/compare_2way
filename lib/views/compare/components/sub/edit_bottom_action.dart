@@ -12,10 +12,10 @@ import 'package:provider/provider.dart';
 
 class EditBottomAction extends StatelessWidget {
 
-  const EditBottomAction({
+  const EditBottomAction({Key? key,
     required this.comparisonOverview,
 //    this.tagTitle,this.itemTitleEditMode,
-  });
+  }) : super(key: key);
 
   final ComparisonOverview comparisonOverview;
 //  final String tagTitle;

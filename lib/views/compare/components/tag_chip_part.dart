@@ -1,13 +1,12 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/views/compare/dialog_page/tag_dialog_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 //ここでのchipは表示だけなのでstatelessでいい
 class TagChipPart extends StatelessWidget {
 
-  const TagChipPart({
-    required this.comparisonOverview,this.displayChipList});
+  const TagChipPart({Key? key,
+    required this.comparisonOverview,this.displayChipList,}) : super(key: key);
   final ComparisonOverview comparisonOverview;
   final List<Chip>? displayChipList;
 
@@ -32,7 +31,7 @@ class TagChipPart extends StatelessWidget {
                     runSpacing: 0,
                     direction: Axis.horizontal,
                     children: dCL,)
-              ),
+              ,),
             ],
           ),
 
@@ -53,8 +52,7 @@ class TagChipPart extends StatelessWidget {
     builder: (context) =>TagDialogPage(comparisonOverview: comparisonOverview,),
       fullscreenDialog: true,//下から
     )
-    );
+    ,);
 
   }
 }
-

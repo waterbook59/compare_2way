@@ -36,7 +36,7 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
             onTap: () {
               Provider.of<CompareViewModel>(context, listen: false)
                   .checkDeleteIcon(
-                      widget.draggedItems[index].comparisonItemId!);
+                      widget.draggedItems[index].comparisonItemId!,);
             },
           );
         },
@@ -72,12 +72,12 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
 }
 
 class Item extends StatelessWidget {
-  const Item({
+  const Item({Key? key,
     required this.data,
     required this.isFirst,
     required this.isLast,
     required this.onTap,
-  });
+  }) : super(key: key);
 
   final DraggingItemData data;
   final bool isFirst;

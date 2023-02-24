@@ -10,7 +10,7 @@ class TextFieldPart extends StatelessWidget {
       required this.didChanged,
       required this.placeholder,
       required this.autofocus,
-      required this.iconData}) : super(key: key);
+      required this.iconData,}) : super(key: key);
 
   final String label;
   final String placeholder;

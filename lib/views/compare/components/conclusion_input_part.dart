@@ -1,20 +1,16 @@
-import 'package:compare_2way/utils/constants.dart';
-import 'package:compare_2way/view_model/compare_view_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 ///初期値をString conclusionで渡して、controllerは分割先で設定
 class ConclusionInputPart extends StatefulWidget {
   const ConclusionInputPart(
-      {
+      {Key? key,
         required this.conclusion,
 //      this.conclusionController,
       this.inputChanged,
 //      this.onEditingCompleted,
 //      this.onFieldSubmitted,
 //      this.onSaved
-      });
+      }) : super(key: key);
 
 //  final TextEditingController conclusionController;
   final String conclusion;
@@ -71,14 +67,14 @@ class _ConclusionInputPartState extends State<ConclusionInputPart> {
     );
   }
 
-  void _onInputChanged() {
-    final viewModel=Provider.of<CompareViewModel>(context, listen: false)
-    ..conclusion= _conclusionController.text
-    ..compareScreenStatus = CompareScreenStatus.update;
-    print('viewModel.conclusion:${viewModel.conclusion}');
-    setState(() {
-    });
-    }
+  // void _onInputChanged() {
+  //   final viewModel=Provider.of<CompareViewModel>(context, listen: false)
+  //   ..conclusion= _conclusionController.text
+  //   ..compareScreenStatus = CompareScreenStatus.update;
+  //   print('viewModel.conclusion:${viewModel.conclusion}');
+  //   setState(() {
+  //   });
+  //   }
 
 
 }

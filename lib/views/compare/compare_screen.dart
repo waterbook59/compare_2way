@@ -21,12 +21,12 @@ import 'components/table_part.dart';
 
 ///Table=>conclusionの順で編集するとTableリセットされる問題を解決
 class CompareScreen extends StatelessWidget {
-  const CompareScreen({
+  const CompareScreen({Key? key,
     ///comparisonOverviewは必ずページ遷移で入るはず
     required this.comparisonOverview,
     this.tagTitle,
     this.screenEditMode,
-  });
+  }) : super(key: key);
 
   final ComparisonOverview comparisonOverview;
   final String? tagTitle;
@@ -35,7 +35,7 @@ class CompareScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
 

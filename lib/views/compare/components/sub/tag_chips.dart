@@ -2,18 +2,17 @@ import 'package:compare_2way/views/compare/components/sub/candidate_tag.dart';
 import 'package:compare_2way/views/compare/components/sub/create_tag.dart';
 import 'package:compare_2way/views/compare/components/sub/tag_input_chip.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class TagChips extends StatefulWidget {
 
-  const TagChips({
+  const TagChips({Key? key,
     required this.tagNameList,
     required this.onSubmitted,
     required this.onDeleted,
     // this.addTagTitle,
     required this.candidateTagNameList,
     required this.setTempoInput,
-  });
+  }) : super(key: key);
   final List<String> tagNameList;//DBからのtagTitleのリスト
   final ValueChanged<List<String>> onSubmitted;
 //  final ValueChanged<List<String>,List<String>> onDeleted;
@@ -45,7 +44,7 @@ class _TagChipsState extends State<TagChips> {
   ///List<Tag>=>Set<String>とList<String>へ変換
     //型推論に失敗する時はmapの後ろに型を明示
     tagNameListSet =widget.tagNameList.map<String>(
-      (tagTitle)=>tagTitle).toSet() ;//toListではなく、toSetに変更で一気に変換
+      (tagTitle)=>tagTitle,).toSet() ;//toListではなく、toSetに変更で一気に変換
 //    print('TagChips/initState/tagTitles(Set):$tagNameListSet');
     _tempoDisplayList  = tagNameListSet.toList();
 
@@ -123,7 +122,8 @@ if(widget.candidateTagNameList==null){
 //                      print('InputChip/onDeleted/tagNameListSet:$tagNameListSet');
                         widget.onDeleted(_tempoDeleteLabels,_tempoDisplayList);
 
-                      //tempoDeleteLabelsクリア(しないとviewModelのDeleteLabelsに重複して登録されていく)
+                      //tempoDeleteLabelsクリア
+                      // (しないとviewModelのDeleteLabelsに重複して登録されていく)
                         _tempoDeleteLabels = [];
 
 
@@ -188,7 +188,7 @@ if(widget.candidateTagNameList==null){
 
                       setState(() {//tag_input_chipのcontroller破棄
                       },);
-                    }),
+                    },),
         ],
       ),
       const Divider(color: Colors.black,),
@@ -252,4 +252,3 @@ if(widget.candidateTagNameList==null){
   }
 
 }
-

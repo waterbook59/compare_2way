@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 
 class CompareViewModel extends ChangeNotifier {
   CompareViewModel({
-    CompareRepository compareRepository,
+    required CompareRepository compareRepository,
   }) : _compareRepository = compareRepository;
 
   final CompareRepository _compareRepository;
@@ -20,8 +20,8 @@ class CompareViewModel extends ChangeNotifier {
 
   //ListPage編集並び替え後のリスト
   List<ComparisonOverview> newComparisonOverviews = <ComparisonOverview>[];
-  CompareScreenStatus compareScreenStatus;
-  ComparisonOverview overviewDB;
+  late CompareScreenStatus compareScreenStatus;
+  late ComparisonOverview overviewDB;
   List<Way1Merit> _way1MeritList = <Way1Merit>[];
 
   List<Way1Merit> get way1MeritList => _way1MeritList;
@@ -76,7 +76,7 @@ class CompareViewModel extends ChangeNotifier {
 
   //textFieldからviewModelへの変更値登録があるのでカプセル化しない
   String tagTitle = '';
-  String addTagTitle;
+  String addTagTitle='';
 
   ///CompareScreenで使用
   //tagDialogPageの下で先に登録のあるタグの候補表示する
@@ -90,7 +90,7 @@ class CompareViewModel extends ChangeNotifier {
   List<String> _tempoDisplayList = <String>[]; //TagDialogPageでのDB登録前の表示リスト
   List<String> _tempoDeleteList = <String>[]; //削除タグリストをつくる一歩手前のtagTitleリスト
   List<String> get tempoDeleteList => _tempoDeleteList;
-  String _tempoInput; //TagInputChipに仮入力してるもの
+  String _tempoInput=''; //TagInputChipに仮入力してるもの
   List<Chip> _displayChipList = <Chip>[]; //CompareScreen表示用
   List<Chip> get displayChipList => _displayChipList;
   List<Tag> _deleteTagList = <Tag>[];
@@ -108,7 +108,7 @@ class CompareViewModel extends ChangeNotifier {
   List<Tag> _selectTagList =
       <Tag>[]; //TagPage=>SelectTagPageへtagTitleで紐づいたタグリスト
   List<Tag> get selectTagList => _selectTagList;
-  TagChart selectTagChart; //TagPageでtagTitle編集時に選択したtagChartを格納
+  late TagChart selectTagChart; //TagPageでtagTitle編集時に選択したtagChartを格納
   List<ComparisonOverview> _selectOverviews = <ComparisonOverview>[];
 
   List<ComparisonOverview> get selectOverviews => _selectOverviews;
@@ -119,8 +119,8 @@ class CompareViewModel extends ChangeNotifier {
   ListEditMode editStatus = ListEditMode.display;
   TagEditMode tagEditMode = TagEditMode.normal; //初期設定は通常モード
 //  bool editFocus = false; //初期設定はタイトルのみ
-  int selectedIndex; //tagPageでのListTile選択
-  int selectedDescListIndex; //DescFromAndButtonでのListTIle選択
+  int? selectedIndex; //tagPageでのListTile選択
+  int selectedDescListIndex=0; //DescFromAndButtonでのListTIle選択
   bool isWay1MeritDeleteIcon = false; //AccordionPart=>DescFormのIconButton表示有無
   bool isWay1DemeritDeleteIcon = false;
   bool isWay2MeritDeleteIcon = false;

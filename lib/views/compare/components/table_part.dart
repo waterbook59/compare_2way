@@ -1,14 +1,13 @@
 import 'package:compare_2way/view_model/compare_view_model.dart';
-import 'package:compare_2way/views/compare/components/sub/evaluate_dropdown.dart';
 import 'package:compare_2way/views/compare/components/icon_title.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:compare_2way/views/compare/components/sub/evaluate_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 
 ///Statefulへ変更:余裕あればSelector導入
 class TablePart extends StatefulWidget {
-   const TablePart({
+   const TablePart({Key? key,
      required this.comparisonItemId,
      required this.way1Title,
      required this.way1MeritEvaluate,
@@ -16,7 +15,7 @@ class TablePart extends StatefulWidget {
      required this.way2Title,
      required this.way2MeritEvaluate,
      required this.way2DemeritEvaluate,
-  });
+  }) : super(key: key);
 
     final String comparisonItemId;
     final String way1Title;
@@ -76,7 +75,7 @@ class _TablePartState extends State<TablePart> {
 
   @override
   Widget build(BuildContext context) {
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return Padding(
@@ -108,7 +107,7 @@ class _TablePartState extends State<TablePart> {
               iconData: Icons.thumb_down,
               iconColor: accentColor,
             ),
-          ]),
+          ],),
 
           ///way1行
           TableRow(children: [
@@ -119,7 +118,7 @@ class _TablePartState extends State<TablePart> {
                   child: Text(
                 widget.way1Title,
                 style: const TextStyle(fontSize: 16),
-              )),
+              ),),
             ),
             ///way1MeritEvaluate
             //高さを設定しないと'!_debugDoingThisLayout': is not true.エラー
@@ -144,14 +143,14 @@ class _TablePartState extends State<TablePart> {
                             way1MeritDisplay = evaluates[newValue];
                             // CompareScreenへ渡さずに直接viewModel側に保存
                             viewModel.setWay1MeritNewValue(
-                                widget.comparisonItemId,newValue);
+                                widget.comparisonItemId,newValue,);
                           });
                         },
                       ),
                   ),
                       const SizedBox(width: 8,),
-                ])
-            ),
+                ],)
+            ,),
             ///way1DemeritEvaluate
             SizedBox(
                 height: 48,
@@ -172,13 +171,13 @@ class _TablePartState extends State<TablePart> {
                           setState(() {
                             way1DemeritDisplay = evaluates[newValue];
                             viewModel.setWay1DemeritNewValue(
-                                widget.comparisonItemId,newValue);
+                                widget.comparisonItemId,newValue,);
                           });
                         },
-                      )),
+                      ),),
                   const SizedBox(width: 8,),
-                ])),
-          ]),
+                ],),),
+          ],),
 
           ///way2行
           TableRow(children: [
@@ -189,7 +188,7 @@ class _TablePartState extends State<TablePart> {
                   child: Text(
                 widget.way2Title,
                 style: const TextStyle(fontSize: 16),
-              )),
+              ),),
             ),
 
             ///way2MeritEvaluate
@@ -211,12 +210,12 @@ class _TablePartState extends State<TablePart> {
                           setState(() {
                             way2MeritDisplay = evaluates[newValue];
                             viewModel.setWay2MeritNewValue(
-                                widget.comparisonItemId,newValue);
+                                widget.comparisonItemId,newValue,);
                           });
                         },
-                      )),
+                      ),),
                   const SizedBox(width: 8,),
-                ])),
+                ],),),
 
             ///way2DemeritEvaluate
             SizedBox(
@@ -237,13 +236,13 @@ class _TablePartState extends State<TablePart> {
                           setState(() {
                             way2DemeritDisplay = evaluates[newValue];
                             viewModel.setWay2DemeritNewValue(
-                                widget.comparisonItemId,newValue);
+                                widget.comparisonItemId,newValue,);
                           });
                         },
-                      )),
+                      ),),
                   const SizedBox(width: 8,),
-                ])),
-          ]),
+                ],),),
+          ],),
         ],
       ),
     );

@@ -1,17 +1,15 @@
 import 'package:compare_2way/data_models/comparison_overview.dart';
-import 'package:compare_2way/data_models/tag.dart';
-import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/common/nav_bar_icon_title.dart';
 import 'package:compare_2way/views/compare/components/sub/tag_chips.dart';
-import 'package:compare_2way/views/compare/components/sub/candidate_tag.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TagDialogPage extends StatelessWidget {
-  const TagDialogPage({required this.comparisonOverview});
+  const TagDialogPage({Key? key, required this.comparisonOverview})
+      : super(key: key);
 
   final ComparisonOverview comparisonOverview;
 
@@ -56,7 +54,7 @@ class TagDialogPage extends StatelessWidget {
               await viewModel.getTagList(comparisonOverview.comparisonItemId);
               Navigator.of(context).pop();
             },
-          )),
+          ),),
       child: Scaffold(
         backgroundColor: CupertinoTheme.of(context).scaffoldBackgroundColor,
         body: GestureDetector(
@@ -92,26 +90,22 @@ class TagDialogPage extends StatelessWidget {
                       } else {
                         return TagChips(
                           tagNameList: viewModel.tagNameList,
-                          setTempoInput: (tempoInput){
-                            viewModel.setTempoInput(tempoInput);
-                          },
-                          onSubmitted: (tempoDisplayList) {
-    ///いきなりviewModel側のtagNameListにsetするとキャンセルしても残るので仮リストへset
-                            //_tempoDisplayListをviewModelへset
-                            viewModel.setTempoDisplayList(tempoDisplayList);
-                          },
-
+                          setTempoInput: viewModel.setTempoInput,
+     ///いきなりviewModel側のtagNameListにsetするとキャンセルしても残るので仮リストへset
+                   //_tempoDisplayListをviewModelへset
+                          onSubmitted: viewModel.setTempoDisplayList,
                           onDeleted: (tempoDeleteLabels,tempoDisplayList) {
                       //削除項目抽出：viewModelにsetしてある_tagNameListと
                             // tempoDeleteLabels比較し、重複しているものだけを抜き出す
-                            viewModel.createDeleteList(tempoDeleteLabels,tempoDisplayList);
+                            viewModel.createDeleteList(tempoDeleteLabels,
+                                tempoDisplayList,);
                           },
                     //candidateが空か否かでContainer or ListView.builderで場合わけ
                           ///null場合分しているので強制呼び出し
                           candidateTagNameList: snapshot.data!,
                         );
                       }
-                    }),
+                    },),
               ],
             ),
           ),
@@ -123,8 +117,8 @@ class TagDialogPage extends StatelessWidget {
   void _cancelPage(BuildContext context) {
     Navigator.pop(context);
     //viewModel側のtempoDisplayList,tempoDeleteListは削除が必要
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-    ..clearTempoList();
+    Provider.of<CompareViewModel>(context, listen: false)
+    .clearTempoList();
   }
 
 }

@@ -177,6 +177,11 @@ class TagPage extends StatelessWidget {
         //IdからcomparisonOverview.titleを取得し表示
         await viewModel.onSelectTag(tagTitle);
 
+        //todo この書き方でBuildContextを非同期処理内で使っても良いか
+        if (context.mounted) {
+          return;
+        }
+
         ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
         await Navigator.of(context, rootNavigator: true)
             .push(MaterialPageRoute<void>(

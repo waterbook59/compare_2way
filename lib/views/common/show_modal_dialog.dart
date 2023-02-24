@@ -6,7 +6,7 @@ void showModalDialog(
     {required BuildContext context,
     required Widget dialogWidget,
       //画面の半分以上いく場合はtrue
-    required bool isScrollable}) {
+    required bool isScrollable,}) {
   showModalBottomSheet<void>(
     context: context,
     builder: (context) => dialogWidget,
@@ -15,6 +15,6 @@ void showModalDialog(
     shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
       top: Radius.circular(10), //topだけならタテだけ
-    )),
+    ),),
   );
 }

@@ -1,14 +1,13 @@
 import 'package:compare_2way/data_models/merit_demerit.dart';
-import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/sub/desc_list_tile.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DescFormAndButton extends StatefulWidget {
-  const DescFormAndButton({
+  const DescFormAndButton({Key? key,
     required this.displayList,
     this.way1MeritList,
     this.way2MeritList,
@@ -22,7 +21,7 @@ class DescFormAndButton extends StatefulWidget {
     required this.deleteList,
     required this.controllers,
     required this.focusNodes,
-  });
+  }) : super(key: key);
 
   final DisplayList displayList;
   final List<Way1Merit>? way1MeritList;
@@ -93,7 +92,7 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
                   displayList: widget.displayList,
                 ),
               );
-            }),
+            },),
 
       ],
     );

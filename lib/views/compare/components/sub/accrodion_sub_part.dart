@@ -2,11 +2,10 @@ import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
-import 'package:compare_2way/views/compare/components/sub/desc_form.dart';
 import 'package:compare_2way/views/compare/components/sub/desc_form_and_button.dart';
 import 'package:compare_2way/views/compare/components/sub/gf_accordian.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 //import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +13,7 @@ import 'package:provider/provider.dart';
 
 class AccordionSubPart extends StatefulWidget {
 
-  const AccordionSubPart({
+  const AccordionSubPart({Key? key,
     required this.title,
     required this.displayList,
     this.way1MeritList,
@@ -24,7 +23,7 @@ class AccordionSubPart extends StatefulWidget {
     required this.inputChanged,
     required this.addList,
     required this.deleteList,
-  });
+  }) : super(key: key);
   ///way1&way2のMerit/Demeritを共通して使っているのでway xxx List箇所は安全呼び出し
   final String title;
   final DisplayList displayList;
@@ -153,7 +152,7 @@ class _AccordionSubPartState extends State<AccordionSubPart> {
                   controllers.add(TextEditingController());
                   focusNodes.add(FocusNode());
                 });
-              }),)
+              },),)
       ],
     );
   }
@@ -188,5 +187,3 @@ class _AccordionSubPartState extends State<AccordionSubPart> {
 
 
 }
-
-

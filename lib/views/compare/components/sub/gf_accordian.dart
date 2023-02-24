@@ -1,5 +1,7 @@
 ///GFAccordionをカスタマイズ(showAccordionのOffset初期位置変更)
 
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
@@ -25,7 +27,7 @@ class GFAccordion extends StatefulWidget {
       this.showAccordion = false,
       this.onToggleCollapsed,
       this.titleBorderRadius = const BorderRadius.all(Radius.circular(0)),
-      this.contentBorderRadius = const BorderRadius.all(Radius.circular(0))})
+      this.contentBorderRadius = const BorderRadius.all(Radius.circular(0)),})
       : super(key: key);
 
   /// controls if the accordion should be collapsed or not making it possible to be controlled from outside
@@ -70,16 +72,20 @@ class GFAccordion extends StatefulWidget {
   /// margin of type [EdgeInsets] which is used to set the margin of the [GFAccordion]
   final EdgeInsets? margin;
 
-  /// titleBorderColor of type  [Color] or [GFColors] which is used to change the border color of title
+  /// titleBorderColor of type  [Color] or [GFColors] which is used to change
+  /// the border color of title
   final Border titleBorder;
 
-  /// contentBorderColor of type  [Color] or [GFColors] which is used to change the border color of content
+  /// contentBorderColor of type  [Color] or [GFColors] which is used to change
+  /// the border color of content
   final Border contentBorder;
 
-  /// titleBorderRadius of type  [Radius]  which is used to change the border radius of title
+  /// titleBorderRadius of type  [Radius]  which is used to change the border
+  /// radius of title
   final BorderRadius titleBorderRadius;
 
-  /// contentBorderRadius of type  [Radius]  which is used to change the border radius of content
+  /// contentBorderRadius of type  [Radius]  which is used to change the border
+  /// radius of content
   final BorderRadius contentBorderRadius;
 
   /// function called when the content body collapsed
@@ -102,11 +108,13 @@ class _GFAccordionState extends State<GFAccordion>
     animationController =
         AnimationController(duration: const Duration(seconds: 2), vsync: this);
     controller = AnimationController(
-        duration: const Duration(milliseconds: 300), vsync: this);
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
     offset = Tween(
       ///beginをゼロにしてendを下方向へ0.02ずらす変更
       begin: Offset.zero,
-      end:  const Offset(0, 0.02),
+      end: const Offset(0, 0.02),
     ).animate(
       CurvedAnimation(
         parent: controller,
@@ -149,7 +157,9 @@ class _GFAccordionState extends State<GFAccordion>
                           ? Text(widget.title!, style: widget.textStyle)
                           : (widget.titleChild ?? Container()),
                     ),
-                    Container(width: 44,),
+                    Container(
+                      width: 44,
+                    ),
                     showAccordion ? widget.expandedIcon : widget.collapsedIcon
                   ],
                 ),
@@ -169,7 +179,8 @@ class _GFAccordionState extends State<GFAccordion>
                       child: widget.content != null
                           ? Text(widget.content!)
                           : (widget.contentChild ?? Container()),
-                    ))
+                    ),
+                  )
                 : Container()
           ],
         ),
@@ -177,7 +188,7 @@ class _GFAccordionState extends State<GFAccordion>
 
   void _toggleCollapsed() {
     setState(() {
-      switch (controller.status as AnimationStatus) {
+      switch (controller.status) {
         case AnimationStatus.completed:
           controller.forward(from: 0);
           break;

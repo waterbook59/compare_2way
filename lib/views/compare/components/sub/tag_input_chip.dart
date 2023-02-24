@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class TagInputChip extends StatefulWidget {
 
-  const TagInputChip({
+  const TagInputChip({Key? key,
     required this.onSubmitted,
     required this.setTempoInput,
     required this.onFocusChange,
   required this.isInput,
-  required this.onChangeInputMode,});
+  required this.onChangeInputMode,}) : super(key: key);
   //入力値をtagChipsへ上げる
   final ValueChanged<String> onSubmitted;
   final ValueChanged<String> setTempoInput;
@@ -96,7 +95,7 @@ class _TagInputChipState extends State<TagInputChip> {
           widget.onChangeInputMode();
           _tagTitleController.text = '';
         }
-      );
+      ,);
 
 
   }
@@ -113,4 +112,3 @@ class _TagInputChipState extends State<TagInputChip> {
   }
 
 }
-

@@ -1,14 +1,13 @@
-import 'package:compare_2way/views/list/add_screen.dart';
 import 'package:flutter/cupertino.dart';
 
 class PageTransition extends StatefulWidget {
 
-  PageTransition({
+  PageTransition({Key? key,
     required this.dialogWidget,
-    required this.animationController});
+    required this.animationController,}) : super(key: key);
 
    Widget dialogWidget;
-  AnimationController animationController;
+   AnimationController animationController;
   @override
   _PageTransitionState createState() => _PageTransitionState();
 }
@@ -20,7 +19,7 @@ class _PageTransitionState extends State<PageTransition>
   void initState() {
     widget.animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
     );
 
     super.initState();
@@ -38,13 +37,12 @@ class _PageTransitionState extends State<PageTransition>
       primaryRouteAnimation: widget.animationController,
       secondaryRouteAnimation: widget.animationController,
       linearTransition: false,
-      child: Container(
+      child: SizedBox(
         width: 300,
         height: 300,
         child:widget.dialogWidget,
       )
 
-    );
+    ,);
   }
 }
-
