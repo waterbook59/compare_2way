@@ -16,22 +16,22 @@ extension ConvertToComparisonOverviewRecords on List<ComparisonOverviewRecord> {
     final comparisonOverviews =
     comparisonOverviewRecords.map((comparisonOverviewRecord) {
         return  ComparisonOverview(
-        dataId: comparisonOverviewRecord.dataId ?? 0,
-        comparisonItemId: comparisonOverviewRecord.comparisonItemId ?? '',
-        itemTitle: comparisonOverviewRecord.itemTitle ?? '',
-        way1Title: comparisonOverviewRecord.way1Title ?? '',
-        way1MeritEvaluate: comparisonOverviewRecord.way1MeritEvaluate ?? 0,
-        way1DemeritEvaluate: comparisonOverviewRecord.way1DemeritEvaluate ?? 0,
-        way2Title: comparisonOverviewRecord.way2Title ?? '',
-        way2MeritEvaluate: comparisonOverviewRecord.way2MeritEvaluate ?? 0,
-        way2DemeritEvaluate: comparisonOverviewRecord.way2DemeritEvaluate ?? 0,
+        dataId: comparisonOverviewRecord.dataId ,
+        comparisonItemId: comparisonOverviewRecord.comparisonItemId,
+        itemTitle: comparisonOverviewRecord.itemTitle ,
+        way1Title: comparisonOverviewRecord.way1Title ,
+        way1MeritEvaluate: comparisonOverviewRecord.way1MeritEvaluate ,
+        way1DemeritEvaluate: comparisonOverviewRecord.way1DemeritEvaluate ,
+        way2Title: comparisonOverviewRecord.way2Title ,
+        way2MeritEvaluate: comparisonOverviewRecord.way2MeritEvaluate ,
+        way2DemeritEvaluate: comparisonOverviewRecord.way2DemeritEvaluate ,
 //todo way3追加
 //            way3Title:  comparisonOverviewRecord.way3Title ?? '',
 //            way3Evaluate: comparisonOverviewRecord.way3Evaluate ?? 0,
-        favorite: comparisonOverviewRecord.favorite ?? false,
+        favorite: comparisonOverviewRecord.favorite ,
         conclusion: comparisonOverviewRecord.conclusion ?? '',
         ///取得時のcreatedAt追加
-        createdAt: comparisonOverviewRecord.createdAt ,
+        createdAt: comparisonOverviewRecord.createdAt! ,
       );
     }).toList();
     return comparisonOverviews;
@@ -46,7 +46,7 @@ extension ConvertToComparisonOverviews on List<ComparisonOverview> {
     comparisonOverviews.map((comparisonOverview) {
       return  ComparisonOverviewRecord(
         dataId: comparisonOverview.dataId ?? 0,
-        comparisonItemId: comparisonOverview.comparisonItemId ?? '',
+        comparisonItemId: comparisonOverview.comparisonItemId ,
         itemTitle: comparisonOverview.itemTitle ?? '',
         way1Title: comparisonOverview.way1Title ?? '',
         way1MeritEvaluate: comparisonOverview.way1MeritEvaluate ?? 0,
@@ -104,17 +104,17 @@ extension ConvertToComparisonOverviewRecord on ComparisonOverviewRecord {
       comparisonItemId: overviewRecord.comparisonItemId,
       itemTitle: overviewRecord.itemTitle ,
       way1Title: overviewRecord.way1Title ,
-      way1MeritEvaluate: overviewRecord.way1MeritEvaluate ?? 0,
-      way1DemeritEvaluate:overviewRecord.way1DemeritEvaluate ?? 0,
+      way1MeritEvaluate: overviewRecord.way1MeritEvaluate ,
+      way1DemeritEvaluate:overviewRecord.way1DemeritEvaluate ,
       way2Title: overviewRecord.way2Title,
-      way2MeritEvaluate: overviewRecord.way2MeritEvaluate ??0,
-      way2DemeritEvaluate: overviewRecord.way2DemeritEvaluate ??0,
+      way2MeritEvaluate: overviewRecord.way2MeritEvaluate ,
+      way2DemeritEvaluate: overviewRecord.way2DemeritEvaluate ,
 //todo way3追加
 //            way3Title:  comparisonOverviewRecord.way3Title ?? '',
 //            way3Evaluate: comparisonOverviewRecord.way3Evaluate ?? 0,
-      favorite: overviewRecord.favorite ?? false,
+      favorite: overviewRecord.favorite ,
       conclusion: overviewRecord.conclusion ?? '',
-      createdAt: overviewRecord.createdAt,
+      createdAt: overviewRecord.createdAt!,
     );
     return comparisonOverview;
   }
@@ -125,6 +125,8 @@ extension ConvertToComparisonOverviewRecord on ComparisonOverviewRecord {
 extension ConvertToWay1MeritRecord on Way1Merit{
   Way1MeritRecord toCreateWay1MeritRecord (Way1Merit initWay1Merit){
     final way1MeritRecord= Way1MeritRecord(
+      //autoIncrementなのでway1MeritIdがnullでも良い
+      way1MeritId: initWay1Merit.way1MeritId!,
       comparisonItemId: initWay1Merit.comparisonItemId!,
       way1MeritDesc: initWay1Merit.way1MeritDesc ?? '',
     );
@@ -149,8 +151,9 @@ extension ConvertToWay1InitMeritRecordList on List<Way1Merit>{
     final way1MeritItemRecords =
     way1MeritItems.map((way1MeritSingle) {
       return Way1MeritRecord(
+        way1MeritId: way1MeritSingle.way1MeritId!,
         comparisonItemId: way1MeritSingle.comparisonItemId!,
-        way1MeritDesc: way1MeritSingle.way1MeritDesc!,
+        way1MeritDesc: way1MeritSingle.way1MeritDesc??'',
       );
     }).toList();
     return way1MeritItemRecords;
@@ -166,7 +169,7 @@ extension ConvertToWay1MeritRecordList on List<Way1Merit>{
       return Way1MeritRecord(
         way1MeritId: way1MeritSingle.way1MeritId!,
         comparisonItemId: way1MeritSingle.comparisonItemId!,
-        way1MeritDesc: way1MeritSingle.way1MeritDesc!,
+        way1MeritDesc: way1MeritSingle.way1MeritDesc??'',
       );
     }).toList();
     return way1MeritItemRecords;
@@ -192,6 +195,7 @@ extension ConvertToWay1MeritList on List<Way1MeritRecord>{
 extension ConvertToWay1DemeritRecord on Way1Demerit{
   Way1DemeritRecord toCreateWay1DemeritRecord (Way1Demerit initWay1Demerit){
     final way1DemeritRecord= Way1DemeritRecord(
+      way1DemeritId: initWay1Demerit.way1DemeritId!,
       comparisonItemId: initWay1Demerit.comparisonItemId!,
       way1DemeritDesc: initWay1Demerit.way1DemeritDesc ?? '',
     );
@@ -216,8 +220,9 @@ extension ConvertToWay1InitDemeritRecordList on List<Way1Demerit>{
     final way1DemeritItemRecords =
     way1DemeritItems.map((way1DemeritSingle) {
       return Way1DemeritRecord(
+        way1DemeritId: way1DemeritSingle.way1DemeritId!,
         comparisonItemId: way1DemeritSingle.comparisonItemId!,
-        way1DemeritDesc: way1DemeritSingle.way1DemeritDesc!,
+        way1DemeritDesc: way1DemeritSingle.way1DemeritDesc?? '',
       );
     }).toList();
     return way1DemeritItemRecords;
@@ -244,6 +249,7 @@ extension ConvertToWay1DemeritList on List<Way1DemeritRecord>{
 extension ConvertToWay2MeritRecord on Way2Merit{
   Way2MeritRecord toCreateWay2MeritRecord (Way2Merit initWay2Merit){
     final way2MeritRecord= Way2MeritRecord(
+      way2MeritId: initWay2Merit.way2MeritId!,
       comparisonItemId: initWay2Merit.comparisonItemId!,
       way2MeritDesc: initWay2Merit.way2MeritDesc ?? '',
     );
@@ -269,13 +275,14 @@ extension ConvertToWay2InitMeritRecordList on List<Way2Merit>{
     final way2MeritItemRecords =
     way2MeritItems.map((way2MeritSingle) {
       return Way2MeritRecord(
+        way2MeritId: way2MeritSingle.way2MeritId!,
         comparisonItemId: way2MeritSingle.comparisonItemId!,
-        way2MeritDesc: way2MeritSingle.way2MeritDesc!,
+        way2MeritDesc: way2MeritSingle.way2MeritDesc?? '',
       );}).toList();
     return way2MeritItemRecords;
   }
 }
-///読込時(DB=>model) List<Way2MeritRecord>=>Lis<Way2Merit>
+///読込時(DB=>model) List<Way2MeritRecord>=>List<Way2Merit>
 extension ConvertToWay2MeritList on List<Way2MeritRecord>{
   List<Way2Merit> toWay2MeritList(List<Way2MeritRecord> way2MeritRecordList){
     final way2MeritList =
@@ -283,7 +290,7 @@ extension ConvertToWay2MeritList on List<Way2MeritRecord>{
       return Way2Merit(
         way2MeritId: way2MeritRecordSingle.way2MeritId,
         comparisonItemId: way2MeritRecordSingle.comparisonItemId,
-        way2MeritDesc: way2MeritRecordSingle.way2MeritDesc,
+        way2MeritDesc: way2MeritRecordSingle.way2MeritDesc?? '',
       );
     }).toList();
     return way2MeritList;
@@ -295,6 +302,7 @@ extension ConvertToWay2MeritList on List<Way2MeritRecord>{
 extension ConvertToWay2DemeritRecord on Way2Demerit{
   Way2DemeritRecord toCreateWay2DemeritRecord (Way2Demerit initWay2Demerit){
     final way2DemeritRecord= Way2DemeritRecord(
+      way2DemeritId: initWay2Demerit.way2DemeritId!,
       comparisonItemId: initWay2Demerit.comparisonItemId!,
       way2DemeritDesc: initWay2Demerit.way2DemeritDesc ?? '',
     );
@@ -319,8 +327,9 @@ extension ConvertToWay2InitDemeritRecordList on List<Way2Demerit>{
     final way2DemeritItemRecords =
     way2DemeritItems.map((way2DemeritSingle) {
       return Way2DemeritRecord(
+        way2DemeritId: way2DemeritSingle.way2DemeritId!,
         comparisonItemId: way2DemeritSingle.comparisonItemId!,
-        way2DemeritDesc: way2DemeritSingle.way2DemeritDesc!,
+        way2DemeritDesc: way2DemeritSingle.way2DemeritDesc?? '',
       );
     }).toList();
     return way2DemeritItemRecords;
@@ -359,7 +368,7 @@ extension ConvertToTagRecordList on List<Tag>{
           tagId: const Uuid().hashCode,
             tagTitle:tag.tagTitle ?? '',
             comparisonItemId:tag.comparisonItemId ?? '',
-            createdAt: tag.createdAt!,
+            createdAt: tag.createdAt,
             createAtToString: tag.createAtToString!,
           );
     }).toList();
@@ -379,7 +388,7 @@ extension ConvertToUpdateTagRecordList on List<Tag>{
         tagId: tag.tagId!,
         tagTitle:tag.tagTitle ?? '',
         comparisonItemId:tag.comparisonItemId ?? '',
-        createdAt: tag.createdAt!,
+        createdAt: tag.createdAt,
         createAtToString: tag.createAtToString!,
       );
     }).toList();
@@ -393,10 +402,10 @@ extension ConvertToTagList on List<TagRecord>{
     tagRecordList.map((tagRecordSingle) {
       return Tag(
         tagId: tagRecordSingle.tagId ??0,
-        comparisonItemId: tagRecordSingle.comparisonItemId ??'',
-        tagTitle: tagRecordSingle.tagTitle ?? '',
+        comparisonItemId: tagRecordSingle.comparisonItemId,
+        tagTitle: tagRecordSingle.tagTitle,
         createdAt: tagRecordSingle.createdAt,
-        createAtToString: tagRecordSingle.createAtToString ??'',
+        createAtToString: tagRecordSingle.createAtToString,
       );
     }).toList() ;
     return tagList;
@@ -410,7 +419,7 @@ extension ConvertToTagRecord on Tag{
         tagId: tag.tagId ??0,
         comparisonItemId: tag.comparisonItemId ??'',
         tagTitle: tag.tagTitle ?? '',
-        createdAt: tag.createdAt!,
+        createdAt: tag.createdAt,
         createAtToString: tag.createAtToString ??'',
       );
     return tagRecord;
@@ -427,7 +436,7 @@ extension ConvertToTagChartRecordList on List<TagChart>{
     tagChartList.map((tagChart) {
       return TagChartRecord(
           dataId: tagChart.dataId!,
-          tagTitle:tagChart.tagTitle ?? '',
+          tagTitle:tagChart.tagTitle ,
           tagAmount:tagChart.tagAmount ?? 0,
       );
     }).toList();
@@ -441,8 +450,8 @@ extension ConvertToTagChartList on List<TagChartRecord>{
     final tagChartList =
     tagChartRecordList.map((tagChartRecord) {
       return TagChart(
-        dataId: tagChartRecord.dataId ?? 0,
-        tagTitle: tagChartRecord.tagTitle ??'',
+        dataId: tagChartRecord.dataId ,
+        tagTitle: tagChartRecord.tagTitle ,
         tagAmount: tagChartRecord.tagAmount ?? 0,
       );
     }).toList() ;
@@ -454,8 +463,8 @@ extension ConvertToTagChartList on List<TagChartRecord>{
 extension ConvertToTagChart on TagChartRecord{
   TagChart toTagChart(TagChartRecord tagChartRecord){
       return TagChart(
-        dataId: tagChartRecord.dataId ?? 0,
-        tagTitle: tagChartRecord.tagTitle ??'',
+        dataId: tagChartRecord.dataId ,
+        tagTitle: tagChartRecord.tagTitle ,
         tagAmount: tagChartRecord.tagAmount ?? 0,
       );
   }
@@ -466,7 +475,7 @@ extension ConvertToTagChartRecord on TagChart{
   TagChartRecord toTagChartRecord(TagChart tagChart){
     return TagChartRecord(
       dataId: tagChart.dataId ?? 0,
-      tagTitle: tagChart.tagTitle ??'',
+      tagTitle: tagChart.tagTitle ,
       tagAmount: tagChart.tagAmount ?? 0,
     );
   }

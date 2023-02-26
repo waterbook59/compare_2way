@@ -1,4 +1,3 @@
-import 'package:compare_2way/data_models/comparison_item_id.dart';
 
 class Tag{
   Tag({
@@ -6,7 +5,7 @@ class Tag{
     this.tagId,
     this.tagTitle,
     this.createdAt,
-    this.createAtToString});
+    this.createAtToString,});
   //tagTitleをprimaryKeyに使用しない
   final int? tagId;
   final String? comparisonItemId;

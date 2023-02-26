@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:moor/ffi.dart';
 import 'package:moor/moor.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+
 import 'comparison_item_dao.dart';
+
 part 'comparison_item_database.g.dart';
 
 ///comparison_item結合(ComparisonOverviewRecords+Way1MeritRecords+..+TagRecords)
@@ -49,7 +51,7 @@ class Way1MeritRecords extends Table {
   TextColumn get comparisonItemId => text()();
   TextColumn get way1MeritDesc => text().nullable()();
   @override
-  Set<Column> get primaryKey => {way1MeritId};
+  Set<Column<dynamic>> get primaryKey => {way1MeritId};
 }
 //テーブルway1Demerit
 class Way1DemeritRecords extends Table {
@@ -57,7 +59,7 @@ class Way1DemeritRecords extends Table {
   TextColumn get comparisonItemId => text()();
   TextColumn get way1DemeritDesc => text().nullable()();
   @override
-  Set<Column> get primaryKey => {way1DemeritId};
+  Set<Column<dynamic>> get primaryKey => {way1DemeritId};
 }
 //テーブルway2Merit
 class Way2MeritRecords extends Table {
@@ -65,7 +67,7 @@ class Way2MeritRecords extends Table {
   TextColumn get comparisonItemId => text()();
   TextColumn get way2MeritDesc => text().nullable()();
   @override
-  Set<Column> get primaryKey => {way2MeritId};
+  Set<Column<dynamic>> get primaryKey => {way2MeritId};
 }
 //テーブルway2Demerit
 class Way2DemeritRecords extends Table {
@@ -73,7 +75,7 @@ class Way2DemeritRecords extends Table {
   TextColumn get comparisonItemId => text()();
   TextColumn get way2DemeritDesc => text().nullable()();
   @override
-  Set<Column> get primaryKey => {way2DemeritId};
+  Set<Column<dynamic>> get primaryKey => {way2DemeritId};
 }
 //テーブルtag
 class TagRecords extends Table{
@@ -84,7 +86,7 @@ class TagRecords extends Table{
   TextColumn get createAtToString => text()();
   //tagTitleの重複登録必要なのでprimaryKeyには設定しない
   @override
-  Set<Column> get primaryKey => {tagId};
+  Set<Column<dynamic>> get primaryKey => {tagId};
 }
 //テーブルtagChart
 class TagChartRecords extends Table{
@@ -97,6 +99,7 @@ class TagChartRecords extends Table{
 
 }
 
+//todo @DriftDatabase
 @UseMoor(tables: [
   ComparisonOverviewRecords,
   Way1MeritRecords,
@@ -105,7 +108,7 @@ class TagChartRecords extends Table{
   Way2DemeritRecords,
   TagRecords,
   TagChartRecords,
-],daos: [ComparisonItemDao])
+],daos: [ComparisonItemDao],)
 class ComparisonItemDB  extends _$ComparisonItemDB{
   ComparisonItemDB() : super(_openConnection());
 
@@ -122,6 +125,7 @@ LazyDatabase _openConnection() {
     final dbFolder = await getApplicationDocumentsDirectory();
     //Fileはdart.ioインポート
     final file = File(p.join(dbFolder.path, 'comparison_item.db'));
+    //todo DriftではNativeDatabase
     return VmDatabase(file);
   });
 }

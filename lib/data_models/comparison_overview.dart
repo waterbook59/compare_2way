@@ -14,7 +14,7 @@ class ComparisonOverview {
         this.way3DemeritEvaluate,
         this.favorite,
          this.conclusion,
-      required this.createdAt});
+      required this.createdAt,});
 
   final int? dataId;
   final String comparisonItemId;

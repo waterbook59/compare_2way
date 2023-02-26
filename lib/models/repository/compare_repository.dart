@@ -15,9 +15,10 @@ class CompareRepository {
       : _comparisonItemDao = comparisonItemDao;
 
   final ComparisonItemDao _comparisonItemDao;
-  List<ComparisonOverview> _overviewResults = <ComparisonOverview>[];
-  ComparisonOverview? _overviewResult;
-  List<Way1Merit> _way1MeritList = <Way1Merit>[];
+  //コンストラクタ初期化でもlateでもOK //todo get＆set
+  // List<ComparisonOverview> _overviewResults = <ComparisonOverview>[];
+  late ComparisonOverview _overviewResult;
+  late List<Way1Merit> _way1MeritList ;
   List<Way2Merit> _way2MeritList = <Way2Merit>[];
   List<Way1Demerit> _way1DemeritList = <Way1Demerit>[];
   List<Way2Demerit> _way2DemeritList = <Way2Demerit>[];
@@ -25,6 +26,8 @@ class CompareRepository {
   List<Tag> _selectTagList = <Tag>[];
   List<TagChart> _tagChartList = <TagChart>[];
   TagChart? _selectTagChart;
+
+  set _overviewResults(List<ComparisonOverview> _overviewResults) {}
 
 
   ///新規作成 comparisonOverview

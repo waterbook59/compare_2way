@@ -70,6 +70,13 @@ class _AccordionSubPartState extends State<AccordionSubPart> {
             ? createWay2DemeritList()
             : controllers = [];
         break;
+
+      case DisplayList.way3Merit:
+      //todo
+        break;
+      case DisplayList.way3Demerit:
+      //todo
+        break;
     }
 
     super.initState();

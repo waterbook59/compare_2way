@@ -1,7 +1,7 @@
 //ReorderableListのアイテムの情報格納
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class DraggingItemData {
   DraggingItemData({this.title, this.key,this.comparisonItemId,this.orderId});

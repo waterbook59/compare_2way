@@ -1,5 +1,5 @@
-import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
+import 'package:compare_2way/data_models/tag.dart';
 
 ///モデルクラスのイメージは取得するときのリスト１行分に何の項目を入れるか
 class ComparisonItem {

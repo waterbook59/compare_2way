@@ -76,6 +76,13 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
                       case DisplayList.way2Demerit:
                         viewModel.focusWay2DemeritList();
                         break;
+
+                      case DisplayList.way3Merit:
+                      //todo
+                        break;
+                      case DisplayList.way3Demerit:
+                      //todo
+                        break;
                     }
 
                     print('DescFormAndButton/Listの１つをonTap!');
