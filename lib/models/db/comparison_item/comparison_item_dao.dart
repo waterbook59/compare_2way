@@ -20,9 +20,12 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       select(comparisonOverviewRecords).get();
 
   ///新規作成:ComparisonOverview
-  Future<void> insertComparisonOverviewDB(
-      ComparisonOverviewRecord comparisonOverviewRecord,) =>
-      into(comparisonOverviewRecords).insert(comparisonOverviewRecord);
+  Future<void> insertComparisonOverviewDB({
+    required ComparisonOverviewRecordsCompanion newCompanion,
+}) =>
+      // into(comparisonOverviewRecords).insert(comparisonOverviewRecord);
+  into(comparisonOverviewRecords).insert(newCompanion);
+
 
   ///読込:ComparisonOverview(comparisonItemIdをもとにway1タイトル、way2タイトルをとってくる)
   Future<List<ComparisonOverviewRecord>> getOverview(String comparisonItemId) =>
@@ -56,7 +59,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   ///新規作成:List<Way1Merit>
   Future<void> insertWay1MeritRecordDB(
-      List<Way1MeritRecord> way1MeritItemRecords,) async {
+      List<Way1MeritRecordsCompanion> way1MeritItemRecords,) async {
     //2行以上の可能性あり
     await batch((batch) {
       batch.insertAll(way1MeritRecords, way1MeritItemRecords);
@@ -65,7 +68,7 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   }
   ///新規作成:List<Way2Merit>
   Future<void> insertWay2MeritRecordDB(
-      List<Way2MeritRecord> way2MeritItemRecords,) async {
+      List<Way2MeritRecordsCompanion> way2MeritItemRecords,) async {
     //2行以上の可能性あり
     await batch((batch) {
       batch.insertAll(way2MeritRecords, way2MeritItemRecords);
@@ -74,18 +77,18 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   }
   ///新規作成:List<Way1Demerit>
   Future<void> insertWay1DemeritRecordDB(
-      List<Way1DemeritRecord> way1DemeritDescs,) async {
+      List<Way1DemeritRecordsCompanion> way1DemeritItemRecords,) async {
     //2行以上の可能性あり
     await batch((batch) {
-      batch.insertAll(way1DemeritRecords, way1DemeritDescs);
+      batch.insertAll(way1DemeritRecords, way1DemeritItemRecords);
     });
   }
   ///新規作成:List<Way2Demerit>
   Future<void> insertWay2DemeritRecordDB(
-      List<Way2DemeritRecord> way2DemeritDescs,) async {
+      List<Way2DemeritRecordsCompanion> way2DemeritItemRecords,) async {
     //2行以上の可能性あり
     await batch((batch) {
-      batch.insertAll(way2DemeritRecords, way2DemeritDescs);
+      batch.insertAll(way2DemeritRecords, way2DemeritItemRecords);
     });
   }
   //todo 新規作成:List<Way3Merit>

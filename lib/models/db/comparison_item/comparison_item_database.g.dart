@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: strict_raw_type
-
 part of 'comparison_item_database.dart';
 
 // **************************************************************************

@@ -32,13 +32,18 @@ class CompareRepository {
 
   ///新規作成 comparisonOverview
   Future<void> createComparisonOverview(
-      ComparisonOverview comparisonOverview,) async {
+      ComparisonOverview newOverview,) async {
     try {
       //comparisonOverview=>ComparisonOverviewRecordへ変換保存
-      final comparisonOverviewRecord =
-          comparisonOverview.toComparisonOverviewRecord(comparisonOverview);
+      // final comparisonOverviewRecord =
+      // newOverview.toComparisonOverviewRecord(newOverview);
+
+      //新規作成時はcomparisonOverviewRecordへそのまま変換&insertではなく(dataIdがnullで変換できない)、
+      // Companionを使ってinsert
+      final newCompanion = newOverview.toOverviewNewRecordsCompanion(
+          newOverview,);
       await _comparisonItemDao
-          .insertComparisonOverviewDB(comparisonOverviewRecord);
+          .insertComparisonOverviewDB(newCompanion: newCompanion);
       print('comparisonOverviewを新規登録');
     } on SqliteException catch (e) {
       print('repositoryエラー:${e.toString()}');
@@ -282,8 +287,10 @@ class CompareRepository {
       ///way1Merit 1行の場合
 //      final way1MeritRecord = way1Merit.toWay1MeritRecord(way1Merit);
       ///List<way1Merit>の場合
+      //way1MeritIdはautoIncrementなので、companion使う
       final way1MeritItemRecords =
           way1MeritList.toWay1InitMeritRecordList(way1MeritList);
+      //todo companion使用
       final way2MeritItemRecords =
       way2MeritList.toWay2InitMeritRecordList(way2MeritList);
 //      final way3MeritItemRecords =

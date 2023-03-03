@@ -7,6 +7,7 @@ import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_database.dart';
+import 'package:moor/moor.dart';
 import 'package:uuid/uuid.dart';
 
 ///(DB=>model):List<ComparisonOverviewRecord>=>List<ComparisonOverview>
@@ -67,6 +68,26 @@ extension ConvertToComparisonOverviews on List<ComparisonOverview> {
   }
 }
 
+///新規挿入時(model=>DB):ComparisonOverview=>Companion
+extension ChangeNewOverviewCompanion on ComparisonOverview {
+  ComparisonOverviewRecordsCompanion toOverviewNewRecordsCompanion(
+      ComparisonOverview updateOverview,)  {
+    final companion=
+   ComparisonOverviewRecordsCompanion(
+     comparisonItemId: Value(updateOverview.comparisonItemId),
+     itemTitle: Value(updateOverview.itemTitle!),
+     way1Title:Value(updateOverview.way1Title!),
+     way2Title: Value(updateOverview.way2Title!),
+     //conclusionはnullableにしているが、addScreenで初期値''を入れているので、入力
+         conclusion: Value(updateOverview.conclusion),
+         createdAt: Value(updateOverview.createdAt),
+    );
+    return companion;
+  }
+}
+
+
+
 ///保存・単独読込の場合はリスト型でやりとり必要ない
 ///(model=>DB):ComparisonOverview=>ComparisonOverviewRecordCompanion
 extension ConvertToComparisonOverview on ComparisonOverview {
@@ -74,6 +95,7 @@ extension ConvertToComparisonOverview on ComparisonOverview {
       ComparisonOverview updateOverview,) {
     final comparisonOverviewRecord =
         ComparisonOverviewRecord(
+          //初期はnull=>0挿入すると重複でUNIQUEエラー
       dataId: updateOverview.dataId!,
       comparisonItemId: updateOverview.comparisonItemId,
       itemTitle: updateOverview.itemTitle! ,
@@ -125,8 +147,8 @@ extension ConvertToComparisonOverviewRecord on ComparisonOverviewRecord {
 extension ConvertToWay1MeritRecord on Way1Merit{
   Way1MeritRecord toCreateWay1MeritRecord (Way1Merit initWay1Merit){
     final way1MeritRecord= Way1MeritRecord(
-      //autoIncrementなのでway1MeritIdがnullでも良い
-      way1MeritId: initWay1Merit.way1MeritId!,
+      //autoIncrementでway1MeritIdがnull=>0挿入だと新規挿入で同idが多くなる？
+      way1MeritId: initWay1Merit.way1MeritId??5,
       comparisonItemId: initWay1Merit.comparisonItemId!,
       way1MeritDesc: initWay1Merit.way1MeritDesc ?? '',
     );
@@ -145,15 +167,16 @@ extension ConvertToUpdateWay1MeritRecord on Way1Merit{
   }
 }
 ///新規登録(model=>DB):List<Way1Merit>=>List<Way1MeritRecord>
+//companionへ変更way1MeritIdがautoIncrementなので
 extension ConvertToWay1InitMeritRecordList on List<Way1Merit>{
-  List<Way1MeritRecord> toWay1InitMeritRecordList(
+  List<Way1MeritRecordsCompanion> toWay1InitMeritRecordList(
       List<Way1Merit> way1MeritItems,) {
     final way1MeritItemRecords =
     way1MeritItems.map((way1MeritSingle) {
-      return Way1MeritRecord(
-        way1MeritId: way1MeritSingle.way1MeritId!,
-        comparisonItemId: way1MeritSingle.comparisonItemId!,
-        way1MeritDesc: way1MeritSingle.way1MeritDesc??'',
+      return Way1MeritRecordsCompanion(
+        // way1MeritId: way1MeritSingle.way1MeritId!,
+        comparisonItemId: Value(way1MeritSingle.comparisonItemId!),
+        way1MeritDesc: Value(way1MeritSingle.way1MeritDesc??''),
       );
     }).toList();
     return way1MeritItemRecords;
@@ -195,7 +218,7 @@ extension ConvertToWay1MeritList on List<Way1MeritRecord>{
 extension ConvertToWay1DemeritRecord on Way1Demerit{
   Way1DemeritRecord toCreateWay1DemeritRecord (Way1Demerit initWay1Demerit){
     final way1DemeritRecord= Way1DemeritRecord(
-      way1DemeritId: initWay1Demerit.way1DemeritId!,
+      way1DemeritId: initWay1Demerit.way1DemeritId??5,
       comparisonItemId: initWay1Demerit.comparisonItemId!,
       way1DemeritDesc: initWay1Demerit.way1DemeritDesc ?? '',
     );
@@ -215,14 +238,14 @@ extension ConvertToUpdateWay1DemeritRecord on Way1Demerit{
 }
 ///新規登録(model=>DB):List<Way1Demerit>=>List<Way1DemeritRecord>
 extension ConvertToWay1InitDemeritRecordList on List<Way1Demerit>{
-  List<Way1DemeritRecord> toWay1InitDemeritRecordList(
+  List<Way1DemeritRecordsCompanion> toWay1InitDemeritRecordList(
       List<Way1Demerit> way1DemeritItems,) {
     final way1DemeritItemRecords =
     way1DemeritItems.map((way1DemeritSingle) {
-      return Way1DemeritRecord(
-        way1DemeritId: way1DemeritSingle.way1DemeritId!,
-        comparisonItemId: way1DemeritSingle.comparisonItemId!,
-        way1DemeritDesc: way1DemeritSingle.way1DemeritDesc?? '',
+      return Way1DemeritRecordsCompanion(
+        // way1DemeritId: way1DemeritSingle.way1DemeritId!,
+        comparisonItemId: Value(way1DemeritSingle.comparisonItemId!),
+        way1DemeritDesc: Value(way1DemeritSingle.way1DemeritDesc?? ''),
       );
     }).toList();
     return way1DemeritItemRecords;
@@ -249,7 +272,7 @@ extension ConvertToWay1DemeritList on List<Way1DemeritRecord>{
 extension ConvertToWay2MeritRecord on Way2Merit{
   Way2MeritRecord toCreateWay2MeritRecord (Way2Merit initWay2Merit){
     final way2MeritRecord= Way2MeritRecord(
-      way2MeritId: initWay2Merit.way2MeritId!,
+      way2MeritId: initWay2Merit.way2MeritId??5,
       comparisonItemId: initWay2Merit.comparisonItemId!,
       way2MeritDesc: initWay2Merit.way2MeritDesc ?? '',
     );
@@ -269,15 +292,15 @@ extension ConvertToUpdateWay2MeritRecord on Way2Merit{
 }
 ///新規登録(model=>DB):List<Way2Merit>=>List<Way2MeritRecord>
 extension ConvertToWay2InitMeritRecordList on List<Way2Merit>{
-  List<Way2MeritRecord> toWay2InitMeritRecordList(
+  List<Way2MeritRecordsCompanion> toWay2InitMeritRecordList(
       List<Way2Merit> way2MeritItems,) {
     ///forEach=>map().toList()へ変更
     final way2MeritItemRecords =
     way2MeritItems.map((way2MeritSingle) {
-      return Way2MeritRecord(
-        way2MeritId: way2MeritSingle.way2MeritId!,
-        comparisonItemId: way2MeritSingle.comparisonItemId!,
-        way2MeritDesc: way2MeritSingle.way2MeritDesc?? '',
+      return Way2MeritRecordsCompanion(
+        // way2MeritId: way2MeritSingle.way2MeritId !,
+        comparisonItemId:Value(way2MeritSingle.comparisonItemId!),
+        way2MeritDesc: Value(way2MeritSingle.way2MeritDesc?? ''),
       );}).toList();
     return way2MeritItemRecords;
   }
@@ -302,7 +325,7 @@ extension ConvertToWay2MeritList on List<Way2MeritRecord>{
 extension ConvertToWay2DemeritRecord on Way2Demerit{
   Way2DemeritRecord toCreateWay2DemeritRecord (Way2Demerit initWay2Demerit){
     final way2DemeritRecord= Way2DemeritRecord(
-      way2DemeritId: initWay2Demerit.way2DemeritId!,
+      way2DemeritId: initWay2Demerit.way2DemeritId??5,
       comparisonItemId: initWay2Demerit.comparisonItemId!,
       way2DemeritDesc: initWay2Demerit.way2DemeritDesc ?? '',
     );
@@ -322,14 +345,14 @@ extension ConvertToUpdateWay2DemeritRecord on Way2Demerit{
 }
 ///新規登録(model=>DB):List<Way2Demerit>=>List<Way2DemeritRecord>
 extension ConvertToWay2InitDemeritRecordList on List<Way2Demerit>{
-  List<Way2DemeritRecord> toWay2InitDemeritRecordList(
+  List<Way2DemeritRecordsCompanion> toWay2InitDemeritRecordList(
       List<Way2Demerit> way2DemeritItems,) {
     final way2DemeritItemRecords =
     way2DemeritItems.map((way2DemeritSingle) {
-      return Way2DemeritRecord(
-        way2DemeritId: way2DemeritSingle.way2DemeritId!,
-        comparisonItemId: way2DemeritSingle.comparisonItemId!,
-        way2DemeritDesc: way2DemeritSingle.way2DemeritDesc?? '',
+      return Way2DemeritRecordsCompanion(
+        // way2DemeritId: way2DemeritSingle.way2DemeritId!,
+        comparisonItemId: Value(way2DemeritSingle.comparisonItemId!),
+        way2DemeritDesc: Value(way2DemeritSingle.way2DemeritDesc?? ''),
       );
     }).toList();
     return way2DemeritItemRecords;
@@ -385,7 +408,7 @@ extension ConvertToUpdateTagRecordList on List<Tag>{
     tagList.map((tag) {
       return TagRecord(
         //tagIdは更新時はそのまま変換
-        tagId: tag.tagId!,
+        tagId: tag.tagId,
         tagTitle:tag.tagTitle ?? '',
         comparisonItemId:tag.comparisonItemId ?? '',
         createdAt: tag.createdAt,

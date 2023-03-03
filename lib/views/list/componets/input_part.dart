@@ -154,22 +154,21 @@ class InputPart extends StatelessWidget {
     await viewModel
         .getComparisonOverview(newComparisonOverview.comparisonItemId);
 
-    //todo この書き方でBuildContextを非同期処理内で使っても良いか
+    ///DBに登録されたcomparisonOverviewをCompareScreenへ渡したい
+    ///非同期処理内でBuildContext使う場合context.mounted内で行う
     if (context.mounted) {
-      return;
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<void>(
+          builder: (context) => CompareScreen(
+            screenEditMode: ScreenEditMode.fromListPage,
+//                  comparisonOverview: comparisonOverview,
+            comparisonOverview: viewModel.overviewDB,
+          ),
+        ),
+      );
     }
 
-    ///DBに登録されたcomparisonOverviewをCompareScreenへ渡したい
-    await Navigator.pushReplacement(
-      context,
-      MaterialPageRoute<void>(
-        builder: (context) => CompareScreen(
-          screenEditMode: ScreenEditMode.fromListPage,
-//                  comparisonOverview: comparisonOverview,
-          comparisonOverview: viewModel.overviewDB,
-        ),
-      ),
-    );
     //DB登録後controllerクリア
     await viewModel.itemControllerClear();
 
