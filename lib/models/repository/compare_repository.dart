@@ -56,15 +56,6 @@ class CompareRepository {
     //更新プロパティ以外のdataIdとかは値入ってないのでnull
     final overviewCompanion =
     updateOverview.toCompanionUpdateTitles(updateOverview);
-    //todo Value変換=>extensionへ
-    // final overviewCompanion = ComparisonOverviewRecordsCompanion(
-    //   //アップデート要素がないものを入れるとnullでエラー(Companionに入れるのは値が更新できるものだけ)
-    //   comparisonItemId: Value(updateOverview.comparisonItemId),
-    //   itemTitle: Value(updateOverview.itemTitle!),
-    //   way1Title: Value(updateOverview.way1Title!),
-    //   way2Title: Value(updateOverview.way2Title!),
-    //   createdAt: Value(updateOverview.createdAt),
-    // );
     await _comparisonItemDao.saveComparisonOverviewDB(
       overviewCompanion: overviewCompanion,
       comparisonItemId:updateOverview.comparisonItemId,
@@ -91,30 +82,7 @@ class CompareRepository {
       ///ComparisonOverview=>ComparisonOverviewRecord
       final overviewCompanion =
           updateOverview.toCompanionUpdateOverview(updateOverview);
-
-      //todo extensionsの中で一気にやる,way3・お気に入り追加
-      ///ComparisonOverviewRecord=>ComparisonOverviewRecordsCompanion
-//       final overviewCompanion = ComparisonOverviewRecordsCompanion(
-//         //アップデート要素がないものを入れるとnullでエラー(Companionに入れるのは値が更新できるものだけ)
-// //        dataId: Value(comparisonOverviewRecord.dataId),
-//         //todo Value変換=>extensionへ
-//         comparisonItemId: Value(updateOverview.comparisonItemId),
-//         itemTitle: Value(updateOverview.itemTitle!),
-//         way1Title: Value(updateOverview.way1Title!),
-//         way1MeritEvaluate: Value(updateOverview.way1MeritEvaluate!),
-//         way1DemeritEvaluate:
-//             Value(updateOverview.way1DemeritEvaluate!),
-//         way2Title: Value(updateOverview.way2Title!),
-//         way2MeritEvaluate: Value(updateOverview.way2MeritEvaluate!),
-//         way2DemeritEvaluate:
-//             Value(updateOverview.way2DemeritEvaluate!),
-// //        favorite: Value(comparisonOverviewRecord.favorite),
-//         conclusion: Value(updateOverview.conclusion),
-//         createdAt: Value(updateOverview.createdAt),
-//       );
-
       await _comparisonItemDao.saveComparisonOverviewDB(
-          // comparisonOverviewRecord.comparisonItemId,
          overviewCompanion: overviewCompanion,
         comparisonItemId: updateOverview.comparisonItemId,
       );
@@ -180,21 +148,13 @@ class CompareRepository {
   ///ComparisonItem=>ComparisonOverviewRecord,List<Way1Merit>に分解登録
 
  ///TablePart自動更新
-  //todo updateEvaluateでスッキリ書く
   //way1Merit
   Future<void> updateWay1MeritEvaluate(ComparisonOverview updateOverview)
   async{
     try{
       final overviewCompanion =
       updateOverview.toCompanionUpdateWay1MeritEvaluate(updateOverview);
-      // //todo Value変換=>extensionへ
-      // final overviewCompanion = ComparisonOverviewRecordsCompanion(
-      //   comparisonItemId: Value(updateOverview.comparisonItemId),
-      //   way1MeritEvaluate: Value(updateOverview.way1MeritEvaluate!),
-      //   createdAt: Value(updateOverview.createdAt),
-      // );
       await _comparisonItemDao.saveComparisonOverviewDB(
-          // comparisonOverviewRecord.comparisonItemId,
         overviewCompanion: overviewCompanion,
         comparisonItemId: updateOverview.comparisonItemId,
       );
@@ -208,14 +168,7 @@ class CompareRepository {
     try{
       final overviewCompanion =
       updateOverview.toCompanionUpdateWay1DemeritEvaluate(updateOverview);
-      // //todo Value変換=>extensionへ
-      // final overviewCompanion = ComparisonOverviewRecordsCompanion(
-      //   comparisonItemId: Value(updateOverview.comparisonItemId),
-      //   way1DemeritEvaluate:Value(updateOverview.way1DemeritEvaluate!),
-      //   createdAt: Value(updateOverview.createdAt),
-      // );
       await _comparisonItemDao.saveComparisonOverviewDB(
-          // comparisonOverviewRecord.comparisonItemId,
         overviewCompanion: overviewCompanion,
         comparisonItemId: updateOverview.comparisonItemId,
       );
@@ -229,14 +182,7 @@ class CompareRepository {
     try{
       final overviewCompanion =
       updateOverview.toCompanionUpdateWay2MeritEvaluate(updateOverview);
-      // //todo Value変換=>extensionへ
-      // final overviewCompanion = ComparisonOverviewRecordsCompanion(
-      //   comparisonItemId: Value(updateOverview.comparisonItemId),
-      //   way2MeritEvaluate:Value(updateOverview.way2MeritEvaluate!),
-      //   createdAt: Value(updateOverview.createdAt),
-      // );
       await _comparisonItemDao.saveComparisonOverviewDB(
-          // comparisonOverviewRecord.comparisonItemId,
         overviewCompanion: overviewCompanion,
         comparisonItemId: updateOverview.comparisonItemId,
       );
@@ -251,14 +197,7 @@ class CompareRepository {
     try{
       final overviewCompanion =
       updateOverview.toCompanionUpdateWay2DemeritEvaluate(updateOverview);
-      // //todo Value変換=>extensionへ
-      // final overviewCompanion = ComparisonOverviewRecordsCompanion(
-      //   comparisonItemId: Value(updateOverview.comparisonItemId),
-      //   way2DemeritEvaluate:Value(updateOverview.way2DemeritEvaluate!),
-      //   createdAt: Value(updateOverview.createdAt),
-      // );
       await _comparisonItemDao.saveComparisonOverviewDB(
-          // comparisonOverviewRecord.comparisonItemId,
         overviewCompanion: overviewCompanion,
         comparisonItemId: updateOverview.comparisonItemId,
       );
@@ -272,12 +211,6 @@ class CompareRepository {
     try{
       final overviewCompanion =
       updateOverview. toCompanionUpdateConclusion(updateOverview);
-      // //todo Value変換=>extensionへ
-      // final overviewCompanion = ComparisonOverviewRecordsCompanion(
-      //   comparisonItemId: Value(updateOverview.comparisonItemId),
-      //   conclusion:Value(updateOverview.conclusion),
-      //   createdAt: Value(updateOverview.createdAt),
-      // );
       await _comparisonItemDao.saveComparisonOverviewDB(
         overviewCompanion: overviewCompanion,
         comparisonItemId: updateOverview.comparisonItemId,
@@ -292,11 +225,6 @@ class CompareRepository {
     try{
       final overviewCompanion =
       updateOverview.toCompanionUpdateTime(updateOverview);
-      // //todo Value変換=>extensionへ
-      // final overviewCompanion = ComparisonOverviewRecordsCompanion(
-      //   comparisonItemId: Value(updateOverview.comparisonItemId),
-      //   createdAt: Value(updateOverview.createdAt),
-      // );
       await _comparisonItemDao.saveComparisonOverviewDB(
         overviewCompanion: overviewCompanion,
         comparisonItemId: updateOverview.comparisonItemId,
