@@ -184,7 +184,7 @@ class InputPart extends StatelessWidget {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     ///更新時は必ずcomparisonOverviewが入ってくるので強制呼び出し
-    await viewModel.updateItem(comparisonOverview!);
+    await viewModel.updateTitles(comparisonOverview!);
 
     //todo この書き方でBuildContextを非同期処理内で使っても良いか
     if (context.mounted) {

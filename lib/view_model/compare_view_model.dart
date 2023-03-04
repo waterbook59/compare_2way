@@ -189,7 +189,7 @@ class CompareViewModel extends ChangeNotifier {
 ////    notifyListeners();
 //  }
   ///AddScreen/InputPartでComparisonOverview更新：itemTitle,way1Title,way2Titleのみ変更
-  ///updateItem
+  ///updateTitles
 //  Future<void> updateComparisonOverView({
 //      ComparisonOverview updateOverview,
 ////    String tagTitle,
@@ -344,7 +344,7 @@ class CompareViewModel extends ChangeNotifier {
   ///DescFormAndButtonでList<Way1Merit>の入力変更があったとき
   Future<void> setChangeListDesc(ComparisonOverview comparisonOverview,
       DisplayList displayList, String newDesc, int index,) async {
-    print('setNewDesc!:$newDesc');
+    print('setNewDesc!:$newDesc/setIndex:$index');
 
     ///List.generate=>DB更新は変更した行のみ
     // Listの中の[index]の番号のway1MeritDescのプロパティだけnewDescに変えたい
@@ -1325,7 +1325,7 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   //todo way3追加
-  Future<void> updateItem(ComparisonOverview comparisonOverview) async {
+  Future<void> updateTitles(ComparisonOverview comparisonOverview) async {
     //compareScreenのSelectorまわすので入力
     itemTitle = _titleController.text;
     way1Title = _way1Controller.text;
@@ -1339,7 +1339,7 @@ class CompareViewModel extends ChangeNotifier {
       way2Title: _way2Controller.text,
       createdAt: DateTime.now(),
     );
-    await _compareRepository.updateComparisonOverView(updateOverview);
+    await _compareRepository.updateTitles(updateOverview);
     await onSelectTag(selectTagTitle);
     notifyListeners();
     _titleController.clear();

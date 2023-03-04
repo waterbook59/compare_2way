@@ -41,11 +41,11 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
           .getSingle();
 
   ///保存:comparisonOverview
-  Future<void> saveComparisonOverviewDB(
-      String comparisonItemId,
-      ComparisonOverviewRecordsCompanion overviewCompanion,) {
+  Future<void> saveComparisonOverviewDB({
+      required ComparisonOverviewRecordsCompanion overviewCompanion,
+    required String comparisonItemId,}) {
     return (update(comparisonOverviewRecords)
-      ..where((it) => it.comparisonItemId.equals(comparisonItemId)))
+      ..where((it) => it.comparisonItemId.equals(comparisonItemId )))
         .write(overviewCompanion);
   }
 

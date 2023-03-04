@@ -68,8 +68,8 @@ extension ConvertToComparisonOverviews on List<ComparisonOverview> {
   }
 }
 
-///新規挿入時(model=>DB):ComparisonOverview=>Companion
-extension ChangeNewOverviewCompanion on ComparisonOverview {
+///ComparisonOverview_新規挿入(model=>DB):ComparisonOverview=>Companion
+extension RegisterNewOverviewCompanion on ComparisonOverview {
   ComparisonOverviewRecordsCompanion toOverviewNewRecordsCompanion(
       ComparisonOverview updateOverview,)  {
     final companion=
@@ -86,7 +86,129 @@ extension ChangeNewOverviewCompanion on ComparisonOverview {
   }
 }
 
+///ComparisonOverview_タイトル更新(model=>DB):ComparisonOverview=>Companion
+extension UpdateTitlesDB on ComparisonOverview {
+  ComparisonOverviewRecordsCompanion toCompanionUpdateTitles(
+      ComparisonOverview updateOverview,)  {
+    final companion=
+    ComparisonOverviewRecordsCompanion(
+//アップデート要素がないものを入れるとnullでエラー(Companionに入れるのは値が更新できるものだけ)
+      comparisonItemId: Value(updateOverview.comparisonItemId),
+      itemTitle: Value(updateOverview.itemTitle!),
+      way1Title: Value(updateOverview.way1Title!),
+      way2Title: Value(updateOverview.way2Title!),
+      createdAt: Value(updateOverview.createdAt),
+    );
+    return companion;
+  }
+}
 
+///ComparisonOverview_テーブル値更新(model=>DB):ComparisonOverview=>Companion
+/// //todo updateEvaluateでスッキリ書く
+//way1Merit
+extension UpdateWay1MeritEvaluateDB on ComparisonOverview {
+  ComparisonOverviewRecordsCompanion toCompanionUpdateWay1MeritEvaluate(
+      ComparisonOverview updateOverview,)  {
+    final companion= ComparisonOverviewRecordsCompanion(
+      comparisonItemId: Value(updateOverview.comparisonItemId),
+      way1MeritEvaluate: Value(updateOverview.way1MeritEvaluate!),
+      createdAt: Value(updateOverview.createdAt),
+    );
+    return companion;
+  }
+}
+
+//way1DeMerit
+extension UpdateWay1DemeritEvaluateDB on ComparisonOverview {
+  ComparisonOverviewRecordsCompanion toCompanionUpdateWay1DemeritEvaluate(
+      ComparisonOverview updateOverview,)  {
+    final companion= ComparisonOverviewRecordsCompanion(
+      comparisonItemId: Value(updateOverview.comparisonItemId),
+      way1DemeritEvaluate:Value(updateOverview.way1DemeritEvaluate!),
+      createdAt: Value(updateOverview.createdAt),
+    );
+    return companion;
+  }
+}
+
+//way2Merit
+extension UpdateWay2MeritEvaluateDB on ComparisonOverview {
+  ComparisonOverviewRecordsCompanion toCompanionUpdateWay2MeritEvaluate(
+      ComparisonOverview updateOverview,)  {
+    final companion= ComparisonOverviewRecordsCompanion(
+      comparisonItemId: Value(updateOverview.comparisonItemId),
+      way1MeritEvaluate: Value(updateOverview.way2MeritEvaluate!),
+      createdAt: Value(updateOverview.createdAt),
+    );
+    return companion;
+  }
+}
+
+//way2DeMerit
+extension UpdateWay2DemeritEvaluateDB on ComparisonOverview {
+  ComparisonOverviewRecordsCompanion toCompanionUpdateWay2DemeritEvaluate(
+      ComparisonOverview updateOverview,)  {
+    final companion= ComparisonOverviewRecordsCompanion(
+      comparisonItemId: Value(updateOverview.comparisonItemId),
+      way1DemeritEvaluate:Value(updateOverview.way2DemeritEvaluate!),
+      createdAt: Value(updateOverview.createdAt),
+    );
+    return companion;
+  }
+}
+//way3Merit
+//way3Demerit
+
+///ComparisonOverview_結論更新(model=>DB):ComparisonOverview=>Companion
+extension UpdateConclusionDB on ComparisonOverview {
+  ComparisonOverviewRecordsCompanion toCompanionUpdateConclusion(
+      ComparisonOverview updateOverview,)  {
+    final companion= ComparisonOverviewRecordsCompanion(
+      comparisonItemId: Value(updateOverview.comparisonItemId),
+      conclusion:Value(updateOverview.conclusion),
+      createdAt: Value(updateOverview.createdAt),
+    );
+    return companion;
+  }
+}
+///ComparisonOverview_時間更新(model=>DB):ComparisonOverview=>Companion
+extension UpdateTimeDB on ComparisonOverview {
+  ComparisonOverviewRecordsCompanion toCompanionUpdateTime(
+      ComparisonOverview updateOverview,)  {
+    final companion= ComparisonOverviewRecordsCompanion(
+      comparisonItemId: Value(updateOverview.comparisonItemId),
+      createdAt: Value(updateOverview.createdAt),
+    );
+    return companion;
+  }
+}
+
+///ComparisonOverview_保存(model=>DB):ComparisonOverview=>Companion
+extension SaveOverviewCompanion on ComparisonOverview {
+  ComparisonOverviewRecordsCompanion toCompanionUpdateOverview(
+      ComparisonOverview updateOverview,)  {
+    //todo extensionsの中で一気にやる,way3・お気に入り追加
+    ///ComparisonOverviewRecord=>ComparisonOverviewRecordsCompanion
+    final companion = ComparisonOverviewRecordsCompanion(
+      //アップデート要素がないものを入れるとnullでエラー(Companionに入れるのは値が更新できるものだけ)
+//        dataId: Value(comparisonOverviewRecord.dataId),
+      comparisonItemId: Value(updateOverview.comparisonItemId),
+      itemTitle: Value(updateOverview.itemTitle!),
+      way1Title: Value(updateOverview.way1Title!),
+      way1MeritEvaluate: Value(updateOverview.way1MeritEvaluate!),
+      way1DemeritEvaluate:
+      Value(updateOverview.way1DemeritEvaluate!),
+      way2Title: Value(updateOverview.way2Title!),
+      way2MeritEvaluate: Value(updateOverview.way2MeritEvaluate!),
+      way2DemeritEvaluate:
+      Value(updateOverview.way2DemeritEvaluate!),
+//        favorite: Value(comparisonOverviewRecord.favorite),
+      conclusion: Value(updateOverview.conclusion),
+      createdAt: Value(updateOverview.createdAt),
+    );
+    return companion;
+  }
+}
 
 ///保存・単独読込の場合はリスト型でやりとり必要ない
 ///(model=>DB):ComparisonOverview=>ComparisonOverviewRecordCompanion
@@ -116,7 +238,7 @@ extension ConvertToComparisonOverview on ComparisonOverview {
   }
 }
 
-///読込時(DB=>model):ComparisonOverviewRecordの１行=>ComparisonOverview
+///ComparisonOverview_読込(DB=>model):ComparisonOverviewRecord=>ComparisonOverview
 extension ConvertToComparisonOverviewRecord on ComparisonOverviewRecord {
   ComparisonOverview toComparisonOverview(
       ComparisonOverviewRecord overviewRecord,) {
