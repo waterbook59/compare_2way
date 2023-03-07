@@ -38,7 +38,7 @@ class SelectTagPage extends StatelessWidget {
         body:
         // 並び順を更新日順に変更する
         Selector<CompareViewModel, List<ComparisonOverview>>(
-            selector: (context, viewModel) => viewModel.selectOverviews,
+            selector: (context, viewModel) => viewModel.selectOverviews!,
             builder: (context, selectOverviews, child) {
 //              print('SelectTagPage通って描画');
         return
