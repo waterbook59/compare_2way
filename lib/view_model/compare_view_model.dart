@@ -111,9 +111,9 @@ class CompareViewModel extends ChangeNotifier {
       <Tag>[]; //TagPage=>SelectTagPageへtagTitleで紐づいたタグリスト
   List<Tag> get selectTagList => _selectTagList;
   late TagChart selectTagChart; //TagPageでtagTitle編集時に選択したtagChartを格納
-  List<ComparisonOverview> _selectOverviews = <ComparisonOverview>[];
+  List<ComparisonOverview>? _selectOverviews = <ComparisonOverview>[];
 
-  List<ComparisonOverview> get selectOverviews => _selectOverviews;
+  List<ComparisonOverview>? get selectOverviews => _selectOverviews;
   String selectTagTitle = '';
 
 //  List<String> idList=[];//ComparisonItemIdのリスト
@@ -787,12 +787,12 @@ class CompareViewModel extends ChangeNotifier {
     final dbTitleSet = dbTitleList.toSet();
     print('viewModel/createTag/dbTitleSet:$dbTitleSet');
     //TagChart新規登録or更新するものだけ抜き出す
-    final extractAddTag = _tempoDisplayList.toSet()..removeAll(dbTitleSet);
-    print('viewModel/createTag/extractAddTag:$extractAddTag');
-    final extractRemoveTagSet = (dbTitleSet
-      ..removeAll(_tempoDisplayList.toSet())) as List<String>;
-    final extractRemoveTagList = extractRemoveTagSet.toList();
-
+    final extractAddTag = (_tempoDisplayList.toSet()..removeAll(dbTitleSet));
+    final extractAddTagList = extractAddTag.toList();
+    print('viewModel/createTag/extractAddTagList:$extractAddTagList');
+    final extractRemoveTagSet = (dbTitleSet..removeAll(_tempoDisplayList.toSet())) ;
+    final  extractRemoveTagList = extractRemoveTagSet.toList();
+    print('viewModel/createTag/extractRemoveTagSet:$extractRemoveTagSet');
     //ここで場合分け、tagChartDBにtagTitleあり=>update,なし=>新規登録
     _allTagList = await _compareRepository.getAllTagList();
     final tagAllTitleList = <String>[]; //DBからのTagのタイトル
@@ -819,6 +819,7 @@ class CompareViewModel extends ChangeNotifier {
     }
     print('extractTagDB:$tagAllTitleList'); //testTagと同じ
     //1.3.extractNewTitle = extractAddTag-tagChartDBTitleList
+    //todo extractAddTagは元々Set<String>なのでtoSet()いらない
     final extractNewTitle = extractAddTag.toSet()
       ..removeAll(tagChartDBTitleList.toSet());
 //    print('extractNewTitle:$extractNewTitle');
@@ -845,9 +846,12 @@ class CompareViewModel extends ChangeNotifier {
     await _compareRepository.updateTagChart(_tagChartList);
 
     //2.削除更新tagChart作成:extractRemoveTagだけTagChartDBのAmountが2以上なら-1、1なら削除する
-    if (extractRemoveTagList.isNotEmpty) {
+    // if (extractRemoveTagList.isNotEmpty) {//withoutNullsがあるので、いらない
+    ///List<String?>=>List<String>への変換
+   /// https://stackoverflow.com/questions/66896648/how-to-convert-a-listt-to-listt-in-null-safe-dart
+    final withoutNulls =<String>[for (var s in extractRemoveTagList)if(s!=null)s];
       final tagChartDBList =
-          await _compareRepository.getTagChartList(extractRemoveTagList);
+          await _compareRepository.getTagChartList(withoutNulls);
       await Future.forEach(tagChartDBList, (TagChart tagChart) async {
         if (tagChart.tagAmount! > 1) {
           //Value更新
@@ -864,7 +868,9 @@ class CompareViewModel extends ChangeNotifier {
           await _compareRepository.removeTagChart(removeTagChartList);
         }
       });
-    }
+    // }else{
+    //     final tagChartDBList=[];
+    //   }
     //新規tagChart作成:
     final newTagChartTitleList = _tempoDisplayList.toSet()
       ..removeAll(tagChartDBTitleList.toSet())
@@ -880,7 +886,7 @@ class CompareViewModel extends ChangeNotifier {
     //List<Tag>作成はDBでの重複削除リスト作成後にrepositoryで行う
     //repo側でupdateOverview作成してDatetime更新(deleteTagメソッドでも同じ)
     await _compareRepository.createTag(
-        extractAddTag, comparisonOverview.comparisonItemId,);
+        extractAddTagList, comparisonOverview.comparisonItemId,);
 
     ///タグを空にして完了おしてもTagがでてくるので追加
     _tempoDisplayList = [];
@@ -1075,19 +1081,52 @@ class CompareViewModel extends ChangeNotifier {
     //[Tag(),Tag(),Tag()]みたいなイメージ
 
     // Tag内のcomparisonItemIdを元にoverViewを取得しリスト化
-    final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
+    final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList()
+    // as List<String>
+    ;//そのままだとList<String?>
 
     ///forEach内の非同期処理でcomparisonIdからList<overview>取得
     ///参照:https://qiita.com/hisw/items/2df0052a400263d5863e
-    await Future.forEach<dynamic>(idList, (String id) async {
-      final selectOverView = await _compareRepository.getComparisonOverview(id);
-      _selectOverviews.add(selectOverView);
-      print(
-          'Future.forEach/id:${_selectOverviews.map((e) => e.comparisonItemId).toList()}',);
-    } as FutureOr<dynamic> Function(dynamic element),);
+
+    ///https://zenn.dev/ttskch/articles/4cee05c400b4d8
+
+    final results=
+    await Future.wait([getSelect(idList)]);
+    /// _selectOverviews= await getSelect(idList);
+
+    print('onSelectTag/forEach後results:$results,_selectOverviews:$_selectOverviews');
+
+
+//todo List<String?>=>List<String>へ変換すればFuture.forEach使えるかも
+   // await Future.forEach<String?> (idList  , (String id)  async {
+   //    print('idList:$idList');
+   //    final selectOverView = await _compareRepository.getComparisonOverview(id);
+   //     _selectOverviews!.add(selectOverView);
+   //    print(
+   //        'Future.forEach/id:${_selectOverviews!.map((e) => e.comparisonItemId).toList()}',);
+   //  } as FutureOr Function(String? element));
+    // as FutureOr<dynamic> Function(ComparisonOverview element),
+
 //    print('viewModel/onSelectTag/selectOverview:${_selectOverviews.map((overview) => overview.itemTitle)}');
     notifyListeners();
   }
+
+  //todo return resulutsではなくで_selectOverviewsへ格納
+  Future<List<ComparisonOverview>> getSelect(List<String?> idList)async{
+    final results =<ComparisonOverview>[];
+    ComparisonOverview result;
+    //todo for in へ変更
+    idList.forEach((id) async{
+      result= await _compareRepository.getComparisonOverview(id!);
+      _selectOverviews!.add(result);
+      results.add(result);
+      print(
+        'Future.wait/id:${_selectOverviews!.map((e) =>
+        e.comparisonItemId,).toList()}',);
+    });
+    return results;
+  }
+
 
   //todo =>使わないので削除して良い
   ///SelectTagPageのFutureBuilder用
@@ -1097,9 +1136,9 @@ class CompareViewModel extends ChangeNotifier {
     final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
     await Future.forEach<dynamic>(idList, (String id) async {
       final selectOverView = await _compareRepository.getComparisonOverview(id);
-      _selectOverviews.add(selectOverView);
+      _selectOverviews!.add(selectOverView);
     } as FutureOr<dynamic> Function(dynamic element),);
-    return _selectOverviews;
+    return _selectOverviews!;
   }
 
   ///onSelectTagを実施してSelectTagPageのSelectorを更新するだけのメソッド

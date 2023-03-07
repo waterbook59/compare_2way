@@ -363,8 +363,8 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   ///新規作成:List<TagChart>登録(dataIdはincrement)&tagTitle同じものは更新
   Future<void> createTagChart(
-      List<TagChartRecord> tagChartRecordList,) async {
-    await Future.forEach(tagChartRecordList,(TagChartRecord tagChart){
+      List<TagChartRecordsCompanion> tagChartRecordList,) async {
+    await Future.forEach(tagChartRecordList,(TagChartRecordsCompanion tagChart){
       into(tagChartRecords).insertOnConflictUpdate(tagChart);
     });
   }
@@ -403,11 +403,11 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   }
 
   ///削除：TagChart tagTitleから削除
-  Future<void> removeTagChart(List<TagChartRecord> removeTagChartRecordList
+  Future<void> removeTagChart(List<TagChartRecordsCompanion> removeTagChartRecordList
       ,)async{
-    await Future.forEach(removeTagChartRecordList,(TagChartRecord tagChart) {
+    await Future.forEach(removeTagChartRecordList,(TagChartRecordsCompanion tagChart) {
       (delete(tagChartRecords)
-        ..where((tbl) => tbl.tagTitle.equals(tagChart.tagTitle)))
+        ..where((tbl) => tbl.tagTitle.equals(tagChart.tagTitle as String?)))
           .go();
     });
   }

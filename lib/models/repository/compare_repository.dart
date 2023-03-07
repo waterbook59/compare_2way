@@ -501,7 +501,7 @@ class CompareRepository {
   ///新規作成 List<Tag>
   // repo側でupdateOverview作成してDatetime更新(deleteTagメソッドでも同じ)
   ///同一comparisonItemId & 同一tagTitleは登録しないが、同一tagTitleは登録できるように変更
-  Future<void> createTag(Set<String> extractionDisplayTag,
+  Future<void> createTag(List<String> extractionDisplayTag,
       String comparisonItemId,)
   async {
     try {
@@ -585,7 +585,7 @@ class CompareRepository {
   Future<void> createTagChart(List<TagChart> tagChartList)async{
     try{
       //List<TagChart>=>List<TagChartDB>
-      final tagChartRecordList = tagChartList.toTagChartRecordList
+      final tagChartRecordList = tagChartList.toTagChartRecordsCompanion
         (tagChartList);
       await _comparisonItemDao.createTagChart(tagChartRecordList);
       print('repository/createTagChartも作成');
@@ -601,18 +601,19 @@ class CompareRepository {
       _tagChartList = tagChartRecordList.toTagChartList(tagChartRecordList);
   }
   ///Update List<TagChart>=>TagChartRecordsCompanion
+  //todo 数量更新をextensionへ変更
   Future<void> updateTagChart(List<TagChart> tagChartList)async{
     //List<TagChart>=>List<TaChartRecord>
     final tagChartRecordList =
-    tagChartList.toTagChartRecordList(tagChartList);
+    tagChartList.toTagChartRecordsCompanion(tagChartList);
 
     try{
       //TagChartRecordsCompanionのリストで数量更新
       tagChartRecordList.map((tagChartRecord){
         final updateTagRecordCompanion =TagChartRecordsCompanion(
-            tagAmount: Value(tagChartRecord.tagAmount),);
+            tagAmount: Value(tagChartRecord.tagAmount as int?),);
          _comparisonItemDao.updateTagChart(
-            tagChartRecordList, updateTagRecordCompanion,);
+            tagChartRecordList.cast<TagChartRecord>(), updateTagRecordCompanion,);
       }).toList();
       print('repository/updateTagChart:更新完了');
 
@@ -681,7 +682,7 @@ class CompareRepository {
     try {
       //List<TagChart>=>List<TagChartRecord>へ変換保存
       final removeTagChartRecordList =
-      removeTagChartList.toTagChartRecordList(removeTagChartList);
+      removeTagChartList.toTagChartRecordsCompanion(removeTagChartList);
       await _comparisonItemDao.removeTagChart(removeTagChartRecordList);
     } on SqliteException catch (e) {
       print('tagChartList削除時repositoryエラー:${e.toString()}');

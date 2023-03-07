@@ -335,7 +335,7 @@ extension ConvertToWay1MeritList on List<Way1MeritRecord>{
   }
 }
 
-//way1Demerit関連
+//way1Demerit関連 //todo 使用なければ削除
 ///新規挿入時(model=>DB):way1Demerit=>way1DemeritRecord
 extension ConvertToWay1DemeritRecord on Way1Demerit{
   Way1DemeritRecord toCreateWay1DemeritRecord (Way1Demerit initWay1Demerit){
@@ -571,18 +571,18 @@ extension ConvertToTagRecord on Tag{
   }
 }
 
-///新規挿入時(model=>DB):List<TagChart>=>List<TagChartRecord>
-extension ConvertToTagChartRecordList on List<TagChart>{
+///TagChart_新規挿入(model=>DB):List<TagChart>=>List<TagChartRecord>
+extension RegisterNewTagChartRecordList on List<TagChart>{
   // tagTitleをprimaryKeyに設定した場合、tagIdのautoIncrement効かないかも
   //=>tagIdがint型なのでUuid.hashCodeを使う
-  List<TagChartRecord> toTagChartRecordList(
+  List<TagChartRecordsCompanion> toTagChartRecordsCompanion(
       List<TagChart> tagChartList,){
     final tagChartRecordList =
     tagChartList.map((tagChart) {
-      return TagChartRecord(
-          dataId: tagChart.dataId!,
-          tagTitle:tagChart.tagTitle ,
-          tagAmount:tagChart.tagAmount ?? 0,
+      return TagChartRecordsCompanion(
+          // dataId: tagChart.dataId!,
+          tagTitle:Value(tagChart.tagTitle) ,
+          tagAmount:Value(tagChart.tagAmount ?? 0),
       );
     }).toList();
     return tagChartRecordList;
