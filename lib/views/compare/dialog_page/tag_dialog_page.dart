@@ -52,7 +52,10 @@ class TagDialogPage extends StatelessWidget {
               await viewModel.updateSelectTagPage();
               //tagChipPart更新
               await viewModel.getTagList(comparisonOverview.comparisonItemId);
-              Navigator.of(context).pop();
+    if (context.mounted) {
+      Navigator.of(context).pop();
+    }
+
             },
           ),),
       child: Scaffold(

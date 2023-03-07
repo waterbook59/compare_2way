@@ -183,10 +183,10 @@ class AddScreen extends StatelessWidget {
 
     //todo この書き方でBuildContextを非同期処理内で使っても良いか
     if (context.mounted) {
-      return;
+      //CompareScreenへ
+      Navigator.pop(context);
     }
-    //CompareScreenへ
-    Navigator.pop(context);
+
   }
 
 

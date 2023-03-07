@@ -571,7 +571,8 @@ extension ConvertToTagRecord on Tag{
   }
 }
 
-///TagChart_新規挿入(model=>DB):List<TagChart>=>List<TagChartRecord>
+//todo removeTagChartで使用しなければ削除
+///List<TagChart>_新規挿入(model=>DB):List<TagChart>=>List<TagChartRecord>
 extension RegisterNewTagChartRecordList on List<TagChart>{
   // tagTitleをprimaryKeyに設定した場合、tagIdのautoIncrement効かないかも
   //=>tagIdがint型なのでUuid.hashCodeを使う
@@ -586,6 +587,16 @@ extension RegisterNewTagChartRecordList on List<TagChart>{
       );
     }).toList();
     return tagChartRecordList;
+  }
+}
+
+///TagChart_tagAmount更新
+extension UpdateTagChartRecordList on TagChart{
+  TagChartRecordsCompanion toUpdateAmountTagCompanion(
+      TagChart tagChart,){
+    final tagCompanion =TagChartRecordsCompanion(
+      tagAmount: Value(tagChart.tagAmount ),);
+    return tagCompanion;
   }
 }
 

@@ -371,12 +371,14 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   ///更新:List<TagChart>tagTitleに紐づいて数量を更新
   Future<void> updateTagChart(
-      List<TagChartRecord> tagChartRecordList,
+      List<String> tagTitleList,
       TagChartRecordsCompanion updateTagRecordCompanion
       ,) async {
-    await Future.forEach(tagChartRecordList,(TagChartRecord tagChart) {
+    ///tagChartRecordListからはtagTitleのリストさえ手に入れば良い。
+
+    await Future.forEach(tagTitleList,(String title) {
       (update(tagChartRecords)
-        ..where((tbl) => tbl.tagTitle.equals(tagChart.tagTitle)
+        ..where((tbl) => tbl.tagTitle.equals(title)
         ,))
           .write(updateTagRecordCompanion);
     });

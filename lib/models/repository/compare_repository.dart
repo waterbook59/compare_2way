@@ -601,19 +601,18 @@ class CompareRepository {
       _tagChartList = tagChartRecordList.toTagChartList(tagChartRecordList);
   }
   ///Update List<TagChart>=>TagChartRecordsCompanion
-  //todo 数量更新をextensionへ変更
   Future<void> updateTagChart(List<TagChart> tagChartList)async{
-    //List<TagChart>=>List<TaChartRecord>
-    final tagChartRecordList =
-    tagChartList.toTagChartRecordsCompanion(tagChartList);
-
+    ///daoに直接tagChartList渡すのは好ましくない
+    ///tagChartRecordへの変換=>data.idエラー=>titleリスト作成しdaoへ渡す
+    final tagTitleList = tagChartList.map((tagChart) => tagChart.tagTitle).toList();
     try{
       //TagChartRecordsCompanionのリストで数量更新
-      tagChartRecordList.map((tagChartRecord){
-        final updateTagRecordCompanion =TagChartRecordsCompanion(
-            tagAmount: Value(tagChartRecord.tagAmount as int?),);
+      tagChartList.map((tagChart){
+        final updateCompanion =tagChart.toUpdateAmountTagCompanion(tagChart);
+
+        //tagTitleList:DBからtitleで検索、updateCompanion:DBの数量更新
          _comparisonItemDao.updateTagChart(
-            tagChartRecordList.cast<TagChartRecord>(), updateTagRecordCompanion,);
+           tagTitleList, updateCompanion,);
       }).toList();
       print('repository/updateTagChart:更新完了');
 
