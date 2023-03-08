@@ -571,7 +571,6 @@ extension ConvertToTagRecord on Tag{
   }
 }
 
-//todo removeTagChartで使用しなければ削除
 ///List<TagChart>_新規挿入(model=>DB):List<TagChart>=>List<TagChartRecord>
 extension RegisterNewTagChartRecordList on List<TagChart>{
   // tagTitleをprimaryKeyに設定した場合、tagIdのautoIncrement効かないかも

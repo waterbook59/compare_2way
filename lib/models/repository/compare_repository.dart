@@ -562,6 +562,7 @@ class CompareRepository {
   Future<void> deleteTag(List<Tag> deleteTagList) async{
     try {
       //List<Tag>=>List<TagRecord>へ変換保存
+      //todo List<Tag>=>List<Companion>をextensionsで作成 comparisonItemIdとtitleのみのValue
       final deleteTagRecordList =
       deleteTagList.toTagRecordList(deleteTagList);
       await _comparisonItemDao.deleteTagList(deleteTagRecordList);
@@ -678,11 +679,12 @@ class CompareRepository {
 
   ///Delete List<TagChart>タイトルから削除
   Future<void> removeTagChart(List<TagChart> removeTagChartList) async{
+    final tagTitleList = removeTagChartList.map((tagChart) => tagChart.tagTitle).toList();
     try {
       //List<TagChart>=>List<TagChartRecord>へ変換保存
-      final removeTagChartRecordList =
-      removeTagChartList.toTagChartRecordsCompanion(removeTagChartList);
-      await _comparisonItemDao.removeTagChart(removeTagChartRecordList);
+      // final removeTagChartRecordList =
+      // removeTagChartList.toTagChartRecordsCompanion(removeTagChartList);
+      await _comparisonItemDao.removeTagChart(tagTitleList);
     } on SqliteException catch (e) {
       print('tagChartList削除時repositoryエラー:${e.toString()}');
     }

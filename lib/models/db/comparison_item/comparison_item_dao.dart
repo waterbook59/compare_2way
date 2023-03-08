@@ -405,11 +405,11 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   }
 
   ///削除：TagChart tagTitleから削除
-  Future<void> removeTagChart(List<TagChartRecordsCompanion> removeTagChartRecordList
+  Future<void> removeTagChart(List<String> removeTagTitleList
       ,)async{
-    await Future.forEach(removeTagChartRecordList,(TagChartRecordsCompanion tagChart) {
+    await Future.forEach(removeTagTitleList,(String removeTagTitle) {
       (delete(tagChartRecords)
-        ..where((tbl) => tbl.tagTitle.equals(tagChart.tagTitle as String?)))
+        ..where((tbl) => tbl.tagTitle.equals(removeTagTitle)))
           .go();
     });
   }
