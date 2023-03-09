@@ -562,7 +562,6 @@ class CompareRepository {
   Future<void> deleteTag(List<Tag> deleteTagList) async{
     try {
       //List<Tag>=>List<TagRecord>へ変換保存
-      //todo List<Tag>=>List<Companion>をextensionsで作成 comparisonItemIdとtitleのみのValue
       final deleteTagRecordList =
       deleteTagList.toTagRecordList(deleteTagList);
       await _comparisonItemDao.deleteTagList(deleteTagRecordList);

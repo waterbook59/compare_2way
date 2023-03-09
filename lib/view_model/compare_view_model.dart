@@ -850,6 +850,7 @@ class CompareViewModel extends ChangeNotifier {
     ///List<String?>=>List<String>への変換
    /// https://stackoverflow.com/questions/66896648/how-to-convert-a-listt-to-listt-in-null-safe-dart
     final withoutNulls =<String>[for (var s in extractRemoveTagList)if(s!=null)s];
+    print('viewModel/createTag/withoutNulls:$withoutNulls');
       final tagChartDBList =
           await _compareRepository.getTagChartList(withoutNulls);
       await Future.forEach(tagChartDBList, (TagChart tagChart) async {

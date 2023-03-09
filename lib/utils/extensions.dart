@@ -514,7 +514,7 @@ extension ConvertToTagRecordList on List<Tag>{
             tagTitle:tag.tagTitle ?? '',
             comparisonItemId:tag.comparisonItemId ?? '',
             createdAt: tag.createdAt,
-            createAtToString: tag.createAtToString!,
+            createAtToString: tag.createAtToString?? '',
           );
     }).toList();
     return tagRecordList;
