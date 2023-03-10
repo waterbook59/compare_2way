@@ -1082,50 +1082,21 @@ class CompareViewModel extends ChangeNotifier {
     //[Tag(),Tag(),Tag()]みたいなイメージ
 
     // Tag内のcomparisonItemIdを元にoverViewを取得しリスト化
-    final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList()
-    // as List<String>
-    ;//そのままだとList<String?>
-
-    ///forEach内の非同期処理でcomparisonIdからList<overview>取得
-    ///参照:https://qiita.com/hisw/items/2df0052a400263d5863e
+    final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
 
     ///https://zenn.dev/ttskch/articles/4cee05c400b4d8
+    // final results=
+    // await Future.wait([getSelect(idList)]);
 
-    final results=
-    await Future.wait([getSelect(idList)]);
-    /// _selectOverviews= await getSelect(idList);
-
-    print('onSelectTag/forEach後results:$results,_selectOverviews:$_selectOverviews');
-
-
-//todo List<String?>=>List<String>へ変換すればFuture.forEach使えるかも
-   // await Future.forEach<String?> (idList  , (String id)  async {
-   //    print('idList:$idList');
-   //    final selectOverView = await _compareRepository.getComparisonOverview(id);
-   //     _selectOverviews!.add(selectOverView);
-   //    print(
-   //        'Future.forEach/id:${_selectOverviews!.map((e) => e.comparisonItemId).toList()}',);
-   //  } as FutureOr Function(String? element));
-    // as FutureOr<dynamic> Function(ComparisonOverview element),
-
-//    print('viewModel/onSelectTag/selectOverview:${_selectOverviews.map((overview) => overview.itemTitle)}');
-    notifyListeners();
-  }
-
-  //todo return resulutsではなくで_selectOverviewsへ格納
-  Future<List<ComparisonOverview>> getSelect(List<String?> idList)async{
-    final results =<ComparisonOverview>[];
-    ComparisonOverview result;
-    //todo for in へ変更
-    idList.forEach((id) async{
-      result= await _compareRepository.getComparisonOverview(id!);
-      _selectOverviews!.add(result);
-      results.add(result);
-      print(
-        'Future.wait/id:${_selectOverviews!.map((e) =>
-        e.comparisonItemId,).toList()}',);
+  //List<String?>=>List<String>へ変換してFuture.forEach使用
+    final withoutNulls =<String>[for (var s in idList)if(s!=null)s];
+    await Future.forEach(withoutNulls, (String id) async{
+      final selectOverView = await _compareRepository.getComparisonOverview(id);
+      _selectOverviews!.add(selectOverView);
     });
-    return results;
+       print(
+           'Future.forEach/id:${_selectOverviews!.map((e) => e.comparisonItemId).toList()}',);
+    notifyListeners();
   }
 
 
