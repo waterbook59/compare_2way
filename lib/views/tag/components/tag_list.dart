@@ -14,7 +14,7 @@ class TagList extends StatelessWidget {
     this.createdAt,
     required this.onDelete,
     required this.onTap,
-    required this.selectTagIdList,
+    this.selectTagIdList,
     required this.listNumber,
     required this.myFocusNode,
   }) : super(key: key);
@@ -26,7 +26,7 @@ class TagList extends StatelessWidget {
   final VoidCallback onTap;
 
 //  final Function(FocusNode) onTap;
-  final List<String> selectTagIdList; //tagTitle編集時に更新するIDリスト
+  final List<String>? selectTagIdList; //tagTitle編集時に更新するIDリスト
   final int listNumber;
   final FocusNode myFocusNode; //todo 完了押した時にfocusNodeのdispose必要かも
 
@@ -97,7 +97,7 @@ class TagList extends StatelessWidget {
                 return viewModel.selectedIndex == listNumber
                     ? EditTagTitle(
                         tagTitle: title,
-                        selectTagIdList: selectTagIdList,
+                        selectTagIdList: selectTagIdList!,
                         myFocusNode: myFocusNode,
                       )
                     : Text(title);

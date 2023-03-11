@@ -371,6 +371,7 @@ class CompareScreen extends StatelessWidget {
                 const SizedBox(height: 4,),
               ///テーブル
                 //todo  width: MediaQuery.of(context).size.width*0.8の形に変更
+                //todo 保存せずに戻ると一部値が入力された状態を保持
                 //way1Title,way2Title名編集時に即時反映させる=>Consumer
                 Consumer<CompareViewModel>(
                  builder: (context, viewModel, child) {

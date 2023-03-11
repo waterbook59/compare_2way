@@ -97,11 +97,11 @@ class TagPage extends StatelessWidget {
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         final tagChart = snapshot.data![index];
-//                                print('tagPage/snapshot:$overview');
+                               // print('tagPage/snapshot.itemIdList:${tagChart.itemIdList}');
                                         //DateTime=>String変換
                                         return TagList(
                                           title: tagChart.tagTitle,
-                                          selectTagIdList: tagChart.itemIdList!,
+                                          selectTagIdList: tagChart.itemIdList,
                                           tagAmount: tagChart.tagAmount!,
                                           createdAt: '登録時間',
                                           onDelete: () => _onDeleteTag(
@@ -179,8 +179,7 @@ class TagPage extends StatelessWidget {
 
         //todo この書き方でBuildContextを非同期処理内で使っても良いか
         if (context.mounted) {
-          return;
-        }
+
 
         ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
         await Navigator.of(context, rootNavigator: true)
@@ -188,6 +187,7 @@ class TagPage extends StatelessWidget {
                 builder: (context) => SelectTagPage(
                       tagTitle: tagTitle,
                     ),),);
+        }
         break;
 
       ///編集モード：タップでタイトルをeditTagTitleへ変更=>onSubmittedでitemIdListを元にDBをupdate
@@ -232,6 +232,7 @@ class TagPage extends StatelessWidget {
               );
             },);
         break;
+
     }
 
     //2モードのとき
