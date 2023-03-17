@@ -157,19 +157,21 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
 
   ///リスト１行新規追加：Way1Merit
-  Future<void> insertWay1MeritRecordSingle(Way1MeritRecord way1MeritRecord) =>
-      into(way1MeritRecords).insert(way1MeritRecord);
+  Future<void> insertWay1MeritRecordSingle(
+      Way1MeritRecordsCompanion way1MeritCompanion,) =>
+      into(way1MeritRecords).insert(way1MeritCompanion);
   ///リスト１行新規追加：Way2Merit
-  Future<void> insertWay2MeritRecordSingle(Way2MeritRecord way2MeritRecord) =>
-      into(way2MeritRecords).insert(way2MeritRecord);
+  Future<void> insertWay2MeritRecordSingle(
+      Way2MeritRecordsCompanion way2MeritCompanion,) =>
+      into(way2MeritRecords).insert(way2MeritCompanion);
   ///リスト１行新規追加：Way1Demerit
   Future<void> insertWay1DemeritRecordSingle(
-      Way1DemeritRecord way1DemeritRecord,) =>
-      into(way1DemeritRecords).insert(way1DemeritRecord);
+      Way1DemeritRecordsCompanion way1DemeritCompanion,) =>
+      into(way1DemeritRecords).insert(way1DemeritCompanion);
   ///リスト１行新規追加：Way1Demerit
   Future<void> insertWay2DemeritRecordSingle(
-      Way2DemeritRecord way2DemeritRecord,) =>
-      into(way2DemeritRecords).insert(way2DemeritRecord);
+      Way2DemeritRecordsCompanion way2DemeritCompanion,) =>
+      into(way2DemeritRecords).insert(way2DemeritCompanion);
   //todo way3Merit/Demerit
 
 

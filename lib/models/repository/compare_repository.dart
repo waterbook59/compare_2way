@@ -402,9 +402,9 @@ class CompareRepository {
   Future<void> addWay1Merit(Way1Merit initWay1Merit) async {
     //1行だけ差し込めるか
     try {
-      final way1MeritRecord =
-          initWay1Merit.toCreateWay1MeritRecord(initWay1Merit);
-      await _comparisonItemDao.insertWay1MeritRecordSingle(way1MeritRecord);
+      final way1MeritCompanion =
+          initWay1Merit.toWay1MeritNewCompanion(initWay1Merit);
+      await _comparisonItemDao.insertWay1MeritRecordSingle(way1MeritCompanion);
       print('repository:リスト１行新規追加');
     } on SqliteException catch (e) {
       print('Way1Merit追加エラー:${e.toString()}');
@@ -413,9 +413,9 @@ class CompareRepository {
   ///リスト１行追加：Way2Merit
   Future<void> addWay2Merit(Way2Merit initWay2Merit) async {
     try {
-      final way2MeritRecord =
-      initWay2Merit.toCreateWay2MeritRecord(initWay2Merit);
-      await _comparisonItemDao.insertWay2MeritRecordSingle(way2MeritRecord);
+      final way2MeritCompanion =
+      initWay2Merit.toWay2MeritNewCompanion(initWay2Merit);
+      await _comparisonItemDao.insertWay2MeritRecordSingle(way2MeritCompanion);
       print('repository:リストWay2Merit１行新規追加');
     } on SqliteException catch (e) {
       print('Way2Merit追加エラー:${e.toString()}');
@@ -436,9 +436,10 @@ class CompareRepository {
   Future<void> addWay1Demerit(Way1Demerit initWay1Demerit) async {
     //1行だけ差し込めるか
     try {
-      final way1DemeritRecord =
-      initWay1Demerit.toCreateWay1DemeritRecord(initWay1Demerit);
-      await _comparisonItemDao.insertWay1DemeritRecordSingle(way1DemeritRecord);
+      final way1DemeritCompanion =
+      initWay1Demerit.toWay1DemeritNewCompanion(initWay1Demerit);
+      await _comparisonItemDao.insertWay1DemeritRecordSingle(
+          way1DemeritCompanion,);
       print('repository:リスト１行新規追加');
     } on SqliteException catch (e) {
       print('Way1Demerit追加エラー:${e.toString()}');
@@ -448,9 +449,10 @@ class CompareRepository {
   Future<void> addWay2Demerit(Way2Demerit initWay2Demerit) async {
     //1行だけ差し込めるか
     try {
-      final way2DemeritRecord =
-      initWay2Demerit.toCreateWay2DemeritRecord(initWay2Demerit);
-      await _comparisonItemDao.insertWay2DemeritRecordSingle(way2DemeritRecord);
+      final way2DemeritCompanion =
+      initWay2Demerit.toWay2DeMeritNewCompanion(initWay2Demerit);
+      await _comparisonItemDao.insertWay2DemeritRecordSingle(
+          way2DemeritCompanion,);
       print('repository:リスト１行新規追加');
     } on SqliteException catch (e) {
       print('Way3Demerit追加エラー:${e.toString()}');

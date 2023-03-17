@@ -266,15 +266,16 @@ extension ConvertToComparisonOverviewRecord on ComparisonOverviewRecord {
 
 //way1Merit関連
 ///新規挿入時(model=>DB):way1Merit=>way1MeritRecord
-extension ConvertToWay1MeritRecord on Way1Merit{
-  Way1MeritRecord toCreateWay1MeritRecord (Way1Merit initWay1Merit){
-    final way1MeritRecord= Way1MeritRecord(
+///      //todo Valueへ変更 way1MeritIdはautoIncrement
+extension RegisterNewWay1MeritCompanion on Way1Merit{
+  Way1MeritRecordsCompanion toWay1MeritNewCompanion (Way1Merit initWay1Merit){
+    final companion= Way1MeritRecordsCompanion(
       //autoIncrementでway1MeritIdがnull=>0挿入だと新規挿入で同idが多くなる？
-      way1MeritId: initWay1Merit.way1MeritId??5,
-      comparisonItemId: initWay1Merit.comparisonItemId!,
-      way1MeritDesc: initWay1Merit.way1MeritDesc ?? '',
+      // way1MeritId:, initWay1Merit.way1MeritId??5,
+      comparisonItemId:Value(initWay1Merit.comparisonItemId!),
+      way1MeritDesc: Value(initWay1Merit.way1MeritDesc),
     );
-    return way1MeritRecord;
+    return companion;
   }
 }
 ///更新時(model=>DB):way1Merit=>way1MeritRecord
@@ -335,16 +336,16 @@ extension ConvertToWay1MeritList on List<Way1MeritRecord>{
   }
 }
 
-//way1Demerit関連 //todo 使用なければ削除
+//way1Demerit関連
 ///新規挿入時(model=>DB):way1Demerit=>way1DemeritRecord
-extension ConvertToWay1DemeritRecord on Way1Demerit{
-  Way1DemeritRecord toCreateWay1DemeritRecord (Way1Demerit initWay1Demerit){
-    final way1DemeritRecord= Way1DemeritRecord(
-      way1DemeritId: initWay1Demerit.way1DemeritId??5,
-      comparisonItemId: initWay1Demerit.comparisonItemId!,
-      way1DemeritDesc: initWay1Demerit.way1DemeritDesc ?? '',
+extension RegisterNewWay1DeMeritCompanion on Way1Demerit{
+  Way1DemeritRecordsCompanion toWay1DemeritNewCompanion (
+      Way1Demerit initWay1Demerit,){
+    final companion= Way1DemeritRecordsCompanion(
+      comparisonItemId:Value(initWay1Demerit.comparisonItemId!),
+      way1DemeritDesc: Value(initWay1Demerit.way1DemeritDesc) ,
     );
-    return way1DemeritRecord;
+    return companion;
   }
 }
 ///更新時(model=>DB):way1Demerit=>way1DemeritRecord
@@ -391,14 +392,13 @@ extension ConvertToWay1DemeritList on List<Way1DemeritRecord>{
 
 //way2Merit関連
 ///新規挿入時(model=>DB):way2Merit=>way2MeritRecord
-extension ConvertToWay2MeritRecord on Way2Merit{
-  Way2MeritRecord toCreateWay2MeritRecord (Way2Merit initWay2Merit){
-    final way2MeritRecord= Way2MeritRecord(
-      way2MeritId: initWay2Merit.way2MeritId??5,
-      comparisonItemId: initWay2Merit.comparisonItemId!,
-      way2MeritDesc: initWay2Merit.way2MeritDesc ?? '',
+extension RegisterNewWay2MeritCompanion on Way2Merit{
+  Way2MeritRecordsCompanion toWay2MeritNewCompanion (Way2Merit initWay2Merit){
+    final companion= Way2MeritRecordsCompanion(
+      comparisonItemId: Value(initWay2Merit.comparisonItemId!),
+      way2MeritDesc: Value(initWay2Merit.way2MeritDesc),
     );
-    return way2MeritRecord;
+    return companion;
   }
 }
 ///更新時(model=>DB):way2Merit=>way2MeritRecord
@@ -444,14 +444,14 @@ extension ConvertToWay2MeritList on List<Way2MeritRecord>{
 
 //way2Demerit関連
 ///新規挿入時(model=>DB):way2Demerit=>way2DemeritRecord
-extension ConvertToWay2DemeritRecord on Way2Demerit{
-  Way2DemeritRecord toCreateWay2DemeritRecord (Way2Demerit initWay2Demerit){
-    final way2DemeritRecord= Way2DemeritRecord(
-      way2DemeritId: initWay2Demerit.way2DemeritId??5,
-      comparisonItemId: initWay2Demerit.comparisonItemId!,
-      way2DemeritDesc: initWay2Demerit.way2DemeritDesc ?? '',
+extension RegisterNewWay2DeMeritCompanion on Way2Demerit{
+  Way2DemeritRecordsCompanion toWay2DeMeritNewCompanion (
+      Way2Demerit initWay2Demerit,){
+    final companion= Way2DemeritRecordsCompanion(
+      comparisonItemId: Value(initWay2Demerit.comparisonItemId!),
+      way2DemeritDesc: Value(initWay2Demerit.way2DemeritDesc),
     );
-    return way2DemeritRecord;
+    return companion;
   }
 }
 ///更新時(model=>DB):way2Demerit=>way2DemeritRecord
