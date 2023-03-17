@@ -41,8 +41,7 @@ class DescListTile extends StatelessWidget {
             : controllers[index].text.isNotEmpty
                 ? DescDisplay(
                     description: controllers[index].text,
-                    //todo 文字色blac12で良いか確認
-                    textColor: Colors.black12,
+                    textColor: Colors.black87,
                   )
                 : const DescDisplay(
                     description: 'メリットを入力',
@@ -62,7 +61,7 @@ class DescListTile extends StatelessWidget {
             : controllers[index].text.isNotEmpty
                 ? DescDisplay(
                     description: controllers[index].text,
-                    textColor: Colors.black12,
+                    textColor: Colors.black87,
                   )
                 : const DescDisplay(
                     description: 'メリットを入力',
@@ -82,7 +81,7 @@ class DescListTile extends StatelessWidget {
             : controllers[index].text.isNotEmpty
                 ? DescDisplay(
                     description: controllers[index].text,
-                    textColor: Colors.black12,
+                    textColor: Colors.black87,
                   )
                 : const DescDisplay(
                     description: 'デメリットを入力',
@@ -102,7 +101,7 @@ class DescListTile extends StatelessWidget {
             : controllers[index].text.isNotEmpty
                 ? DescDisplay(
                     description: controllers[index].text,
-                    textColor: Colors.black12,
+                    textColor: Colors.black87,
                   )
                 : const DescDisplay(
                     description: 'デメリットを入力',
