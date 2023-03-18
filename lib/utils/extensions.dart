@@ -137,7 +137,7 @@ extension UpdateWay2MeritEvaluateDB on ComparisonOverview {
       ComparisonOverview updateOverview,)  {
     final companion= ComparisonOverviewRecordsCompanion(
       comparisonItemId: Value(updateOverview.comparisonItemId),
-      way1MeritEvaluate: Value(updateOverview.way2MeritEvaluate!),
+      way2MeritEvaluate: Value(updateOverview.way2MeritEvaluate!),
       createdAt: Value(updateOverview.createdAt),
     );
     return companion;
@@ -150,7 +150,7 @@ extension UpdateWay2DemeritEvaluateDB on ComparisonOverview {
       ComparisonOverview updateOverview,)  {
     final companion= ComparisonOverviewRecordsCompanion(
       comparisonItemId: Value(updateOverview.comparisonItemId),
-      way1DemeritEvaluate:Value(updateOverview.way2DemeritEvaluate!),
+      way2DemeritEvaluate:Value(updateOverview.way2DemeritEvaluate!),
       createdAt: Value(updateOverview.createdAt),
     );
     return companion;

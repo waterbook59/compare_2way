@@ -57,7 +57,6 @@ class _TablePartState extends State<TablePart> {
 
   @override
   void initState() {
-//    print('listPageから渡ってきたway1MeritEvaluateの値:${widget.way1MeritEvaluate}');
   //listpageからgetListで得られた値が渡ってきてセット
     way1MeritDisplay = evaluates[widget.way1MeritEvaluate];
     way1DemeritDisplay = evaluates[widget.way1DemeritEvaluate];
@@ -134,7 +133,6 @@ class _TablePartState extends State<TablePart> {
                       child: way1MeritDisplay,),
 
                   Expanded(
-                      flex: 1,
                       child:
                       EvaluateDropdown(
                         initialValue:widget.way1MeritEvaluate,
@@ -163,11 +161,9 @@ class _TablePartState extends State<TablePart> {
                   ),
                   // EvaluateDropdownで選択したときもフォーカス外す(キーボード下げる)
                   Expanded(
-                      flex: 1,
                       child: EvaluateDropdown(
                         initialValue: widget.way1DemeritEvaluate,
                         onSelected: (newValue) {
-                          print(newValue);
                           setState(() {
                             way1DemeritDisplay = evaluates[newValue];
                             viewModel.setWay1DemeritNewValue(
@@ -202,11 +198,9 @@ class _TablePartState extends State<TablePart> {
                       child: way2MeritDisplay,
                   ),
                   Expanded(
-                      flex: 1,
                       child: EvaluateDropdown(
                         initialValue: widget.way2MeritEvaluate,
                         onSelected: (newValue) {
-                          print(newValue);
                           setState(() {
                             way2MeritDisplay = evaluates[newValue];
                             viewModel.setWay2MeritNewValue(
@@ -228,11 +222,9 @@ class _TablePartState extends State<TablePart> {
                       child:   way2DemeritDisplay,
                   ),
                   Expanded(
-                      flex: 1,
                       child: EvaluateDropdown(
                         initialValue: widget.way2DemeritEvaluate,
                         onSelected: (newValue) {
-                          print(newValue);
                           setState(() {
                             way2DemeritDisplay = evaluates[newValue];
                             viewModel.setWay2DemeritNewValue(

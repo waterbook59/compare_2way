@@ -12,7 +12,6 @@ import 'package:compare_2way/views/compare/components/tag_chip_part.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-// import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
 
 import 'components/icon_title.dart';
