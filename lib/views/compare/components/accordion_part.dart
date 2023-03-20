@@ -48,6 +48,11 @@ class _AccordionPartState extends State<AccordionPart> {
 
   @override
   void initState() {
+
+    ///descListTileのフォーカスをリセットする
+    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
+     ..selectedDescListIndex=null;
+
     //todo way3Merit,Demerit分作成
     switch (widget.displayList) {
       case DisplayList.way1Merit:

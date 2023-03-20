@@ -58,7 +58,7 @@ class CompareScreen extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
         ///leadingの戻るアイコンの色を変更するだけならこれでOK
-        //todo actionsForegroundColorが廃止
+        /// todo actionsForegroundColorが廃止
         // actionsForegroundColor: Colors.white,
         middle:
         screenEditMode ==ScreenEditMode.fromListPage

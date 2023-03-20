@@ -122,7 +122,7 @@ class CompareViewModel extends ChangeNotifier {
   TagEditMode tagEditMode = TagEditMode.normal; //初期設定は通常モード
 //  bool editFocus = false; //初期設定はタイトルのみ
   int? selectedIndex; //tagPageでのListTile選択
-  int selectedDescListIndex=0; //DescFromAndButtonでのListTIle選択
+  int? selectedDescListIndex; //DescFromAndButtonでのListTIle選択
   bool isWay1MeritDeleteIcon = false; //AccordionPart=>DescFormのIconButton表示有無
   bool isWay1DemeritDeleteIcon = false;
   bool isWay2MeritDeleteIcon = false;
