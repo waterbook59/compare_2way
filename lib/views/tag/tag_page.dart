@@ -18,6 +18,8 @@ import 'components/sub/tag_edit_button_action.dart';
 ///削除したlistをタグ一覧として表示する（tagChips参照）
 
 class TagPage extends StatelessWidget {
+  const TagPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
@@ -101,7 +103,7 @@ class TagPage extends StatelessWidget {
                                         //DateTime=>String変換
                                         return TagList(
                                           title: tagChart.tagTitle,
-                                          selectTagIdList: tagChart.itemIdList,
+                                          // selectTagIdList: tagChart.itemIdList,
                                           tagAmount: tagChart.tagAmount!,
                                           createdAt: '登録時間',
                                           onDelete: () => _onDeleteTag(
@@ -176,11 +178,7 @@ class TagPage extends StatelessWidget {
       case TagEditMode.normal:
         //IdからcomparisonOverview.titleを取得し表示
         await viewModel.onSelectTag(tagTitle);
-
-        //todo この書き方でBuildContextを非同期処理内で使っても良いか
         if (context.mounted) {
-
-
         ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
         await Navigator.of(context, rootNavigator: true)
             .push(MaterialPageRoute<void>(

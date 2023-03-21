@@ -44,7 +44,6 @@ class TagList extends StatelessWidget {
 ///onPressedがSlidableActionCallback = void Function(BuildContext context);なので
             ///()空だとNG=>(_):void Function(BuildContext)?に変更
             onPressed: (_) {
-              print('削除します');
               onDelete();
             },
             backgroundColor: Colors.red,
@@ -97,7 +96,8 @@ class TagList extends StatelessWidget {
                 return viewModel.selectedIndex == listNumber
                     ? EditTagTitle(
                         tagTitle: title,
-                        selectTagIdList: selectTagIdList!,
+                       /// //todo selectTagIdListがnull
+                       //  selectTagIdList: selectTagIdList!,
                         myFocusNode: myFocusNode,
                       )
                     : Text(title);

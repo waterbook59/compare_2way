@@ -82,17 +82,11 @@ if(widget.candidateTagNameList==null){
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Wrap(
-        alignment: WrapAlignment.start,
-        direction: Axis.horizontal,
         spacing: 8,
-        runSpacing: 0,
         children:
         [
               Wrap(
-                alignment: WrapAlignment.start,
                 spacing: 8,
-                runSpacing: 0,
-                direction: Axis.horizontal,
                 children:
                 ///List<InputChip>への変換はinitState内ではなく、Wrap内で行わないとselectedが反映されない
                 ///tagNameListからつくることでtempoChipsいらない

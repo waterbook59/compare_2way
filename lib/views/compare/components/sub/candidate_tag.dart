@@ -34,7 +34,6 @@ class CandidateTag extends StatelessWidget {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(
                   width: 8,

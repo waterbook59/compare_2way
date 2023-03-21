@@ -328,7 +328,8 @@ class CompareViewModel extends ChangeNotifier {
 
   ///引数 required
   Future<void> setConclusion(
-      {required String comparisonItemId, required String newConclusion,}) async {
+      {required String comparisonItemId, required String newConclusion,}) async
+  {
     if (conclusion != newConclusion) {
       conclusion = newConclusion;
       final updateOverview = ComparisonOverview(
@@ -790,7 +791,8 @@ class CompareViewModel extends ChangeNotifier {
     final extractAddTag = (_tempoDisplayList.toSet()..removeAll(dbTitleSet));
     final extractAddTagList = extractAddTag.toList();
     print('viewModel/createTag/extractAddTagList:$extractAddTagList');
-    final extractRemoveTagSet = (dbTitleSet..removeAll(_tempoDisplayList.toSet())) ;
+    final extractRemoveTagSet = (dbTitleSet..removeAll(_tempoDisplayList.toSet(
+    ),)) ;
     final  extractRemoveTagList = extractRemoveTagSet.toList();
     print('viewModel/createTag/extractRemoveTagSet:$extractRemoveTagSet');
     //ここで場合分け、tagChartDBにtagTitleあり=>update,なし=>新規登録
@@ -812,7 +814,7 @@ class CompareViewModel extends ChangeNotifier {
     //1.2.extractTagDB = tagAllTitleList-extractDelete(更新タイトルタグを抽出)
     //tagAllTitleListからextractDeleteTitleを1つづつ抜いていく
     for (var i = 0; i < extractDeleteTitle.length; ++i) {
-      final deleteTitle = extractDeleteTitle[i];
+      // final deleteTitle = extractDeleteTitle[i];
 //      print('deleteTitle:$deleteTitle');
       //removeAllと同じ
 //      print('testTag$testTag') ;
@@ -849,7 +851,8 @@ class CompareViewModel extends ChangeNotifier {
     // if (extractRemoveTagList.isNotEmpty) {//withoutNullsがあるので、いらない
     ///List<String?>=>List<String>への変換
    /// https://stackoverflow.com/questions/66896648/how-to-convert-a-listt-to-listt-in-null-safe-dart
-    final withoutNulls =<String>[for (var s in extractRemoveTagList)if(s!=null)s];
+    final withoutNulls =<String>[for (var s in extractRemoveTagList)if(s!=null)s
+    ];
     print('viewModel/createTag/withoutNulls:$withoutNulls');
       final tagChartDBList =
           await _compareRepository.getTagChartList(withoutNulls);
@@ -1046,7 +1049,7 @@ class CompareViewModel extends ChangeNotifier {
         dataId: tagChart.dataId,
         tagTitle: tagChart.tagTitle,
         tagAmount: tagChart.tagAmount,
-        itemIdList: tagChart.itemIdList,
+        // itemIdList: tagChart.itemIdList,
         myFocusNode: FocusNode(),),);
     }
 

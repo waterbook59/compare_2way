@@ -1,10 +1,8 @@
-///GFAccordionをカスタマイズ(showAccordionのOffset初期位置変更)
-
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
-
+///GFAccordionをカスタマイズ(showAccordionのOffset初期位置変更)
 class GFAccordion extends StatefulWidget {
   /// An accordion is used to show (and hide) content. Use [showAccordion] to hide & show the accordion content.
   const GFAccordion(

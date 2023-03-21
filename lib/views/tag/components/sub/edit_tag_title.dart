@@ -7,12 +7,12 @@ import 'package:provider/provider.dart';
 class EditTagTitle extends StatefulWidget {
   const EditTagTitle({
     required this.tagTitle,
-    required this.selectTagIdList,
+    // required this.selectTagIdList,
     required this.myFocusNode,
   });
 
   final String tagTitle;
-  final List<String> selectTagIdList;//tagTitle編集時に更新するIDリスト
+  // final List<String> selectTagIdList;//tagTitle編集時に更新するIDリスト
   final FocusNode myFocusNode;
 
   @override

@@ -26,7 +26,6 @@ class CreateTag extends StatelessWidget {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(width: 8,),
                 Icon(CupertinoIcons.plus_circled, size: 24,
