@@ -20,31 +20,16 @@ class OverViewList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      startActionPane: ActionPane(
+      endActionPane: ActionPane(
         motion: const ScrollMotion(),
         children: [
-          SlidableAction(onPressed: (_) {
-          print('削除します');
-          onDelete();
-          },
+          SlidableAction(
+            onPressed: (_) {onDelete();},
             backgroundColor: Colors.red,
             icon: Icons.remove_circle_outline,
-            label: '削除',)
+            label: 'アイテムを削除',)
         ],
       ),
-      ///ver.0.6.0以下で使用
-      // actionPane: const SlidableScrollActionPane(),
-      // secondaryActions: [
-      //   IconSlideAction(
-      //     caption: '削除',
-      //     color: Colors.red,
-      //     icon: Icons.remove_circle_outline,
-      //     onTap: () {
-      //       print('削除します');
-      //       onDelete();
-      //     },
-      //   )
-      // ],
       child: DecoratedBox(
         decoration: listDecoration,
         child: ListTile(

@@ -37,7 +37,7 @@ class TagList extends StatelessWidget {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return Slidable(
-      startActionPane: ActionPane(
+      endActionPane: ActionPane(
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
@@ -52,19 +52,6 @@ class TagList extends StatelessWidget {
           ),
         ],
       ),
-      ///ver.0.6.0以下で使用
-      // actionPane: const SlidableScrollActionPane(),
-      // secondaryActions: [
-      //   IconSlideAction(
-      //     caption: 'タグを削除',
-      //     color: Colors.red,
-      //     icon: Icons.remove_circle_outline,
-      //     onTap: () {
-      //       print('削除します');
-      //       onDelete();
-      //     },
-      //   )
-      // ],
       child: DecoratedBox(
         decoration: listDecoration,
         child: ListTile(
