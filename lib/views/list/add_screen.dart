@@ -27,7 +27,6 @@ class AddScreen extends StatelessWidget {
         .of(context)
         .primaryColor;
     final accentColor = Theme.of(context).colorScheme.secondary;
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -45,14 +44,13 @@ class AddScreen extends StatelessWidget {
         )
         :const Text('名称編集',style: middleTextStyle,),
         /// 下から出てくる場合は右上に比較ボタンでもいいかも
-        //todo 作成・更新ボタン nullの場合、灰色にしたい
       trailing:
       Consumer<CompareViewModel>(
           builder: (context, compareViewModel, child) {
             return
-              viewModel.titleController.text.isNotEmpty &&
-                  viewModel.way1Controller.text.isNotEmpty &&
-                  viewModel.way2Controller.text.isNotEmpty
+              compareViewModel.titleController.text.isNotEmpty &&
+                  compareViewModel.way1Controller.text.isNotEmpty &&
+                  compareViewModel.way2Controller.text.isNotEmpty
             //入力されているとき
              ? CupertinoButton(
                 padding: const EdgeInsets.all(8),

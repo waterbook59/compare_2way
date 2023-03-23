@@ -33,6 +33,7 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
             // first and last attributes affect border drawn during dragging
             isFirst: index == 0,
             isLast: index == widget.draggedItems.length - 1,
+            /// //todo deleteItemIdListが空でない時だけ押せる、addScreenの作成ボタン参照
             onTap: () {
               Provider.of<CompareViewModel>(context, listen: false)
                   .checkDeleteIcon(

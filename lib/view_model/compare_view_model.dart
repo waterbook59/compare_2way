@@ -590,6 +590,16 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> changeEditStatusNew() async {
+    if (editStatus==ListEditMode.edit) {
+      editStatus = ListEditMode.display;
+      deleteItemIdList = [];
+    } else {
+      editStatus = ListEditMode.edit;
+    }
+    notifyListeners();
+  }
+
   //ListPage単一行削除
   Future<void> deleteItem(String comparisonItemId) async {
     ///tagChart更新//todo tagChartのidList格納できればもっとシンプルに書ける
@@ -634,6 +644,7 @@ class CompareViewModel extends ChangeNotifier {
       print('id削除後:$deleteItemIdList');
     } else {
       deleteItemIdList.add(itemId);
+     /// //todo deleteItemListが空出ない時だけshowDialog出す
       print('id追加後:$deleteItemIdList');
     }
     notifyListeners();
