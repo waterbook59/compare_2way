@@ -14,7 +14,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'componets/list_page_edit_button.dart';
-import 'componets/list_page_edit_button_new.dart';
 
 class ListPage extends StatelessWidget {
   const ListPage({Key? key}) : super(key: key);
@@ -41,7 +40,7 @@ class ListPage extends StatelessWidget {
                       style: middleTextStyle,
                     );
             },),
-        trailing: const ListPageEditButtonNew(),
+        trailing: const ListPageEditButton(),
       ),
       child: Scaffold(
         //todo Consumer=>Selectorへ変更を検討

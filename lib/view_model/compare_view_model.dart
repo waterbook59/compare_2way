@@ -580,17 +580,8 @@ class CompareViewModel extends ChangeNotifier {
     return _comparisonOverviews;
   }
 
-  Future<void> changeEditStatus(ListEditMode editMode) async {
-    if (editMode == ListEditMode.edit) {
-      editStatus = ListEditMode.display;
-      deleteItemIdList = [];
-    } else {
-      editStatus = ListEditMode.edit;
-    }
-    notifyListeners();
-  }
 
-  Future<void> changeEditStatusNew() async {
+  Future<void> changeEditStatus() async {
     if (editStatus==ListEditMode.edit) {
       editStatus = ListEditMode.display;
       deleteItemIdList = [];
