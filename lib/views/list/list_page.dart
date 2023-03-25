@@ -22,7 +22,7 @@ class ListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor = Theme.of(context).colorScheme.secondary;
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    // final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -50,7 +50,7 @@ class ListPage extends StatelessWidget {
             //todo FutureBuilderを再考する(Consumer or Selectorのみ)iPhoneでは遅さ感じない
 
             builder: (context, compareViewModel, child) {
-          return (viewModel.editStatus == ListEditMode.display)
+          return (compareViewModel.editStatus == ListEditMode.display)
 
               ///通常時
               //SingleChildScrollViewのchildが中心にこない問題の解決法
@@ -61,7 +61,7 @@ class ListPage extends StatelessWidget {
                         BoxConstraints(minHeight: constraints.maxHeight),
                     //初回描画の時にgetListが２回発動される
                     child: FutureBuilder(
-                      future: viewModel.getList(),
+                      future: compareViewModel.getList(),
                       builder: (context,
                           AsyncSnapshot<List<ComparisonOverview>> snapshot,) {
                         if (snapshot.data == null) {
@@ -129,7 +129,7 @@ class ListPage extends StatelessWidget {
                             FutureBuilder(
 ///List<ComparisonOverview>ではなくList<ItemData>へ変換して取得(getAllTagList参照)
                               future:
-                                viewModel.getItemDataList(),
+                              compareViewModel.getItemDataList(),
                               builder: (context,
                                   AsyncSnapshot<List<DraggingItemData>>
                                   snapshot,) {
@@ -155,9 +155,11 @@ class ListPage extends StatelessWidget {
                       )
           ,);
         },),
-        floatingActionButton: Consumer<CompareViewModel>(
+        floatingActionButton:
+            //todo viewModel.editStatusのみなのでSelector使える?
+        Consumer<CompareViewModel>(
             builder: (context, compareViewModel, child) {
-          return (viewModel.editStatus == ListEditMode.display)
+          return (compareViewModel.editStatus == ListEditMode.display)
               ? SizedBox(
                   width: 56,
                   height: 56,

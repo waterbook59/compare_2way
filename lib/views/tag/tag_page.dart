@@ -24,7 +24,7 @@ class TagPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     // final accentColor = CupertinoTheme.of(context).primaryContrastingColor;
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    // final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -47,8 +47,8 @@ class TagPage extends StatelessWidget {
 //         selector: (context, compareViewModel) => compareViewModel.allTagList,
             Consumer<CompareViewModel>(
           builder: (context, compareViewModel, child) {
-            return (viewModel.tagEditMode == TagEditMode.normal ||
-                    viewModel.tagEditMode == TagEditMode.tagTitleEdit)
+            return (compareViewModel.tagEditMode == TagEditMode.normal ||
+                compareViewModel.tagEditMode == TagEditMode.tagTitleEdit)
                 //ここでnormal&editとdeleteModeで表示変更
                 //todo normal&tagTitleEdit内のdeleteModeの表示削除
                 //normal&tagTitleEdit

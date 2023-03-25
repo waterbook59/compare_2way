@@ -20,8 +20,6 @@ class InputPart extends StatelessWidget {
   Widget build(BuildContext context) {
     final accentColor = Theme.of(context).colorScheme.secondary;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    //todo autofocusが三項条件演算子から変更してできているか確認
-    print('autofocusのtrue/false:${displayMode == AddScreenMode.add}');
     return Column(
       children: [
         ///タイトル
