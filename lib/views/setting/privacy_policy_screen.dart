@@ -25,8 +25,9 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
     _webViewController=WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.white)
-      ..setNavigationDelegate(NavigationDelegate(
-        onNavigationRequest:(request){
+      ..setNavigationDelegate(
+        NavigationDelegate(
+        onNavigationRequest:(request,){
           if (request.url.startsWith('https://www.youtube.com/')) {
             // debugPrint('blocking navigation to ${request.url}');
             return NavigationDecision.prevent;

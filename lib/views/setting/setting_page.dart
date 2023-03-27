@@ -3,6 +3,7 @@ import 'package:compare_2way/style.dart';
 import 'package:compare_2way/views/setting/license_page.dart';
 import 'package:compare_2way/views/setting/privacy_policy_screen.dart';
 import 'package:compare_2way/views/setting/user_policy_screen.dart';
+import 'package:compare_2way/views/setting/web_view_test.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
@@ -96,7 +97,7 @@ class _SettingPageState extends State<SettingPage> {
                       onPressed: (context) {
                         Navigator.of(context).push(
                           MaterialPageRoute<void>(
-                            builder: (_) => PrivacyPolicyScreen(),
+                            builder: (_) => const WebViewTest(),
                           ),
                         );
                       },
