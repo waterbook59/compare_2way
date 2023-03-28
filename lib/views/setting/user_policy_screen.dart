@@ -9,50 +9,16 @@ class UserPolicyScreen extends StatefulWidget {
   const UserPolicyScreen({Key? key}) : super(key: key);
 
   @override
-  _UserPolicyScreenState createState() => _UserPolicyScreenState();
+  State<UserPolicyScreen> createState() => _UserPolicyScreenState();
 }
 
 class _UserPolicyScreenState extends State<UserPolicyScreen> {
-
-  bool connectionStatus=false;
-  int position = 1;
-  final key = UniqueKey();
-  ///web_view_flutter ver4.0以降は中級編1の動画参考
   late WebViewController _webViewController;
+  bool connectionStatus = true; //インターネット接続の有無
+  bool isLoading = true; // ローディングの有無
+  double downloadPercentage = 0; // 進捗バー用
 
-  @override
-  void initState() {
-    super.initState();
-    _webViewController=WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..setBackgroundColor(Colors.white)
-    ..setNavigationDelegate(NavigationDelegate(
-        onNavigationRequest:(request){
-          if (request.url.startsWith('https://www.youtube.com/')) {
-            // debugPrint('blocking navigation to ${request.url}');
-            return NavigationDecision.prevent;
-          }
-          debugPrint('allowing navigation to ${request.url}');
-          return NavigationDecision.navigate;
-    } ,),)
-    ..loadRequest(Uri.parse('https://waterboook.com/terms_of_service'));
-  }
-
-  //todo disposeでcontroller破棄?
-
-  void doneLoading(String A) {
-    setState(() {
-      position = 0;
-    });
-  }
-
-  void startLoading(String A) {
-    setState(() {
-      position = 1;
-    });
-  }
-
-  /// インターネット接続チェック
+  // インターネット接続チェック
   Future<void> check() async {
     try {
       final result = await InternetAddress.lookup('google.com');
@@ -64,13 +30,58 @@ class _UserPolicyScreenState extends State<UserPolicyScreen> {
     }
   }
 
+  // ローディングの切り替え
+  void toggleLoading() {
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
+
+  // 進捗計算
+  void calculateProgress(int progress) {
+    setState(() {
+      downloadPercentage = progress / 100;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.white)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (
+            request,
+          ) {
+            if (request.url.startsWith('https://www.youtube.com/')) {
+              // debugPrint('blocking navigation to ${request.url}');
+              return NavigationDecision.prevent;
+            }
+            debugPrint('allowing navigation to ${request.url}');
+            return NavigationDecision.navigate;
+          },
+          onProgress: calculateProgress,
+          onPageFinished: (_) {
+            if (isLoading) {
+              toggleLoading();
+            }
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse('https://waterboook.com/terms_of_service'));
+  }
+
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
+
     return FutureBuilder<dynamic>(
-        future: check(),
-    builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-      return CupertinoPageScaffold(
+      future: check(),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        return CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(
             backgroundColor: primaryColor,
             // actionsForegroundColor: Colors.white,
@@ -80,57 +91,57 @@ class _UserPolicyScreenState extends State<UserPolicyScreen> {
             ),
           ),
           child: Scaffold(
-            body: connectionStatus == true
-                ? IndexedStack(
-              index: position,
-              children: [
-                //todo ロード中プログレスインジケーターを表示
-                WebViewWidget(controller: _webViewController),
-                // WebView(
-                //   initialUrl: 'https://waterboook.com/terms_of_service',
-                //   javascriptMode: JavascriptMode.unrestricted,
-                //   key: key,
-                //   /// indexを０にしてWebViewを表示
-                //   onPageFinished: doneLoading,
-                //   /// indexを1にしてプログレスインジケーターを表示
-                //   onPageStarted: startLoading,
-                // ),
+            body: connectionStatus
+                ? SafeArea(
+                    child: Column(
+                      children: [
+                        // 進捗バー
+                        isLoading
+                            ? LinearProgressIndicator(
+                                color: accentColor,
+                                backgroundColor: Colors.grey,
+                                value: downloadPercentage,
+                                minHeight: 7,
+                              )
+                            : const SizedBox.shrink(),
+                        Expanded(
+                          child: Scrollbar(
+                            child: WebViewWidget(
+                              controller: _webViewController,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
 
-                Container(
-                  child: const Center(
-                    child: CircularProgressIndicator(
-                        backgroundColor: Colors.blue,),
-                  ),
-                ),
-              ],
-            )
-
-            /// インターネットに接続されていない場合の処理
+                /// インターネットに接続されていない場合の処理 //todo 文字中央に
                 : SafeArea(
-              child: Center(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding:const EdgeInsets.only(
-                        top: 120,
-                        bottom: 20,
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 120,
+                              bottom: 20,
+                            ),
+                            child: Container(),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(
+                              bottom: 20,
+                            ),
+                            child: Text(
+                              'インターネットに接続されていません',
+                            ),
+                          ),
+                        ],
                       ),
-                      child: Container(),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(
-                        bottom: 20,
-                      ),
-                      child: Text(
-                        'インターネットに接続されていません',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),);
-    }
-       ,);
+                  ),
+          ),
+        );
+      },
+    );
   }
 }

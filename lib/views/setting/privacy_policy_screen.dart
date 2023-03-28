@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:compare_2way/style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,13 +9,26 @@ class PrivacyPolicyScreen extends StatefulWidget {
   const PrivacyPolicyScreen({Key? key}) : super(key: key);
 
   @override
-  State<PrivacyPolicyScreen> createState() => _WebViewTestState();
+  State<PrivacyPolicyScreen> createState() => _PrivacyPolicyScreenState();
 }
 
-class _WebViewTestState extends State<PrivacyPolicyScreen> {
+class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
   late WebViewController _webViewController;
+  bool connectionStatus = true; //インターネット接続の有無
   bool isLoading = true; // ローディングの有無
   double downloadPercentage = 0; // 進捗バー用
+
+  // インターネット接続チェック
+  Future<void> check() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        connectionStatus = true;
+      }
+    } on SocketException catch (_) {
+      connectionStatus = false;
+    }
+  }
 
   // ローディングの切り替え
   void toggleLoading() {
@@ -64,36 +79,69 @@ class _WebViewTestState extends State<PrivacyPolicyScreen> {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor = Theme.of(context).colorScheme.secondary;
 
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: primaryColor,
-        middle: const Text(
-          'プライバシーポリシー',
-          style: middleTextStyle,
-        ),
-      ),
-      child: Scaffold(
-        body: Column(
-          children: [
-            // 進捗バー
-            isLoading
-                ? LinearProgressIndicator(
-                    color: accentColor,
-                    backgroundColor: Colors.grey,
-                    value: downloadPercentage,
-                    minHeight: 7,
-                  )
-                : const SizedBox.shrink(),
-            Expanded(
-              child: Scrollbar(
-                child: WebViewWidget(
-                  controller: _webViewController,
-                ),
-              ),
+    return FutureBuilder<dynamic>(
+      future: check(),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        return CupertinoPageScaffold(
+          navigationBar: CupertinoNavigationBar(
+            backgroundColor: primaryColor,
+            middle: const Text(
+              'プライバシーポリシー',
+              style: middleTextStyle,
             ),
-          ],
-        ),
-      ),
+          ),
+          child: Scaffold(
+            body: connectionStatus
+                ? SafeArea(
+                  child: Column(
+                      children: [
+                        // 進捗バー
+                        isLoading
+                            ? LinearProgressIndicator(
+                                color: accentColor,
+                                backgroundColor: Colors.grey,
+                                value: downloadPercentage,
+                                minHeight: 7,
+                              )
+                            : const SizedBox.shrink(),
+                        Expanded(
+                          child: Scrollbar(
+                            child: WebViewWidget(
+                              controller: _webViewController,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                )
+
+                /// インターネットに接続されていない場合の処理 //todo 文字中央に
+                : SafeArea(
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 120,
+                              bottom: 20,
+                            ),
+                            child: Container(),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(
+                              bottom: 20,
+                            ),
+                            child: Text(
+                              'インターネットに接続されていません',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+          ),
+        );
+      },
     );
   }
 }
