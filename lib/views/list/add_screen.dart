@@ -114,7 +114,7 @@ class AddScreen extends StatelessWidget {
       itemTitle: viewModel.titleController.text,
       way1Title: viewModel.way1Controller.text,
       way2Title: viewModel.way2Controller.text,
-      //todo way3追加
+      /// //todo way3追加
       conclusion: '',
       createdAt: DateTime.now(),
     );
@@ -136,7 +136,7 @@ class AddScreen extends StatelessWidget {
       comparisonItemId: newComparisonOverview.comparisonItemId,
       way2DemeritDesc: '',
     );
-    //todo way3追加
+    /// //todo way3追加
 
     ///DB登録
     ///viewModel側でcontroller.textを入力してDB登録
@@ -179,7 +179,7 @@ class AddScreen extends StatelessWidget {
     ///更新時は必ずcomparisonOverviewが入ってくるので強制呼び出し
     await viewModel.updateTitles(comparisonOverview!);
 
-    //todo この書き方でBuildContextを非同期処理内で使っても良いか
+    /// //todo この書き方でBuildContextを非同期処理内で使っても良いか
     if (context.mounted) {
       //CompareScreenへ
       Navigator.pop(context);

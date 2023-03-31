@@ -43,11 +43,11 @@ class ListPage extends StatelessWidget {
         trailing: const ListPageEditButton(),
       ),
       child: Scaffold(
-        //todo Consumer=>Selectorへ変更を検討
+        /// //todo Consumer=>Selectorへ変更を検討
         body: Consumer<CompareViewModel>(
 
             /// Consumer=>FutureBuilderは空リスト表示できるが、リスト押してからCompareScreen表示が遅い?
-            //todo FutureBuilderを再考する(Consumer or Selectorのみ)iPhoneでは遅さ感じない
+            /// //todo FutureBuilderを再考する(Consumer or Selectorのみ)iPhoneでは遅さ感じない
 
             builder: (context, compareViewModel, child) {
           return (compareViewModel.editStatus == ListEditMode.display)
@@ -65,7 +65,7 @@ class ListPage extends StatelessWidget {
                       builder: (context,
                           AsyncSnapshot<List<ComparisonOverview>> snapshot,) {
                         if (snapshot.data == null) {
-                          print('List<ComparisonOverview>>snapshotがnull');
+                          debugPrint('List<ComparisonOverview>>snapshotがnull');
                           return Container();
                         }
                       ///viewModel.comparisonOverviews.isEmptyだとEmptyView通ってしまう
@@ -116,7 +116,7 @@ class ListPage extends StatelessWidget {
                 )
 
               ///編集時  ListTile→ReorderableListView&CheckboxListTile
-              //todo Consumerにしないと編集時リストがなくなる
+              /// //todo Consumerにしないと編集時リストがなくなる
               : LayoutBuilder(
                   builder: (context, constraints) => SingleChildScrollView(
                         child: ConstrainedBox(
@@ -156,7 +156,7 @@ class ListPage extends StatelessWidget {
           ,);
         },),
         floatingActionButton:
-            //todo viewModel.editStatusのみなのでSelector使える?
+            /// //todo viewModel.editStatusのみなのでSelector使える?
         Consumer<CompareViewModel>(
             builder: (context, compareViewModel, child) {
           return (compareViewModel.editStatus == ListEditMode.display)
@@ -180,7 +180,7 @@ class ListPage extends StatelessWidget {
   } //buildはここまで
 
   // DB登録とComparePageへ移動
-  //todo ページ遷移は下からに変更
+  /// //todo ページ遷移は下からに変更
   void _createComparisonItems(BuildContext context) {
     ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
     Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(

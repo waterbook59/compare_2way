@@ -25,7 +25,7 @@ class SelectTagPage extends StatelessWidget {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        //todo actionsForegroundColorが廃止
+        /// //todo actionsForegroundColorが廃止
         // actionsForegroundColor: Colors.white,
         backgroundColor: primaryColor,
         // tagアイコン追加(アイコン+文字を中心にもっていくため右を48空ける)

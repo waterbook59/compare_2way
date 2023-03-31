@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TagPageTitle extends StatelessWidget {
+  const TagPageTitle({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Selector<CompareViewModel,TagEditMode>(

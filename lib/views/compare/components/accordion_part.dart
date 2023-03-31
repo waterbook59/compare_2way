@@ -36,7 +36,7 @@ class AccordionPart extends StatefulWidget {
   final Function(int) deleteList;
 
   @override
-  _AccordionPartState createState() => _AccordionPartState();
+  State<AccordionPart> createState() => _AccordionPartState();
 }
 
 class _AccordionPartState extends State<AccordionPart> {
@@ -50,10 +50,10 @@ class _AccordionPartState extends State<AccordionPart> {
   void initState() {
 
     ///descListTileのフォーカスをリセットする
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false)
-     ..selectedDescListIndex=null;
+    Provider.of<CompareViewModel>(context, listen: false)
+     .selectedDescListIndex=null;
 
-    //todo way3Merit,Demerit分作成
+    /// //todo way3Merit,Demerit分作成
     switch (widget.displayList) {
       case DisplayList.way1Merit:
         widget.way1MeritList!.isNotEmpty
@@ -82,10 +82,10 @@ class _AccordionPartState extends State<AccordionPart> {
             : controllers = [];
         break;
       case DisplayList.way3Merit:
-        //todo
+        // //todo
         break;
       case DisplayList.way3Demerit:
-        //todo
+       // //todo
         break;
 
     }
@@ -137,7 +137,7 @@ class _AccordionPartState extends State<AccordionPart> {
             contentChild:
           //リストが増えていくとDescFormButtonがタイトル部分にはみ出している
             ///=>custom.GFAccordion設定で初期位置修正
-            //todo way3追加
+            // //todo way3追加
             DescFormAndButton(
               displayList: widget.displayList,
               way1MeritList: widget.way1MeritList,
@@ -155,7 +155,7 @@ class _AccordionPartState extends State<AccordionPart> {
           contentPadding: const EdgeInsets.only(top: 1,left: 8,right: 8),
         ),
 
-    //todo ボタン押しやすいサイズに
+    // //todo ボタン押しやすいサイズに
         Positioned(
           right: 64,
           top: 20,
@@ -174,7 +174,7 @@ class _AccordionPartState extends State<AccordionPart> {
     );
   }
 
-  //todo way3Merit,Demerit分作成
+  // //todo way3Merit,Demerit分作成
   ///initStateでの条件分岐があり必ず各リストが入るので強制呼び出し
   void createWay1MeritList() {
     controllers = widget.way1MeritList!.map((item) {

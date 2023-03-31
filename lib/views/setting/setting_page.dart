@@ -1,8 +1,8 @@
 import 'package:app_review/app_review.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/views/setting/license_page.dart';
-import 'package:compare_2way/views/setting/user_policy_screen.dart';
 import 'package:compare_2way/views/setting/privacy_policy_screen.dart';
+import 'package:compare_2way/views/setting/user_policy_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
@@ -12,7 +12,7 @@ class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
 
   @override
-  _SettingPageState createState() => _SettingPageState();
+  State<SettingPage> createState() => _SettingPageState();
 }
 
 class _SettingPageState extends State<SettingPage> {
@@ -83,7 +83,7 @@ class _SettingPageState extends State<SettingPage> {
                       onPressed: (context) {
                         Navigator.of(context).push(
                           MaterialPageRoute<void>(
-                            builder: (_) => UserPolicyScreen(),
+                            builder: (_) => const UserPolicyScreen(),
                           ),
                         );
                       },
@@ -113,7 +113,7 @@ class _SettingPageState extends State<SettingPage> {
                       onPressed: (context) {
                         Navigator.of(context).push(
                           MaterialPageRoute<void>(
-                            builder: (_) => MyLicensePage(),
+                            builder: (_) => const MyLicensePage(),
                           ),
                         );
                       },
@@ -140,7 +140,7 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   void _requestReview() {
-    AppReview.requestReview.then(print);
+    AppReview.requestReview.then(debugPrint);
   }
 
 //flutter_email_senderを使ってメールを送信

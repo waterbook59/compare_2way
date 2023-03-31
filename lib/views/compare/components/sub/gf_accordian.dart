@@ -24,8 +24,11 @@ class GFAccordion extends StatefulWidget {
       this.margin,
       this.showAccordion = false,
       this.onToggleCollapsed,
-      this.titleBorderRadius = const BorderRadius.all(Radius.circular(0)),
-      this.contentBorderRadius = const BorderRadius.all(Radius.circular(0)),})
+      this.titleBorderRadius = BorderRadius.zero,
+      //   this.titleBorderRadius = const BorderRadius.all(Radius.circular(0)),
+        this.contentBorderRadius = BorderRadius.zero,
+      // this.contentBorderRadius = const BorderRadius.all(Radius.circular(0)),
+      })
       : super(key: key);
 
   /// controls if the accordion should be collapsed or not making it possible to be controlled from outside
@@ -90,7 +93,8 @@ class GFAccordion extends StatefulWidget {
   final Function(bool)? onToggleCollapsed;
 
   @override
-  _GFAccordionState createState() => _GFAccordionState();
+  State<GFAccordion> createState() => _GFAccordionState();
+  // _GFAccordionState createState() => _GFAccordionState();
 }
 
 class _GFAccordionState extends State<GFAccordion>
@@ -126,7 +130,7 @@ class _GFAccordionState extends State<GFAccordion>
   void dispose() {
     animationController.dispose();
     controller.dispose();
-    //todo showAccordion,offsetインスタンスdispose?
+    /// //todo showAccordion,offsetインスタンスdispose?
     super.dispose();
   }
 

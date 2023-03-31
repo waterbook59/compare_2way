@@ -36,7 +36,7 @@ class AccordionSubPart extends StatefulWidget {
   final Function(int) deleteList;
 
   @override
-  _AccordionSubPartState createState() => _AccordionSubPartState();
+  State<AccordionSubPart> createState() => _AccordionSubPartState();
 }
 
 class _AccordionSubPartState extends State<AccordionSubPart> {
@@ -48,7 +48,7 @@ class _AccordionSubPartState extends State<AccordionSubPart> {
 
   @override
   void initState() {
-    //todo way3Merit,Demerit分作成
+    // //todo way3Merit,Demerit分作成
     switch (widget.displayList) {
       case DisplayList.way1Merit:
         widget.way1MeritList!.isNotEmpty
@@ -72,10 +72,10 @@ class _AccordionSubPartState extends State<AccordionSubPart> {
         break;
 
       case DisplayList.way3Merit:
-      //todo
+      // //todo
         break;
       case DisplayList.way3Demerit:
-      //todo
+      // //todo
         break;
     }
 
@@ -127,7 +127,7 @@ class _AccordionSubPartState extends State<AccordionSubPart> {
           contentChild:
           //リストが増えていくとDescFormButtonがタイトル部分にはみ出している
           ///=>custom.GFAccordion設定で初期位置修正
-          //todo way3追加
+          // //todo way3追加
           DescFormAndButton(
             displayList: widget.displayList,
             way1MeritList: widget.way1MeritList,
@@ -145,7 +145,7 @@ class _AccordionSubPartState extends State<AccordionSubPart> {
           contentPadding: const EdgeInsets.only(top: 1,left: 8,right: 8),
         ),
 
-        //todo ボタン押しやすいサイズに
+        // //todo ボタン押しやすいサイズに
         Positioned(
           right: 64,
           top: 20,
@@ -164,7 +164,7 @@ class _AccordionSubPartState extends State<AccordionSubPart> {
     );
   }
 
-  //todo way3Merit,Demerit分作成
+  // //todo way3Merit,Demerit分作成
   ///initStateでの条件分岐があり必ず各リストが入るので強制呼び出し
   void createWay1MeritList() {
     controllers = widget.way1MeritList!.map((item) {

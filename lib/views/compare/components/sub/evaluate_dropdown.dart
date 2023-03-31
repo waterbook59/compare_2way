@@ -10,7 +10,8 @@ class EvaluateDropdown extends StatefulWidget {
   final Function(int) onSelected;
 
   @override
-  _EvaluateDropdownState createState() => _EvaluateDropdownState();
+  State<EvaluateDropdown> createState() => _EvaluateDropdownState();
+  // _EvaluateDropdownState createState() => _EvaluateDropdownState();
 }
 
 class _EvaluateDropdownState extends State<EvaluateDropdown> {
@@ -24,7 +25,7 @@ class _EvaluateDropdownState extends State<EvaluateDropdown> {
 
   @override
   void dispose() {
-    // TODO:  displayValueインスタンス？
+    /// //todo:  displayValueインスタンス？
     super.dispose();
   }
 

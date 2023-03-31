@@ -22,7 +22,7 @@ class TagChips extends StatefulWidget {
   final ValueChanged<String> setTempoInput;
 
   @override
-  _TagChipsState createState() => _TagChipsState();
+  State<TagChips> createState() => _TagChipsState();
 }
 
 class _TagChipsState extends State<TagChips> {
@@ -48,7 +48,7 @@ class _TagChipsState extends State<TagChips> {
 //    print('TagChips/initState/tagTitles(Set):$tagNameListSet');
     _tempoDisplayList  = tagNameListSet.toList();
 
-    //todo view層で場合分けが必要か、viewModel層以下での場合分必要か
+    /// //todo view層で場合分けが必要か、viewModel層以下での場合分必要か
 if(widget.candidateTagNameList==null){
   isCandidate =false;
 }else{
@@ -59,18 +59,19 @@ if(widget.candidateTagNameList==null){
     //TagDialogPageのgetCandidateTagListでviewModelにcandidateTagNameList格納
     _tempoCandidateLabels = widget.candidateTagNameList;
 
-    print('tagChips/initState/tagNameListSet:$tagNameListSet, candidateTagNameList:${widget.candidateTagNameList}' );
+    debugPrint('tagChips/initState/tagNameListSet:'
+        '$tagNameListSet, candidateTagNameList:${widget.candidateTagNameList}');
 
     super.initState();
   }
 
   @override
   void dispose() {
-    //todo disposeしなくてい良い??
+    /// //todo disposeしなくてい良い??
     _tempoCandidateLabels = [];
     _tempoDisplayList = [];
     _tempoInput ='';//tagChips破棄時に空にする
-    print('tagChips/dispose_tempoDisplayList :$_tempoDisplayList');
+    debugPrint('tagChips/dispose_tempoDisplayList :$_tempoDisplayList');
     super.dispose();
   }
 
@@ -90,7 +91,7 @@ if(widget.candidateTagNameList==null){
                 children:
                 ///List<InputChip>への変換はinitState内ではなく、Wrap内で行わないとselectedが反映されない
                 ///tagNameListからつくることでtempoChipsいらない
-                //todo 長すぎるチップでも全部見えるようにする
+                /// //todo 長すぎるチップでも全部見えるようにする
                 List<InputChip>.generate(
                     _tempoDisplayList.length, (int index) {
                   return InputChip(
@@ -107,7 +108,7 @@ if(widget.candidateTagNameList==null){
                       _tempoCandidateLabels.add(_tempoDisplayList[index]);
                       _tempoDeleteLabels.add(_tempoDisplayList[index]);
                       _tempoDisplayList.removeAt(index);
-                      print('onDelete/tempoDeleteLabels:$_tempoDeleteLabels');
+                  debugPrint('onDelete/tempoDeleteLabels:$_tempoDeleteLabels');
  ///削除した状態をviewModelへset
 //                      widget.onSubmitted(_tempoDisplayList);
                       // ignore: lines_longer_than_80_chars

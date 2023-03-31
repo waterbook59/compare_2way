@@ -14,7 +14,7 @@ class ReorderableEditList extends StatefulWidget {
   final List<DraggingItemData> draggedItems;
 
   @override
-  _ReorderableEditListState createState() => _ReorderableEditListState();
+  State<ReorderableEditList> createState() => _ReorderableEditListState();
 }
 
 class _ReorderableEditListState extends State<ReorderableEditList> {

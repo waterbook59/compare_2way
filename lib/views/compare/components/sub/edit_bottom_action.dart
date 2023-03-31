@@ -95,7 +95,7 @@ class EditBottomAction extends StatelessWidget {
         ),);
         break;
       case CompareEditMenu.allListDelete:
-        //todo 必要なら非同期に変更
+        /// //todo 必要なら非同期に変更
         Navigator.pop(context);
         showDialog<Widget>(
             context: context,
@@ -118,7 +118,7 @@ class EditBottomAction extends StatelessWidget {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute<void>(
-                              builder: (context) => HomeScreen(
+                              builder: (context) => const HomeScreen(
                               ),),);
                     },
                     child: const Text('削除'),

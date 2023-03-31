@@ -16,7 +16,7 @@ class TagViewModel extends ChangeNotifier{
   ///TagPageのFutureBuilder用
   Future<List<Tag>> getAllTagList() async {
     _tagList = await _compareRepository.getAllTagList();
-        print('viewModel.getTagAllList:${_tagList.map((e) => e.tagTitle)}');
+    debugPrint('viewModel.getTagAllList:${_tagList.map((e) => e.tagTitle)}');
     return _tagList;
 
   }

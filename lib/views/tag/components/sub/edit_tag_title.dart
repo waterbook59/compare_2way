@@ -5,18 +5,18 @@ import 'package:provider/provider.dart';
 
 ///変更した値を上を渡すのではなく、ここでDB更新までもっていく
 class EditTagTitle extends StatefulWidget {
-  const EditTagTitle({
+  const EditTagTitle({Key? key,
     required this.tagTitle,
     // required this.selectTagIdList,
     required this.myFocusNode,
-  });
+  }) : super(key: key);
 
   final String tagTitle;
   // final List<String> selectTagIdList;//tagTitle編集時に更新するIDリスト
   final FocusNode myFocusNode;
 
   @override
-  _EditTagTitleState createState() => _EditTagTitleState();
+  State<EditTagTitle> createState() => _EditTagTitleState();
 }
 
 class _EditTagTitleState extends State<EditTagTitle> {

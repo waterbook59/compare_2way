@@ -21,15 +21,11 @@ class TagChipPart extends StatelessWidget {
       child: Column(
         children: [
           Row(//cupertino
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                   child: Wrap(
-                    alignment: WrapAlignment.start,
                     spacing: 8,
-                    runSpacing: 0,
-                    direction: Axis.horizontal,
                     children: dCL,)
               ,),
             ],

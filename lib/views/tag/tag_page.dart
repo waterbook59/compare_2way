@@ -29,11 +29,11 @@ class TagPage extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
-        middle: TagPageTitle(),
+        middle: const TagPageTitle(),
         trailing:
             //タグ名編集時にキーボードunFocusできるアイコン追加(viewModel経由=>Consumerに訴える)
             //編集モード(true)の時はリストをタップするとTagListのtagTitle部を編集する形に
-            TagEditButtonAction(),
+            const TagEditButtonAction(),
       ),
 
       ///Scaffoldで全く問題なし
@@ -48,9 +48,9 @@ class TagPage extends StatelessWidget {
             Consumer<CompareViewModel>(
           builder: (context, compareViewModel, child) {
             return (compareViewModel.tagEditMode == TagEditMode.normal ||
-                compareViewModel.tagEditMode == TagEditMode.tagTitleEdit)
+                    compareViewModel.tagEditMode == TagEditMode.tagTitleEdit)
                 //ここでnormal&editとdeleteModeで表示変更
-                //todo normal&tagTitleEdit内のdeleteModeの表示削除
+                /// //todo normal&tagTitleEdit内のdeleteModeの表示削除
                 //normal&tagTitleEdit
                 ? LayoutBuilder(
                     builder: (context, constraints) {
@@ -60,22 +60,27 @@ class TagPage extends StatelessWidget {
                         child: FutureBuilder(
                           future: compareViewModel.getAllTagChartList(),
                           //compareViewModel.allTagList,
-                          builder: (context,
-                              AsyncSnapshot<List<TagChart>> snapshot,) {
+                          builder: (
+                            context,
+                            AsyncSnapshot<List<TagChart>> snapshot,
+                          ) {
                             if (snapshot.data == null) {
-                              print(
-                                'AsyncSnapshot<List<TagChart>> snapshotがnull',);
+                              debugPrint(
+                                'AsyncSnapshot<List<TagChart>> snapshotがnull',
+                              );
                               return Container();
                             }
 
                             ///nullで場合分けしているので、snapshot.data強制呼び出し
                             if (snapshot.hasData && snapshot.data!.isEmpty) {
-                              print('TagPage/EmptyView側通って描画');
+                              debugPrint('TagPage/EmptyView側通って描画');
                               return Container(
-                                  child: const Center(
-                                      child: Text('タグづけされたアイテムはありません'),),);
+                                child: const Center(
+                                  child: Text('タグづけされたアイテムはありません'),
+                                ),
+                              );
                             } else {
-                              //todo まとめてスクロール sliver使用 https://kabochapo.hateblo.jp/entry/2021/05/10/190621
+                              /// //todo まとめてスクロール sliver使用 https://kabochapo.hateblo.jp/entry/2021/05/10/190621
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -99,15 +104,17 @@ class TagPage extends StatelessWidget {
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         final tagChart = snapshot.data![index];
-                               // print('tagPage/snapshot.itemIdList:${tagChart.itemIdList}');
+                                        // print('tagPage/snapshot.itemIdList:${tagChart.itemIdList}');
                                         //DateTime=>String変換
                                         return TagList(
                                           title: tagChart.tagTitle,
-                                          // selectTagIdList: tagChart.itemIdList,
+                                      // selectTagIdList: tagChart.itemIdList,
                                           tagAmount: tagChart.tagAmount!,
                                           createdAt: '登録時間',
                                           onDelete: () => _onDeleteTag(
-                                              context, tagChart.tagTitle,),
+                                            context,
+                                            tagChart.tagTitle,
+                                          ),
                                           onTap: () => _onSelectTag(
                                             context,
                                             tagChart.tagTitle,
@@ -129,34 +136,37 @@ class TagPage extends StatelessWidget {
                     },
                   )
                 //削除モード
-                : LayoutBuilder(builder: (context, constraints) {
-                    return SingleChildScrollView(
-                      child: ConstrainedBox(
-                        constraints:
-                            BoxConstraints(minHeight: constraints.maxHeight),
-                        child: FutureBuilder(
-                          future: compareViewModel.getTagChartList(),
-                          builder: (
-                            context,
-                            AsyncSnapshot<List<DraggingTagChart>> snapshot,
-                          ) {
-                            if (snapshot.data == null) {
-                              return Container();
-                            }
-                            if (snapshot.hasData && snapshot.data!.isEmpty) {
-                              return Container(
-                                child: const Center(child: Text('アイテムはありません')),
-                              );
-                            } else {
-                              return ReorderableTagList(
-                                draggedTags: snapshot.data!,
-                              );
-                            }
-                          },
+                : LayoutBuilder(
+                    builder: (context, constraints) {
+                      return SingleChildScrollView(
+                        child: ConstrainedBox(
+                          constraints:
+                              BoxConstraints(minHeight: constraints.maxHeight),
+                          child: FutureBuilder(
+                            future: compareViewModel.getTagChartList(),
+                            builder: (
+                              context,
+                              AsyncSnapshot<List<DraggingTagChart>> snapshot,
+                            ) {
+                              if (snapshot.data == null) {
+                                return Container();
+                              }
+                              if (snapshot.hasData && snapshot.data!.isEmpty) {
+                                return Container(
+                                  child:
+                                      const Center(child: Text('アイテムはありません')),
+                                );
+                              } else {
+                                return ReorderableTagList(
+                                  draggedTags: snapshot.data!,
+                                );
+                              }
+                            },
+                          ),
                         ),
-                      ),
-                    );
-                  },);
+                      );
+                    },
+                  );
           },
         ),
       ),
@@ -179,18 +189,21 @@ class TagPage extends StatelessWidget {
         //IdからcomparisonOverview.titleを取得し表示
         await viewModel.onSelectTag(tagTitle);
         if (context.mounted) {
-        ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
-        await Navigator.of(context, rootNavigator: true)
-            .push(MaterialPageRoute<void>(
-                builder: (context) => SelectTagPage(
-                      tagTitle: tagTitle,
-                    ),),);
+          ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
+          await Navigator.of(context, rootNavigator: true).push(
+            MaterialPageRoute<void>(
+              builder: (context) => SelectTagPage(
+                tagTitle: tagTitle,
+              ),
+            ),
+          );
         }
         break;
 
       ///編集モード：タップでタイトルをeditTagTitleへ変更=>onSubmittedでitemIdListを元にDBをupdate
       //編集モードでリストの１つをタップ=>tagTitleからList<Tag>をviewModelへ格納
-    //タグ名を編集=>新しいTagTitleからList<Tag>上書き、tagIdとcomparisonItemIdの2つからtagTitleを上書き
+      //タグ名を編集=>新しいTagTitleからList<Tag>上書き、
+    // tagIdとcomparisonItemIdの2つからtagTitleを上書き
       case TagEditMode.tagTitleEdit:
         // タップでtextFieldにfocus
         myFocusNode.requestFocus();
@@ -201,36 +214,36 @@ class TagPage extends StatelessWidget {
       /// 削除モード タップでタグ削除 //todo タップ削除はなくなったのでこの部分はいらない
       case TagEditMode.tagDelete:
         await showDialog<Widget>(
-            context: context,
-            builder: (context) {
-              return CupertinoAlertDialog(
-                title: Text('「$tagTitle」タグ'),
-                content: const Text('削除してもいいですか？'),
-                actions: [
-                  CupertinoDialogAction(
-                    isDestructiveAction: true,
-                    onPressed: () {
-                      viewModel.onDeleteTag(tagTitle);
-                      Navigator.pop(context);
-                      Fluttertoast.showToast(
-                        msg: '削除完了',
-                      );
-                    },
-                    child: const Text('削除'),
-                  ),
-                  CupertinoDialogAction(
-                    child: const Text('キャンセル'),
-                    onPressed: () {
-                      //キャンセル押した時に_selectedIndexをデフォルトに(選択状態解除)
-                      viewModel.unFocusTagPageList();
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              );
-            },);
+          context: context,
+          builder: (context) {
+            return CupertinoAlertDialog(
+              title: Text('「$tagTitle」タグ'),
+              content: const Text('削除してもいいですか？'),
+              actions: [
+                CupertinoDialogAction(
+                  isDestructiveAction: true,
+                  onPressed: () {
+                    viewModel.onDeleteTag(tagTitle);
+                    Navigator.pop(context);
+                    Fluttertoast.showToast(
+                      msg: '削除完了',
+                    );
+                  },
+                  child: const Text('削除'),
+                ),
+                CupertinoDialogAction(
+                  child: const Text('キャンセル'),
+                  onPressed: () {
+                    //キャンセル押した時に_selectedIndexをデフォルトに(選択状態解除)
+                    viewModel.unFocusTagPageList();
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          },
+        );
         break;
-
     }
 
     //2モードのとき
@@ -259,35 +272,38 @@ class TagPage extends StatelessWidget {
 
   //tagTitleを元に削除
   Future<Future<Widget?>> _onDeleteTag(
-      BuildContext context, String tagTitle,) async {
+    BuildContext context,
+    String tagTitle,
+  ) async {
     //Slidable削除のとき確認ダイアログ出す
     return showDialog<Widget>(
-        context: context,
-        builder: (context) {
-          return CupertinoAlertDialog(
-            title: Text('「$tagTitle」タグの削除'),
-            content: const Text('削除してもいいですか？'),
-            actions: [
-              CupertinoDialogAction(
-                isDestructiveAction: true,
-                onPressed: () {
-                  // final viewModel =
-                      Provider.of<CompareViewModel>(context, listen: false)
-                        .onDeleteTag(tagTitle);
-                  Fluttertoast.showToast(
-                    msg: '削除完了',
-                  );
-                  Navigator.pop(context);
-                },
-                child: const Text('削除'),
-              ),
-              CupertinoDialogAction(
-                child: const Text('キャンセル'),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          );
-        },);
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text('「$tagTitle」タグの削除'),
+          content: const Text('削除してもいいですか？'),
+          actions: [
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              onPressed: () {
+                // final viewModel =
+                Provider.of<CompareViewModel>(context, listen: false)
+                    .onDeleteTag(tagTitle);
+                Fluttertoast.showToast(
+                  msg: '削除完了',
+                );
+                Navigator.pop(context);
+              },
+              child: const Text('削除'),
+            ),
+            CupertinoDialogAction(
+              child: const Text('キャンセル'),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
 
     //確認ダイアログなし削除
     // final viewModel = Provider.of<CompareViewModel>(context, listen: false);

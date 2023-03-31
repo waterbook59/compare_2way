@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class SelectItemList extends StatelessWidget {
   const SelectItemList(
-      {required this.title,
+      {Key? key, required this.title,
         required this.conclusion,
         required this.createdAt,
         this.onDelete,
         required this.onTap,
-        required this.listDecoration,});
+        required this.listDecoration,}) : super(key: key);
 
   final String title;
   final String conclusion;

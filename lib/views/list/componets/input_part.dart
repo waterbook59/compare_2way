@@ -67,7 +67,7 @@ class InputPart extends StatelessWidget {
 //          iconData: CupertinoIcons.arrow_turn_up_left ,
         ),
         const SizedBox(height: 16),
-//todo way3のアイコン
+/// //todo way3のアイコン
 //          iconData: CupertinoIcons.arrow_uturn_up ,
         ///button
         Consumer<CompareViewModel>(
@@ -112,7 +112,7 @@ class InputPart extends StatelessWidget {
       way1DemeritEvaluate: 0,
       way2MeritEvaluate: 0,
       way2DemeritEvaluate: 0,
-      //todo way3追加
+      /// //todo way3追加
       conclusion: '',
       createdAt: DateTime.now(),
     );
@@ -134,7 +134,7 @@ class InputPart extends StatelessWidget {
       comparisonItemId: newComparisonOverview.comparisonItemId,
       way2DemeritDesc: '',
     );
-    //todo way3追加
+    /// //todo way3追加
 
     ///DB登録
     ///viewModel側でcontroller.textを入力してDB登録
@@ -184,7 +184,7 @@ class InputPart extends StatelessWidget {
     ///更新時は必ずcomparisonOverviewが入ってくるので強制呼び出し
     await viewModel.updateTitles(comparisonOverview!);
 
-    //todo この書き方でBuildContextを非同期処理内で使っても良いか
+    /// //todo この書き方でBuildContextを非同期処理内で使っても良いか
     if (context.mounted) {
       return;
     }

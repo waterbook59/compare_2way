@@ -28,7 +28,7 @@ class TagList extends StatelessWidget {
 //  final Function(FocusNode) onTap;
   final List<String>? selectTagIdList; //tagTitle編集時に更新するIDリスト
   final int listNumber;
-  final FocusNode myFocusNode; //todo 完了押した時にfocusNodeのdispose必要かも
+  final FocusNode myFocusNode; /// //todo 完了押した時にfocusNodeのdispose必要かも
 
   @override
   Widget build(BuildContext context) {

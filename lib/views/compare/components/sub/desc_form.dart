@@ -24,7 +24,8 @@ class DescForm extends StatefulWidget {
 
 
   @override
-  _DescFormState createState() => _DescFormState();
+  State<DescForm> createState() => _DescFormState();
+  // _DescFormState createState() => _DescFormState();
 }
 
 class _DescFormState extends State<DescForm> {
@@ -34,8 +35,8 @@ class _DescFormState extends State<DescForm> {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
-//todo way3Merit,Demerit追加
-    //todo cupertinoTextField部分は共通でスッキリ書く
+// //todo way3Merit,Demerit追加
+  //  //todo cupertinoTextField部分は共通でスッキリ書く
     switch(widget.displayList){
       case DisplayList.way1Merit:
         return Stack(
@@ -183,7 +184,7 @@ class _DescFormState extends State<DescForm> {
                 :Container(),
           ],
         );
-    //todo way3Merit,Demerit分作成
+    // //todo way3Merit,Demerit分作成
       case DisplayList.way3Merit:
         return Container();
       case DisplayList.way3Demerit:

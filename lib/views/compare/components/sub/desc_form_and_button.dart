@@ -13,7 +13,7 @@ class DescFormAndButton extends StatefulWidget {
     this.way2MeritList,
     this.way1DemeritList,
     this.way2DemeritList,
-    //todo
+    // //todo
 //    this.way3MeritList,
 //    this.way3DemeritList,
     required this.inputChanged,
@@ -35,7 +35,8 @@ class DescFormAndButton extends StatefulWidget {
   final List<FocusNode> focusNodes;
 
   @override
-  _DescFormAndButtonState createState() => _DescFormAndButtonState();
+  // _DescFormAndButtonState createState() => _DescFormAndButtonState();
+  State<DescFormAndButton> createState() => _DescFormAndButtonState();
 }
 
 class _DescFormAndButtonState extends State<DescFormAndButton> {
@@ -58,11 +59,11 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
                 onTap: () {
                   setState(() {
                     viewModel.selectedDescListIndex = index;
-                    print('viewModel.selectedIndex:'
+                    debugPrint('viewModel.selectedIndex:'
                         '${viewModel.selectedDescListIndex}');
                     widget.focusNodes[index].requestFocus();
                     //isDisplayIconをviewModelにもたせる
-                    //todo way3Merit,Demerit分作成
+                    // //todo way3Merit,Demerit分作成
                     switch (widget.displayList) {
                       case DisplayList.way1Merit:
                         viewModel.focusWay1MeritList();
@@ -78,14 +79,14 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
                         break;
 
                       case DisplayList.way3Merit:
-                      //todo
+                      // //todo
                         break;
                       case DisplayList.way3Demerit:
-                      //todo
+                      // //todo
                         break;
                     }
 
-                    print('DescFormAndButton/Listの１つをonTap!');
+                    debugPrint('DescFormAndButton/Listの１つをonTap!');
                   });
                 },
                 child: DescListTile(
@@ -105,7 +106,7 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
     );
   }
 
-  //todo リストが1の時だけdeleteIcon出さない
+  // //todo リストが1の時だけdeleteIcon出さない
   //deleteするときのキーボード立ち上がりをふせぐ
   void _deleteList(BuildContext context, int deleteIndex) {
 //    print(
@@ -118,7 +119,7 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
         widget.controllers.removeAt(deleteIndex);
         widget.focusNodes.removeAt(deleteIndex);
         widget.deleteList(deleteIndex);
-        print('DescForm削除setState時のcontrollers.length:'
+        debugPrint('DescForm削除setState時のcontrollers.length:'
             '${widget.controllers.length}');
       });
     }

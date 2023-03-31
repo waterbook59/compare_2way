@@ -18,7 +18,7 @@ class TagDialogPage extends StatelessWidget {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return CupertinoPageScaffold(
-      //todo navBarのUI調整
+      /// //todo navBarのUI調整
       navigationBar: CupertinoNavigationBar(
           backgroundColor: const Color(0xFF363A44),
 //        leadingはxボタンに変更
@@ -43,10 +43,10 @@ class TagDialogPage extends StatelessWidget {
               ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
 //              print('tagDialogPageの完了ボタン！');
             //tempoInputTagに入力がある場合はviewModelの_tagNameListに追加
-              //todo candidateからの選択だとtempoInputに入らない
+              /// //todo candidateからの選択だとtempoInputに入らない
               await viewModel.createTag(comparisonOverview);//DBと重複してないものを登録
               //削除リストとDBリストで重複してるものを削除
-              //todo 削除完了時にTagChart側も削除(Tag削除されてもTagPage側(TagChart表示側)は残っている)
+              /// //todo 削除完了時にTagChart側も削除(Tag削除されてもTagPage側(TagChart表示側)は残っている)
               await viewModel.deleteTag(comparisonOverview.comparisonItemId);
               //TagPage側更新
               await viewModel.updateSelectTagPage();
@@ -83,7 +83,7 @@ class TagDialogPage extends StatelessWidget {
                     future: viewModel.getCandidateTagList(),
                     builder: (context, AsyncSnapshot<List<String>> snapshot) {
                       if (snapshot.data == null) {
-                        print('AsyncSnapshot candidateがnull');
+                        debugPrint('AsyncSnapshot candidateがnull');
                         return Container();
 //                      }
                         /// candidateが空の時はTagChipsのCandidateTag以外表示

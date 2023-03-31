@@ -3,7 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-//todo TagChartの要素必要(itemIdList)削除時の時間更新のとき使う
+/// //todo TagChartの要素必要(itemIdList)削除時の時間更新のとき使う
 class DraggingTagChart {
   DraggingTagChart({
     this.tagTitle, this.key,this.tagAmount,this.itemIdList,this.orderId,});

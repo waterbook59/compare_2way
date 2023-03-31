@@ -40,7 +40,7 @@ class CompareScreen extends StatelessWidget {
 
     //initState的に他の画面から写ってきた時のみ読込
     if (viewModel.compareScreenStatus == CompareScreenStatus.set) {
-      print('compareScreenのFuture通過');
+      debugPrint('compareScreenのFuture通過');
       Future(() async {
         await viewModel.setOverview(comparisonOverview);
         //viewModelで全てのAccordion中のリストとる
@@ -58,7 +58,7 @@ class CompareScreen extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         backgroundColor: primaryColor,
         ///leadingの戻るアイコンの色を変更するだけならこれでOK
-        /// todo actionsForegroundColorが廃止
+        /// //todo actionsForegroundColorが廃止
         // actionsForegroundColor: Colors.white,
         middle:
         screenEditMode ==ScreenEditMode.fromListPage
@@ -72,7 +72,7 @@ class CompareScreen extends StatelessWidget {
           },
         )
 //            : Text(tagTitle,style: middleTextStyle,),
-          //todo 右に保存完了ボタンがあるのでNavBarIconTitleの左側にスペース追加
+          /// //todo 右に保存完了ボタンがあるのでNavBarIconTitleの左側にスペース追加
         ///fromSelectTagPageの場合、tagTitle必ず入ってくるので強制呼び出し
         :NavBarIconTitle(tagTitle:tagTitle!,titleIcon: CupertinoIcons.tag,
         leftFlex: 1,centerFlex: 10,rightFlex: 1,),
@@ -123,14 +123,14 @@ class CompareScreen extends StatelessWidget {
                   child: Selector<CompareViewModel, String>(
                     selector: (context, viewModel) => viewModel.segmentValue,
                       builder: (context, segmentValue, child) {
-                      //todo widget分割ですっきり書きたい
+                      /// //todo widget分割ですっきり書きたい
                       return CupertinoSegmentedControl(
                         children: const
                         {'0': Text('All'),
                           '1': Text('way1'),
                           '2': Text('way2'),},
                         onValueChanged: (String newValue){
-                          print(newValue);
+                          debugPrint(newValue);
                           _selectSegment(context,newValue);
                         },
                         groupValue: segmentValue,
@@ -162,7 +162,7 @@ class CompareScreen extends StatelessWidget {
                         .getWay1MeritDesc(comparisonOverview.comparisonItemId),
                         builder:
                             (context, AsyncSnapshot<List<Way1Merit>> snapshot) {
-                            //todo 変更時、createdAtを更新
+                            /// //todo 変更時、createdAtを更新
                               return
                                 ///inNotEmpty箇所は強制呼び出しでエラー消える
                                 snapshot.hasData && snapshot.data!.isNotEmpty
@@ -361,7 +361,7 @@ class CompareScreen extends StatelessWidget {
                     :Container();
                   },
                 ),
-                //todo 自己評価&TablePart widget分割(スッキリ書く)
+                /// //todo 自己評価&TablePart widget分割(スッキリ書く)
                 const SizedBox(height: 4,),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
@@ -369,7 +369,7 @@ class CompareScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 4,),
               ///テーブル
-                //todo  width: MediaQuery.of(context).size.width*0.8の形に変更
+                /// //todo  width: MediaQuery.of(context).size.width*0.8の形に変更
                 //way1Title,way2Title名編集時に即時反映させる=>Consumer
                 Consumer<CompareViewModel>(
                  builder: (context, viewModel, child) {
@@ -387,7 +387,7 @@ class CompareScreen extends StatelessWidget {
                       );
                     }
                 ,),
-                //todo 結論&ConclusionInputPart widget分割(スッキリ書く)
+                /// //todo 結論&ConclusionInputPart widget分割(スッキリ書く)
                 const SizedBox(
                   height: 16,
                 ),
@@ -464,7 +464,7 @@ class CompareScreen extends StatelessWidget {
     //ComparisonOverviewをviewModel側から保存に変更
     ///表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
     await viewModel.saveComparisonItem(comparisonOverview);
-    //todo 完了アイコンの入ったトースト表示
+    /// //todo 完了アイコンの入ったトースト表示
     await Fluttertoast.showToast(
       gravity: ToastGravity.CENTER,
       msg: '保存完了',

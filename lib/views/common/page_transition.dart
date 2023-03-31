@@ -9,7 +9,8 @@ class PageTransition extends StatefulWidget {
    Widget dialogWidget;
    AnimationController animationController;
   @override
-  _PageTransitionState createState() => _PageTransitionState();
+  State<PageTransition> createState() => _PageTransitionState();
+  // _PageTransitionState createState() => _PageTransitionState();
 }
 
 class _PageTransitionState extends State<PageTransition>
@@ -27,7 +28,7 @@ class _PageTransitionState extends State<PageTransition>
 
   @override
   void dispose() {
-    // TODO: animationController dispose
+    /// //TODO: animationController dispose
     super.dispose();
   }
 

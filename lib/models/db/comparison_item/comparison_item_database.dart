@@ -26,7 +26,7 @@ class ComparisonOverviewRecords extends Table {
   IntColumn get way2DemeritEvaluate =>
       integer().withDefault(const Constant(0))();
 
-  //todo way3はあとで追加
+  /// //todo way3はあとで追加
 //  TextColumn get way3Title => text()();
 //  IntColumn get way3MeritEvaluate =>
 //      integer().withDefault(const Constant(0))(); // 評価、初期ゼロ
@@ -99,7 +99,7 @@ class TagChartRecords extends Table{
 
 }
 
-//todo @DriftDatabase
+/// //todo @DriftDatabase
 @UseMoor(tables: [
   ComparisonOverviewRecords,
   Way1MeritRecords,
@@ -125,7 +125,7 @@ LazyDatabase _openConnection() {
     final dbFolder = await getApplicationDocumentsDirectory();
     //Fileはdart.ioインポート
     final file = File(p.join(dbFolder.path, 'comparison_item.db'));
-    //todo DriftではNativeDatabase
+    /// //todo DriftではNativeDatabase
     return VmDatabase(file);
   });
 }

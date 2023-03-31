@@ -27,7 +27,7 @@ class TablePart extends StatefulWidget {
 
 
   @override
-  _TablePartState createState() => _TablePartState();
+  State<TablePart> createState() => _TablePartState();
 }
 
 class _TablePartState extends State<TablePart> {
@@ -67,7 +67,7 @@ class _TablePartState extends State<TablePart> {
   }
   @override
   void dispose() {
-    //todo way1MeritDisplay,way1DemeritDisplay,way2MeritDisplay,
+    /// //todo way1MeritDisplay,way1DemeritDisplay,way2MeritDisplay,
     // way2DemeritDisplayインスタンス破棄?
     super.dispose();
   }

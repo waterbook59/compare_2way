@@ -161,7 +161,7 @@ class TagEditButtonAction extends StatelessWidget {
         viewModel.changeToTagDelete();
         break;
       case TagEditMode.normal:
-        // TODO: Handle this case.
+        /// //TODO: Handle this case.
         break;
     }
   }

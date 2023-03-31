@@ -26,7 +26,7 @@ extension ConvertToComparisonOverviewRecords on List<ComparisonOverviewRecord> {
         way2Title: comparisonOverviewRecord.way2Title ,
         way2MeritEvaluate: comparisonOverviewRecord.way2MeritEvaluate ,
         way2DemeritEvaluate: comparisonOverviewRecord.way2DemeritEvaluate ,
-//todo way3追加
+/// //todo way3追加
 //            way3Title:  comparisonOverviewRecord.way3Title ?? '',
 //            way3Evaluate: comparisonOverviewRecord.way3Evaluate ?? 0,
         favorite: comparisonOverviewRecord.favorite ,
@@ -55,7 +55,7 @@ extension ConvertToComparisonOverviews on List<ComparisonOverview> {
         way2Title: comparisonOverview.way2Title ?? '',
         way2MeritEvaluate: comparisonOverview.way2MeritEvaluate ?? 0,
         way2DemeritEvaluate: comparisonOverview.way2DemeritEvaluate ?? 0,
-//todo way3追加
+/// //todo way3追加
 //            way3Title:  comparisonOverviewRecord.way3Title ?? '',
 //            way3Evaluate: comparisonOverviewRecord.way3Evaluate ?? 0,
         favorite: comparisonOverview.favorite ?? false,
@@ -187,7 +187,7 @@ extension UpdateTimeDB on ComparisonOverview {
 extension SaveOverviewCompanion on ComparisonOverview {
   ComparisonOverviewRecordsCompanion toCompanionUpdateOverview(
       ComparisonOverview updateOverview,)  {
-    //todo extensionsの中で一気にやる,way3・お気に入り追加
+    /// //todo extensionsの中で一気にやる,way3・お気に入り追加
     ///ComparisonOverviewRecord=>ComparisonOverviewRecordsCompanion
     final companion = ComparisonOverviewRecordsCompanion(
       //アップデート要素がないものを入れるとnullでエラー(Companionに入れるのは値が更新できるものだけ)
@@ -227,7 +227,7 @@ extension ConvertToComparisonOverview on ComparisonOverview {
       way2Title: updateOverview.way2Title!,
       way2MeritEvaluate: updateOverview.way2MeritEvaluate ??0,
       way2DemeritEvaluate: updateOverview.way2DemeritEvaluate ??0,
-//todo way3追加
+/// //todo way3追加
 //            way3Title:  comparisonOverviewRecord.way3Title ?? '',
 //            way3Evaluate: comparisonOverviewRecord.way3Evaluate ?? 0,
       favorite: updateOverview.favorite ?? false,
@@ -253,7 +253,7 @@ extension ConvertToComparisonOverviewRecord on ComparisonOverviewRecord {
       way2Title: overviewRecord.way2Title,
       way2MeritEvaluate: overviewRecord.way2MeritEvaluate ,
       way2DemeritEvaluate: overviewRecord.way2DemeritEvaluate ,
-//todo way3追加
+/// //todo way3追加
 //            way3Title:  comparisonOverviewRecord.way3Title ?? '',
 //            way3Evaluate: comparisonOverviewRecord.way3Evaluate ?? 0,
       favorite: overviewRecord.favorite ,
@@ -496,8 +496,8 @@ extension ConvertToWay2DemeritList on List<Way2DemeritRecord>{
   }
 }
 
-//todo way3Merit関連
-//todo way3Demerit関連
+/// //todo way3Merit関連
+/// //todo way3Demerit関連
 
 ///新規挿入時(model=>DB):List<Tag>=>List<TagRecord>
 extension ConvertToTagRecordList on List<Tag>{

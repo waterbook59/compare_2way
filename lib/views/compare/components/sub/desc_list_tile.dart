@@ -107,7 +107,7 @@ class DescListTile extends StatelessWidget {
                     description: 'デメリットを入力',
                     textColor: Colors.grey,
                   );
-      //todo way3Merit,Demerit分作成
+      /// //todo way3Merit,Demerit分作成
       case DisplayList.way3Merit:
         return Container();
       case DisplayList.way3Demerit:

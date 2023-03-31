@@ -24,7 +24,7 @@ class ConclusionInputPart extends StatefulWidget {
 //  final Function(String) onSaved;
 
   @override
-  _ConclusionInputPartState createState() => _ConclusionInputPartState();
+  State<ConclusionInputPart> createState() => _ConclusionInputPartState();
 }
 
 class _ConclusionInputPartState extends State<ConclusionInputPart> {

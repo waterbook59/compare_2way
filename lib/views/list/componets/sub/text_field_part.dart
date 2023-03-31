@@ -29,7 +29,7 @@ class TextFieldPart extends StatelessWidget {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(left: 40),
-          child: //todo Text=>アイコンタイトルへ変更
+          child: /// //todo Text=>アイコンタイトルへ変更
               IconTitle(
             title: label,
             iconData: iconData,
@@ -47,7 +47,7 @@ class TextFieldPart extends StatelessWidget {
             placeholder: placeholder,
             autofocus: autofocus,
 //            enabled: isTextInputEnabled,
-            //todo style設定
+            /// //todo style設定
             style: const TextStyle(color: Colors.black),
 //            style: inputTextStyle,
             keyboardType: TextInputType.text,
