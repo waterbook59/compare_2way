@@ -913,7 +913,6 @@ class CompareViewModel extends ChangeNotifier {
     final tempoDeleteLabelsSet = _tempoDeleteList.toSet() //Stringのset
       ..removeAll(tempoDisplaySet);
     _tempoDeleteList = tempoDeleteLabelsSet.toList();
-
     ///  _tempoInputに文字が残っていると消したのにcreateTag時に _tempoDisplayListにaddされてしまう
     _tempoInput = '';
   }

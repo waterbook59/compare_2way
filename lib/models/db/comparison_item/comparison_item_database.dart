@@ -79,7 +79,7 @@ class Way2DemeritRecords extends Table {
 }
 //テーブルtag
 class TagRecords extends Table{
-  IntColumn get tagId => integer().nullable()();
+  IntColumn get tagId => integer().autoIncrement()();
   TextColumn get comparisonItemId => text()();
   TextColumn get tagTitle => text()();
   DateTimeColumn get createdAt => dateTime().nullable()();

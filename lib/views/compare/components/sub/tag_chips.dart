@@ -41,15 +41,18 @@ class _TagChipsState extends State<TagChips> {
 
   @override
   void initState() {
-  ///List<Tag>=>Set<String>とList<String>へ変換
+  //List<Tag>=>Set<String>とList<String>へ変換
     //型推論に失敗する時はmapの後ろに型を明示
-    tagNameListSet =widget.tagNameList.map<String>(
-      (tagTitle)=>tagTitle,).toSet() ;//toListではなく、toSetに変更で一気に変換
-//    print('TagChips/initState/tagTitles(Set):$tagNameListSet');
-    _tempoDisplayList  = tagNameListSet.toList();
+//     tagNameListSet =widget.tagNameList.map<String>(
+//       (tagTitle)=>tagTitle,).toSet() ;//toListではなく、toSetに変更で一気に変換
+// //    print('TagChips/initState/tagTitles(Set):$tagNameListSet');
+//     _tempoDisplayList  = tagNameListSet.toList();
+  ///CompareScreen開くときにgetTagListでviewModel側のtempoDisplayListにはtagNameList格納
+    _tempoDisplayList=widget.tagNameList;
+
 
     /// //todo view層で場合分けが必要か、viewModel層以下での場合分必要か
-if(widget.candidateTagNameList==null){
+if(widget.candidateTagNameList.isEmpty){
   isCandidate =false;
 }else{
   isCandidate = true;
@@ -120,7 +123,6 @@ if(widget.candidateTagNameList==null){
                       //tempoDeleteLabelsクリア
                       // (しないとviewModelのDeleteLabelsに重複して登録されていく)
                         _tempoDeleteLabels = [];
-
 
                       })
                         :null,

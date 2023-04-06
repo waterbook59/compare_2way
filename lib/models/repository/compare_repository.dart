@@ -559,8 +559,9 @@ class CompareRepository {
         );
       }).toList();
 
+      ///tagIdはUuId.hashCodeだと2回目以降で同じ番号が生成されてしまう
       //最終的に登録するList<Tag>ができたらList<TagRecord>へ変換する(tagIdはここで付与)
-      final tagRecordList = tagList.toTagRecordList(tagList);
+      final tagRecordList = tagList.toTagRecordsNewCompanionList(tagList);
 
       //2つのリストを比較しようとしてforEach内でforEachしようとしたけど、動かない
       ///(別のリストのタグにも使うのでtagTitleの重複登録は必要)
@@ -595,7 +596,8 @@ class CompareRepository {
   Future<void> deleteTag(List<Tag> deleteTagList) async {
     try {
       //List<Tag>=>List<TagRecord>へ変換保存
-      final deleteTagRecordList = deleteTagList.toTagRecordList(deleteTagList);
+      final deleteTagRecordList = deleteTagList.toTagRecordsDeleteList(
+          deleteTagList);
       await _comparisonItemDao.deleteTagList(deleteTagRecordList);
     } on SqliteException catch (e) {
       debugPrint('tagList削除時repositoryエラー:$e');
@@ -835,7 +837,8 @@ class CompareRepository {
   Future<void> deleteSelectTagList(List<Tag> deleteTagList) async {
     try {
       //List<Tag>=>List<TagRecord>へ変換保存
-      final deleteTagRecordList = deleteTagList.toTagRecordList(deleteTagList);
+      final deleteTagRecordList = deleteTagList.toTagRecordsDeleteList(
+          deleteTagList,);
       await _comparisonItemDao.deleteSelectTagList(deleteTagRecordList);
     } on SqliteException catch (e) {
       debugPrint('tagList削除時repositoryエラー:$e');

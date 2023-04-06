@@ -500,22 +500,41 @@ extension ConvertToWay2DemeritList on List<Way2DemeritRecord>{
 /// //todo way3Demerit関連
 
 ///新規挿入時(model=>DB):List<Tag>=>List<TagRecord>
-extension ConvertToTagRecordList on List<Tag>{
+/// TagRecordsCompanion、Value値へ変更(Uuid().hashCodeだとUNIQUEエラー)
+extension RegisterNewTagRecordsCompanionList on List<Tag>{
   // tagTitleをprimaryKeyに設定した場合、tagIdのautoIncrement効かないかも
   //=>tagIdがint型なのでUuid.hashCodeを使う
-  List<TagRecord> toTagRecordList(
+  List<TagRecordsCompanion> toTagRecordsNewCompanionList(
       List<Tag> tagList,){
     final tagRecordList =
         tagList.map((tag) {
-          return TagRecord(
-            //tagIdはautoIncrementなので新規作成時入れない
-//            tagId:tag.tagId ?? 0,
-          tagId: const Uuid().hashCode,
-            tagTitle:tag.tagTitle ?? '',
-            comparisonItemId:tag.comparisonItemId ?? '',
-            createdAt: tag.createdAt,
-            createAtToString: tag.createAtToString?? '',
+          return TagRecordsCompanion(
+//           tagId: const Uuid().hashCode,
+            tagTitle:Value(tag.tagTitle ?? ''),
+            comparisonItemId:Value(tag.comparisonItemId ?? ''),
+            createdAt: Value(tag.createdAt),
+            createAtToString: Value(tag.createAtToString?? ''),
           );
+    }).toList();
+    return tagRecordList;
+  }
+}
+///削除時(model=>DB):List<Tag>=>List<TagRecord>
+///Value値を使うとdaoでのFuture.forEachで型エラー発生するので削除時はそのまま変換
+extension DeleteTagRecordList on List<Tag>{
+  // tagTitleをprimaryKeyに設定した場合、tagIdのautoIncrement効かないかも
+  //=>tagIdがint型なのでUuid.hashCodeを使う
+  List<TagRecord> toTagRecordsDeleteList(
+      List<Tag> tagList,){
+    final tagRecordList =
+    tagList.map((tag) {
+      return TagRecord(
+          tagId: tag.tagId,
+        tagTitle:tag.tagTitle ?? '',
+        comparisonItemId:tag.comparisonItemId ?? '',
+        createdAt: tag.createdAt,
+        createAtToString: tag.createAtToString?? '',
+      );
     }).toList();
     return tagRecordList;
   }
@@ -561,7 +580,7 @@ extension ConvertToTagRecord on Tag{
   TagRecord toTagRecord(Tag tag){
     final tagRecord =
     TagRecord(
-        tagId: tag.tagId ??0,
+        tagId: tag.tagId,
         comparisonItemId: tag.comparisonItemId ??'',
         tagTitle: tag.tagTitle ?? '',
         createdAt: tag.createdAt,

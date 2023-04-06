@@ -254,7 +254,9 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   ///新規作成:List<TagRecord>:batchでやると重複登録されてしまうので
   ///1行ずつdao側でinsertOnConflictUpdate
-  Future<void> insertTagRecordList(List<TagRecord> tagRecordList) async{
+  //todo tagIdにautoIncrementで番号が割り当てられない
+  Future<void> insertTagRecordList(List<TagRecordsCompanion> tagRecordList)
+  async{
     await batch((batch) {
       batch.insertAll(tagRecords, tagRecordList);
     });
@@ -292,9 +294,9 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   /// //todo forEach=>map.toList
   /// //todo TagDialogPageの削除はdeleteSingleTagListとかに名前変更
   Future<void> deleteTagList(List<TagRecord> deleteTagRecordList)async {
-    deleteTagRecordList.forEach((tag) {
+    deleteTagRecordList.forEach((TagRecord tag) {
       (delete(tagRecords)..where(
-              (tbl) => tbl.comparisonItemId.equals(tag.comparisonItemId)
+              (tbl) => tbl.comparisonItemId.equals(tag.comparisonItemId )
               & tbl.tagTitle.equals(tag.tagTitle),)).go();
     });
     debugPrint('dao/削除');
