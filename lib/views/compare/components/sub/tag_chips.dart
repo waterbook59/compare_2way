@@ -41,15 +41,8 @@ class _TagChipsState extends State<TagChips> {
 
   @override
   void initState() {
-  //List<Tag>=>Set<String>とList<String>へ変換
-    //型推論に失敗する時はmapの後ろに型を明示
-//     tagNameListSet =widget.tagNameList.map<String>(
-//       (tagTitle)=>tagTitle,).toSet() ;//toListではなく、toSetに変更で一気に変換
-// //    print('TagChips/initState/tagTitles(Set):$tagNameListSet');
-//     _tempoDisplayList  = tagNameListSet.toList();
-  ///CompareScreen開くときにgetTagListでviewModel側のtempoDisplayListにはtagNameList格納
+    ///CompareScreen開くときにgetTagListでviewModel側のtempoDisplayListにはtagNameList格納
     _tempoDisplayList=widget.tagNameList;
-
 
     /// //todo view層で場合分けが必要か、viewModel層以下での場合分必要か
 if(widget.candidateTagNameList.isEmpty){
@@ -61,11 +54,6 @@ if(widget.candidateTagNameList.isEmpty){
     //candidateTagNameListから選択したもの消したいので、widget.candidateTagNameList=>_tempoCandidateLabelsへinitStateで変換
     //TagDialogPageのgetCandidateTagListでviewModelにcandidateTagNameList格納
     _tempoCandidateLabels = widget.candidateTagNameList;
-
-    debugPrint('tagChips/initState/_tempoDisplayList(=tagNameList):'
-        '$_tempoDisplayList, _tempoCandidateLabels:$_tempoCandidateLabels, '
-        '_tempoInput:$_tempoInput, _tempoDeleteLabels:$_tempoDeleteLabels, _tempoLabels:$_tempoLabels');
-
     super.initState();
   }
 
@@ -116,7 +104,9 @@ if(widget.candidateTagNameList.isEmpty){
                       //tempoDeleteLabelsクリア
                       // (しないとviewModelのDeleteLabelsに重複して登録されていく)
                         _tempoDeleteLabels = [];
-
+                      if(_tempoCandidateLabels.isNotEmpty){
+                        isCandidate = true;
+                      }
                       })
                         :null,
                     deleteIcon: const Icon(Icons.highlight_off),

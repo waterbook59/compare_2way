@@ -41,7 +41,6 @@ class TagDialogPage extends StatelessWidget {
             onPressed: () async {
               //完了を押したらinput内容(List<String>)とcomparisonIdを基にtagクラスをDB登録
               ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
-//              print('tagDialogPageの完了ボタン！');
             //tempoInputTagに入力がある場合はviewModelの_tagNameListに追加
               /// //todo candidateからの選択だとtempoInputに入らない
               await viewModel.createTag(comparisonOverview);//DBと重複してないものを登録
@@ -73,9 +72,12 @@ class TagDialogPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Text(
-                    'タグ',
-                    textAlign: TextAlign.left,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      'タグ',
+                      textAlign: TextAlign.left,
+                    ),
                   ),
                 ),
                 ///FutureBuilder=>TagChips
@@ -91,21 +93,24 @@ class TagDialogPage extends StatelessWidget {
 //                        print('candidateが空');
 //                        return Container();
                       } else {
-                        return TagChips(
-                          tagNameList: viewModel.tagNameList,
-                          setTempoInput: viewModel.setTempoInput,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: TagChips(
+                            tagNameList: viewModel.tagNameList,
+                            setTempoInput: viewModel.setTempoInput,
      ///いきなりviewModel側のtagNameListにsetするとキャンセルしても残るので仮リストへset
                    //_tempoDisplayListをviewModelへset
-                          onSubmitted: viewModel.setTempoDisplayList,
-                          onDeleted: (tempoDeleteLabels,tempoDisplayList) {
+                            onSubmitted: viewModel.setTempoDisplayList,
+                            onDeleted: (tempoDeleteLabels,tempoDisplayList) {
                       //削除項目抽出：viewModelにsetしてある_tagNameListと
-                            // tempoDeleteLabels比較し、重複しているものだけを抜き出す
-                            viewModel.createDeleteList(tempoDeleteLabels,
-                                tempoDisplayList,);
-                          },
+                              // tempoDeleteLabels比較し、重複しているものだけを抜き出す
+                              viewModel.createDeleteList(tempoDeleteLabels,
+                                  tempoDisplayList,);
+                            },
                     //candidateが空か否かでContainer or ListView.builderで場合わけ
-                          ///null場合分しているので強制呼び出し
-                          candidateTagNameList: snapshot.data!,
+                            ///null場合分しているので強制呼び出し
+                            candidateTagNameList: snapshot.data!,
+                          ),
                         );
                       }
                     },),

@@ -966,7 +966,7 @@ class CompareViewModel extends ChangeNotifier {
     joinList.map((title) {
       if (lists.contains(title)) {
         _tempoDeleteList.add(title);
-        debugPrint('createDeleteList/_tempoDeleteList:$_tempoDeleteList');
+        debugPrint('viewModel/createDeleteList/_tempoDeleteList:$_tempoDeleteList');
       } else {
         lists.add(title);
       }
