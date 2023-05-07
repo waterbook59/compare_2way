@@ -57,7 +57,9 @@ class AddScreen extends StatelessWidget {
                 onPressed:
                     displayMode == AddScreenMode.add
                     ?() => _createComparisonItems(context)
-                    :()=>_updateComparisonItems(context),
+                    :() {
+                      _updateComparisonItems(context);
+                    },
                 child: displayMode == AddScreenMode.add
                     ? Text('作成',style: TextStyle(color: accentColor),)
                     : Text('更新',style: TextStyle(color: accentColor),)
@@ -178,11 +180,10 @@ class AddScreen extends StatelessWidget {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     ///更新時は必ずcomparisonOverviewが入ってくるので強制呼び出し
     await viewModel.updateTitles(comparisonOverview!);
-
-    /// //todo この書き方でBuildContextを非同期処理内で使っても良いか
     if (context.mounted) {
       //CompareScreenへ
-      Navigator.pop(context);
+    Navigator.pop(context);
+
     }
 
   }
