@@ -939,10 +939,10 @@ class CompareViewModel extends ChangeNotifier {
     //_tagNameListにもtagTitle格納
     ///null safety mapの後ろに型追加、tag.tagTitleは強制呼び出し
     _tagNameList = _tagList.map<String>((tag) => tag.tagTitle!).toList();
-//    print('viewModel.getTagList/_tagNameList:$_tagNameList');
+   print('viewModel.getTagList/_tagNameList:$_tagNameList');
 
     _tempoDisplayList = _tagNameList;
-//    print('viewModel.getTagList/_tempoDisplayList:$_tempoDisplayList');
+   print('viewModel.getTagList/_tempoDisplayList:$_tempoDisplayList');
     //List<Tag>=>List<Chips>へ変更
     _displayChipList = _tagList.map((tag) {
       return Chip(
@@ -960,8 +960,15 @@ class CompareViewModel extends ChangeNotifier {
   ///tagChipsで削除するTagを登録
   Future<void> createDeleteList(
       List<String> tempoDeleteLabels, List<String> tempoDisplayList,) async {
+    //削除候補のdeleteTag名が完了を押す前のxボタンを押しただけでtagNameListからも消えているので再度tagListからtagNameList作り直し
+    debugPrint('viewModel.createDeleteList/_tagList:${_tagList.map((e) => e.tagTitle)}');
+    debugPrint('viewModel.createDeleteList/_tagNameList:$_tagNameList');
+    _tagNameList=_tagList.map<String>((tag) => tag.tagTitle!).toList();
     //削除時も_tempoDisplayListに格納=>createTag時に使用
     _tempoDisplayList = tempoDisplayList;
+    debugPrint('viewModel.createDeleteList/tempoDeleteLabels:$tempoDeleteLabels');
+    debugPrint('viewModel.createDeleteList/tempoDisplayList:$tempoDisplayList');
+    debugPrint('viewModel.createDeleteList/_tagNameList:$_tagNameList');
     //tempoDeleteLabelsとDB登録してある項目(_tagNameList)を結合
     final joinList = [...tempoDeleteLabels, ..._tagNameList];
 //  final joinList= List<String>.from(tempoDeleteLabels)..addAll(_tagNameList);
@@ -1335,7 +1342,9 @@ class CompareViewModel extends ChangeNotifier {
 
     ///removeAll使うにはListはダメでSetを用いる
     candidateTitleSet.removeAll(choiceTitleSet);
+    debugPrint('viewModel.getCandidateTagList/_tagNameList:$_tagNameList');
     return candidateTagNameList = candidateTitleSet.toList();
+
   }
 
   ///AddScreen/InputPartでComparisonOverview新規登録：ComparisonOverview=>ComparisonOverviewRecordでDB登録

@@ -62,7 +62,7 @@ if(widget.candidateTagNameList.isEmpty){
     //TagDialogPageのgetCandidateTagListでviewModelにcandidateTagNameList格納
     _tempoCandidateLabels = widget.candidateTagNameList;
 
-    debugPrint('tagChips/initState/_tempoDisplayList:'
+    debugPrint('tagChips/initState/_tempoDisplayList(=tagNameList):'
         '$_tempoDisplayList, _tempoCandidateLabels:$_tempoCandidateLabels, '
         '_tempoInput:$_tempoInput, _tempoDeleteLabels:$_tempoDeleteLabels, _tempoLabels:$_tempoLabels');
 
@@ -112,7 +112,8 @@ if(widget.candidateTagNameList.isEmpty){
                       _tempoCandidateLabels.add(_tempoDisplayList[index]);
                       _tempoDeleteLabels.add(_tempoDisplayList[index]);
                       _tempoDisplayList.removeAt(index);
-                  debugPrint('onDelete/tempoDeleteLabels:$_tempoDeleteLabels');
+                  debugPrint('TagChips/onDelete/tempoDeleteLabels:$_tempoDeleteLabels');
+                  debugPrint('TagChips/onDelete/_tempoDisplayList:$_tempoDisplayList');
  ///削除した状態をviewModelへset
 //                      widget.onSubmitted(_tempoDisplayList);
                       // ignore: lines_longer_than_80_chars
