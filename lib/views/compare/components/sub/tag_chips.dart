@@ -112,16 +112,7 @@ if(widget.candidateTagNameList.isEmpty){
                       _tempoCandidateLabels.add(_tempoDisplayList[index]);
                       _tempoDeleteLabels.add(_tempoDisplayList[index]);
                       _tempoDisplayList.removeAt(index);
-                  debugPrint('TagChips/onDelete/tempoDeleteLabels:$_tempoDeleteLabels');
-                  debugPrint('TagChips/onDelete/_tempoDisplayList:$_tempoDisplayList');
- ///削除した状態をviewModelへset
-//                      widget.onSubmitted(_tempoDisplayList);
-                      // ignore: lines_longer_than_80_chars
-                      //DB由来のタイトルから削除タイトル抜かないと1回削除して再度TagInputChipで同じものを入力しようとしても重複タグ扱いになって登録されない
-                        //tagNameListSet = _tempoDisplayList.toSet();//todo いらない？
-//                      print('InputChip/onDeleted/tagNameListSet:$tagNameListSet');
                         widget.onDeleted(_tempoDeleteLabels,_tempoDisplayList);
-
                       //tempoDeleteLabelsクリア
                       // (しないとviewModelのDeleteLabelsに重複して登録されていく)
                         _tempoDeleteLabels = [];
