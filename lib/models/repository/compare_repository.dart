@@ -641,19 +641,14 @@ class CompareRepository {
   Future<void> updateTagChart(List<TagChart> tagChartList) async {
     ///daoに直接tagChartList渡すのは好ましくない
     ///tagChartRecordへの変換=>data.idエラー=>titleリスト作成しdaoへ渡す
-    final tagTitleList =
-        tagChartList.map((tagChart) => tagChart.tagTitle).toList();
-    try {
-      //TagChartRecordsCompanionのリストで数量更新
-      tagChartList.map((tagChart) {
-        final updateCompanion = tagChart.toUpdateAmountTagCompanion(tagChart);
 
-        //tagTitleList:DBからtitleで検索、updateCompanion:DBの数量更新
-        _comparisonItemDao.updateTagChart(
-          tagTitleList,
+    try {
+      await Future.forEach(tagChartList, (TagChart tagChart) async{
+        final updateCompanion = tagChart.toUpdateAmountTagCompanion(tagChart);
+        await _comparisonItemDao.updateTagChart(tagChart.tagTitle,
           updateCompanion,
         );
-      }).toList();
+      });
       debugPrint('repository/updateTagChart:更新完了');
     } on SqliteException catch (e) {
       debugPrint('repository更新エラー/updateTagChart:$e');

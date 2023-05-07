@@ -784,9 +784,9 @@ class CompareViewModel extends ChangeNotifier {
       // _tempoInputだけのとき、tagNameListにもtempoInputが追加されてしまう
       _tempoDisplayList.add(_tempoInput);
     }
-    final dbTagList = await _compareRepository
-        .getTagList(comparisonOverview.comparisonItemId);
-    final dbTitleList = dbTagList.map((tag) => tag.tagTitle).toList();
+    // _tagListとしてID固有のタグをCompareScreen開く時のgetTagListで格納済みなので、dgTagListを取らなくていい
+    // ID固有のタグが最初にない時に登録するとtagTitle!がどうなるか確認
+    final dbTitleList = _tagList.map((tag) => tag.tagTitle!).toList();
     final dbTitleSet = dbTitleList.toSet();
     debugPrint('viewModel/createTag/dbTitleSet:$dbTitleSet');
     //TagChart新規登録or更新するものだけ抜き出す
@@ -798,14 +798,17 @@ class CompareViewModel extends ChangeNotifier {
     final  extractRemoveTagList = extractRemoveTagSet.toList();
     debugPrint('viewModel/createTag/extractRemoveTagSet:$extractRemoveTagSet');
     //ここで場合分け、tagChartDBにtagTitleあり=>update,なし=>新規登録
+    ///_allTagList:ID関係なく全タグリスト、dbTitleList:ID固有のタグのタイトル名だけのリスト
     _allTagList = await _compareRepository.getAllTagList();
     final tagAllTitleList = <String>[]; //DBからのTagのタイトル
-//     DBのTagChartのタイトル取得=>格納
-    final tagChartDBTitleList = await _compareRepository.getTagChartDBTitle();
-//    DBのTagのタイトル取得=>格納
+    //    DBのTagのタイトル取得=>格納
     _allTagList.map((tag) {
       return tagAllTitleList.add(tag.tagTitle!);
     }).toList();
+
+//     DBのTagChartのタイトル取得=>格納
+    final tagChartDBTitleList = await _compareRepository.getTagChartDBTitle();
+    debugPrint('tagChartDBTitleList:$tagChartDBTitleList');
 
     //1.追加更新tagChart作成:extractAddTagからtagChartDBTitleにあるタイトルだけ抽出
     //1.1.extractDelete = tagAllTitleList-extractAddTag(更新用タイトルタグ抽出)
@@ -847,7 +850,9 @@ class CompareViewModel extends ChangeNotifier {
           tagAmount: amount,
         ),),);
     debugPrint('tagSummary:$tagSummary');
-    await _compareRepository.updateTagChart(_tagChartList);
+      await _compareRepository.updateTagChart(_tagChartList);
+
+
 
     //2.削除更新tagChart作成:extractRemoveTagだけTagChartDBのAmountが2以上なら-1、1なら削除する
     // if (extractRemoveTagList.isNotEmpty) {//withoutNullsがあるので、いらない
