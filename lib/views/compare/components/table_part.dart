@@ -2,7 +2,6 @@ import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/icon_title.dart';
 import 'package:compare_2way/views/compare/components/sub/DemeritEvaluateDropdown.dart';
 import 'package:compare_2way/views/compare/components/sub/MeritEvaluateDropdown.dart';
-import 'package:compare_2way/views/compare/components/sub/evaluate_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
