@@ -508,7 +508,6 @@ extension RegisterNewTagRecordsCompanionList on List<Tag>{
     final tagRecordList =
         tagList.map((tag) {
           return TagRecordsCompanion(
-//           tagId: const Uuid().hashCode,
             tagTitle:Value(tag.tagTitle ?? ''),
             comparisonItemId:Value(tag.comparisonItemId ?? ''),
             createdAt: Value(tag.createdAt),

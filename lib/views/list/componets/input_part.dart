@@ -11,7 +11,7 @@ import 'package:uuid/uuid.dart';
 
 class InputPart extends StatelessWidget {
   const InputPart({Key? key, this.displayMode, this.comparisonOverview,
-  required this.onUpdate})
+  required this.onUpdate,})
       : super(key: key);
 
   final AddScreenMode? displayMode;

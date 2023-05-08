@@ -254,18 +254,11 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
 
   ///新規作成:List<TagRecord>:batchでやると重複登録されてしまうので
   ///1行ずつdao側でinsertOnConflictUpdate
-  //todo tagIdにautoIncrementで番号が割り当てられない
   Future<void> insertTagRecordList(List<TagRecordsCompanion> tagRecordList)
   async{
     await batch((batch) {
       batch.insertAll(tagRecords, tagRecordList);
     });
-    debugPrint('dao/insertTagRecordList:$tagRecordList');
-
-//   tagRecordList.forEach(
-//     into(tagRecords).insertOnConflictUpdate
-//    );
-   
   }
 
   ///新規作成:List<TagRecord> 重複回避:

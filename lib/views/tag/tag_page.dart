@@ -74,10 +74,8 @@ class TagPage extends StatelessWidget {
                             ///nullで場合分けしているので、snapshot.data強制呼び出し
                             if (snapshot.hasData && snapshot.data!.isEmpty) {
                               debugPrint('TagPage/EmptyView側通って描画');
-                              return Container(
-                                child: const Center(
-                                  child: Text('タグづけされたアイテムはありません'),
-                                ),
+                              return const Center(
+                                child: Text('タグづけされたアイテムはありません'),
                               );
                             } else {
                               /// //todo まとめてスクロール sliver使用 https://kabochapo.hateblo.jp/entry/2021/05/10/190621
@@ -152,10 +150,7 @@ class TagPage extends StatelessWidget {
                                 return Container();
                               }
                               if (snapshot.hasData && snapshot.data!.isEmpty) {
-                                return Container(
-                                  child:
-                                      const Center(child: Text('アイテムはありません')),
-                                );
+                                return const Center(child: Text('アイテムはありません'));
                               } else {
                                 return ReorderableTagList(
                                   draggedTags: snapshot.data!,

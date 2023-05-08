@@ -73,9 +73,7 @@ class ListPage extends StatelessWidget {
                         ///isEmpty箇所は強制呼び出しでエラー消える
                         if (snapshot.hasData && snapshot.data!.isEmpty) {
 //                          print('ListPage/EmptyView側通って描画');
-                          return Container(
-                              child:
-                                  const Center(child: Text('アイテムを追加してください')),);
+                          return const Center(child: Text('アイテムを追加してください'));
                         } else {
 //print('ListView側通って描画');
                           return
@@ -138,9 +136,8 @@ class ListPage extends StatelessWidget {
                                       }
                                 ///inEmpty箇所は強制呼び出しでエラー消える
                                 if (snapshot.hasData && snapshot.data!.isEmpty)
-                                {return Container(
-                                      child: const Center(
-                                          child: Text('アイテムはありません'),),);
+                                {return const Center(
+                                    child: Text('アイテムはありません'),);
                                       } else {
                                        return
                                          ReorderableEditList(
