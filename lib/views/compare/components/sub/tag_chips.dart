@@ -16,7 +16,7 @@ class TagChips extends StatefulWidget {
   final List<String> tagNameList;//DBからのtagTitleのリスト
   final ValueChanged<List<String>> onSubmitted;
 //  final ValueChanged<List<String>,List<String>> onDeleted;
-  final Function(List<String>,List<String>) onDeleted;
+  final void Function(List<String>,List<String>) onDeleted;
   // final String addTagTitle;
   final List<String> candidateTagNameList;
   final ValueChanged<String> setTempoInput;
@@ -138,11 +138,6 @@ if(widget.candidateTagNameList.isEmpty){
                       widget.setTempoInput(tempoInput);
                     },
                     onSubmitted: (input){
-                      debugPrint('tagChipsのonSubmitted時の_tempoCandidateLabels:$_tempoCandidateLabels');
-                      debugPrint('tagChipsのonSubmitted時の_tempoDisplayList:$_tempoDisplayList');
-                      debugPrint('tagChipsのonSubmitted時の_tempoDeleteLabels$_tempoDeleteLabels');
-                      debugPrint('tagChipsのonSubmitted時の_tempoInput:$_tempoInput');
-                      debugPrint('tagChipsのonSubmitted時の_tempoLabels:$_tempoLabels');
                       ///inputが既存の仮tagクラス内またはDB内に存在しないのかvalidation
                       //入力なしは登録されないようvalidation(input =''の時登録なし)
                       if(input == ''||input == ' ' ){
@@ -170,11 +165,6 @@ if(widget.candidateTagNameList.isEmpty){
                         //TagInputChip表示をActionChipへ戻す
                         isInput = false;
                       }
-                      debugPrint('tagChipsのonSubmitted時の_tempoCandidateLabels:$_tempoCandidateLabels');
-                      debugPrint('tagChipsのonSubmitted時の_tempoDisplayList:$_tempoDisplayList');
-                      debugPrint('tagChipsのonSubmitted時の_tempoDeleteLabels$_tempoDeleteLabels');
-                      debugPrint('tagChipsのonSubmitted時の_tempoInput:$_tempoInput');
-                      debugPrint('tagChipsのonSubmitted時の_tempoLabels:$_tempoLabels');
                       setState(() {//tag_input_chipのcontroller破棄
                       },);
 

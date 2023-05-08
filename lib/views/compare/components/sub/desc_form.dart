@@ -15,8 +15,8 @@ class DescForm extends StatefulWidget {
         required this.displayList,
       }) : super(key: key);
 
-  final Function(String) inputChanged;
-  final Function(int) deleteList;
+  final void Function(String) inputChanged;
+  final void Function(int) deleteList;
   final int index;
   final List<TextEditingController> controllers;
   final FocusNode focusNode;

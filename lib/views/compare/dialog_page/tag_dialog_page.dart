@@ -101,12 +101,9 @@ class TagDialogPage extends StatelessWidget {
      ///いきなりviewModel側のtagNameListにsetするとキャンセルしても残るので仮リストへset
                    //_tempoDisplayListをviewModelへset
                             onSubmitted: viewModel.setTempoDisplayList,
-                            onDeleted: (tempoDeleteLabels,tempoDisplayList) {
-                      //削除項目抽出：viewModelにsetしてある_tagNameListと
-                              // tempoDeleteLabels比較し、重複しているものだけを抜き出す
-                              viewModel.createDeleteList(tempoDeleteLabels,
-                                  tempoDisplayList,);
-                            },
+                            //削除項目抽出：viewModelにsetしてある_tagNameListと
+                            // tempoDeleteLabels比較し、重複しているものだけを抜き出す
+                            onDeleted: viewModel.createDeleteList,
                     //candidateが空か否かでContainer or ListView.builderで場合わけ
                             ///null場合分しているので強制呼び出し
                             candidateTagNameList: snapshot.data!,

@@ -28,9 +28,9 @@ class DescFormAndButton extends StatefulWidget {
   final List<Way2Merit>? way2MeritList;
   final List<Way1Demerit>? way1DemeritList;
   final List<Way2Demerit>? way2DemeritList;
-  final Function(String, int) inputChanged;
-  final Function() addList;
-  final Function(int) deleteList;
+  final void Function(String, int) inputChanged;
+  final void Function() addList;
+  final void Function(int) deleteList;
   final List<TextEditingController> controllers;
   final List<FocusNode> focusNodes;
 

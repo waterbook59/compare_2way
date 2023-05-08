@@ -8,7 +8,6 @@ import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_database.dart';
 import 'package:moor/moor.dart';
-import 'package:uuid/uuid.dart';
 
 ///(DB=>model):List<ComparisonOverviewRecord>=>List<ComparisonOverview>
 extension ConvertToComparisonOverviewRecords on List<ComparisonOverviewRecord> {

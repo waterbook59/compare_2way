@@ -90,7 +90,7 @@ class GFAccordion extends StatefulWidget {
   final BorderRadius contentBorderRadius;
 
   /// function called when the content body collapsed
-  final Function(bool)? onToggleCollapsed;
+  final void Function(bool)? onToggleCollapsed;
 
   @override
   State<GFAccordion> createState() => _GFAccordionState();

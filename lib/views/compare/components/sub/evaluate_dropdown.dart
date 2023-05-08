@@ -7,7 +7,7 @@ class EvaluateDropdown extends StatefulWidget {
 
   final int initialValue;
 
-  final Function(int) onSelected;
+  final void Function(int) onSelected;
 
   @override
   State<EvaluateDropdown> createState() => _EvaluateDropdownState();

@@ -597,7 +597,7 @@ class CompareRepository {
     try {
       //List<Tag>=>List<TagRecord>へ変換保存
       final deleteTagRecordList = deleteTagList.toTagRecordsDeleteList(
-          deleteTagList);
+          deleteTagList,);
       await _comparisonItemDao.deleteTagList(deleteTagRecordList);
     } on SqliteException catch (e) {
       debugPrint('tagList削除時repositoryエラー:$e');

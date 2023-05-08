@@ -18,7 +18,7 @@ class ConclusionInputPart extends StatefulWidget {
   ///CompareScreenへ新しく入力した文字を渡す
   ///final Function(String) inputChangedでも良い(ValueChangedは引数を<>で記載)
 
-  final Function(String)? inputChanged;
+  final void Function(String)? inputChanged;
 //  final Function(String) onEditingCompleted;
 //  final Function(String) onFieldSubmitted;
 //  final Function(String) onSaved;
