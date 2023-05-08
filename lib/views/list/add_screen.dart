@@ -7,6 +7,7 @@ import 'package:compare_2way/views/compare/compare_screen.dart';
 import 'package:compare_2way/views/list/componets/input_part.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -87,7 +88,8 @@ class AddScreen extends StatelessWidget {
 ///InputPart
                     InputPart(
                     displayMode: displayMode,
-                    comparisonOverview: comparisonOverview,)
+                    comparisonOverview: comparisonOverview,
+                    onUpdate:()=>  _updateComparisonItems(context),)
 
             ],
           ),
@@ -180,11 +182,13 @@ class AddScreen extends StatelessWidget {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     ///更新時は必ずcomparisonOverviewが入ってくるので強制呼び出し
     await viewModel.updateTitles(comparisonOverview!);
+    await Fluttertoast.showToast(msg: '更新完了',);
     if (context.mounted) {
       //CompareScreenへ
     Navigator.pop(context);
-
     }
+
+
 
   }
 

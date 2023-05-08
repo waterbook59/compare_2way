@@ -6,15 +6,18 @@ import 'package:compare_2way/views/compare/compare_screen.dart';
 import 'package:compare_2way/views/list/componets/sub/text_field_part.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class InputPart extends StatelessWidget {
-  const InputPart({Key? key, this.displayMode, this.comparisonOverview})
+  const InputPart({Key? key, this.displayMode, this.comparisonOverview,
+  required this.onUpdate})
       : super(key: key);
 
   final AddScreenMode? displayMode;
   final ComparisonOverview? comparisonOverview;
+  final VoidCallback onUpdate;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +87,8 @@ class InputPart extends StatelessWidget {
                       viewModel.way2Controller.text.isNotEmpty
                   ? displayMode == AddScreenMode.add
                       ? () => _createComparisonItems(context)
-                      : () => _updateComparisonItems(context)
+                     //更新メソッドはVoidCallbackでAddScreen側のメソッドで管理
+                      : onUpdate
                   : null,
               child: displayMode == AddScreenMode.add
                   ? const Text('作成')
@@ -174,20 +178,7 @@ class InputPart extends StatelessWidget {
     //Once you have called dispose() on a TextEditingController,のエラー出る
   }
 
-  ///更新メソッド
-  Future<void> _updateComparisonItems(
-    BuildContext context,
-  ) async {
-    //テキスト入力したものをviewModel側へ格納
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
-    ///更新時は必ずcomparisonOverviewが入ってくるので強制呼び出し
-    await viewModel.updateTitles(comparisonOverview!);
 
-    if (context.mounted) {
-      //CompareScreenへ
-      Navigator.pop(context);
-    }
 
-  }
 }
