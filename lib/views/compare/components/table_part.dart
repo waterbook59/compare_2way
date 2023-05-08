@@ -1,5 +1,7 @@
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/icon_title.dart';
+import 'package:compare_2way/views/compare/components/sub/DemeritEvaluateDropdown.dart';
+import 'package:compare_2way/views/compare/components/sub/MeritEvaluateDropdown.dart';
 import 'package:compare_2way/views/compare/components/sub/evaluate_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,13 +34,6 @@ class TablePart extends StatefulWidget {
 
 class _TablePartState extends State<TablePart> {
   ///evaluatePickerのリスト
-//  final List<String> evaluates = <String>[
-//    '',
-//    '◎',
-//    '◯',
-//    '△',
-//    '×',
-//  ];
   final List<Image> evaluates = <Image>[
     Image.asset('assets/images/blank.png'),
     Image.asset('assets/images/double_circle.png'),
@@ -47,6 +42,21 @@ class _TablePartState extends State<TablePart> {
     Image.asset('assets/images/cross.png'),
     Image.asset('assets/images/double_cross.png'),
   ];
+
+  final List<Image> evaluatePositives = <Image>[
+    Image.asset('assets/images/blank.png'),
+    Image.asset('assets/images/double_circle.png'),
+    Image.asset('assets/images/round.png'),
+    Image.asset('assets/images/triangle.png'),
+  ];
+
+  final List<Image> evaluateNegatives = <Image>[
+    Image.asset('assets/images/blank.png'),
+    Image.asset('assets/images/triangle.png'),
+    Image.asset('assets/images/cross.png'),
+    Image.asset('assets/images/double_cross.png'),
+  ];
+
 
 
   Image way1MeritDisplay = Image.asset('assets/images/blank.png');
@@ -58,11 +68,11 @@ class _TablePartState extends State<TablePart> {
   @override
   void initState() {
   //listpageからgetListで得られた値が渡ってきてセット
-    way1MeritDisplay = evaluates[widget.way1MeritEvaluate];
-    way1DemeritDisplay = evaluates[widget.way1DemeritEvaluate];
-    way2MeritDisplay = evaluates[widget.way2MeritEvaluate];
+    way1MeritDisplay = evaluatePositives[widget.way1MeritEvaluate];
+    way1DemeritDisplay = evaluateNegatives[widget.way1DemeritEvaluate];
+    way2MeritDisplay = evaluatePositives[widget.way2MeritEvaluate];
     way2DemeritDisplay =
-        evaluates[widget.way2DemeritEvaluate];
+    evaluateNegatives[widget.way2DemeritEvaluate];
     super.initState();
   }
   @override
@@ -134,11 +144,11 @@ class _TablePartState extends State<TablePart> {
 
                   Expanded(
                       child:
-                      EvaluateDropdown(
+                      MeritEvaluateDropdown(
                         initialValue:widget.way1MeritEvaluate,
                         onSelected: (newValue) {
                           setState(() {
-                            way1MeritDisplay = evaluates[newValue];
+                            way1MeritDisplay = evaluatePositives[newValue];
                             // CompareScreenへ渡さずに直接viewModel側に保存
                             viewModel.setWay1MeritNewValue(
                                 widget.comparisonItemId,newValue,);
@@ -161,11 +171,11 @@ class _TablePartState extends State<TablePart> {
                   ),
                   // EvaluateDropdownで選択したときもフォーカス外す(キーボード下げる)
                   Expanded(
-                      child: EvaluateDropdown(
+                      child: DemeritEvaluateDropdown(
                         initialValue: widget.way1DemeritEvaluate,
                         onSelected: (newValue) {
                           setState(() {
-                            way1DemeritDisplay = evaluates[newValue];
+                            way1DemeritDisplay = evaluateNegatives[newValue];
                             viewModel.setWay1DemeritNewValue(
                                 widget.comparisonItemId,newValue,);
                           });
@@ -198,11 +208,11 @@ class _TablePartState extends State<TablePart> {
                       child: way2MeritDisplay,
                   ),
                   Expanded(
-                      child: EvaluateDropdown(
+                      child: MeritEvaluateDropdown(
                         initialValue: widget.way2MeritEvaluate,
                         onSelected: (newValue) {
                           setState(() {
-                            way2MeritDisplay = evaluates[newValue];
+                            way2MeritDisplay = evaluatePositives[newValue];
                             viewModel.setWay2MeritNewValue(
                                 widget.comparisonItemId,newValue,);
                           });
@@ -222,11 +232,11 @@ class _TablePartState extends State<TablePart> {
                       child:   way2DemeritDisplay,
                   ),
                   Expanded(
-                      child: EvaluateDropdown(
+                      child: DemeritEvaluateDropdown(
                         initialValue: widget.way2DemeritEvaluate,
                         onSelected: (newValue) {
                           setState(() {
-                            way2DemeritDisplay = evaluates[newValue];
+                            way2DemeritDisplay = evaluateNegatives[newValue];
                             viewModel.setWay2DemeritNewValue(
                                 widget.comparisonItemId,newValue,);
                           });
