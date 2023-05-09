@@ -16,20 +16,30 @@ class CompareRepository {
 
   final ComparisonItemDao _comparisonItemDao;
 
-  //コンストラクタ初期化でもlateでもOK //todo get＆set
-  // List<ComparisonOverview> _overviewResults = <ComparisonOverview>[];
+  //コンストラクタ初期化でもlateでもOK
+  List<ComparisonOverview> _overviewResults = <ComparisonOverview>[];
+  //repository外からアクセスして値を変えられないようにgetでカプセル化
+  List<ComparisonOverview> get overviewResults => _overviewResults;
   late ComparisonOverview _overviewResult;
+  ComparisonOverview get overviewResult => _overviewResult;
   late List<Way1Merit> _way1MeritList;
-
+  List<Way1Merit> get way1MeritList =>_way1MeritList;
   List<Way2Merit> _way2MeritList = <Way2Merit>[];
+  List<Way2Merit> get way2MeritList =>_way2MeritList;
   List<Way1Demerit> _way1DemeritList = <Way1Demerit>[];
+  List<Way1Demerit> get way1DemeritList=>_way1DemeritList;
   List<Way2Demerit> _way2DemeritList = <Way2Demerit>[];
+  List<Way2Demerit> get way2DemeritList=>_way2DemeritList;
   List<Tag> _tagList = <Tag>[];
+  List<Tag> get tagList =>_tagList;
   List<Tag> _selectTagList = <Tag>[];
+  List<Tag> get selectTagList =>_selectTagList;
   List<TagChart> _tagChartList = <TagChart>[];
+  List<TagChart> get tagChartList =>_tagChartList;
   TagChart? _selectTagChart;
+  TagChart? get selectTagChart =>_selectTagChart;
 
-  set _overviewResults(List<ComparisonOverview> _overviewResults) {}
+
 
   ///新規作成 comparisonOverview
   Future<void> createComparisonOverview(

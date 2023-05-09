@@ -25,16 +25,12 @@ class CompareViewModel extends ChangeNotifier {
   late CompareScreenStatus compareScreenStatus;
   late ComparisonOverview overviewDB;
   List<Way1Merit> _way1MeritList = <Way1Merit>[];
-
   List<Way1Merit> get way1MeritList => _way1MeritList;
   List<Way2Merit> _way2MeritList = <Way2Merit>[];
-
   List<Way2Merit> get way2MeritList => _way2MeritList;
   List<Way1Demerit> _way1DemeritList = <Way1Demerit>[];
-
   List<Way1Demerit> get way1DemeritList => _way1DemeritList;
   List<Way2Demerit> _way2DemeritList = <Way2Demerit>[];
-
   List<Way2Demerit> get way2DemeritList => _way2DemeritList;
 
 //textFieldからviewModelへの変更値登録があるのでカプセル化しない
