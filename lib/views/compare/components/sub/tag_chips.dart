@@ -140,7 +140,7 @@ if(widget.candidateTagNameList.isEmpty){
                     onSubmitted: (input){
                       ///inputが既存の仮tagクラス内またはDB内に存在しないのかvalidation
                       //入力なしは登録されないようvalidation(input =''の時登録なし)
-                      if(input == ''||input == ' ' ){
+                      if(input == ''||input == ' ' ||input== '　'){
                       }else{
                         /// _tempoCandidateLabels内にinput要素があれば削除
                         if( _tempoCandidateLabels.contains(input)){
@@ -179,6 +179,16 @@ if(widget.candidateTagNameList.isEmpty){
       ? CreateTag(
         title: _tempoInput,
         onTapAddTag: (){
+          //todo Tagを追加する時tempoInputが空ならAddTagしてもタグが追加しないようにする
+          // if (_tempoInput == '' || _tempoInput == '　' || _tempoInput == ' ') {
+          //   debugPrint('_tempoInput空の方/_tempoInput：$_tempoInput');
+          // } else {
+          //   // _tempoInputだけのとき、tagNameListにもtempoInputが追加されてしまう
+          //   debugPrint('_tempoInput入力の方/_tempoInput$_tempoInput');
+          //   _tempoCandidateLabels.add(_tempoInput);
+          // }
+
+
           //追加時フォーカス外す
           FocusScope.of(context).unfocus();
           setState(() {

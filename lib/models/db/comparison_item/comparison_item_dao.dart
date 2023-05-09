@@ -284,14 +284,13 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
       ).get();
 
   ///削除：List<Tag> comparisonItemIdとtagTitleの２つの条件のもののみ削除
-  /// //todo forEach=>map.toList
-  /// //todo TagDialogPageの削除はdeleteSingleTagListとかに名前変更
   Future<void> deleteTagList(List<TagRecord> deleteTagRecordList)async {
-    deleteTagRecordList.forEach((TagRecord tag) {
-      (delete(tagRecords)..where(
-              (tbl) => tbl.comparisonItemId.equals(tag.comparisonItemId )
-              & tbl.tagTitle.equals(tag.tagTitle),)).go();
-    });
+
+    await Future.forEach(deleteTagRecordList, (TagRecord tag) {
+      (delete(tagRecords)
+        ..where((tbl) => tbl.comparisonItemId.equals(tag.comparisonItemId )
+        & tbl.tagTitle.equals(tag.tagTitle),)).go();
+    } );
     debugPrint('dao/削除');
   }
   ///削除：List<Tag> CompareScreenを削除時、comparisonItemIdのtag全削除

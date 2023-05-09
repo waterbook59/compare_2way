@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/dragging_tag_chart.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
@@ -129,20 +131,18 @@ class CompareRepository {
   }
 
   ///Delete ListPage選択行
-  /// //todo forEach修正
-  void deleteItemList(List<String> deleteItemIdList) {
-    deleteItemIdList.forEach((id) async {
+  Future<void> deleteItemList(List<String> deleteItemIdList) async {
+
+    await Future.forEach(deleteItemIdList, (String id) async{
       await _comparisonItemDao.deleteItem(id);
       await _comparisonItemDao.deleteWay1MeritList(id);
       await _comparisonItemDao.deleteWay2MeritList(id);
       await _comparisonItemDao.deleteWay1DemeritList(id);
       await _comparisonItemDao.deleteWay2DemeritList(id);
-
+      await _comparisonItemDao.deleteAllTagList(id);
       /// //todo way3List削除
 //    await _comparisonItemDao.deleteWay3MeritList(comparisonItemId);
 //    await _comparisonItemDao.deleteWay3DemeritList(comparisonItemId);
-      await _comparisonItemDao.deleteAllTagList(id);
-      debugPrint('データ削除完了');
     });
   }
 

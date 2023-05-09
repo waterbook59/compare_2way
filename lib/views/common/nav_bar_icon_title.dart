@@ -35,13 +35,11 @@ class NavBarIconTitle extends StatelessWidget {
         Expanded(
           ///右側が広がるので文字が左寄りになってしまう
           flex: centerFlex,
-          child: Container(
-            child: Text(
-              tagTitle,
-              style: middleTextStyle,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+          child: Text(
+            tagTitle,
+            style: middleTextStyle,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
         Expanded(

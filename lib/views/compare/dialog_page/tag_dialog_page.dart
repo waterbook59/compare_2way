@@ -42,10 +42,8 @@ class TagDialogPage extends StatelessWidget {
               //完了を押したらinput内容(List<String>)とcomparisonIdを基にtagクラスをDB登録
               ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
             //tempoInputTagに入力がある場合はviewModelの_tagNameListに追加
-              /// //todo candidateからの選択だとtempoInputに入らない
               await viewModel.createTag(comparisonOverview);//DBと重複してないものを登録
               //削除リストとDBリストで重複してるものを削除
-              /// //todo 削除完了時にTagChart側も削除(Tag削除されてもTagPage側(TagChart表示側)は残っている)
               await viewModel.deleteTag(comparisonOverview.comparisonItemId);
               //TagPage側更新
               await viewModel.updateSelectTagPage();
