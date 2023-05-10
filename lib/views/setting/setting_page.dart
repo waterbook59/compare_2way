@@ -122,12 +122,10 @@ class _SettingPageState extends State<SettingPage> {
                       title: const Text('バージョン'),
 //                      subtitle: 'English',
                       leading: const Icon(Icons.language),
-//                      trailing:const Icon(Icons.arrow_forward_ios),
-                      onPressed: (context) {
-//                    Navigator.of(context).push(MaterialPageRoute(
-//                      builder: (_) => LanguagesScreen(),
-//                    ));
-                      },
+                      trailing: const Padding(
+                        padding: EdgeInsets.only(right: 8),
+                        child: Text('ver.1.0.0'),
+                      ),
                     ),
                   ],
                 )
