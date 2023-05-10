@@ -73,15 +73,12 @@ class _TagInputChipState extends State<TagInputChip> {
           },
           autofocus: true,
           controller: _tagTitleController,
-          //decorationをnullにするとpadding含め余計な装飾は全てなくなる
           decoration:
-//          null,
           const InputDecoration(
             hintText: 'タグを追加',
             border: InputBorder.none,
             //isDenseで少し幅狭くなる
             isDense:true,
-//              contentPadding: EdgeInsets.all(8),
           ),
 
         ),

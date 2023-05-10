@@ -85,11 +85,6 @@ class TagDialogPage extends StatelessWidget {
                       if (snapshot.data == null) {
                         debugPrint('AsyncSnapshot candidateがnull');
                         return Container();
-//                      }
-                        /// candidateが空の時はTagChipsのCandidateTag以外表示
-//                      if (snapshot.hasData && snapshot.data.isEmpty) {
-//                        print('candidateが空');
-//                        return Container();
                       } else {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),

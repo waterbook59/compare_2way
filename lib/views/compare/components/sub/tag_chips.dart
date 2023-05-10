@@ -63,7 +63,6 @@ if(widget.candidateTagNameList.isEmpty){
     _tempoCandidateLabels = [];
     _tempoDisplayList = [];
     _tempoInput ='';//tagChips破棄時に空にする
-    debugPrint('tagChips/dispose_tempoDisplayList :$_tempoDisplayList');
     super.dispose();
   }
 
@@ -139,12 +138,9 @@ if(widget.candidateTagNameList.isEmpty){
                     },
                     onSubmitted: (input){
                       ///inputが既存の仮tagクラス内またはDB内に存在しないのかvalidation
-                      //入力なしは登録されないようvalidation(input =''の時登録なし)
-                      // if(input == ''||input == ' ' ||input== '　'){
-                      //   print('tagChips/TagInputChipのvalidation側');
+                      //空欄入力validation
                         if(input.trim().isEmpty){
                           _tempoInput='';
-    print('tagChips/TagInputChipのvalidation側');
                       }else{
                         /// _tempoCandidateLabels内にinput要素があれば削除
                         if( _tempoCandidateLabels.contains(input)){
@@ -187,17 +183,14 @@ if(widget.candidateTagNameList.isEmpty){
           //追加時フォーカス外す
           FocusScope.of(context).unfocus();
           setState(() {
-            //Tagを追加する時tempoInputが空ならAddTagしてもタグが追加しないようにする+isFocusをfalseに変更
+            //空欄入力validation
            if(_tempoInput.trim().isEmpty) {
-              debugPrint('createTag/_tempoInput空の方/_tempoInput：$_tempoInput');
               isFocus= false;
               isInput= false;
               _tempoInput='';
-              debugPrint('createTag/_tempoInput空の方/_tempoInput：$_tempoInput');
               return;
             } else {
               // _tempoInputだけのとき、tagNameListにもtempoInputが追加されてしまう
-              debugPrint('createTag/_tempoInput入力の方/_tempoInput$_tempoInput');
               _tempoCandidateLabels.add(_tempoInput);
             }
 
