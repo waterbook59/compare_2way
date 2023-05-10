@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/dragging_item_data.dart';
 import 'package:compare_2way/data_models/dragging_tag_chart.dart';
@@ -904,7 +903,7 @@ class CompareViewModel extends ChangeNotifier {
 
   ///TagInputChipで仮入力したものをset
   void setTempoInput(String tempoInput) {
-    if (tempoInput == '') {
+    if(tempoInput.trim().isEmpty){
     } else {
       _tempoInput = tempoInput;
       debugPrint('viewModel/_tempoInput:$_tempoInput');

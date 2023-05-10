@@ -140,7 +140,11 @@ if(widget.candidateTagNameList.isEmpty){
                     onSubmitted: (input){
                       ///inputが既存の仮tagクラス内またはDB内に存在しないのかvalidation
                       //入力なしは登録されないようvalidation(input =''の時登録なし)
-                      if(input == ''||input == ' ' ||input== '　'){
+                      // if(input == ''||input == ' ' ||input== '　'){
+                      //   print('tagChips/TagInputChipのvalidation側');
+                        if(input.trim().isEmpty){
+                          _tempoInput='';
+    print('tagChips/TagInputChipのvalidation側');
                       }else{
                         /// _tempoCandidateLabels内にinput要素があれば削除
                         if( _tempoCandidateLabels.contains(input)){
@@ -179,19 +183,26 @@ if(widget.candidateTagNameList.isEmpty){
       ? CreateTag(
         title: _tempoInput,
         onTapAddTag: (){
-          //todo Tagを追加する時tempoInputが空ならAddTagしてもタグが追加しないようにする
-          // if (_tempoInput == '' || _tempoInput == '　' || _tempoInput == ' ') {
-          //   debugPrint('_tempoInput空の方/_tempoInput：$_tempoInput');
-          // } else {
-          //   // _tempoInputだけのとき、tagNameListにもtempoInputが追加されてしまう
-          //   debugPrint('_tempoInput入力の方/_tempoInput$_tempoInput');
-          //   _tempoCandidateLabels.add(_tempoInput);
-          // }
-
 
           //追加時フォーカス外す
           FocusScope.of(context).unfocus();
           setState(() {
+            //Tagを追加する時tempoInputが空ならAddTagしてもタグが追加しないようにする+isFocusをfalseに変更
+           if(_tempoInput.trim().isEmpty) {
+              debugPrint('createTag/_tempoInput空の方/_tempoInput：$_tempoInput');
+              isFocus= false;
+              isInput= false;
+              _tempoInput='';
+              debugPrint('createTag/_tempoInput空の方/_tempoInput：$_tempoInput');
+              return;
+            } else {
+              // _tempoInputだけのとき、tagNameListにもtempoInputが追加されてしまう
+              debugPrint('createTag/_tempoInput入力の方/_tempoInput$_tempoInput');
+              _tempoCandidateLabels.add(_tempoInput);
+            }
+
+
+
             //候補タグから既にあるものを入れたら表示を消す
             if( _tempoCandidateLabels.contains(_tempoInput)){
               _tempoCandidateLabels.remove(_tempoInput);

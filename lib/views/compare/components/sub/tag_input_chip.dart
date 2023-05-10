@@ -52,13 +52,14 @@ class _TagInputChipState extends State<TagInputChip> {
         width:
         MediaQuery.of(context).size.width*0.3,
         child:
-        /// //todo CupertinoTextFIeldへ変更
+        /// //todo CupertinoTextFieldへ変更
         //            CupertinoTextField(
 //              onSubmitted: null,
 //              autofocus: true,
 //              controller: _tagTitleController,
 //              placeholder: 'タグを追加',
 //            ),
+
          TextField(
           // ignore: lines_longer_than_80_chars
           // onChangedでviewModelのtempoInputTagに一旦setし、tagDialogPageで完了をおしたら入力有無のvalidationしつつ_tagNameListに追加&登録
