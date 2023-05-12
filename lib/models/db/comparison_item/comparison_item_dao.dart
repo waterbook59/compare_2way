@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/drift.dart';
 import 'comparison_item_database.dart';
 
 part 'comparison_item_dao.g.dart';
 
-@UseDao(tables: [
+@DriftAccessor(tables: [
   ComparisonOverviewRecords,
   Way1MeritRecords,
   Way1DemeritRecords,

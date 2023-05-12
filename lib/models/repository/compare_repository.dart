@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/dragging_tag_chart.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
@@ -7,9 +8,9 @@ import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_dao.dart';
 import 'package:compare_2way/models/db/comparison_item/comparison_item_database.dart';
 import 'package:compare_2way/utils/extensions.dart';
+import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
 import 'package:flutter/foundation.dart';
-import 'package:moor/ffi.dart';
-import 'package:moor/moor.dart';
 
 class CompareRepository {
   CompareRepository({required ComparisonItemDao comparisonItemDao})
@@ -760,7 +761,7 @@ class CompareRepository {
   ///削除 Tag
   Future<void> onDeleteTag(Tag deleteTag) async {
     try {
-      //List<Tag>=>List<TagRecord>へ変換保存
+      //List<Tag>=>List<TagRecord>へ変換保存 //todo Value(title)
       final deleteTagRecord = deleteTag.toTagRecord(deleteTag);
       await _comparisonItemDao.onDeleteTag(deleteTagRecord);
     } on SqliteException catch (e) {

@@ -18,6 +18,8 @@ class SelectItemList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
     return DecoratedBox(
       decoration: listDecoration,
       child: ListTile(
@@ -27,8 +29,28 @@ class SelectItemList extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('結論：$conclusion'),
-            Text(createdAt),
+            const SizedBox(height: 4,),
+            Row(
+              children: [
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 4,vertical:1),
+                    child: Text(
+                      '結論',
+                      style: TextStyle(fontSize: 14,
+                        color: Colors.white,),
+                    ),
+                  ),
+                ),
+
+                Text(conclusion),
+              ],
+            ),
+            Text(createdAt,style: TextStyle(fontSize: 12),),
           ],
         ),
         trailing:const Icon(Icons.arrow_forward_ios),

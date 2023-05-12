@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:moor/ffi.dart';
-import 'package:moor/moor.dart';
+import 'package:drift/native.dart';
+import 'package:drift/drift.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -100,7 +100,7 @@ class TagChartRecords extends Table{
 }
 
 /// //todo @DriftDatabase
-@UseMoor(tables: [
+@DriftDatabase(tables: [
   ComparisonOverviewRecords,
   Way1MeritRecords,
   Way1DemeritRecords,
@@ -126,6 +126,6 @@ LazyDatabase _openConnection() {
     //Fileはdart.ioインポート
     final file = File(p.join(dbFolder.path, 'comparison_item.db'));
     /// //todo DriftではNativeDatabase
-    return VmDatabase(file);
+    return NativeDatabase(file);
   });
 }

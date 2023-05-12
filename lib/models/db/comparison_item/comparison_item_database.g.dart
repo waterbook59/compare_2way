@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: strict_raw_type
-
 part of 'comparison_item_database.dart';
 
 // **************************************************************************
@@ -24,6 +22,8 @@ class ComparisonOverviewRecord extends DataClass
   final String way2Title;
   final int way2MeritEvaluate;
   final int way2DemeritEvaluate;
+
+  /// //todo way3はあとで追加
   final bool favorite;
   final String? conclusion;
   final DateTime? createdAt;
@@ -40,8 +40,7 @@ class ComparisonOverviewRecord extends DataClass
       required this.favorite,
       this.conclusion,
       this.createdAt});
-  factory ComparisonOverviewRecord.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
+  factory ComparisonOverviewRecord.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return ComparisonOverviewRecord(
@@ -116,7 +115,7 @@ class ComparisonOverviewRecord extends DataClass
 
   factory ComparisonOverviewRecord.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return ComparisonOverviewRecord(
       dataId: serializer.fromJson<int>(json['dataId']),
       comparisonItemId: serializer.fromJson<String>(json['comparisonItemId']),
@@ -136,7 +135,7 @@ class ComparisonOverviewRecord extends DataClass
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'dataId': serializer.toJson<int>(dataId),
       'comparisonItemId': serializer.toJson<String>(comparisonItemId),
@@ -584,7 +583,7 @@ class $ComparisonOverviewRecordsTable extends ComparisonOverviewRecords
   @override
   ComparisonOverviewRecord map(Map<String, dynamic> data,
       {String? tablePrefix}) {
-    return ComparisonOverviewRecord.fromData(data, attachedDatabase,
+    return ComparisonOverviewRecord.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -602,8 +601,7 @@ class Way1MeritRecord extends DataClass implements Insertable<Way1MeritRecord> {
       {required this.way1MeritId,
       required this.comparisonItemId,
       this.way1MeritDesc});
-  factory Way1MeritRecord.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
+  factory Way1MeritRecord.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Way1MeritRecord(
@@ -638,7 +636,7 @@ class Way1MeritRecord extends DataClass implements Insertable<Way1MeritRecord> {
 
   factory Way1MeritRecord.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Way1MeritRecord(
       way1MeritId: serializer.fromJson<int>(json['way1MeritId']),
       comparisonItemId: serializer.fromJson<String>(json['comparisonItemId']),
@@ -647,7 +645,7 @@ class Way1MeritRecord extends DataClass implements Insertable<Way1MeritRecord> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'way1MeritId': serializer.toJson<int>(way1MeritId),
       'comparisonItemId': serializer.toJson<String>(comparisonItemId),
@@ -813,7 +811,7 @@ class $Way1MeritRecordsTable extends Way1MeritRecords
   Set<GeneratedColumn> get $primaryKey => {way1MeritId};
   @override
   Way1MeritRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Way1MeritRecord.fromData(data, attachedDatabase,
+    return Way1MeritRecord.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -832,8 +830,7 @@ class Way1DemeritRecord extends DataClass
       {required this.way1DemeritId,
       required this.comparisonItemId,
       this.way1DemeritDesc});
-  factory Way1DemeritRecord.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
+  factory Way1DemeritRecord.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Way1DemeritRecord(
@@ -868,7 +865,7 @@ class Way1DemeritRecord extends DataClass
 
   factory Way1DemeritRecord.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Way1DemeritRecord(
       way1DemeritId: serializer.fromJson<int>(json['way1DemeritId']),
       comparisonItemId: serializer.fromJson<String>(json['comparisonItemId']),
@@ -877,7 +874,7 @@ class Way1DemeritRecord extends DataClass
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'way1DemeritId': serializer.toJson<int>(way1DemeritId),
       'comparisonItemId': serializer.toJson<String>(comparisonItemId),
@@ -1044,7 +1041,7 @@ class $Way1DemeritRecordsTable extends Way1DemeritRecords
   Set<GeneratedColumn> get $primaryKey => {way1DemeritId};
   @override
   Way1DemeritRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Way1DemeritRecord.fromData(data, attachedDatabase,
+    return Way1DemeritRecord.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -1062,8 +1059,7 @@ class Way2MeritRecord extends DataClass implements Insertable<Way2MeritRecord> {
       {required this.way2MeritId,
       required this.comparisonItemId,
       this.way2MeritDesc});
-  factory Way2MeritRecord.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
+  factory Way2MeritRecord.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Way2MeritRecord(
@@ -1098,7 +1094,7 @@ class Way2MeritRecord extends DataClass implements Insertable<Way2MeritRecord> {
 
   factory Way2MeritRecord.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Way2MeritRecord(
       way2MeritId: serializer.fromJson<int>(json['way2MeritId']),
       comparisonItemId: serializer.fromJson<String>(json['comparisonItemId']),
@@ -1107,7 +1103,7 @@ class Way2MeritRecord extends DataClass implements Insertable<Way2MeritRecord> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'way2MeritId': serializer.toJson<int>(way2MeritId),
       'comparisonItemId': serializer.toJson<String>(comparisonItemId),
@@ -1273,7 +1269,7 @@ class $Way2MeritRecordsTable extends Way2MeritRecords
   Set<GeneratedColumn> get $primaryKey => {way2MeritId};
   @override
   Way2MeritRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Way2MeritRecord.fromData(data, attachedDatabase,
+    return Way2MeritRecord.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -1292,8 +1288,7 @@ class Way2DemeritRecord extends DataClass
       {required this.way2DemeritId,
       required this.comparisonItemId,
       this.way2DemeritDesc});
-  factory Way2DemeritRecord.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
+  factory Way2DemeritRecord.fromData(Map<String, dynamic> data,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Way2DemeritRecord(
@@ -1328,7 +1323,7 @@ class Way2DemeritRecord extends DataClass
 
   factory Way2DemeritRecord.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return Way2DemeritRecord(
       way2DemeritId: serializer.fromJson<int>(json['way2DemeritId']),
       comparisonItemId: serializer.fromJson<String>(json['comparisonItemId']),
@@ -1337,7 +1332,7 @@ class Way2DemeritRecord extends DataClass
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'way2DemeritId': serializer.toJson<int>(way2DemeritId),
       'comparisonItemId': serializer.toJson<String>(comparisonItemId),
@@ -1504,7 +1499,7 @@ class $Way2DemeritRecordsTable extends Way2DemeritRecords
   Set<GeneratedColumn> get $primaryKey => {way2DemeritId};
   @override
   Way2DemeritRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Way2DemeritRecord.fromData(data, attachedDatabase,
+    return Way2DemeritRecord.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -1515,23 +1510,22 @@ class $Way2DemeritRecordsTable extends Way2DemeritRecords
 }
 
 class TagRecord extends DataClass implements Insertable<TagRecord> {
-  final int? tagId;
+  final int tagId;
   final String comparisonItemId;
   final String tagTitle;
   final DateTime? createdAt;
   final String createAtToString;
   TagRecord(
-      {this.tagId,
+      {required this.tagId,
       required this.comparisonItemId,
       required this.tagTitle,
       this.createdAt,
       required this.createAtToString});
-  factory TagRecord.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory TagRecord.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return TagRecord(
       tagId: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}tag_id']),
+          .mapFromDatabaseResponse(data['${effectivePrefix}tag_id'])!,
       comparisonItemId: const StringType().mapFromDatabaseResponse(
           data['${effectivePrefix}comparison_item_id'])!,
       tagTitle: const StringType()
@@ -1545,9 +1539,7 @@ class TagRecord extends DataClass implements Insertable<TagRecord> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || tagId != null) {
-      map['tag_id'] = Variable<int?>(tagId);
-    }
+    map['tag_id'] = Variable<int>(tagId);
     map['comparison_item_id'] = Variable<String>(comparisonItemId);
     map['tag_title'] = Variable<String>(tagTitle);
     if (!nullToAbsent || createdAt != null) {
@@ -1559,8 +1551,7 @@ class TagRecord extends DataClass implements Insertable<TagRecord> {
 
   TagRecordsCompanion toCompanion(bool nullToAbsent) {
     return TagRecordsCompanion(
-      tagId:
-          tagId == null && nullToAbsent ? const Value.absent() : Value(tagId),
+      tagId: Value(tagId),
       comparisonItemId: Value(comparisonItemId),
       tagTitle: Value(tagTitle),
       createdAt: createdAt == null && nullToAbsent
@@ -1572,9 +1563,9 @@ class TagRecord extends DataClass implements Insertable<TagRecord> {
 
   factory TagRecord.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return TagRecord(
-      tagId: serializer.fromJson<int?>(json['tagId']),
+      tagId: serializer.fromJson<int>(json['tagId']),
       comparisonItemId: serializer.fromJson<String>(json['comparisonItemId']),
       tagTitle: serializer.fromJson<String>(json['tagTitle']),
       createdAt: serializer.fromJson<DateTime?>(json['createdAt']),
@@ -1583,9 +1574,9 @@ class TagRecord extends DataClass implements Insertable<TagRecord> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'tagId': serializer.toJson<int?>(tagId),
+      'tagId': serializer.toJson<int>(tagId),
       'comparisonItemId': serializer.toJson<String>(comparisonItemId),
       'tagTitle': serializer.toJson<String>(tagTitle),
       'createdAt': serializer.toJson<DateTime?>(createdAt),
@@ -1633,7 +1624,7 @@ class TagRecord extends DataClass implements Insertable<TagRecord> {
 }
 
 class TagRecordsCompanion extends UpdateCompanion<TagRecord> {
-  final Value<int?> tagId;
+  final Value<int> tagId;
   final Value<String> comparisonItemId;
   final Value<String> tagTitle;
   final Value<DateTime?> createdAt;
@@ -1655,7 +1646,7 @@ class TagRecordsCompanion extends UpdateCompanion<TagRecord> {
         tagTitle = Value(tagTitle),
         createAtToString = Value(createAtToString);
   static Insertable<TagRecord> custom({
-    Expression<int?>? tagId,
+    Expression<int>? tagId,
     Expression<String>? comparisonItemId,
     Expression<String>? tagTitle,
     Expression<DateTime?>? createdAt,
@@ -1671,7 +1662,7 @@ class TagRecordsCompanion extends UpdateCompanion<TagRecord> {
   }
 
   TagRecordsCompanion copyWith(
-      {Value<int?>? tagId,
+      {Value<int>? tagId,
       Value<String>? comparisonItemId,
       Value<String>? tagTitle,
       Value<DateTime?>? createdAt,
@@ -1689,7 +1680,7 @@ class TagRecordsCompanion extends UpdateCompanion<TagRecord> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (tagId.present) {
-      map['tag_id'] = Variable<int?>(tagId.value);
+      map['tag_id'] = Variable<int>(tagId.value);
     }
     if (comparisonItemId.present) {
       map['comparison_item_id'] = Variable<String>(comparisonItemId.value);
@@ -1728,8 +1719,10 @@ class $TagRecordsTable extends TagRecords
   final VerificationMeta _tagIdMeta = const VerificationMeta('tagId');
   @override
   late final GeneratedColumn<int?> tagId = GeneratedColumn<int?>(
-      'tag_id', aliasedName, true,
-      type: const IntType(), requiredDuringInsert: false);
+      'tag_id', aliasedName, false,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _comparisonItemIdMeta =
       const VerificationMeta('comparisonItemId');
   @override
@@ -1801,7 +1794,7 @@ class $TagRecordsTable extends TagRecords
   Set<GeneratedColumn> get $primaryKey => {tagId};
   @override
   TagRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return TagRecord.fromData(data, attachedDatabase,
+    return TagRecord.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
@@ -1817,9 +1810,7 @@ class TagChartRecord extends DataClass implements Insertable<TagChartRecord> {
   final int? tagAmount;
   TagChartRecord(
       {required this.dataId, required this.tagTitle, this.tagAmount});
-  factory TagChartRecord.fromData(
-      Map<String, dynamic> data, GeneratedDatabase db,
-      {String? prefix}) {
+  factory TagChartRecord.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return TagChartRecord(
       dataId: const IntType()
@@ -1853,7 +1844,7 @@ class TagChartRecord extends DataClass implements Insertable<TagChartRecord> {
 
   factory TagChartRecord.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return TagChartRecord(
       dataId: serializer.fromJson<int>(json['dataId']),
       tagTitle: serializer.fromJson<String>(json['tagTitle']),
@@ -1862,7 +1853,7 @@ class TagChartRecord extends DataClass implements Insertable<TagChartRecord> {
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
+    serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'dataId': serializer.toJson<int>(dataId),
       'tagTitle': serializer.toJson<String>(tagTitle),
@@ -2013,7 +2004,7 @@ class $TagChartRecordsTable extends TagChartRecords
   Set<GeneratedColumn> get $primaryKey => {dataId};
   @override
   TagChartRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return TagChartRecord.fromData(data, attachedDatabase,
+    return TagChartRecord.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
