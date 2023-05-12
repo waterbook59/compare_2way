@@ -265,7 +265,6 @@ extension ConvertToComparisonOverviewRecord on ComparisonOverviewRecord {
 
 //way1Merit関連
 ///新規挿入時(model=>DB):way1Merit=>way1MeritRecord
-///      //todo Valueへ変更 way1MeritIdはautoIncrement
 extension RegisterNewWay1MeritCompanion on Way1Merit{
   Way1MeritRecordsCompanion toWay1MeritNewCompanion (Way1Merit initWay1Merit){
     final companion= Way1MeritRecordsCompanion(
@@ -537,6 +536,8 @@ extension DeleteTagRecordList on List<Tag>{
     return tagRecordList;
   }
 }
+
+
 ///更新時(model=>DB):List<Tag>=>List<TagRecord>
 extension ConvertToUpdateTagRecordList on List<Tag>{
   // tagTitleをprimaryKeyに設定した場合、tagIdのautoIncrement効かないかも
@@ -563,7 +564,7 @@ extension ConvertToTagList on List<TagRecord>{
     final tagList =
     tagRecordList.map((tagRecordSingle) {
       return Tag(
-        tagId: tagRecordSingle.tagId ??0,
+        tagId: tagRecordSingle.tagId,
         comparisonItemId: tagRecordSingle.comparisonItemId,
         tagTitle: tagRecordSingle.tagTitle,
         createdAt: tagRecordSingle.createdAt,
@@ -573,20 +574,8 @@ extension ConvertToTagList on List<TagRecord>{
     return tagList;
   }
 }
-///削除時(model=>DB) Tag=>TagRecord
-extension ConvertToTagRecord on Tag{
-  TagRecord toTagRecord(Tag tag){
-    final tagRecord =
-    TagRecord(
-        tagId: tag.tagId,
-        comparisonItemId: tag.comparisonItemId ??'',
-        tagTitle: tag.tagTitle ?? '',
-        createdAt: tag.createdAt,
-        createAtToString: tag.createAtToString ??'',
-      );
-    return tagRecord;
-  }
-}
+///削除時(model=>DB) Tag=>TagRecord,tagTitleで削除するので使わない
+
 
 ///List<TagChart>_新規挿入(model=>DB):List<TagChart>=>List<TagChartRecord>
 extension RegisterNewTagChartRecordList on List<TagChart>{

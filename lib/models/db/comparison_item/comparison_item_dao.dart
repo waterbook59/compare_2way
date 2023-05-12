@@ -337,16 +337,16 @@ class ComparisonItemDao extends DatabaseAccessor<ComparisonItemDB>
   }
 
   ///削除：Tag tagPageでのtagTitleを削除
-  Future<void> onDeleteTag(TagRecord deleteTagRecord) =>
+  Future<void> onDeleteTag(String deleteTagTitle) =>
       (delete(tagRecords)
-        ..where((tbl) => tbl.tagTitle.equals(deleteTagRecord.tagTitle)))
+        ..where((tbl) => tbl.tagTitle.equals(deleteTagTitle)))
           .go();
 
   ///削除：Tag tagPageでの選択したtagTitleを削除
-  Future<void> deleteSelectTagList(List<TagRecord> deleteTagRecordList)async{
-    await Future.forEach(deleteTagRecordList,(TagRecord tag) {
+  Future<void> deleteSelectTagList(List<String> deleteTagTitleList)async{
+    await Future.forEach(deleteTagTitleList,(String tagTitle) {
       (delete(tagRecords)
-        ..where((tbl) => tbl.tagTitle.equals(tag.tagTitle)))
+        ..where((tbl) => tbl.tagTitle.equals(tagTitle)))
           .go();
     });
 

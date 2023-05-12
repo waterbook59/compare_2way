@@ -11,6 +11,7 @@ import 'package:compare_2way/utils/extensions.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/foundation.dart';
+import 'package:uuid/uuid.dart';
 
 class CompareRepository {
   CompareRepository({required ComparisonItemDao comparisonItemDao})
@@ -264,8 +265,6 @@ class CompareRepository {
       //way1MeritIdはautoIncrementなので、companion使う
       final way1MeritItemRecords =
           way1MeritList.toWay1InitMeritRecordList(way1MeritList);
-
-      /// //todo companion使用
       final way2MeritItemRecords =
           way2MeritList.toWay2InitMeritRecordList(way2MeritList);
 //      final way3MeritItemRecords =
@@ -562,6 +561,8 @@ class CompareRepository {
       debugPrint('repo/createTag/extractionDisplayTag:$extractionDisplayTag');
       final tagList = extractionDisplayTag.map((name) {
         return Tag(
+          tagId: int.parse(
+            const Uuid().v1().replaceAll('-', '').substring(0, 9),radix:16,),
           comparisonItemId: comparisonItemId,
           tagTitle: name,
           createdAt: DateTime.now(),
@@ -708,7 +709,6 @@ class CompareRepository {
   ///Read List<TagChart>削除更新用にtitle検索からtagChartList読み込み
   Future<List<TagChart>> getTagChartList(List<String> titleList) async {
     final tagChartRecordList = <TagChartRecord>[];
-    /// //todo 1行ずつ読み取る
     await Future.forEach(titleList, (String title) async {
       final tagChartRecord = await _comparisonItemDao.getTagChart(title);
       tagChartRecordList.add(tagChartRecord);
@@ -758,12 +758,10 @@ class CompareRepository {
     }
   }
 
-  ///削除 Tag
-  Future<void> onDeleteTag(Tag deleteTag) async {
+  ///削除 Tag タイトルから削除なのでtagTitleをdaoへ渡す
+  Future<void> onDeleteTag(String deleteTagTitle) async {
     try {
-      //List<Tag>=>List<TagRecord>へ変換保存 //todo Value(title)
-      final deleteTagRecord = deleteTag.toTagRecord(deleteTag);
-      await _comparisonItemDao.onDeleteTag(deleteTagRecord);
+      await _comparisonItemDao.onDeleteTag(deleteTagTitle);
     } on SqliteException catch (e) {
       debugPrint('tagList削除時repositoryエラー:$e');
     }
@@ -838,13 +836,12 @@ class CompareRepository {
     }
   }
 
-  /// TagPage選択行削除 //todo deleteItemList,deleteTag参照
+  /// TagPage選択行削除
   Future<void> deleteSelectTagList(List<Tag> deleteTagList) async {
     try {
-      //List<Tag>=>List<TagRecord>へ変換保存
-      final deleteTagRecordList = deleteTagList.toTagRecordsDeleteList(
-          deleteTagList,);
-      await _comparisonItemDao.deleteSelectTagList(deleteTagRecordList);
+      final deleteTagTitle=deleteTagList.map((e) => e.tagTitle).toList();
+      await _comparisonItemDao.deleteSelectTagList(
+          deleteTagTitle.cast<String>(),);
     } on SqliteException catch (e) {
       debugPrint('tagList削除時repositoryエラー:$e');
     }

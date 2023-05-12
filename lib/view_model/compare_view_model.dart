@@ -8,6 +8,7 @@ import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/models/repository/compare_repository.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class CompareViewModel extends ChangeNotifier {
   CompareViewModel({
@@ -960,6 +961,9 @@ class CompareViewModel extends ChangeNotifier {
     debugPrint('deleteTagメソッドで消すtempoDeleteTagList:$_tempoDeleteList');
     _tempoDeleteList.map((title) {
       final deleteTag = Tag(
+        //tagIdがrequiredなのでUuidでとりあえず入力
+        tagId: int.parse(
+            const Uuid().v1().replaceAll('-', '').substring(0, 9),radix:16,),
         comparisonItemId: comparisonItemId,
         tagTitle: title,
       );
@@ -1145,8 +1149,9 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> onDeleteTag(String tagTitle) async {
     //tagTitleで紐づけて削除するのでcomparisonItemIdいらない
     //一応Tag形式にしてやりとりしてるが、tagTitleだけあれば削除可能(のはず)
-    final deleteTag = Tag(tagTitle: tagTitle);
-    await _compareRepository.onDeleteTag(deleteTag);
+    //もうTag変換せずにtagTitleだけ渡す
+    // final deleteTag = Tag(tagTitle: tagTitle);
+    await _compareRepository.onDeleteTag(tagTitle);
     //削除してtagPage更新
     selectedIndex = null;
     /// //todo 削除したアイテム全ての日時更新(タグ名変更と同じで変えるのは変かも)
@@ -1248,10 +1253,13 @@ class CompareViewModel extends ChangeNotifier {
     //Tag削除
     _tempoDeleteList.map((title) {
       final deleteTag = Tag(
+        tagId: int.parse(
+          const Uuid().v1().replaceAll('-', '').substring(0, 9),radix:16,),
         tagTitle: title,
       );
       deleteTagList.add(deleteTag);
     }).toList();
+
     //TagChart削除
     _tempoDeleteList.map((title) {
       final deleteTagChart = TagChart(
