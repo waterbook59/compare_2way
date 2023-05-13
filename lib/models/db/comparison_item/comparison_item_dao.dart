@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:drift/drift.dart';
+import 'package:flutter/cupertino.dart';
 import 'comparison_item_database.dart';
 
 part 'comparison_item_dao.g.dart';

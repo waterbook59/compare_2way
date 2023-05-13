@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class MeritEvaluateDropdown extends StatefulWidget {
@@ -47,20 +49,20 @@ class _EvaluateDropdownState extends State<MeritEvaluateDropdown> {
                   style: TextStyle(fontSize: 40),
                 ),),
             ),
-            const PopupMenuItem(
+             PopupMenuItem(
               value: 1,
               child: Center(
                 child: Text(
                   '◎',
-                  style: TextStyle(fontSize: 40),
+                  style: TextStyle(fontSize: Platform.isIOS ? 40 : 55,),
                 ),),
             ),
-            const PopupMenuItem(
+             PopupMenuItem(
               value: 2,
               child: Center(
                 child: Text(
                   '○',
-                  style: TextStyle(fontSize: 40),
+                  style: TextStyle(fontSize: Platform.isIOS ? 40 : 55,),
                 ),),
             ),
             const PopupMenuItem(

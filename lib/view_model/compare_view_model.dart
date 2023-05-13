@@ -843,11 +843,11 @@ class CompareViewModel extends ChangeNotifier {
     //2.削除更新tagChart作成:extractRemoveTagだけTagChartDBのAmountが2以上なら-1、1なら削除する
     ///List<String?>=>List<String>への変換
    /// https://stackoverflow.com/questions/66896648/how-to-convert-a-listt-to-listt-in-null-safe-dart
-    final withoutNulls =<String>[for (var s in extractRemoveTagList)if(s!=null)s
-    ];
-    debugPrint('viewModel/createTag/withoutNulls:$withoutNulls');
+    //常にextractRemoveTagListはnullにならないので、変換式はなし
+    //final withoutNulls = extractRemoveTagList.where((s) => s!= null).toList();
+    // debugPrint('viewModel/createTag/withoutNulls:$withoutNulls');
       final tagChartDBList =
-          await _compareRepository.getTagChartList(withoutNulls);
+          await _compareRepository.getTagChartList(extractRemoveTagList);
       await Future.forEach(tagChartDBList, (TagChart tagChart) async {
         if (tagChart.tagAmount! > 1) {
           //Value更新
@@ -1225,8 +1225,12 @@ class CompareViewModel extends ChangeNotifier {
       //tagTitleが同じのTagをdeleteTagListから削除:難
       //deleteItemIdListからitemIdList全て削除(同じid全て消す)set化してremoveAll
       _selectTagList = await _compareRepository.onSelectTag(tagTitle);
-      final updateIdSet =
-          _selectTagList.map((tag) => tag.comparisonItemId).toSet();
+      // final updateIdSet =
+      //     _selectTagList.map((tag) => tag.comparisonItemId).toSet();
+      final updateIdSet = _selectTagList
+          .where((tag) => tag.comparisonItemId != null)
+          .map((tag) => tag.comparisonItemId!)
+          .toSet();
       final deleteIdSet = deleteItemIdList.toSet()..removeAll(updateIdSet);
       deleteItemIdList = deleteIdSet.toList();
       debugPrint('tagTitle削除後:$_tempoDeleteList');
