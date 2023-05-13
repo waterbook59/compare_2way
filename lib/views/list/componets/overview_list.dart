@@ -39,8 +39,30 @@ class OverViewList extends StatelessWidget {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('結論：$conclusion'),
-              Text(createdAt),
+              const SizedBox(height: 4,),
+              Row(
+                children: [
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.black45,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4,vertical:1),
+                      child: Text(
+                        '結論',
+                        style: TextStyle(fontSize: 14,
+                          color: Colors.white,),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 4,),
+
+                  Text(conclusion!,style: const TextStyle(
+                    color: Colors.black,),),
+                ],
+              ),
+              Text(createdAt,style: const TextStyle(fontSize: 12),),
             ],
           ),
           trailing:const Icon(Icons.arrow_forward_ios),

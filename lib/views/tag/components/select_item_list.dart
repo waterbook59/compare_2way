@@ -34,7 +34,7 @@ class SelectItemList extends StatelessWidget {
               children: [
                 DecoratedBox(
                   decoration: BoxDecoration(
-                    color: Colors.grey,
+                    color: Colors.black45,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Padding(
@@ -46,11 +46,11 @@ class SelectItemList extends StatelessWidget {
                     ),
                   ),
                 ),
-
+                const SizedBox(width: 4,),
                 Text(conclusion),
               ],
             ),
-            Text(createdAt,style: TextStyle(fontSize: 12),),
+            Text(createdAt,style: const TextStyle(fontSize: 12),),
           ],
         ),
         trailing:const Icon(Icons.arrow_forward_ios),
