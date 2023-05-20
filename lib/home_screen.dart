@@ -1,20 +1,22 @@
 import 'package:compare_2way/views/list/list_page.dart';
 import 'package:compare_2way/views/setting/setting_page.dart';
 import 'package:compare_2way/views/tag/tag_page.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
 
   final _pages = [
-    ListPage(),
-    TagPage(),
-    SettingPage(),
+    const ListPage(),
+    const TagPage(),
+    const SettingPage(),
   ];
 
   int _currentIndex = 0;
@@ -25,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //    final accentColor = CupertinoTheme
 //        .of(context)
 //        .primaryContrastingColor;
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
 
     return
       SafeArea(
@@ -54,14 +56,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
              ),
-          tabBuilder: (context, _currentIndex) {
+          tabBuilder: (context, currentIndex) {
             return CupertinoTabView(
               builder: (context){
-               return _pages[_currentIndex];
+               return _pages[currentIndex];
               },
             );
           }
-      ),
+      ,),
       );
   }
 }

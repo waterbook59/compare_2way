@@ -22,7 +22,7 @@ class ListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final accentColor = Theme.of(context).colorScheme.secondary;
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
+    // final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -43,14 +43,14 @@ class ListPage extends StatelessWidget {
         trailing: const ListPageEditButton(),
       ),
       child: Scaffold(
-        //todo Consumer=>Selectorへ変更を検討
+        /// //todo Consumer=>Selectorへ変更を検討
         body: Consumer<CompareViewModel>(
 
             /// Consumer=>FutureBuilderは空リスト表示できるが、リスト押してからCompareScreen表示が遅い?
-            //todo FutureBuilderを再考する(Consumer or Selectorのみ)iPhoneでは遅さ感じない
+            /// //todo FutureBuilderを再考する(Consumer or Selectorのみ)iPhoneでは遅さ感じない
 
             builder: (context, compareViewModel, child) {
-          return (viewModel.editStatus == ListEditMode.display)
+          return (compareViewModel.editStatus == ListEditMode.display)
 
               ///通常時
               //SingleChildScrollViewのchildが中心にこない問題の解決法
@@ -61,11 +61,11 @@ class ListPage extends StatelessWidget {
                         BoxConstraints(minHeight: constraints.maxHeight),
                     //初回描画の時にgetListが２回発動される
                     child: FutureBuilder(
-                      future: viewModel.getList(),
+                      future: compareViewModel.getList(),
                       builder: (context,
                           AsyncSnapshot<List<ComparisonOverview>> snapshot,) {
                         if (snapshot.data == null) {
-                          print('List<ComparisonOverview>>snapshotがnull');
+                          debugPrint('List<ComparisonOverview>>snapshotがnull');
                           return Container();
                         }
                       ///viewModel.comparisonOverviews.isEmptyだとEmptyView通ってしまう
@@ -73,9 +73,7 @@ class ListPage extends StatelessWidget {
                         ///isEmpty箇所は強制呼び出しでエラー消える
                         if (snapshot.hasData && snapshot.data!.isEmpty) {
 //                          print('ListPage/EmptyView側通って描画');
-                          return Container(
-                              child:
-                                  const Center(child: Text('アイテムを追加してください')),);
+                          return const Center(child: Text('アイテムを追加してください'));
                         } else {
 //print('ListView側通って描画');
                           return
@@ -97,12 +95,12 @@ class ListPage extends StatelessWidget {
                               final formatted =
                                   formatter.format(overview.createdAt);
                               return OverViewList(
-                                title: overview.itemTitle,
+                                title: overview.itemTitle!,
                                 conclusion: overview.conclusion,
                                 createdAt: formatted,
                                 onDelete: () => _deleteItem(context,
                                   overview.comparisonItemId,
-                                  overview.itemTitle,),
+                                  overview.itemTitle!,),
                                 onTap: () => _updateList(context, overview),
                                 listDecoration: listDecoration,
                               );
@@ -116,7 +114,7 @@ class ListPage extends StatelessWidget {
                 )
 
               ///編集時  ListTile→ReorderableListView&CheckboxListTile
-              //todo Consumerにしないと編集時リストがなくなる
+              /// //todo Consumerにしないと編集時リストがなくなる
               : LayoutBuilder(
                   builder: (context, constraints) => SingleChildScrollView(
                         child: ConstrainedBox(
@@ -129,7 +127,7 @@ class ListPage extends StatelessWidget {
                             FutureBuilder(
 ///List<ComparisonOverview>ではなくList<ItemData>へ変換して取得(getAllTagList参照)
                               future:
-                                viewModel.getItemDataList(),
+                              compareViewModel.getItemDataList(),
                               builder: (context,
                                   AsyncSnapshot<List<DraggingItemData>>
                                   snapshot,) {
@@ -138,9 +136,8 @@ class ListPage extends StatelessWidget {
                                       }
                                 ///inEmpty箇所は強制呼び出しでエラー消える
                                 if (snapshot.hasData && snapshot.data!.isEmpty)
-                                {return Container(
-                                      child: const Center(
-                                          child: Text('アイテムはありません'),),);
+                                {return const Center(
+                                    child: Text('アイテムはありません'),);
                                       } else {
                                        return
                                          ReorderableEditList(
@@ -155,9 +152,11 @@ class ListPage extends StatelessWidget {
                       )
           ,);
         },),
-        floatingActionButton: Consumer<CompareViewModel>(
+        floatingActionButton:
+            /// //todo viewModel.editStatusのみなのでSelector使える?
+        Consumer<CompareViewModel>(
             builder: (context, compareViewModel, child) {
-          return (viewModel.editStatus == ListEditMode.display)
+          return (compareViewModel.editStatus == ListEditMode.display)
               ? SizedBox(
                   width: 56,
                   height: 56,
@@ -178,7 +177,7 @@ class ListPage extends StatelessWidget {
   } //buildはここまで
 
   // DB登録とComparePageへ移動
-  //todo ページ遷移は下からに変更
+  /// //todo ページ遷移は下からに変更
   void _createComparisonItems(BuildContext context) {
     ///画面遷移時にbottomNavbarをキープしたくない時rootNavigatorをtrueにする
     Navigator.of(context, rootNavigator: true).push(MaterialPageRoute<void>(

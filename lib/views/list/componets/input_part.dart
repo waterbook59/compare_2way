@@ -10,18 +10,18 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class InputPart extends StatelessWidget {
-  const InputPart({Key? key, this.displayMode, this.comparisonOverview})
+  const InputPart({Key? key, this.displayMode, this.comparisonOverview,
+  required this.onUpdate,})
       : super(key: key);
 
   final AddScreenMode? displayMode;
   final ComparisonOverview? comparisonOverview;
+  final VoidCallback onUpdate;
 
   @override
   Widget build(BuildContext context) {
     final accentColor = Theme.of(context).colorScheme.secondary;
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
-    //todo autofocusが三項条件演算子から変更してできているか確認
-    print('autofocusのtrue/false:${displayMode == AddScreenMode.add}');
     return Column(
       children: [
         ///タイトル
@@ -69,7 +69,7 @@ class InputPart extends StatelessWidget {
 //          iconData: CupertinoIcons.arrow_turn_up_left ,
         ),
         const SizedBox(height: 16),
-//todo way3のアイコン
+/// //todo way3のアイコン
 //          iconData: CupertinoIcons.arrow_uturn_up ,
         ///button
         Consumer<CompareViewModel>(
@@ -86,7 +86,8 @@ class InputPart extends StatelessWidget {
                       viewModel.way2Controller.text.isNotEmpty
                   ? displayMode == AddScreenMode.add
                       ? () => _createComparisonItems(context)
-                      : () => _updateComparisonItems(context)
+                     //更新メソッドはVoidCallbackでAddScreen側のメソッドで管理
+                      : onUpdate
                   : null,
               child: displayMode == AddScreenMode.add
                   ? const Text('作成')
@@ -114,7 +115,7 @@ class InputPart extends StatelessWidget {
       way1DemeritEvaluate: 0,
       way2MeritEvaluate: 0,
       way2DemeritEvaluate: 0,
-      //todo way3追加
+      /// //todo way3追加
       conclusion: '',
       createdAt: DateTime.now(),
     );
@@ -136,7 +137,7 @@ class InputPart extends StatelessWidget {
       comparisonItemId: newComparisonOverview.comparisonItemId,
       way2DemeritDesc: '',
     );
-    //todo way3追加
+    /// //todo way3追加
 
     ///DB登録
     ///viewModel側でcontroller.textを入力してDB登録
@@ -154,22 +155,21 @@ class InputPart extends StatelessWidget {
     await viewModel
         .getComparisonOverview(newComparisonOverview.comparisonItemId);
 
-    //todo この書き方でBuildContextを非同期処理内で使っても良いか
+    ///DBに登録されたcomparisonOverviewをCompareScreenへ渡したい
+    ///非同期処理内でBuildContext使う場合context.mounted内で行う
     if (context.mounted) {
-      return;
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<void>(
+          builder: (context) => CompareScreen(
+            screenEditMode: ScreenEditMode.fromListPage,
+//                  comparisonOverview: comparisonOverview,
+            comparisonOverview: viewModel.overviewDB,
+          ),
+        ),
+      );
     }
 
-    ///DBに登録されたcomparisonOverviewをCompareScreenへ渡したい
-    await Navigator.pushReplacement(
-      context,
-      MaterialPageRoute<void>(
-        builder: (context) => CompareScreen(
-          screenEditMode: ScreenEditMode.fromListPage,
-//                  comparisonOverview: comparisonOverview,
-          comparisonOverview: viewModel.overviewDB,
-        ),
-      ),
-    );
     //DB登録後controllerクリア
     await viewModel.itemControllerClear();
 
@@ -177,21 +177,7 @@ class InputPart extends StatelessWidget {
     //Once you have called dispose() on a TextEditingController,のエラー出る
   }
 
-  ///更新メソッド
-  Future<void> _updateComparisonItems(
-    BuildContext context,
-  ) async {
-    //テキスト入力したものをviewModel側へ格納
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
-    ///更新時は必ずcomparisonOverviewが入ってくるので強制呼び出し
-    await viewModel.updateItem(comparisonOverview!);
 
-    //todo この書き方でBuildContextを非同期処理内で使っても良いか
-    if (context.mounted) {
-      return;
-    }
-    //CompareScreenへ
-    Navigator.pop(context);
-  }
+
 }

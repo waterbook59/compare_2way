@@ -1,3 +1,4 @@
+import 'package:compare_2way/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -20,45 +21,60 @@ class OverViewList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      startActionPane: ActionPane(
+      endActionPane: ActionPane(
         motion: const ScrollMotion(),
         children: [
-          SlidableAction(onPressed: (_) {
-          print('削除します');
-          onDelete();
-          },
+          SlidableAction(
+            onPressed: (_) {onDelete();},
             backgroundColor: Colors.red,
             icon: Icons.remove_circle_outline,
-            label: '削除',)
+            label: 'アイテムを削除',)
         ],
       ),
-      ///ver.0.6.0以下で使用
-      // actionPane: const SlidableScrollActionPane(),
-      // secondaryActions: [
-      //   IconSlideAction(
-      //     caption: '削除',
-      //     color: Colors.red,
-      //     icon: Icons.remove_circle_outline,
-      //     onTap: () {
-      //       print('削除します');
-      //       onDelete();
-      //     },
-      //   )
-      // ],
       child: DecoratedBox(
         decoration: listDecoration,
         child: ListTile(
           onTap: onTap,
-          title: Text(title),
+          title: Text(title,
+            style: listTitleTextStyle,
+          ),
           //conclusionはConsumerで初回描画されない
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('結論：$conclusion'),
-              Text(createdAt),
+              const SizedBox(height: 8,),
+              Row(
+                children: [
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.black45,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4,vertical:1),
+                      child: Text(
+                        '結論',
+                        style: TextStyle(fontSize: 14,
+                          color: Colors.white,),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8,),
+
+                  Text(conclusion!,style: const TextStyle(
+                    color: Colors.black,),),
+                ],
+              ),
+              const SizedBox(height: 4,),
+              Text(createdAt,style: const TextStyle(fontSize: 12),),
             ],
           ),
-          trailing:const Icon(Icons.arrow_forward_ios),
+          trailing:Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Icon(Icons.arrow_forward_ios),
+            ],
+          ),
 //          isThreeLine: true,
         ),
       ),

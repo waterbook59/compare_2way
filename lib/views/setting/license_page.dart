@@ -8,7 +8,7 @@ class MyLicensePage extends StatefulWidget {
   const MyLicensePage({Key? key}) : super(key: key);
 
   @override
-  _MyLicensePageState createState() => _MyLicensePageState();
+   State<MyLicensePage> createState() => _MyLicensePageState();
 }
 
 class _MyLicensePageState extends State<MyLicensePage> {
@@ -32,7 +32,7 @@ class _MyLicensePageState extends State<MyLicensePage> {
 
   @override
   void dispose() {
-    // TODO: licenses dispose?
+    /// //TODO: licenses dispose?
     super.dispose();
   }
 

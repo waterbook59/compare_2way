@@ -7,6 +7,7 @@ import 'package:compare_2way/views/compare/compare_screen.dart';
 import 'package:compare_2way/views/list/componets/input_part.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -27,7 +28,6 @@ class AddScreen extends StatelessWidget {
         .of(context)
         .primaryColor;
     final accentColor = Theme.of(context).colorScheme.secondary;
-    final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -45,21 +45,22 @@ class AddScreen extends StatelessWidget {
         )
         :const Text('名称編集',style: middleTextStyle,),
         /// 下から出てくる場合は右上に比較ボタンでもいいかも
-        //todo 作成・更新ボタン nullの場合、灰色にしたい
       trailing:
       Consumer<CompareViewModel>(
           builder: (context, compareViewModel, child) {
             return
-              viewModel.titleController.text.isNotEmpty &&
-                  viewModel.way1Controller.text.isNotEmpty &&
-                  viewModel.way2Controller.text.isNotEmpty
+              compareViewModel.titleController.text.isNotEmpty &&
+                  compareViewModel.way1Controller.text.isNotEmpty &&
+                  compareViewModel.way2Controller.text.isNotEmpty
             //入力されているとき
              ? CupertinoButton(
                 padding: const EdgeInsets.all(8),
                 onPressed:
                     displayMode == AddScreenMode.add
                     ?() => _createComparisonItems(context)
-                    :()=>_updateComparisonItems(context),
+                    :() {
+                      _updateComparisonItems(context);
+                    },
                 child: displayMode == AddScreenMode.add
                     ? Text('作成',style: TextStyle(color: accentColor),)
                     : Text('更新',style: TextStyle(color: accentColor),)
@@ -87,7 +88,8 @@ class AddScreen extends StatelessWidget {
 ///InputPart
                     InputPart(
                     displayMode: displayMode,
-                    comparisonOverview: comparisonOverview,)
+                    comparisonOverview: comparisonOverview,
+                    onUpdate:()=>  _updateComparisonItems(context),)
 
             ],
           ),
@@ -110,16 +112,13 @@ class AddScreen extends StatelessWidget {
 
     //Uuid渡したいので、view側でcomparisonOverview作成
     //null safty対応でEvaluateの初期値入力
+    // =>comparison_item_databaseで初期値0に設定しているので、いらないかも
     final newComparisonOverview = ComparisonOverview(
       comparisonItemId: const Uuid().v1(),
       itemTitle: viewModel.titleController.text,
       way1Title: viewModel.way1Controller.text,
       way2Title: viewModel.way2Controller.text,
-      way1MeritEvaluate: 0,
-      way1DemeritEvaluate: 0,
-      way2MeritEvaluate: 0,
-      way2DemeritEvaluate: 0,
-      //todo way3追加
+      /// //todo way3追加
       conclusion: '',
       createdAt: DateTime.now(),
     );
@@ -141,7 +140,7 @@ class AddScreen extends StatelessWidget {
       comparisonItemId: newComparisonOverview.comparisonItemId,
       way2DemeritDesc: '',
     );
-    //todo way3追加
+    /// //todo way3追加
 
     ///DB登録
     ///viewModel側でcontroller.textを入力してDB登録
@@ -155,19 +154,20 @@ class AddScreen extends StatelessWidget {
     await viewModel.getComparisonOverview(
         newComparisonOverview.comparisonItemId,);
 
-    //todo この書き方でBuildContextを非同期処理内で使っても良いか
-    if (context.mounted) {
-      return;
-    }
     ///DBに登録されたcomparisonOverviewをCompareScreenへ渡したい
-    await Navigator.pushReplacement(
+    ///非同期処理内でBuildContext使う場合context.mounted内で行う
+    if (context.mounted) {
+      // return;
+      await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-            builder: (context) => CompareScreen(
-              screenEditMode: ScreenEditMode.fromListPage,
+          builder: (context) => CompareScreen(
+            screenEditMode: ScreenEditMode.fromListPage,
 //                  comparisonOverview: comparisonOverview,
-              comparisonOverview: viewModel.overviewDB,
-            ),),);
+            comparisonOverview: viewModel.overviewDB,
+          ),),);
+    }
+
     //DB登録後controllerクリア
     await viewModel.itemControllerClear();
 
@@ -181,14 +181,15 @@ class AddScreen extends StatelessWidget {
     //テキスト入力したものをviewModel側へ格納
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
     ///更新時は必ずcomparisonOverviewが入ってくるので強制呼び出し
-    await viewModel.updateItem(comparisonOverview!);
-
-    //todo この書き方でBuildContextを非同期処理内で使っても良いか
+    await viewModel.updateTitles(comparisonOverview!);
+    await Fluttertoast.showToast(msg: '更新完了',);
     if (context.mounted) {
-      return;
-    }
-    //CompareScreenへ
+      //CompareScreenへ
     Navigator.pop(context);
+    }
+
+
+
   }
 
 

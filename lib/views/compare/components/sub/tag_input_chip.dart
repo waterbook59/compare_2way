@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class TagInputChip extends StatefulWidget {
 
-  const TagInputChip({
+  const TagInputChip({Key? key,
     required this.onSubmitted,
     required this.setTempoInput,
     required this.onFocusChange,
   required this.isInput,
-  required this.onChangeInputMode,});
+  required this.onChangeInputMode,}) : super(key: key);
   //入力値をtagChipsへ上げる
   final ValueChanged<String> onSubmitted;
   final ValueChanged<String> setTempoInput;
@@ -17,7 +16,7 @@ class TagInputChip extends StatefulWidget {
   final bool isInput;
 
   @override
-  _TagInputChipState createState() => _TagInputChipState();
+  State<TagInputChip> createState() => _TagInputChipState();
 }
 
 class _TagInputChipState extends State<TagInputChip> {
@@ -36,7 +35,7 @@ class _TagInputChipState extends State<TagInputChip> {
   @override
   void dispose() {
     _tagTitleController.dispose();
-    //todo _focus dispose?
+    /// //todo _focus dispose?
     super.dispose();
   }
 
@@ -44,7 +43,7 @@ class _TagInputChipState extends State<TagInputChip> {
   //バリデーションや入力完了後のメソッドを入れたいのでTextFormFiledへ変更
   Widget build(BuildContext context) {
     return
-      //todo 入力に合わせてChipのばしたい
+      /// //todo 入力に合わせてChipのばしたい
    widget.isInput
       //フォーカスしてる時はプラスアイコンなしのTextField
     ?Chip(
@@ -53,13 +52,14 @@ class _TagInputChipState extends State<TagInputChip> {
         width:
         MediaQuery.of(context).size.width*0.3,
         child:
-        //todo CupertinoTextFIeldへ変更
+        /// //todo CupertinoTextFieldへ変更
         //            CupertinoTextField(
 //              onSubmitted: null,
 //              autofocus: true,
 //              controller: _tagTitleController,
 //              placeholder: 'タグを追加',
 //            ),
+
          TextField(
           // ignore: lines_longer_than_80_chars
           // onChangedでviewModelのtempoInputTagに一旦setし、tagDialogPageで完了をおしたら入力有無のvalidationしつつ_tagNameListに追加&登録
@@ -71,18 +71,14 @@ class _TagInputChipState extends State<TagInputChip> {
             //入力完了したらDB登録し、chipsのリスト内に入れて、入力chipの左に並べて表示
             _onSubmitted(context,input);
           },
-          maxLines: 1,
           autofocus: true,
           controller: _tagTitleController,
-          //decorationをnullにするとpadding含め余計な装飾は全てなくなる
           decoration:
-//          null,
           const InputDecoration(
             hintText: 'タグを追加',
             border: InputBorder.none,
             //isDenseで少し幅狭くなる
             isDense:true,
-//              contentPadding: EdgeInsets.all(8),
           ),
 
         ),
@@ -96,7 +92,7 @@ class _TagInputChipState extends State<TagInputChip> {
           widget.onChangeInputMode();
           _tagTitleController.text = '';
         }
-      );
+      ,);
 
 
   }
@@ -113,4 +109,3 @@ class _TagInputChipState extends State<TagInputChip> {
   }
 
 }
-

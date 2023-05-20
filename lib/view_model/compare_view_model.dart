@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:compare_2way/data_models/comparison_overview.dart';
 import 'package:compare_2way/data_models/dragging_item_data.dart';
 import 'package:compare_2way/data_models/dragging_tag_chart.dart';
@@ -7,10 +8,11 @@ import 'package:compare_2way/data_models/tag_chart.dart';
 import 'package:compare_2way/models/repository/compare_repository.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class CompareViewModel extends ChangeNotifier {
   CompareViewModel({
-    CompareRepository compareRepository,
+    required CompareRepository compareRepository,
   }) : _compareRepository = compareRepository;
 
   final CompareRepository _compareRepository;
@@ -20,19 +22,15 @@ class CompareViewModel extends ChangeNotifier {
 
   //ListPage編集並び替え後のリスト
   List<ComparisonOverview> newComparisonOverviews = <ComparisonOverview>[];
-  CompareScreenStatus compareScreenStatus;
-  ComparisonOverview overviewDB;
+  late CompareScreenStatus compareScreenStatus;
+  late ComparisonOverview overviewDB;
   List<Way1Merit> _way1MeritList = <Way1Merit>[];
-
   List<Way1Merit> get way1MeritList => _way1MeritList;
   List<Way2Merit> _way2MeritList = <Way2Merit>[];
-
   List<Way2Merit> get way2MeritList => _way2MeritList;
   List<Way1Demerit> _way1DemeritList = <Way1Demerit>[];
-
   List<Way1Demerit> get way1DemeritList => _way1DemeritList;
   List<Way2Demerit> _way2DemeritList = <Way2Demerit>[];
-
   List<Way2Demerit> get way2DemeritList => _way2DemeritList;
 
 //textFieldからviewModelへの変更値登録があるのでカプセル化しない
@@ -69,14 +67,14 @@ class CompareViewModel extends ChangeNotifier {
   int get way3DemeritEvaluate => _way3DemeritEvaluate;
 
   //いらんかも
-  TextEditingController _conclusionController = TextEditingController();
+  final TextEditingController _conclusionController = TextEditingController();
 
   TextEditingController get conclusionController => _conclusionController;
   String conclusion = '';
 
   //textFieldからviewModelへの変更値登録があるのでカプセル化しない
   String tagTitle = '';
-  String addTagTitle;
+  String addTagTitle='';
 
   ///CompareScreenで使用
   //tagDialogPageの下で先に登録のあるタグの候補表示する
@@ -90,7 +88,7 @@ class CompareViewModel extends ChangeNotifier {
   List<String> _tempoDisplayList = <String>[]; //TagDialogPageでのDB登録前の表示リスト
   List<String> _tempoDeleteList = <String>[]; //削除タグリストをつくる一歩手前のtagTitleリスト
   List<String> get tempoDeleteList => _tempoDeleteList;
-  String _tempoInput; //TagInputChipに仮入力してるもの
+  String _tempoInput=''; //TagInputChipに仮入力してるもの
   List<Chip> _displayChipList = <Chip>[]; //CompareScreen表示用
   List<Chip> get displayChipList => _displayChipList;
   List<Tag> _deleteTagList = <Tag>[];
@@ -108,10 +106,10 @@ class CompareViewModel extends ChangeNotifier {
   List<Tag> _selectTagList =
       <Tag>[]; //TagPage=>SelectTagPageへtagTitleで紐づいたタグリスト
   List<Tag> get selectTagList => _selectTagList;
-  TagChart selectTagChart; //TagPageでtagTitle編集時に選択したtagChartを格納
-  List<ComparisonOverview> _selectOverviews = <ComparisonOverview>[];
+  late TagChart selectTagChart; //TagPageでtagTitle編集時に選択したtagChartを格納
+  List<ComparisonOverview>? _selectOverviews = <ComparisonOverview>[];
 
-  List<ComparisonOverview> get selectOverviews => _selectOverviews;
+  List<ComparisonOverview>? get selectOverviews => _selectOverviews;
   String selectTagTitle = '';
 
 //  List<String> idList=[];//ComparisonItemIdのリスト
@@ -119,8 +117,8 @@ class CompareViewModel extends ChangeNotifier {
   ListEditMode editStatus = ListEditMode.display;
   TagEditMode tagEditMode = TagEditMode.normal; //初期設定は通常モード
 //  bool editFocus = false; //初期設定はタイトルのみ
-  int selectedIndex; //tagPageでのListTile選択
-  int selectedDescListIndex; //DescFromAndButtonでのListTIle選択
+  int? selectedIndex; //tagPageでのListTile選択
+  int? selectedDescListIndex; //DescFromAndButtonでのListTIle選択
   bool isWay1MeritDeleteIcon = false; //AccordionPart=>DescFormのIconButton表示有無
   bool isWay1DemeritDeleteIcon = false;
   bool isWay2MeritDeleteIcon = false;
@@ -158,9 +156,9 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   ///FutureBuilder用(notifyListeners(リビルド)なし)
-  //todo getSingle()に変更してすっきり書く
+  /// //todo getSingle()に変更してすっきり書く
   Future<List<ComparisonOverview>> getWaitOverview(
-      String comparisonItemId) async {
+      String comparisonItemId,) async {
     _comparisonOverviews =
         await _compareRepository.getOverview(comparisonItemId);
 
@@ -174,7 +172,7 @@ class CompareViewModel extends ChangeNotifier {
     _way2DemeritEvaluate = comparisonOverviews[0].way2DemeritEvaluate!;
     _conclusionController.text = comparisonOverviews[0].conclusion!;
 
-    //todo way3Evaluate
+    /// //todo way3Evaluate
 //    print('FutureBuilderのway2のタイトル:$_way2Title');
     return _comparisonOverviews;
   }
@@ -187,7 +185,7 @@ class CompareViewModel extends ChangeNotifier {
 ////    notifyListeners();
 //  }
   ///AddScreen/InputPartでComparisonOverview更新：itemTitle,way1Title,way2Titleのみ変更
-  ///updateItem
+  ///updateTitles
 //  Future<void> updateComparisonOverView({
 //      ComparisonOverview updateOverview,
 ////    String tagTitle,
@@ -216,10 +214,10 @@ class CompareViewModel extends ChangeNotifier {
 //    notifyListeners();
 //  }
 
-  //todo way1,way2,way3入力
+  /// //todo way1,way2,way3入力
   ///AddScreen/InputPartでWay1Merit,Way2Meritリストを新規登録
   //way1Merit,way2Meritのリストを作って保存
-  //todo list.add=>DB登録=>list空の流れではなく、
+  /// //todo list.add=>DB登録=>list空の流れではなく、
   // initWay1MeritをリストにしてcreateDescListに渡す方がすっきり書ける
   Future<void> createDesc(
     Way1Merit initWay1Merit,
@@ -229,17 +227,18 @@ class CompareViewModel extends ChangeNotifier {
   ) async {
     _way1MeritList = [initWay1Merit];
     _way2MeritList = [initWay2Merit];
-    //todo _way3MeritList = [initWay3Merit];
+    /// //todo _way3MeritList = [initWay3Merit];
     _way1DemeritList = [initWay1Demerit];
     _way2DemeritList = [initWay2Demerit];
-    //todo _way3DemeritList = [initWay3Demerit];
+    /// //todo _way3DemeritList = [initWay3Demerit];
 
     //ここでaddしていくと古いものがだぶる
-    ///既存のoverviewでway1リスト追加=>新規でoverview,way1リスト作成,DB登録=>既存のoverviewが重複して登録されてしまう
+    ///既存のoverviewでway1リスト追加=>新規でoverview,way1リスト作成,DB登録
+    ///=>既存のoverviewが重複して登録されてしまう
 //    _way1MeritList.add(initWay1Merit);
 //    print('compareViewModel/createDesc/way1MeritList.add$_way1MeritList');
 //    _way2MeritList.add(initWay2Merit);
-    //todo way3追加
+    /// //todo way3追加
     await _compareRepository.createDescList(
         _way1MeritList, _way2MeritList, _way1DemeritList, _way2DemeritList,);
     _way1MeritList = <Way1Merit>[];
@@ -255,7 +254,7 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   Future<void> setWay1MeritNewValue(
-      String comparisonItemId, int newValue) async {
+      String comparisonItemId, int newValue,) async {
     //値を変えた場合だけ更新
     if (_way1MeritEvaluate != newValue) {
       //TablePartでviewModel.way1MeritEvaluateとして表示しないならこのset1行いらない
@@ -271,7 +270,7 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   Future<void> setWay1DemeritNewValue(
-      String comparisonItemId, int newValue) async {
+      String comparisonItemId, int newValue,) async {
     if (_way1DemeritEvaluate != newValue) {
       _way1DemeritEvaluate = newValue;
       final updateOverview = ComparisonOverview(
@@ -285,7 +284,7 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   Future<void> setWay2MeritNewValue(
-      String comparisonItemId, int newValue) async {
+      String comparisonItemId, int newValue,) async {
     if (_way2MeritEvaluate != newValue) {
       _way2MeritEvaluate = newValue;
       final updateOverview = ComparisonOverview(
@@ -299,7 +298,7 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   Future<void> setWay2DemeritNewValue(
-      String comparisonItemId, int newValue) async {
+      String comparisonItemId, int newValue,) async {
     if (_way2DemeritEvaluate != newValue) {
       _way2DemeritEvaluate = newValue;
       final updateOverview = ComparisonOverview(
@@ -312,20 +311,21 @@ class CompareViewModel extends ChangeNotifier {
     }
   }
 
-  //todo way3メソッド設定
+  /// //todo way3メソッド設定
   Future<void> setWay3MeritNewValue(
-      String comparisonItemId, int newValue) async {
+      String comparisonItemId, int newValue,) async {
     _way3MeritEvaluate = newValue;
   }
 
   Future<void> setWay3DemeritNewValue(
-      String comparisonItemId, int newValue) async {
+      String comparisonItemId, int newValue,) async {
     _way3DemeritEvaluate = newValue;
   }
 
   ///引数 required
   Future<void> setConclusion(
-      {required String comparisonItemId, required String newConclusion}) async {
+      {required String comparisonItemId, required String newConclusion,}) async
+  {
     if (conclusion != newConclusion) {
       conclusion = newConclusion;
       final updateOverview = ComparisonOverview(
@@ -340,8 +340,8 @@ class CompareViewModel extends ChangeNotifier {
 
   ///DescFormAndButtonでList<Way1Merit>の入力変更があったとき
   Future<void> setChangeListDesc(ComparisonOverview comparisonOverview,
-      DisplayList displayList, String newDesc, int index) async {
-    print('setNewDesc!:$newDesc');
+      DisplayList displayList, String newDesc, int index,) async {
+    debugPrint('setNewDesc!:$newDesc/setIndex:$index');
 
     ///List.generate=>DB更新は変更した行のみ
     // Listの中の[index]の番号のway1MeritDescのプロパティだけnewDescに変えたい
@@ -408,7 +408,7 @@ class CompareViewModel extends ChangeNotifier {
         _way2DemeritList = await _compareRepository
             .getWay2DemeritList(comparisonOverview.comparisonItemId);
         break;
-      //todo way3入力
+      /// //todo way3入力
       case DisplayList.way3Merit:
         break;
       case DisplayList.way3Demerit:
@@ -427,21 +427,23 @@ class CompareViewModel extends ChangeNotifier {
 
   ///DescFormAndButtonでリスト行追加
   Future<void> accordionAddList(
-      ComparisonOverview comparisonOverview, DisplayList displayList) async {
+      ComparisonOverview comparisonOverview, DisplayList displayList,) async {
     switch (displayList) {
       case DisplayList.way1Merit:
         final initWay1Merit = Way1Merit(
           comparisonItemId: comparisonOverview.comparisonItemId,
           way1MeritDesc: '',
         );
-        print('CompareViewModel/addWay1Merit/新規リスト追加前'
-            '${_way1MeritList.map((way1Merit) => way1Merit.way1MeritDesc).toList()}');
+        debugPrint('CompareViewModel/addWay1Merit/新規リスト追加前'
+            '${_way1MeritList.map((way1Merit) => way1Merit.way1MeritDesc)
+            .toList()}');
         await _compareRepository.addWay1Merit(initWay1Merit);
         //1行DBへ追加した後、追加したもの含めて_way1MeritListに取得リスト格納してみる
         _way1MeritList = await _compareRepository
             .getWay1MeritList(comparisonOverview.comparisonItemId);
-        print('CompareViewModel/addWay1Merit/新規リスト追加後'
-            '${_way1MeritList.map((way1Merit) => way1Merit.way1MeritDesc).toList()}');
+        debugPrint('CompareViewModel/addWay1Merit/新規リスト追加後'
+            '${_way1MeritList.map((way1Merit) => way1Merit.way1MeritDesc)
+            .toList()}');
         break;
       case DisplayList.way2Merit:
         final initWay2Merit = Way2Merit(
@@ -470,7 +472,7 @@ class CompareViewModel extends ChangeNotifier {
         _way2DemeritList = await _compareRepository
             .getWay2DemeritList(comparisonOverview.comparisonItemId);
         break;
-      //todo way3入力
+      /// //todo way3入力
       case DisplayList.way3Merit:
       case DisplayList.way3Demerit:
     }
@@ -487,36 +489,36 @@ class CompareViewModel extends ChangeNotifier {
 
   ///DescFormAndButtonでリスト削除
   Future<void> accordionDeleteList(DisplayList displayList,
-      int accordionIdIndex, ComparisonOverview comparisonOverview) async {
+      int accordionIdIndex, ComparisonOverview comparisonOverview,) async {
     switch (displayList) {
       case DisplayList.way1Merit:
         final deleteWay1MeritId = _way1MeritList[accordionIdIndex].way1MeritId;
-        await _compareRepository.deleteWay1Merit(deleteWay1MeritId);
+        await _compareRepository.deleteWay1Merit(deleteWay1MeritId!);
         //再取得しないとDescFormAndButtonでのListViewの認識している長さと削除するindexが異なりエラー
         _way1MeritList = await _compareRepository
             .getWay1MeritList(comparisonOverview.comparisonItemId);
         break;
       case DisplayList.way2Merit:
         final deleteWay2MeritId = _way2MeritList[accordionIdIndex].way2MeritId;
-        await _compareRepository.deleteWay2Merit(deleteWay2MeritId);
+        await _compareRepository.deleteWay2Merit(deleteWay2MeritId!);
         _way2MeritList = await _compareRepository
             .getWay2MeritList(comparisonOverview.comparisonItemId);
         break;
       case DisplayList.way1Demerit:
         final deleteWay1DemeritId =
             _way1DemeritList[accordionIdIndex].way1DemeritId;
-        await _compareRepository.deleteWay1Demerit(deleteWay1DemeritId);
+        await _compareRepository.deleteWay1Demerit(deleteWay1DemeritId!);
         _way1DemeritList = await _compareRepository
             .getWay1DemeritList(comparisonOverview.comparisonItemId);
         break;
       case DisplayList.way2Demerit:
         final deleteWay2DemeritId =
             _way2DemeritList[accordionIdIndex].way2DemeritId;
-        await _compareRepository.deleteWay2Demerit(deleteWay2DemeritId);
+        await _compareRepository.deleteWay2Demerit(deleteWay2DemeritId!);
         _way2DemeritList = await _compareRepository
             .getWay2DemeritList(comparisonOverview.comparisonItemId);
         break;
-      //todo way3入力
+      /// //todo way3入力
       case DisplayList.way3Merit:
       case DisplayList.way3Demerit:
     }
@@ -531,7 +533,7 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   ///CompareScreenで表示されてる値を元にviewModelの値更新(ListPageに反映される)＆DB登録
-  //todo favorite,way3追加
+  /// //todo favorite,way3追加
   Future<void> saveComparisonItem(ComparisonOverview updateOverview) async {
     //値を変更した時だけ更新=>現状どの項目も変更時自動保存（保存押しても時間だけ変更）
     final saveOverview = ComparisonOverview(
@@ -549,7 +551,7 @@ class CompareViewModel extends ChangeNotifier {
     await _compareRepository.saveComparisonItem(saveOverview);
 
     ///updateComparisonOverViewと同じで内容更新されたらonSelectTag実施
-    //todo 自動更新の場合はキーボード完了ボタンを押したらonSelectTag
+    /// //todo 自動更新の場合はキーボード完了ボタンを押したらonSelectTag
     await onSelectTag(selectTagTitle);
 
     notifyListeners();
@@ -557,9 +559,9 @@ class CompareViewModel extends ChangeNotifier {
 
   ///データ保存後に再取得
   Future<void> getOverviewList() async {
-    print('getOverviewList発動');
+    debugPrint('getOverviewList発動');
     _comparisonOverviews = await _compareRepository.getOverviewList();
-    print('getOverviewList非同期終了');
+    debugPrint('getOverviewList非同期終了');
     notifyListeners();
   }
 
@@ -574,8 +576,9 @@ class CompareViewModel extends ChangeNotifier {
     return _comparisonOverviews;
   }
 
-  Future<void> changeEditStatus(ListEditMode editMode) async {
-    if (editMode == ListEditMode.edit) {
+
+  Future<void> changeEditStatus() async {
+    if (editStatus==ListEditMode.edit) {
       editStatus = ListEditMode.display;
       deleteItemIdList = [];
     } else {
@@ -590,19 +593,22 @@ class CompareViewModel extends ChangeNotifier {
     //itemIdをもとにList<Tag>取得(tagList拝借)=>
     // tagNameからList<tagChartt>取得=>agAmountの数でtagChart更新
     _tagList = await _compareRepository.getTagList(comparisonItemId);
-    _tagNameList = _tagList.map((e) => e.tagTitle).toList();
+    _tagNameList = _tagList.map((e) => e.tagTitle!).toList();
     final tagChartDBList =
         await _compareRepository.getTagChartList(_tagNameList);
     await Future.forEach(tagChartDBList, (TagChart tagChart) async {
-      if (tagChart.tagAmount > 1) {
+      if (tagChart.tagAmount! > 1) {
         //Value更新
-        final decreaseTagChartList = <TagChart>[]..add(TagChart(
-            tagTitle: tagChart.tagTitle, tagAmount: tagChart.tagAmount - 1));
+        // final decreaseTagChartList = <TagChart>[]..add(TagChart(
+        //   tagTitle: tagChart.tagTitle, tagAmount: tagChart.tagAmount - 1,),);
+        final decreaseTagChartList = <TagChart>[TagChart(
+          tagTitle: tagChart.tagTitle, tagAmount: tagChart.tagAmount! - 1,)];
+
         await _compareRepository.updateTagChart(decreaseTagChartList);
       } else {
         //削除
-        final removeTagChartList = <TagChart>[]..add(TagChart(
-            tagTitle: tagChart.tagTitle, tagAmount: tagChart.tagAmount));
+        final removeTagChartList = <TagChart>[TagChart(
+            tagTitle: tagChart.tagTitle, tagAmount: tagChart.tagAmount,)];
         await _compareRepository.removeTagChart(removeTagChartList);
       }
     });
@@ -622,10 +628,11 @@ class CompareViewModel extends ChangeNotifier {
     ///2. comparisonItemIDをリストに追加・削除を行う
     if (deleteItemIdList.contains(itemId)) {
       deleteItemIdList.remove(itemId);
-      print('id削除後:$deleteItemIdList');
+      debugPrint('id削除後:$deleteItemIdList');
     } else {
       deleteItemIdList.add(itemId);
-      print('id追加後:$deleteItemIdList');
+     /// //todo deleteItemListが空出ない時だけshowDialog出す
+      debugPrint('id追加後:$deleteItemIdList');
     }
     notifyListeners();
   }
@@ -634,26 +641,27 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> deleteItemList() async {
     _tagList = [];
     //アイテムとTagを削除
-    _compareRepository.deleteItemList(deleteItemIdList);
+    await _compareRepository.deleteItemList(deleteItemIdList);
     //idListからList<Tag>取得=>tagNameList変換=>1つずつTag取得=>tagAmountの数でtagChart更新
     await Future.forEach(deleteItemIdList, (String itemId) async {
       final singleIdTagList = await _compareRepository.getTagList(itemId);
       singleIdTagList.map((tag) => _tagList.add(tag)).toList();
     });
-    _tagNameList = _tagList.map((e) => e.tagTitle).toList();
+    _tagNameList = _tagList.map((e) => e.tagTitle!).toList();
 
     // tagNameList１つずつgetSingleTagChartして、それぞれtagAmount>1かを判別して更新・削除
     await Future.forEach(_tagNameList, (String tagName) async {
       final selectTag = await _compareRepository.getSingleTagChart(tagName);
-      if (selectTag.tagAmount > 1) {
+      if (selectTag.tagAmount! > 1) {
         //Value更新
-        final decreaseTagChartList = <TagChart>[]..add(TagChart(
-            tagTitle: selectTag.tagTitle, tagAmount: selectTag.tagAmount - 1));
+        final decreaseTagChartList = <TagChart>[TagChart(
+            tagTitle: selectTag.tagTitle, tagAmount: selectTag.tagAmount! - 1,
+        )];
         await _compareRepository.updateTagChart(decreaseTagChartList);
       } else {
         //削除
-        final removeTagChartList = <TagChart>[]..add(TagChart(
-            tagTitle: selectTag.tagTitle, tagAmount: selectTag.tagAmount));
+        final removeTagChartList = <TagChart>[TagChart(
+            tagTitle: selectTag.tagTitle, tagAmount: selectTag.tagAmount,)];
         await _compareRepository.removeTagChart(removeTagChartList);
       }
     });
@@ -678,17 +686,17 @@ class CompareViewModel extends ChangeNotifier {
           title: overView.itemTitle,
           key: ValueKey(i),
           comparisonItemId: overView.comparisonItemId,
-          orderId: i));
+          orderId: i,),);
     }
     return draggedItems;
   }
 
   ///ListPage編集並び替え後のDBの順番入れ替え、まずdataIdで行ってみる
   Future<void> changeCompareListOrder(
-      List<DraggingItemData> draggingItems) async {
+      List<DraggingItemData> draggingItems,) async {
     //draggingItemのcompareItemId順にDBから新たにcomparisonItemのリストを取得
     final draggingIdList =
-        draggingItems.map((item) => item.comparisonItemId).toList();
+        draggingItems.map((item) => item.comparisonItemId!).toList();
     final newCompareItemList =
         await _compareRepository.getNewOrderList(draggingIdList);
     //draggingItemsをrepositoryにそのまま渡してcomparisonItemId順にdataIdを更新する
@@ -698,20 +706,20 @@ class CompareViewModel extends ChangeNotifier {
     _comparisonOverviews = await _compareRepository.getOverviewList();
   }
 
-  Future<void> backListPage() {
+  Future<void> backListPage() async {
     notifyListeners();
   }
 
-  //todo way3追加
+  /// //todo way3追加
   Future<void> setOverview(ComparisonOverview comparisonOverview) async {
-    itemTitle = comparisonOverview.itemTitle;
-    way1Title = comparisonOverview.way1Title;
-    _way1MeritEvaluate = comparisonOverview.way1MeritEvaluate;
-    _way1DemeritEvaluate = comparisonOverview.way1DemeritEvaluate;
-    way2Title = comparisonOverview.way2Title;
-    _way2MeritEvaluate = comparisonOverview.way2MeritEvaluate;
-    _way2DemeritEvaluate = comparisonOverview.way2DemeritEvaluate;
-    conclusion = comparisonOverview.conclusion;
+    itemTitle = comparisonOverview.itemTitle!;
+    way1Title = comparisonOverview.way1Title!;
+    _way1MeritEvaluate = comparisonOverview.way1MeritEvaluate!;
+    _way1DemeritEvaluate = comparisonOverview.way1DemeritEvaluate!;
+    way2Title = comparisonOverview.way2Title!;
+    _way2MeritEvaluate = comparisonOverview.way2MeritEvaluate!;
+    _way2DemeritEvaluate = comparisonOverview.way2DemeritEvaluate!;
+    conclusion = comparisonOverview.conclusion!;
 //    print('文頭のsetOverview');
 //    notifyListeners();
   }
@@ -726,7 +734,7 @@ class CompareViewModel extends ChangeNotifier {
         await _compareRepository.getWay1DemeritList(comparisonItemId);
     _way2DemeritList =
         await _compareRepository.getWay2DemeritList(comparisonItemId);
-    //todo way3入力
+    /// //todo way3入力
 //    print('文頭のgetWay1/Way2MeritList');
 //    notifyListeners();
   }
@@ -758,7 +766,7 @@ class CompareViewModel extends ChangeNotifier {
         await _compareRepository.getWay2DemeritList(comparisonItemId);
   }
 
-  //todo way3追加
+  /// //todo way3追加
 
   ///tagDialogPageでList<tag>を新規登録
   ///同一のcomparisonId且つ同一tagTitleはDB登録できないようにメソッド変更
@@ -767,60 +775,55 @@ class CompareViewModel extends ChangeNotifier {
     _tagChartList = [];
     //表示用リストだったものを本登録
     ///TagDialogPageで完了ボタン押した時に入力中のタグも登録
-    if (_tempoInput == '' || _tempoInput == null || _tempoInput == ' ') {
+    if (_tempoInput == '' || _tempoInput == '　' || _tempoInput == ' ') {
+      debugPrint('_tempoInput空の方/_tempoInput：$_tempoInput');
     } else {
       // _tempoInputだけのとき、tagNameListにもtempoInputが追加されてしまう
+      debugPrint('_tempoInput入力の方/_tempoInput$_tempoInput');
       _tempoDisplayList.add(_tempoInput);
     }
-    final dbTagList = await _compareRepository
-        .getTagList(comparisonOverview.comparisonItemId);
-    final dbTitleList = dbTagList.map((tag) => tag.tagTitle).toList();
-    final dbTitleSet = dbTitleList.toSet();
-    print('viewModel/createTag/dbTitleSet:$dbTitleSet');
-    //TagChart新規登録or更新するものだけ抜き出す
-    final extractAddTag = _tempoDisplayList.toSet()..removeAll(dbTitleSet);
-    print('viewModel/createTag/extractAddTag:$extractAddTag');
-    final extractRemoveTagSet = dbTitleSet
-      ..removeAll(_tempoDisplayList.toSet());
-    final extractRemoveTagList = extractRemoveTagSet.toList();
 
+
+    // _tagListとしてID固有のタグをCompareScreen開く時のgetTagListで格納済みなので、dgTagListを取らなくていい
+    // ID固有のタグが最初にない時に登録するとtagTitle!がどうなるか確認
+    final dbTitleList = _tagList.map((tag) => tag.tagTitle!).toList();
+    final dbTitleSet = dbTitleList.toSet();
+    //TagChart新規登録or更新するものだけ抜き出す
+    final extractAddTag = (_tempoDisplayList.toSet()..removeAll(dbTitleSet));
+    final extractAddTagList = extractAddTag.toList();
+    final extractRemoveTagSet = (dbTitleSet..removeAll(_tempoDisplayList.toSet(
+    ),)) ;
+    final  extractRemoveTagList = extractRemoveTagSet.toList();
     //ここで場合分け、tagChartDBにtagTitleあり=>update,なし=>新規登録
+    ///_allTagList:ID関係なく全タグリスト、dbTitleList:ID固有のタグのタイトル名だけのリスト
     _allTagList = await _compareRepository.getAllTagList();
     final tagAllTitleList = <String>[]; //DBからのTagのタイトル
+    //    DBのTagのタイトル取得=>格納
+    _allTagList.map((tag) {
+      return tagAllTitleList.add(tag.tagTitle!);
+    }).toList();
+
 //     DBのTagChartのタイトル取得=>格納
     final tagChartDBTitleList = await _compareRepository.getTagChartDBTitle();
-//    DBのTagのタイトル取得=>格納
-    _allTagList.map((tag) {
-      return tagAllTitleList.add(tag.tagTitle);
-    }).toList();
+    debugPrint('tagChartDBTitleList:$tagChartDBTitleList');
 
     //1.追加更新tagChart作成:extractAddTagからtagChartDBTitleにあるタイトルだけ抽出
     //1.1.extractDelete = tagAllTitleList-extractAddTag(更新用タイトルタグ抽出)
     final extractDeleteTitleSet = tagAllTitleList.toSet()
       ..removeAll(extractAddTag);
     final extractDeleteTitle = extractDeleteTitleSet.toList();
-    print('extractDeleteTitle:$extractDeleteTitle');
     //1.2.extractTagDB = tagAllTitleList-extractDelete(更新タイトルタグを抽出)
     //tagAllTitleListからextractDeleteTitleを1つづつ抜いていく
     for (var i = 0; i < extractDeleteTitle.length; ++i) {
-      final deleteTitle = extractDeleteTitle[i];
-//      print('deleteTitle:$deleteTitle');
-      //removeAllと同じ
-      final testTag = tagAllTitleList
-        ..removeWhere((String value) => value == deleteTitle);
-//      print('testTag$testTag') ;
     }
-    print('extractTagDB:$tagAllTitleList'); //testTagと同じ
     //1.3.extractNewTitle = extractAddTag-tagChartDBTitleList
+    /// //todo extractAddTagは元々Set<String>なのでtoSet()いらない
     final extractNewTitle = extractAddTag.toSet()
       ..removeAll(tagChartDBTitleList.toSet());
-//    print('extractNewTitle:$extractNewTitle');
     //1.4.extractTempo = extractAddTag-extractNewTitle
     final extractTempo = extractAddTag.toSet()..removeAll(extractNewTitle);
-//    print('extractTempo:$extractTempo');
     //1.5.tagChartUpdateList = extractTagDB+extractTempo
     final tagChartUpdateList = tagAllTitleList + extractTempo.toList();
-//   print('tagChart更新タイトル:${tagChartUpdateList.map((e) => e)}');
 
 // 更新タイトルの数を数えてTagChartとして更新登録
     final tagSummary = <String, int>{}; //Map<String,int>
@@ -828,35 +831,37 @@ class CompareViewModel extends ChangeNotifier {
     //参照:https://www.fixes.pub/program/268895.html
     //.where参照:https://qiita.com/dennougorilla/items/170deacf178891ced41e
     tagChartUpdateList.toSet().toList().forEach((st) =>
-        tagSummary[st] = tagChartUpdateList.where((i) => i == st).length);
+        tagSummary[st] = tagChartUpdateList.where((i) => i == st).length,);
     //Map<String,dynamic> =>List<TagChart>参考:https://qiita.com/7_asupara/items/01c29c006556e89f5b17
     tagSummary.forEach((key, amount) => _tagChartList.add(TagChart(
           tagTitle: key,
           tagAmount: amount,
-        )));
-    print('tagSummary:$tagSummary');
-    await _compareRepository.updateTagChart(_tagChartList);
+        ),),);
+    debugPrint('tagSummary:$tagSummary');
+      await _compareRepository.updateTagChart(_tagChartList);
 
     //2.削除更新tagChart作成:extractRemoveTagだけTagChartDBのAmountが2以上なら-1、1なら削除する
-    if (extractRemoveTagList.isNotEmpty) {
+    ///List<String?>=>List<String>への変換
+   /// https://stackoverflow.com/questions/66896648/how-to-convert-a-listt-to-listt-in-null-safe-dart
+    //常にextractRemoveTagListはnullにならないので、変換式はなし
+    //final withoutNulls = extractRemoveTagList.where((s) => s!= null).toList();
+    // debugPrint('viewModel/createTag/withoutNulls:$withoutNulls');
       final tagChartDBList =
           await _compareRepository.getTagChartList(extractRemoveTagList);
       await Future.forEach(tagChartDBList, (TagChart tagChart) async {
-        if (tagChart.tagAmount > 1) {
+        if (tagChart.tagAmount! > 1) {
           //Value更新
-//          print('削除更新でtagAmount−１の方');
-          final decreaseTagChartList = <TagChart>[]..add(TagChart(
-              tagTitle: tagChart.tagTitle, tagAmount: tagChart.tagAmount - 1));
+          final decreaseTagChartList = <TagChart>[TagChart(
+              tagTitle: tagChart.tagTitle, tagAmount: tagChart.tagAmount! - 1,
+          )];
           await _compareRepository.updateTagChart(decreaseTagChartList);
         } else {
           //削除
-//          print('削除更新で削除しちゃう方');
-          final removeTagChartList = <TagChart>[]..add(TagChart(
-              tagTitle: tagChart.tagTitle, tagAmount: tagChart.tagAmount));
+          final removeTagChartList = <TagChart>[TagChart(
+              tagTitle: tagChart.tagTitle, tagAmount: tagChart.tagAmount,)];
           await _compareRepository.removeTagChart(removeTagChartList);
         }
       });
-    }
     //新規tagChart作成:
     final newTagChartTitleList = _tempoDisplayList.toSet()
       ..removeAll(tagChartDBTitleList.toSet())
@@ -864,7 +869,6 @@ class CompareViewModel extends ChangeNotifier {
     final newTagChartList = newTagChartTitleList
         .map((tagTitle) => TagChart(tagTitle: tagTitle, tagAmount: 1))
         .toList();
-//    print('newTagChart:${newTagChartList.map((e) => e.tagTitle)}');
 
     await _compareRepository.createTagChart(newTagChartList);
 
@@ -872,7 +876,7 @@ class CompareViewModel extends ChangeNotifier {
     //List<Tag>作成はDBでの重複削除リスト作成後にrepositoryで行う
     //repo側でupdateOverview作成してDatetime更新(deleteTagメソッドでも同じ)
     await _compareRepository.createTag(
-        extractAddTag, comparisonOverview.comparisonItemId);
+        extractAddTagList, comparisonOverview.comparisonItemId,);
 
     ///タグを空にして完了おしてもTagがでてくるので追加
     _tempoDisplayList = [];
@@ -880,45 +884,40 @@ class CompareViewModel extends ChangeNotifier {
     ///残っているとtempoDisplayListにaddされ続けてしまう
     _tempoInput = '';
     _tagChartList = []; //編集=>完了でどんどん増えていってしまうので
-    //新規作成のときはnotifyListenersいらない？取得の時のみ？
   }
 
   ///TagDialogPageでの登録完了(createTag)前の表示用リスト
   //tagChipsでtextField入力内容をviewModelへset
   Future<void> setTempoDisplayList(List<String> tempoDisplayList) async {
+
     _tempoDisplayList = tempoDisplayList;
+
     //onSubmitted時にtempoDeleteListから重複しているタグを削除
     // (tempoDisplayListに上がっているものはtempoDeleteListから抜く)
     final tempoDisplaySet = _tempoDisplayList.toSet(); //StringのSet
     final tempoDeleteLabelsSet = _tempoDeleteList.toSet() //Stringのset
       ..removeAll(tempoDisplaySet);
     _tempoDeleteList = tempoDeleteLabelsSet.toList();
-
     ///  _tempoInputに文字が残っていると消したのにcreateTag時に _tempoDisplayListにaddされてしまう
     _tempoInput = '';
   }
 
   ///TagInputChipで仮入力したものをset
   void setTempoInput(String tempoInput) {
-    if (tempoInput == '') {
+    if(tempoInput.trim().isEmpty){
     } else {
       _tempoInput = tempoInput;
-      print('viewModel/_tempoInput:$_tempoInput');
+      debugPrint('viewModel/_tempoInput:$_tempoInput');
     }
   }
 
   ///CompareScreenでのList<Tag>取得(文頭取得用)
   Future<void> getTagList(String comparisonItemId) async {
-    //todo 初期は_tagListはnullになる？？
+    /// //todo 初期は_tagListはnullになる？？
     _tagList = await _compareRepository.getTagList(comparisonItemId);
-//    print('viewModel.getTagList:${_tagList.map((e) => e.tagTitle)}');
-    //_tagNameListにもtagTitle格納
     ///null safety mapの後ろに型追加、tag.tagTitleは強制呼び出し
     _tagNameList = _tagList.map<String>((tag) => tag.tagTitle!).toList();
-//    print('viewModel.getTagList/_tagNameList:$_tagNameList');
-
     _tempoDisplayList = _tagNameList;
-//    print('viewModel.getTagList/_tempoDisplayList:$_tempoDisplayList');
     //List<Tag>=>List<Chips>へ変更
     _displayChipList = _tagList.map((tag) {
       return Chip(
@@ -929,30 +928,27 @@ class CompareViewModel extends ChangeNotifier {
 
     //ここでSelectTaPage更新するとComPareScreenへ映る毎に読み込まれてしまうのでやめる
 //    await onSelectTag(selectTagTitle);
-//    print('文頭のgetTagList');
     notifyListeners();
   }
 
   ///tagChipsで削除するTagを登録
   Future<void> createDeleteList(
-      List<String> tempoDeleteLabels, List<String> tempoDisplayList) async {
+      List<String> tempoDeleteLabels, List<String> tempoDisplayList,) async {
+    //削除候補のdeleteTag名がxボタンを押しただけでtagNameListからも消えているので再度tagListからtagNameList作り直し
+    _tagNameList=_tagList.map<String>((tag) => tag.tagTitle!).toList();
     //削除時も_tempoDisplayListに格納=>createTag時に使用
     _tempoDisplayList = tempoDisplayList;
-    //tempoDeleteLabelsとDB登録してある項目(_tagNameList)を結合
+    //削除する項目(tempoDeleteLabels)とDB登録してある項目(_tagNameList)を結合
     final joinList = [...tempoDeleteLabels, ..._tagNameList];
-//  final joinList= List<String>.from(tempoDeleteLabels)..addAll(_tagNameList);
-    //削除する項目(tempoDeleteLabels)とDB登録してある項目(_tagNameList)を結合して
-    ///重複のみを抜き出す（重複削除はset化してremoveAllすれば良いが、重複抜出はリスト結合&if文しかない）
+    //重複のみを抜き出す（重複削除はset化してremoveAllすれば良いが、重複抜出はリスト結合&if文しかない）
     // ここではTag化せずにList<String>に留めておいて完了押(deleteTag)したらTag化する方向にもっていく
-    print('viewModel.createDeleteList/joinList:$joinList');
     final lists = <String>[];
     joinList.map((title) {
       if (lists.contains(title)) {
         _tempoDeleteList.add(title);
-        print('createDeleteList/_tempoDeleteList:$_tempoDeleteList');
+        debugPrint('viewModel/createDeleteList/_tempoDeleteList:$_tempoDeleteList');
       } else {
         lists.add(title);
-        print('delete以外のリスト：$lists');
       }
     }).toList();
     //onSubmittedで追加=>onDeleted削除時に_tempoInputに文字があると登録されてしまう
@@ -962,9 +958,12 @@ class CompareViewModel extends ChangeNotifier {
   ///tagDialogPageでList<tag>を削除
   Future<void> deleteTag(String comparisonItemId) async {
     //createDeleteListで作成したtempoDeleteListをList<Tag>化してDBへ渡す
-    print('deleteTagメソッドで消すtempoDeleteTagList:$_tempoDeleteList');
+    debugPrint('deleteTagメソッドで消すtempoDeleteTagList:$_tempoDeleteList');
     _tempoDeleteList.map((title) {
       final deleteTag = Tag(
+        //tagIdがrequiredなのでUuidでとりあえず入力
+        tagId: int.parse(
+            const Uuid().v1().replaceAll('-', '').substring(0, 9),radix:16,),
         comparisonItemId: comparisonItemId,
         tagTitle: title,
       );
@@ -998,8 +997,8 @@ class CompareViewModel extends ChangeNotifier {
   ///TagPageのFutureBuilder用
   Future<List<TagChart>> getAllTagChartList() async {
     _tagChartList = await _compareRepository.getAllTagChartList();
-    print(
-        'getAllTagChartList/tagChart:${_tagChartList.map((tagChart) => tagChart.tagTitle)}');
+    debugPrint(
+        'getAllTagChartList/tagChart:${_tagChartList.map((tagChart) => tagChart.tagTitle)}',);
 
     //TagPageを表示する手順
     ///方法1. List<Tag>の内容を全てList<TagChart>として取得して表示する:難
@@ -1026,12 +1025,14 @@ class CompareViewModel extends ChangeNotifier {
 //        )));
     ///focusNodeだけ加えて返す//todo mapに変換
     final tagDisplayList = <TagChart>[];
-    _tagChartList.forEach((tagChart) => tagDisplayList.add(TagChart(
+    for (final tagChart in _tagChartList) {
+      tagDisplayList.add(TagChart(
         dataId: tagChart.dataId,
         tagTitle: tagChart.tagTitle,
         tagAmount: tagChart.tagAmount,
-        itemIdList: tagChart.itemIdList,
-        myFocusNode: FocusNode(),),),);
+        // itemIdList: tagChart.itemIdList,
+        myFocusNode: FocusNode(),),);
+    }
 
 //    _tagChartList.map((tagChart){
 //      TagChart(dataId: tagChart.dataId,
@@ -1041,52 +1042,59 @@ class CompareViewModel extends ChangeNotifier {
 //    }).toList();
 
 //    print('getAllTagChartList/FocusNode追加/tagChart:${_tagChartList.map((tagChart) => tagChart.tagTitle)}');
-    print(
-        'getAllTagChartList/FocusNode追加/tagDisplayList:${tagDisplayList.map((tagChart) => tagChart.tagTitle)}');
+    debugPrint(
+        'getAllTagChartList/FocusNode追加/tagDisplayList:${tagDisplayList.map((tagChart) => tagChart.tagTitle)}',);
     return tagDisplayList;
   }
 
+  // ignore: duplicate_ignore
   ///TagPage=>SelectTagPage
+  // ignore: lines_longer_than_80_chars
   Future<void> onSelectTag(String tagTitle) async {
     ///tag名を元にDBからList<Tag>=>comparisonIdのリスト
     ///=>idリストを元にDBからList<Overview>をviewModelに格納
     selectTagTitle = tagTitle;
     _selectOverviews = [];
     //tagTitleを元にList<Tag>を取得(更新順)
-    //ListPage(_comparisonOverviews)もSelectTagPage(_selectOverviews)もcreatedAtはidを元にDBからとってくるので同じ
+    //ListPage(_comparisonOverviews)も
+    // SelectTagPage(_selectOverviews)もcreatedAtはidを元にDBからとってくるので同じ
     //タグが追加された順になっている(一方で更新されたものほど上に来た方が使い勝手いいかも(ascでなくてdesc))
     _selectTagList = await _compareRepository.onSelectTag(tagTitle);
-    print('viewModel/onSelectTag:${_selectTagList.map((e) => e.tagTitle)}');
-    print(
-        'viewModel/onSelectTag:${_selectTagList.map((e) => e.createAtToString)}');
+    debugPrint('viewModel/onSelectTag:${_selectTagList.map((e) => e.tagTitle)}');
+    debugPrint(
+        'viewModel/onSelectTag:${_selectTagList.map((e) => e.createAtToString)}',);
     //[Tag(),Tag(),Tag()]みたいなイメージ
 
     // Tag内のcomparisonItemIdを元にoverViewを取得しリスト化
     final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
 
-    ///forEach内の非同期処理でcomparisonIdからList<overview>取得
-    ///参照:https://qiita.com/hisw/items/2df0052a400263d5863e
-    await Future.forEach(idList, (String id) async {
+    ///https://zenn.dev/ttskch/articles/4cee05c400b4d8
+    // final results=
+    // await Future.wait([getSelect(idList)]);
+
+  //List<String?>=>List<String>へ変換してFuture.forEach使用
+    final withoutNulls =<String>[for (var s in idList)if(s!=null)s];
+    await Future.forEach(withoutNulls, (String id) async{
       final selectOverView = await _compareRepository.getComparisonOverview(id);
-      _selectOverviews.add(selectOverView);
-      print(
-          'Future.forEach/id:${_selectOverviews.map((e) => e.comparisonItemId).toList()}');
+      _selectOverviews!.add(selectOverView);
     });
-//    print('viewModel/onSelectTag/selectOverview:${_selectOverviews.map((overview) => overview.itemTitle)}');
+    debugPrint(
+           'Future.forEach/id:${_selectOverviews!.map((e) => e.comparisonItemId).toList()}',);
     notifyListeners();
   }
 
-  //todo =>使わないので削除して良い
+
+  /// //todo =>使わないので削除して良い
   ///SelectTagPageのFutureBuilder用
   Future<List<ComparisonOverview>> getSelectList(String tagTitle) async {
     _selectOverviews = [];
     _selectTagList = await _compareRepository.onSelectTag(tagTitle);
     final idList = _selectTagList.map((tag) => tag.comparisonItemId).toList();
-    await Future.forEach(idList, (String id) async {
+    await Future.forEach<dynamic>(idList, (String id) async {
       final selectOverView = await _compareRepository.getComparisonOverview(id);
-      _selectOverviews.add(selectOverView);
-    });
-    return _selectOverviews;
+      _selectOverviews!.add(selectOverView);
+    } as FutureOr<dynamic> Function(dynamic element),);
+    return _selectOverviews!;
   }
 
   ///onSelectTagを実施してSelectTagPageのSelectorを更新するだけのメソッド
@@ -1118,9 +1126,9 @@ class CompareViewModel extends ChangeNotifier {
     tagEditMode = TagEditMode.tagDelete;
 
     ///"完了"押した時に_selectedIndexをデフォルトに(次に編集押した時に前の選択状態にならないようにする)
-    selectedIndex = null; //todo 選択削除できたらいらない?
+    selectedIndex = null; /// //todo 選択削除できたらいらない?
     _tempoDeleteList = [];
-    print('changeToTagDelete/$tempoDeleteList');
+    debugPrint('changeToTagDelete/$tempoDeleteList');
 
     notifyListeners();
   }
@@ -1131,7 +1139,7 @@ class CompareViewModel extends ChangeNotifier {
   }
 
   //TagListでの通常モード(タイトル)<=>フォーカスモードの切替
-  Future<void> changeEditFocus(int listNumber) {
+  Future<void> changeEditFocus(int listNumber) async {
     selectedIndex = listNumber;
     notifyListeners();
 //  selectedIndex =null;//ここでデフォルトにするとリストタップしても変更しなくなる
@@ -1141,12 +1149,13 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> onDeleteTag(String tagTitle) async {
     //tagTitleで紐づけて削除するのでcomparisonItemIdいらない
     //一応Tag形式にしてやりとりしてるが、tagTitleだけあれば削除可能(のはず)
-    final deleteTag = Tag(tagTitle: tagTitle);
-    await _compareRepository.onDeleteTag(deleteTag);
+    //もうTag変換せずにtagTitleだけ渡す
+    // final deleteTag = Tag(tagTitle: tagTitle);
+    await _compareRepository.onDeleteTag(tagTitle);
     //削除してtagPage更新
     selectedIndex = null;
-    //todo 削除したアイテム全ての日時更新(タグ名変更と同じで変えるのは変かも)
-    final removeTagChartList = <TagChart>[]..add(TagChart(tagTitle: tagTitle));
+    /// //todo 削除したアイテム全ての日時更新(タグ名変更と同じで変えるのは変かも)
+    final removeTagChartList = <TagChart>[TagChart(tagTitle: tagTitle)];
     await _compareRepository.removeTagChart(removeTagChartList);
     notifyListeners();
   }
@@ -1159,12 +1168,12 @@ class CompareViewModel extends ChangeNotifier {
 
   ///タグ名の編集時にタグ選択した時にcomparisonIdを取得する タグ名変えてもcreatedAtは更新しない
   //updateTagTitleと２こ１
-  //todo getAllTagListの方法1でList<TagChart>内にcomparisonItemId格納できればこのメソッドいらない
+  /// //todo getAllTagListの方法1でList<TagChart>内にcomparisonItemId格納できればこのメソッドいらない
   Future<void> getTagTitleId(String tagTitle) async {
     //tagTitleからList<Tag>読取
     _selectTagList = await _compareRepository.onSelectTag(tagTitle);
-    print(
-        'viewModel/getTagTitled/_selectTagList:${_selectTagList.map((e) => e.tagTitle)}');
+    debugPrint(
+        'viewModel/getTagTitled/_selectTagList:${_selectTagList.map((e) => e.tagTitle)}',);
     selectTagChart = await _compareRepository.getSingleTagChart(tagTitle);
   }
 
@@ -1195,7 +1204,7 @@ class CompareViewModel extends ChangeNotifier {
           tagTitle: tagOverView.tagTitle,
           key: ValueKey(i),
           tagAmount: tagOverView.tagAmount,
-          orderId: i));
+          orderId: i,),);
     }
     return draggedTags;
   }
@@ -1209,29 +1218,33 @@ class CompareViewModel extends ChangeNotifier {
   Future<void> checkDeleteTag(String tagTitle) async {
     ///tagTitleをリストに追加・削除を行う
     ///comparisonItemIdをリストに追加・削除を行う(ListPage削除用のdeleteItemIdListを借りる)
-    print('checkDeleteTag/$tempoDeleteList');
+    debugPrint('checkDeleteTag/$tempoDeleteList');
     if (_tempoDeleteList.contains(tagTitle)) {
       //tagTitleチェック外す
       _tempoDeleteList.remove(tagTitle);
       //tagTitleが同じのTagをdeleteTagListから削除:難
       //deleteItemIdListからitemIdList全て削除(同じid全て消す)set化してremoveAll
       _selectTagList = await _compareRepository.onSelectTag(tagTitle);
-      final updateIdSet =
-          _selectTagList.map((tag) => tag.comparisonItemId).toSet();
+      // final updateIdSet =
+      //     _selectTagList.map((tag) => tag.comparisonItemId).toSet();
+      final updateIdSet = _selectTagList
+          .where((tag) => tag.comparisonItemId != null)
+          .map((tag) => tag.comparisonItemId!)
+          .toSet();
       final deleteIdSet = deleteItemIdList.toSet()..removeAll(updateIdSet);
       deleteItemIdList = deleteIdSet.toList();
-      print('tagTitle削除後:$_tempoDeleteList');
+      debugPrint('tagTitle削除後:$_tempoDeleteList');
     } else {
       //tagTitle新たにチェック
       _tempoDeleteList.add(tagTitle);
-      //todo getAllTagListでitemIdListに格納することでDBからとらなくていい
+      /// //todo getAllTagListでitemIdListに格納することでDBからとらなくていい
       //tagChartList内にidList格納できないとonSelectTagみたいにtagTitleを使ってDBからとるしかない
       _selectTagList = await _compareRepository.onSelectTag(tagTitle);
       _selectTagList
-          .map((tag) => deleteItemIdList.add(tag.comparisonItemId))
+          .map((tag) => deleteItemIdList.add(tag.comparisonItemId!))
           .toList();
       //完了押した時にdeleteItemIdList内の同じ値削除(id一つだけ残す)set化してList化
-      print('tagTitle追加後:$_tempoDeleteList');
+      debugPrint('tagTitle追加後:$_tempoDeleteList');
     }
     notifyListeners();
   }
@@ -1244,10 +1257,13 @@ class CompareViewModel extends ChangeNotifier {
     //Tag削除
     _tempoDeleteList.map((title) {
       final deleteTag = Tag(
+        tagId: int.parse(
+          const Uuid().v1().replaceAll('-', '').substring(0, 9),radix:16,),
         tagTitle: title,
       );
       deleteTagList.add(deleteTag);
     }).toList();
+
     //TagChart削除
     _tempoDeleteList.map((title) {
       final deleteTagChart = TagChart(
@@ -1256,7 +1272,7 @@ class CompareViewModel extends ChangeNotifier {
       _removeTagChartList.add(deleteTagChart);
     }).toList();
     await _compareRepository.deleteSelectTagList(deleteTagList);
-    //todo tagDialogの_removeTagChartListにおきかえてもいい
+    /// //todo tagDialogの_removeTagChartListにおきかえてもいい
     await _compareRepository.removeTagChart(_removeTagChartList);
     _removeTagChartList = [];
 
@@ -1293,7 +1309,7 @@ class CompareViewModel extends ChangeNotifier {
     final candidateTitleSet = <String>{};
     _allTagList.map((tag) {
       ///null safety tagTitle初回はnullになるはず、、、
-      return candidateTitleSet.add(tag.tagTitle);
+      return candidateTitleSet.add(tag.tagTitle!);
     }).toSet();
     final choiceTitleSet = <String>{};
     tagList.map((tag) {
@@ -1303,6 +1319,7 @@ class CompareViewModel extends ChangeNotifier {
     ///removeAll使うにはListはダメでSetを用いる
     candidateTitleSet.removeAll(choiceTitleSet);
     return candidateTagNameList = candidateTitleSet.toList();
+
   }
 
   ///AddScreen/InputPartでComparisonOverview新規登録：ComparisonOverview=>ComparisonOverviewRecordでDB登録
@@ -1311,8 +1328,8 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  //todo way3追加
-  Future<void> updateItem(ComparisonOverview comparisonOverview) async {
+  /// //todo way3追加
+  Future<void> updateTitles(ComparisonOverview comparisonOverview) async {
     //compareScreenのSelectorまわすので入力
     itemTitle = _titleController.text;
     way1Title = _way1Controller.text;
@@ -1326,7 +1343,7 @@ class CompareViewModel extends ChangeNotifier {
       way2Title: _way2Controller.text,
       createdAt: DateTime.now(),
     );
-    await _compareRepository.updateComparisonOverView(updateOverview);
+    await _compareRepository.updateTitles(updateOverview);
     await onSelectTag(selectTagTitle);
     notifyListeners();
     _titleController.clear();
@@ -1428,7 +1445,7 @@ class CompareViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> selectSegment(String newValue) {
+  Future<void> selectSegment(String newValue) async {
     segmentValue = newValue;
     notifyListeners();
   }

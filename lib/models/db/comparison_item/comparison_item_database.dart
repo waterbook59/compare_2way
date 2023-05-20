@@ -1,10 +1,12 @@
 import 'dart:io';
 
-import 'package:moor/ffi.dart';
-import 'package:moor/moor.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+
 import 'comparison_item_dao.dart';
+
 part 'comparison_item_database.g.dart';
 
 ///comparison_item結合(ComparisonOverviewRecords+Way1MeritRecords+..+TagRecords)
@@ -24,7 +26,7 @@ class ComparisonOverviewRecords extends Table {
   IntColumn get way2DemeritEvaluate =>
       integer().withDefault(const Constant(0))();
 
-  //todo way3はあとで追加
+  /// //todo way3はあとで追加
 //  TextColumn get way3Title => text()();
 //  IntColumn get way3MeritEvaluate =>
 //      integer().withDefault(const Constant(0))(); // 評価、初期ゼロ
@@ -49,7 +51,7 @@ class Way1MeritRecords extends Table {
   TextColumn get comparisonItemId => text()();
   TextColumn get way1MeritDesc => text().nullable()();
   @override
-  Set<Column> get primaryKey => {way1MeritId};
+  Set<Column<dynamic>> get primaryKey => {way1MeritId};
 }
 //テーブルway1Demerit
 class Way1DemeritRecords extends Table {
@@ -57,7 +59,7 @@ class Way1DemeritRecords extends Table {
   TextColumn get comparisonItemId => text()();
   TextColumn get way1DemeritDesc => text().nullable()();
   @override
-  Set<Column> get primaryKey => {way1DemeritId};
+  Set<Column<dynamic>> get primaryKey => {way1DemeritId};
 }
 //テーブルway2Merit
 class Way2MeritRecords extends Table {
@@ -65,7 +67,7 @@ class Way2MeritRecords extends Table {
   TextColumn get comparisonItemId => text()();
   TextColumn get way2MeritDesc => text().nullable()();
   @override
-  Set<Column> get primaryKey => {way2MeritId};
+  Set<Column<dynamic>> get primaryKey => {way2MeritId};
 }
 //テーブルway2Demerit
 class Way2DemeritRecords extends Table {
@@ -73,18 +75,18 @@ class Way2DemeritRecords extends Table {
   TextColumn get comparisonItemId => text()();
   TextColumn get way2DemeritDesc => text().nullable()();
   @override
-  Set<Column> get primaryKey => {way2DemeritId};
+  Set<Column<dynamic>> get primaryKey => {way2DemeritId};
 }
 //テーブルtag
 class TagRecords extends Table{
-  IntColumn get tagId => integer().nullable()();
+  IntColumn get tagId => integer().autoIncrement()();
   TextColumn get comparisonItemId => text()();
   TextColumn get tagTitle => text()();
   DateTimeColumn get createdAt => dateTime().nullable()();
   TextColumn get createAtToString => text()();
   //tagTitleの重複登録必要なのでprimaryKeyには設定しない
   @override
-  Set<Column> get primaryKey => {tagId};
+  Set<Column<dynamic>> get primaryKey => {tagId};
 }
 //テーブルtagChart
 class TagChartRecords extends Table{
@@ -97,7 +99,8 @@ class TagChartRecords extends Table{
 
 }
 
-@UseMoor(tables: [
+/// //todo @DriftDatabase
+@DriftDatabase(tables: [
   ComparisonOverviewRecords,
   Way1MeritRecords,
   Way1DemeritRecords,
@@ -105,7 +108,7 @@ class TagChartRecords extends Table{
   Way2DemeritRecords,
   TagRecords,
   TagChartRecords,
-],daos: [ComparisonItemDao])
+],daos: [ComparisonItemDao],)
 class ComparisonItemDB  extends _$ComparisonItemDB{
   ComparisonItemDB() : super(_openConnection());
 
@@ -122,6 +125,7 @@ LazyDatabase _openConnection() {
     final dbFolder = await getApplicationDocumentsDirectory();
     //Fileはdart.ioインポート
     final file = File(p.join(dbFolder.path, 'comparison_item.db'));
-    return VmDatabase(file);
+    /// //todo DriftではNativeDatabase
+    return NativeDatabase(file);
   });
 }

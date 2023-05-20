@@ -14,7 +14,7 @@ class ReorderableEditList extends StatefulWidget {
   final List<DraggingItemData> draggedItems;
 
   @override
-  _ReorderableEditListState createState() => _ReorderableEditListState();
+  State<ReorderableEditList> createState() => _ReorderableEditListState();
 }
 
 class _ReorderableEditListState extends State<ReorderableEditList> {
@@ -33,10 +33,11 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
             // first and last attributes affect border drawn during dragging
             isFirst: index == 0,
             isLast: index == widget.draggedItems.length - 1,
+            /// //todo deleteItemIdListが空でない時だけ押せる、addScreenの作成ボタン参照
             onTap: () {
               Provider.of<CompareViewModel>(context, listen: false)
                   .checkDeleteIcon(
-                      widget.draggedItems[index].comparisonItemId!);
+                      widget.draggedItems[index].comparisonItemId!,);
             },
           );
         },
@@ -72,12 +73,12 @@ class _ReorderableEditListState extends State<ReorderableEditList> {
 }
 
 class Item extends StatelessWidget {
-  const Item({
+  const Item({Key? key,
     required this.data,
     required this.isFirst,
     required this.isLast,
     required this.onTap,
-  });
+  }) : super(key: key);
 
   final DraggingItemData data;
   final bool isFirst;

@@ -1,20 +1,19 @@
 import 'package:compare_2way/data_models/merit_demerit.dart';
-import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
 import 'package:compare_2way/views/compare/components/sub/desc_list_tile.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DescFormAndButton extends StatefulWidget {
-  const DescFormAndButton({
+  const DescFormAndButton({Key? key,
     required this.displayList,
     this.way1MeritList,
     this.way2MeritList,
     this.way1DemeritList,
     this.way2DemeritList,
-    //todo
+    // //todo
 //    this.way3MeritList,
 //    this.way3DemeritList,
     required this.inputChanged,
@@ -22,21 +21,22 @@ class DescFormAndButton extends StatefulWidget {
     required this.deleteList,
     required this.controllers,
     required this.focusNodes,
-  });
+  }) : super(key: key);
 
   final DisplayList displayList;
   final List<Way1Merit>? way1MeritList;
   final List<Way2Merit>? way2MeritList;
   final List<Way1Demerit>? way1DemeritList;
   final List<Way2Demerit>? way2DemeritList;
-  final Function(String, int) inputChanged;
-  final Function() addList;
-  final Function(int) deleteList;
+  final void Function(String, int) inputChanged;
+  final void Function() addList;
+  final void Function(int) deleteList;
   final List<TextEditingController> controllers;
   final List<FocusNode> focusNodes;
 
   @override
-  _DescFormAndButtonState createState() => _DescFormAndButtonState();
+  // _DescFormAndButtonState createState() => _DescFormAndButtonState();
+  State<DescFormAndButton> createState() => _DescFormAndButtonState();
 }
 
 class _DescFormAndButtonState extends State<DescFormAndButton> {
@@ -59,11 +59,11 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
                 onTap: () {
                   setState(() {
                     viewModel.selectedDescListIndex = index;
-                    print('viewModel.selectedIndex:'
+                    debugPrint('viewModel.selectedIndex:'
                         '${viewModel.selectedDescListIndex}');
                     widget.focusNodes[index].requestFocus();
                     //isDisplayIconをviewModelにもたせる
-                    //todo way3Merit,Demerit分作成
+                    // //todo way3Merit,Demerit分作成
                     switch (widget.displayList) {
                       case DisplayList.way1Merit:
                         viewModel.focusWay1MeritList();
@@ -77,9 +77,16 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
                       case DisplayList.way2Demerit:
                         viewModel.focusWay2DemeritList();
                         break;
+
+                      case DisplayList.way3Merit:
+                      // //todo
+                        break;
+                      case DisplayList.way3Demerit:
+                      // //todo
+                        break;
                     }
 
-                    print('DescFormAndButton/Listの１つをonTap!');
+                    debugPrint('DescFormAndButton/Listの１つをonTap!');
                   });
                 },
                 child: DescListTile(
@@ -93,13 +100,13 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
                   displayList: widget.displayList,
                 ),
               );
-            }),
+            },),
 
       ],
     );
   }
 
-  //todo リストが1の時だけdeleteIcon出さない
+  // //todo リストが1の時だけdeleteIcon出さない
   //deleteするときのキーボード立ち上がりをふせぐ
   void _deleteList(BuildContext context, int deleteIndex) {
 //    print(
@@ -112,7 +119,7 @@ class _DescFormAndButtonState extends State<DescFormAndButton> {
         widget.controllers.removeAt(deleteIndex);
         widget.focusNodes.removeAt(deleteIndex);
         widget.deleteList(deleteIndex);
-        print('DescForm削除setState時のcontrollers.length:'
+        debugPrint('DescForm削除setState時のcontrollers.length:'
             '${widget.controllers.length}');
       });
     }

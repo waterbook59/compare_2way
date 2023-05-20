@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class SelectItemList extends StatelessWidget {
   const SelectItemList(
-      {required this.title,
+      {Key? key, required this.title,
         required this.conclusion,
         required this.createdAt,
         this.onDelete,
         required this.onTap,
-        required this.listDecoration,});
+        required this.listDecoration,}) : super(key: key);
 
   final String title;
   final String conclusion;
@@ -18,6 +18,8 @@ class SelectItemList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
     return DecoratedBox(
       decoration: listDecoration,
       child: ListTile(
@@ -27,8 +29,28 @@ class SelectItemList extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('結論：$conclusion'),
-            Text(createdAt),
+            const SizedBox(height: 4,),
+            Row(
+              children: [
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Colors.black45,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 4,vertical:1),
+                    child: Text(
+                      '結論',
+                      style: TextStyle(fontSize: 14,
+                        color: Colors.white,),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 4,),
+                Text(conclusion),
+              ],
+            ),
+            Text(createdAt,style: const TextStyle(fontSize: 12),),
           ],
         ),
         trailing:const Icon(Icons.arrow_forward_ios),

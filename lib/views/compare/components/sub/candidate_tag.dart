@@ -1,16 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 //tagDialogPageの下のタブ候補
 class CandidateTag extends StatelessWidget {
-  const CandidateTag({
+  const CandidateTag({Key? key,
     required this.title,
 //    this.tagAmount,
 //    this.createdAt,
     required this.onTap,
 //    this.selectTagIdList,
     required this.listNumber,
-  });
+  }) : super(key: key);
 
    final String title;
 //  final int tagAmount;
@@ -34,7 +34,6 @@ class CandidateTag extends StatelessWidget {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(
                   width: 8,
@@ -51,7 +50,7 @@ class CandidateTag extends StatelessWidget {
                     child: Text(
                   title,
                   style: const TextStyle(fontSize: 16),
-                )),
+                ),),
               ],
             ),
             const Divider(
@@ -67,7 +66,7 @@ class CandidateTag extends StatelessWidget {
   }
 
   Future<void> getTitle(
-      BuildContext context, int listNumber) async {
+      BuildContext context, int listNumber,) async {
     onTap(title);
     //選択タグへ追加したら表示から削除(tagAllTitleListから選択したもの削除)
   }

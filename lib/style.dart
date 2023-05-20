@@ -1,15 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cupertino_icons/cupertino_icons.dart';
 
 //const titleFontJa = 'Hiragino Kaku Gothic w6';
 //const titleFontEn = 'SF Pro Display Medium';
 ///ヒラギノ使う場合はassetsにfontsデータを入れる必要なし
-const regularFontJa = 'Hiragino Kaku Gothic ProN';
+const regularFontJa = 'Regular';
 
 ///CupertinoNavigationBar
 //NavigationMiddle
-const middleTextStyle = TextStyle(fontSize: 18, color: Colors.white);
+const middleTextStyle = TextStyle(fontFamily:regularFontJa,fontSize: 18,
+    color: Colors.white,);
 
 const middleJaTextStyle =
     TextStyle(fontFamily: regularFontJa, fontSize: 18, color: Colors.white);
@@ -17,6 +16,10 @@ const middleJaTextStyle =
 //NavigationTrailing
 const trailingTextStyle =
     TextStyle(fontFamily: regularFontJa, fontSize: 16, color: Colors.white);
+
+//ListTitle
+const listTitleTextStyle=
+TextStyle(fontFamily: regularFontJa,  fontWeight:FontWeight.bold );
 
 const subTitleTextStyle =
 TextStyle(fontFamily: regularFontJa, fontSize: 14, color: Colors.black54);
@@ -36,15 +39,15 @@ const itemTitleTextStyle = TextStyle(
 
 //アコーディオンの丸み
 const accordionTopBorderRadius = BorderRadius.only(
-    topLeft: Radius.circular(5), topRight: Radius.circular(5));
+    topLeft: Radius.circular(5), topRight: Radius.circular(5),);
 const accordionBottomBorderRadius = BorderRadius.only(
-    bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5));
+    bottomLeft: Radius.circular(5), bottomRight: Radius.circular(5),);
 
 //比較のRaisedButton
 //var  createButtonBorderRadius = RoundedRectangleBorder(
 //  borderRadius: BorderRadius.circular(5),);
 
 const listDecoration = BoxDecoration(
-    border: Border(bottom: BorderSide(width: 0.5, color: Colors.grey)));
+    border: Border(bottom: BorderSide(width: 0.5, color: Colors.grey)),);
 
 const accordionBackgroundColor = Color(0xFFE0E0E0);

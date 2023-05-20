@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class PageTitle extends StatelessWidget {
 
-  const PageTitle({required this.title});
+  const PageTitle({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override

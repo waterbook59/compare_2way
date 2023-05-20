@@ -14,7 +14,7 @@ class TagList extends StatelessWidget {
     this.createdAt,
     required this.onDelete,
     required this.onTap,
-    required this.selectTagIdList,
+    this.selectTagIdList,
     required this.listNumber,
     required this.myFocusNode,
   }) : super(key: key);
@@ -26,9 +26,9 @@ class TagList extends StatelessWidget {
   final VoidCallback onTap;
 
 //  final Function(FocusNode) onTap;
-  final List<String> selectTagIdList; //tagTitle編集時に更新するIDリスト
+  final List<String>? selectTagIdList; //tagTitle編集時に更新するIDリスト
   final int listNumber;
-  final FocusNode myFocusNode; //todo 完了押した時にfocusNodeのdispose必要かも
+  final FocusNode myFocusNode; /// //todo 完了押した時にfocusNodeのdispose必要かも
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +37,13 @@ class TagList extends StatelessWidget {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
     return Slidable(
-      startActionPane: ActionPane(
+      endActionPane: ActionPane(
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
 ///onPressedがSlidableActionCallback = void Function(BuildContext context);なので
             ///()空だとNG=>(_):void Function(BuildContext)?に変更
             onPressed: (_) {
-              print('削除します');
               onDelete();
             },
             backgroundColor: Colors.red,
@@ -53,19 +52,6 @@ class TagList extends StatelessWidget {
           ),
         ],
       ),
-      ///ver.0.6.0以下で使用
-      // actionPane: const SlidableScrollActionPane(),
-      // secondaryActions: [
-      //   IconSlideAction(
-      //     caption: 'タグを削除',
-      //     color: Colors.red,
-      //     icon: Icons.remove_circle_outline,
-      //     onTap: () {
-      //       print('削除します');
-      //       onDelete();
-      //     },
-      //   )
-      // ],
       child: DecoratedBox(
         decoration: listDecoration,
         child: ListTile(
@@ -97,7 +83,8 @@ class TagList extends StatelessWidget {
                 return viewModel.selectedIndex == listNumber
                     ? EditTagTitle(
                         tagTitle: title,
-                        selectTagIdList: selectTagIdList,
+                       /// //todo selectTagIdListがnull
+                       //  selectTagIdList: selectTagIdList!,
                         myFocusNode: myFocusNode,
                       )
                     : Text(title);

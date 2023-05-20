@@ -12,7 +12,7 @@ class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
 
   @override
-  _SettingPageState createState() => _SettingPageState();
+  State<SettingPage> createState() => _SettingPageState();
 }
 
 class _SettingPageState extends State<SettingPage> {
@@ -83,7 +83,7 @@ class _SettingPageState extends State<SettingPage> {
                       onPressed: (context) {
                         Navigator.of(context).push(
                           MaterialPageRoute<void>(
-                            builder: (_) => UserPolicyScreen(),
+                            builder: (_) => const UserPolicyScreen(),
                           ),
                         );
                       },
@@ -96,7 +96,7 @@ class _SettingPageState extends State<SettingPage> {
                       onPressed: (context) {
                         Navigator.of(context).push(
                           MaterialPageRoute<void>(
-                            builder: (_) => PrivacyPolicyScreen(),
+                            builder: (_) => const PrivacyPolicyScreen(),
                           ),
                         );
                       },
@@ -113,7 +113,7 @@ class _SettingPageState extends State<SettingPage> {
                       onPressed: (context) {
                         Navigator.of(context).push(
                           MaterialPageRoute<void>(
-                            builder: (_) => MyLicensePage(),
+                            builder: (_) => const MyLicensePage(),
                           ),
                         );
                       },
@@ -122,12 +122,10 @@ class _SettingPageState extends State<SettingPage> {
                       title: const Text('バージョン'),
 //                      subtitle: 'English',
                       leading: const Icon(Icons.language),
-//                      trailing:const Icon(Icons.arrow_forward_ios),
-                      onPressed: (context) {
-//                    Navigator.of(context).push(MaterialPageRoute(
-//                      builder: (_) => LanguagesScreen(),
-//                    ));
-                      },
+                      trailing: const Padding(
+                        padding: EdgeInsets.only(right: 8),
+                        child: Text('ver.1.0.0'),
+                      ),
                     ),
                   ],
                 )
@@ -140,7 +138,7 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   void _requestReview() {
-    AppReview.requestReview.then(print);
+    AppReview.requestReview.then(debugPrint);
   }
 
 //flutter_email_senderを使ってメールを送信

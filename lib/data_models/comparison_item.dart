@@ -1,5 +1,5 @@
-import 'package:compare_2way/data_models/tag.dart';
 import 'package:compare_2way/data_models/merit_demerit.dart';
+import 'package:compare_2way/data_models/tag.dart';
 
 ///モデルクラスのイメージは取得するときのリスト１行分に何の項目を入れるか
 class ComparisonItem {
@@ -27,13 +27,13 @@ class ComparisonItem {
       this.conclusion,
         this.createdAt,});
 
-  //todo dataIdはrequiredでもいい？
+  /// //todo dataIdはrequiredでもいい？
   final int? dataId;
   final String? comparisonItemId;
   final String? itemTitle;
 
   final String? way1Title;
-  //todo リストなのでway1Meritsにリファクタリング
+  /// //todo リストなのでway1Meritsにリファクタリング
   final List<Way1Merit>? way1Merit;
   final List<Way1Demerit>? way1Demerit;
   final int? way1MeritEvaluate;

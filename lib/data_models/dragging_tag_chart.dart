@@ -1,13 +1,12 @@
 //ReorderableTagListのアイテムの情報格納
 
-import 'package:compare_2way/data_models/tag.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-//todo TagChartの要素必要(itemIdList)削除時の時間更新のとき使う
+/// //todo TagChartの要素必要(itemIdList)削除時の時間更新のとき使う
 class DraggingTagChart {
   DraggingTagChart({
-    this.tagTitle, this.key,this.tagAmount,this.itemIdList,this.orderId});
+    this.tagTitle, this.key,this.tagAmount,this.itemIdList,this.orderId,});
   final String? tagTitle;
   // Each item in reorderable list needs stable and unique key
   final Key? key;

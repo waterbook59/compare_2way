@@ -1,25 +1,22 @@
-import 'dart:ui';
-
-import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DescForm extends StatefulWidget {
   const DescForm(
-      {
+      {Key? key,
       required this.inputChanged,
       required this.index,
       required this.controllers,
       required this.deleteList,
       required this.focusNode,
         required this.displayList,
-      });
+      }) : super(key: key);
 
-  final Function(String) inputChanged;
-  final Function(int) deleteList;
+  final void Function(String) inputChanged;
+  final void Function(int) deleteList;
   final int index;
   final List<TextEditingController> controllers;
   final FocusNode focusNode;
@@ -27,7 +24,8 @@ class DescForm extends StatefulWidget {
 
 
   @override
-  _DescFormState createState() => _DescFormState();
+  State<DescForm> createState() => _DescFormState();
+  // _DescFormState createState() => _DescFormState();
 }
 
 class _DescFormState extends State<DescForm> {
@@ -37,8 +35,8 @@ class _DescFormState extends State<DescForm> {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<CompareViewModel>(context, listen: false);
 
-//todo way3Merit,Demerit追加
-    //todo cupertinoTextField部分は共通でスッキリ書く
+// //todo way3Merit,Demerit追加
+  //  //todo cupertinoTextField部分は共通でスッキリ書く
     switch(widget.displayList){
       case DisplayList.way1Merit:
         return Stack(
@@ -92,7 +90,6 @@ class _DescFormState extends State<DescForm> {
                 :Container(),
           ],
         );
-        break;
       case DisplayList.way2Merit:
         return Stack(
           //material
@@ -123,7 +120,6 @@ class _DescFormState extends State<DescForm> {
                 :Container(),
           ],
         );
-        break;
       case DisplayList.way1Demerit:
         return Stack(
           alignment: Alignment.centerRight,
@@ -156,7 +152,6 @@ class _DescFormState extends State<DescForm> {
                 :Container(),
           ],
         );
-        break;
       case DisplayList.way2Demerit:
         return Stack(
           alignment: Alignment.centerRight,
@@ -189,8 +184,7 @@ class _DescFormState extends State<DescForm> {
                 :Container(),
           ],
         );
-        break;
-    //todo way3Merit,Demerit分作成
+    // //todo way3Merit,Demerit分作成
       case DisplayList.way3Merit:
         return Container();
       case DisplayList.way3Demerit:

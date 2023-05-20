@@ -2,10 +2,9 @@ import 'package:compare_2way/data_models/merit_demerit.dart';
 import 'package:compare_2way/style.dart';
 import 'package:compare_2way/utils/constants.dart';
 import 'package:compare_2way/view_model/compare_view_model.dart';
-import 'package:compare_2way/views/compare/components/sub/desc_form.dart';
 import 'package:compare_2way/views/compare/components/sub/desc_form_and_button.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 //import 'package:getwidget/components/accordian/gf_accordian.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +12,7 @@ import 'sub/gf_accordian.dart' as custom;
 
 class AccordionPart extends StatefulWidget {
 
-  const AccordionPart({
+  const AccordionPart({Key? key,
     required this.title,
     required this.displayList,
     this.way1MeritList,
@@ -23,7 +22,7 @@ class AccordionPart extends StatefulWidget {
     required this.inputChanged,
     required this.addList,
     required this.deleteList,
-  });
+  }) : super(key: key);
 
   ///way1&way2のMerit/Demeritを共通して使っているのでway xxx List箇所は安全呼び出し
   final String title;
@@ -32,12 +31,12 @@ class AccordionPart extends StatefulWidget {
   final List<Way2Merit>? way2MeritList;
   final List<Way1Demerit>? way1DemeritList;
   final List<Way2Demerit>? way2DemeritList;
-  final Function(String, int) inputChanged;
-  final Function() addList;
-  final Function(int) deleteList;
+  final void Function(String, int) inputChanged;
+  final void Function() addList;
+  final void Function(int) deleteList;
 
   @override
-  _AccordionPartState createState() => _AccordionPartState();
+  State<AccordionPart> createState() => _AccordionPartState();
 }
 
 class _AccordionPartState extends State<AccordionPart> {
@@ -49,7 +48,12 @@ class _AccordionPartState extends State<AccordionPart> {
 
   @override
   void initState() {
-    //todo way3Merit,Demerit分作成
+
+    ///descListTileのフォーカスをリセットする
+    Provider.of<CompareViewModel>(context, listen: false)
+     .selectedDescListIndex=null;
+
+    /// //todo way3Merit,Demerit分作成
     switch (widget.displayList) {
       case DisplayList.way1Merit:
         widget.way1MeritList!.isNotEmpty
@@ -77,7 +81,12 @@ class _AccordionPartState extends State<AccordionPart> {
             ? createWay2DemeritList()
             : controllers = [];
         break;
-
+      case DisplayList.way3Merit:
+        // //todo
+        break;
+      case DisplayList.way3Demerit:
+       // //todo
+        break;
 
     }
     super.initState();
@@ -128,7 +137,7 @@ class _AccordionPartState extends State<AccordionPart> {
             contentChild:
           //リストが増えていくとDescFormButtonがタイトル部分にはみ出している
             ///=>custom.GFAccordion設定で初期位置修正
-            //todo way3追加
+            // //todo way3追加
             DescFormAndButton(
               displayList: widget.displayList,
               way1MeritList: widget.way1MeritList,
@@ -146,7 +155,7 @@ class _AccordionPartState extends State<AccordionPart> {
           contentPadding: const EdgeInsets.only(top: 1,left: 8,right: 8),
         ),
 
-    //todo ボタン押しやすいサイズに
+    // //todo ボタン押しやすいサイズに
         Positioned(
           right: 64,
           top: 20,
@@ -160,12 +169,12 @@ class _AccordionPartState extends State<AccordionPart> {
                   controllers.add(TextEditingController());
                   focusNodes.add(FocusNode());
                 });
-              }),)
+              },),)
       ],
     );
   }
 
-  //todo way3Merit,Demerit分作成
+  // //todo way3Merit,Demerit分作成
   ///initStateでの条件分岐があり必ず各リストが入るので強制呼び出し
   void createWay1MeritList() {
     controllers = widget.way1MeritList!.map((item) {
@@ -195,5 +204,3 @@ class _AccordionPartState extends State<AccordionPart> {
 
 
 }
-
-

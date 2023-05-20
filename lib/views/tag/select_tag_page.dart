@@ -13,7 +13,7 @@ import 'components/select_item_list.dart';
 
 
 class SelectTagPage extends StatelessWidget {
-  const SelectTagPage({required this.tagTitle});
+  const SelectTagPage({Key? key, required this.tagTitle}) : super(key: key);
 
   final String tagTitle;
 
@@ -25,7 +25,7 @@ class SelectTagPage extends StatelessWidget {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        //todo actionsForegroundColorが廃止
+        /// //todo actionsForegroundColorが廃止
         // actionsForegroundColor: Colors.white,
         backgroundColor: primaryColor,
         // tagアイコン追加(アイコン+文字を中心にもっていくため右を48空ける)
@@ -38,7 +38,7 @@ class SelectTagPage extends StatelessWidget {
         body:
         // 並び順を更新日順に変更する
         Selector<CompareViewModel, List<ComparisonOverview>>(
-            selector: (context, viewModel) => viewModel.selectOverviews,
+            selector: (context, viewModel) => viewModel.selectOverviews!,
             builder: (context, selectOverviews, child) {
 //              print('SelectTagPage通って描画');
         return
@@ -54,8 +54,8 @@ class SelectTagPage extends StatelessWidget {
                     final formatted = formatter.format(overview.createdAt);
 
                     return SelectItemList(
-                      title: overview.itemTitle,
-                      conclusion: overview.conclusion,
+                      title: overview.itemTitle!,
+                      conclusion: overview.conclusion!,
                       createdAt: formatted,
 //              onDelete: () => _deleteList(
 //                  context, overview.comparisonItemId),
