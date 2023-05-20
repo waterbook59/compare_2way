@@ -34,8 +34,7 @@ class MyApp extends StatelessWidget {
         primaryColor: const Color(0xFF363A44),
         scaffoldBackgroundColor: const Color(0xFFF5F5F5),
         // フォントとしてヒラギノ使う 'Hiragino Sans'も選択肢
-        fontFamily: 'Hiragino Kaku Gothic ProN',
-
+        fontFamily: 'Regular',
         ///iOS風ページ遷移(右からスワイプ、下から上は個別設定)
         pageTransitionsTheme: const PageTransitionsTheme(
           builders: <TargetPlatform, PageTransitionsBuilder>{
