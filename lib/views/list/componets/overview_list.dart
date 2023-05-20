@@ -1,3 +1,4 @@
+import 'package:compare_2way/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -34,12 +35,14 @@ class OverViewList extends StatelessWidget {
         decoration: listDecoration,
         child: ListTile(
           onTap: onTap,
-          title: Text(title),
+          title: Text(title,
+            style: listTitleTextStyle,
+          ),
           //conclusionはConsumerで初回描画されない
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 4,),
+              const SizedBox(height: 8,),
               Row(
                 children: [
                   DecoratedBox(
@@ -56,16 +59,22 @@ class OverViewList extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 4,),
+                  const SizedBox(width: 8,),
 
                   Text(conclusion!,style: const TextStyle(
                     color: Colors.black,),),
                 ],
               ),
+              const SizedBox(height: 4,),
               Text(createdAt,style: const TextStyle(fontSize: 12),),
             ],
           ),
-          trailing:const Icon(Icons.arrow_forward_ios),
+          trailing:Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Icon(Icons.arrow_forward_ios),
+            ],
+          ),
 //          isThreeLine: true,
         ),
       ),

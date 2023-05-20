@@ -17,6 +17,10 @@ const middleJaTextStyle =
 const trailingTextStyle =
     TextStyle(fontFamily: regularFontJa, fontSize: 16, color: Colors.white);
 
+//ListTitle
+const listTitleTextStyle=
+TextStyle(fontFamily: regularFontJa,  fontWeight:FontWeight.bold );
+
 const subTitleTextStyle =
 TextStyle(fontFamily: regularFontJa, fontSize: 14, color: Colors.black54);
 
